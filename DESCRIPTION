@@ -11,3 +11,6 @@ Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 1.0.13-1)
 LinkingTo: Rcpp
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
