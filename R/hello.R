@@ -13,6 +13,13 @@
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
 
+#' Title
+#'
+#' @return A character vector
+#' @export
+#'
+#' @examples
+#' hello()
 hello <- function() {
   print("Hello, world!")
 }
