@@ -1,7 +1,19 @@
 
 # TODO: Må finne en måte å gjøre dette for mange samples
-# TODO: SKrive dokumentasjon
+# TODO: Skrive dokumentasjon
+# TODO: Skrive tester
 
+#' Title
+#'
+#' @param fastq_file a FASTQ-file with forward reads (R1)
+#' @param reverse a FASTQ-file with reverse reads (R2)
+#' @param threads number of computational threads to use
+#' @param fastqout name of the FASTQ-file with the output.
+#' When defined as NULL, no file is written.
+#'
+#' @return A tibble with merged fastq sequences
+#' @export
+#'
 fastq_mergepairs <- function(fastq_file,
                              reverse,
                              #log_file = NULL,
@@ -21,11 +33,11 @@ fastq_mergepairs <- function(fastq_file,
     # Checks if vsearch should write output to file
     message("No filename for output file. No output file will be written.")
     merged_fastq_text <- system2(command = "vsearch",
-                            args = c("--fastq_mergepairs", fastq_file,
-                                     "--reverse", reverse,
-                                     "--threads", threads,
-                                     "--fastqout", "-"),
-                            stdout = TRUE)
+                                 args = c("--fastq_mergepairs", fastq_file,
+                                          "--reverse", reverse,
+                                          "--threads", threads,
+                                          "--fastqout", "-"),
+                                 stdout = TRUE)
 
     # Transforming output string to tibble
     if (length(merged_fastq_text) %% 4 != 0) {
