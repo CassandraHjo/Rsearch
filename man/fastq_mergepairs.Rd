@@ -2,7 +2,7 @@
 % Please edit documentation in R/fastq_processing.R
 \name{fastq_mergepairs}
 \alias{fastq_mergepairs}
-\title{Title}
+\title{Merge FASTQ files}
 \usage{
 fastq_mergepairs(fastq_file, reverse, threads = 1, fastqout = NULL)
 }
@@ -20,5 +20,5 @@ When defined as NULL, no file is written.}
 A tibble with merged fastq sequences
 }
 \description{
-Title
+Merge FASTQ files
 }
