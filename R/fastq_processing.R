@@ -1,5 +1,6 @@
 
 # TODO: Må finne en måte å gjøre dette for mange samples
+# TODO: SKrive dokumentasjon
 
 fastq_mergepairs <- function(fastq_file,
                              reverse,
@@ -35,8 +36,8 @@ fastq_mergepairs <- function(fastq_file,
     sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
     qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
 
-    merged_fastq <- tibble(
-      Header = str_remove(headers, "^@"),
+    merged_fastq <- tibble::tibble(
+      Header = stringr::str_remove(headers, "^@"),
       Sequence = sequences,
       Quality = qualities
     )
@@ -50,7 +51,7 @@ fastq_mergepairs <- function(fastq_file,
                      "--threads", threads,
                      "--fastqout", fastqout))
 
-    merged_fastq <- readFastq(fastqout) # fra microseq
+    merged_fastq <- microseq::readFastq(fastqout)
     return(merged_fastq)
   }
 }
