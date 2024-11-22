@@ -1,9 +1,83 @@
+#' Parse output text from read merging to tibble
+#'
+#' @param output_text string of output from running fastq_mergepairs in vsearch
+#'
+#' @return table with merging metrics
+#' @export
+#'
+parse_merge_pairs_output <- function(output_text) {
+
+  # Ekstraher linjer og verdier fra output_text
+  pairs <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Pairs$"), "\\d+"))
+  merged <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Merged \\("), "\\d+"))
+  merged_percent <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Merged \\("), "\\d+\\.\\d+"))
+  not_merged <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Not merged"), "\\d+"))
+  not_merged_percent <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Not merged"), "\\d+\\.\\d+"))
+
+  too_many_diff <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "too many differences"), "\\d+"))
+  align_score_low <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "alignment score too low"), "\\d+"))
+
+  mean_read_length <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean read length"), "\\d+\\.\\d+"))
+
+  mean_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean fragment length"), "\\d+\\.\\d+"))
+  sd_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Standard deviation of fragment length"), "\\d+\\.\\d+"))
+
+  mean_expected_error_forward <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean expected error in forward sequences"), "\\d+\\.\\d+"))
+  mean_expected_error_reverse <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean expected error in reverse sequences"), "\\d+\\.\\d+"))
+  mean_expected_error_merged <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean expected error in merged sequences"), "\\d+\\.\\d+"))
+
+  mean_observed_error_forward <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean observed errors in merged region of forward sequences"), "\\d+\\.\\d+"))
+  mean_observed_error_reverse <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean observed errors in merged region of reverse sequences"), "\\d+\\.\\d+"))
+  mean_observed_error_merged <- as.numeric(stringr::str_extract(stringr::str_subset(output_text, "Mean observed errors in merged region$"), "\\d+\\.\\d+"))
+
+  metrics <- tibble::tibble(
+    Metric = c(
+      "Total Pairs",
+      "Merged Pairs",
+      "Merged Percentage",
+      "Not Merged Pairs",
+      "Not Merged Percentage",
+      "Too Many Differences",
+      "Alignment Score Too Low",
+      "Mean Read Length",
+      "Mean Fragment Length",
+      "SD Fragment Length",
+      "Mean Expected Error Forward",
+      "Mean Expected Error Reverse",
+      "Mean Expected Error Merged",
+      "Mean Observed Error Forward",
+      "Mean Observed Error Reverse",
+      "Mean Observed Error Merged"
+    ),
+    Value = c(
+      pairs,
+      merged,
+      merged_percent,
+      not_merged,
+      not_merged_percent,
+      too_many_diff,
+      align_score_low,
+      mean_read_length,
+      mean_frag_length,
+      sd_frag_length,
+      mean_expected_error_forward,
+      mean_expected_error_reverse,
+      mean_expected_error_merged,
+      mean_observed_error_forward,
+      mean_observed_error_reverse,
+      mean_observed_error_merged
+    )
+  )
+
+  return(metrics)
+}
+
 
 # TODO: Må finne en måte å gjøre dette for mange samples
 # TODO: Skrive dokumentasjon
 # TODO: Skrive tester
 
-#' Title
+#' Merge FASTQ files
 #'
 #' @param fastq_file a FASTQ-file with forward reads (R1)
 #' @param reverse a FASTQ-file with reverse reads (R2)
@@ -57,16 +131,20 @@ fastq_mergepairs <- function(fastq_file,
 
   } else {
     message("Writing output to file:", fastqout)
-    system2("vsearch",
-            args = c("--fastq_mergepairs", fastq_file,
-                     "--reverse", reverse,
-                     "--threads", threads,
-                     "--fastqout", fastqout))
+    output_text <- system2("vsearch",
+                           args = c("--fastq_mergepairs", fastq_file,
+                                    "--reverse", reverse,
+                                    "--threads", threads,
+                                    "--fastqout", fastqout),
+                           stdout = TRUE,
+                           stderr = TRUE)
 
+    # output statistics in table
+    metrics <- parse_merge_pairs_output(output_text)
+
+    # merged reads in table
     merged_fastq <- microseq::readFastq(fastqout)
-    return(merged_fastq)
+
+    return(list(metrics = metrics, merged_fastq = merged_fastq))
   }
 }
-
-
-
