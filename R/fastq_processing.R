@@ -22,7 +22,7 @@ fastq_mergepairs <- function(fastq_file,
     merged_fastq_text <- system2(command = "vsearch",
                             args = c("--fastq_mergepairs", fastq_file,
                                      "--reverse", reverse,
-                                     #"--threads", threads,
+                                     "--threads", threads,
                                      "--fastqout", "-"),
                             stdout = TRUE)
 
@@ -32,8 +32,8 @@ fastq_mergepairs <- function(fastq_file,
     }
 
     headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
-    sequences <- fastq_text[seq(2, length(fastq_text), by = 4)]
-    qualities <- fastq_text[seq(4, length(fastq_text), by = 4)]
+    sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
+    qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
 
     merged_fastq <- tibble(
       Header = str_remove(headers, "^@"),
