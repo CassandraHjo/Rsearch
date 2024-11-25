@@ -98,6 +98,7 @@ parse_merge_pairs_output <- function(output_text) {
 #' @param threads number of computational threads to use
 #' @param fastqout name of the FASTQ-file with the output.
 #' When defined as NULL, no file is written.
+#' @param log_file log file for the merging
 #'
 #' @return A tibble with merged fastq sequences
 #' @export
