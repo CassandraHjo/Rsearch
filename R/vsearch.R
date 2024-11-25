@@ -2,7 +2,7 @@
 #'
 #' @description Specify the valid command to invoke VSEARCH.
 #'
-#' @param executable full path to the VSEARCH executable on your computer (text).
+#' @param vsearch_executable full path to the VSEARCH executable on your computer (text).
 #'
 #' @details Use this function to change the command used to invoke the external
 #' software VSEARCH on this computer. When the \code{Rsearch} package is installed this

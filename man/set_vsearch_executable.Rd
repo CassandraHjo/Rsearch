@@ -7,7 +7,7 @@
 set_vsearch_executable(vsearch_executable)
 }
 \arguments{
-\item{executable}{full path to the VSEARCH executable on your computer (text).}
+\item{vsearch_executable}{full path to the VSEARCH executable on your computer (text).}
 }
 \value{
 Nothing is returned, but the option \code{Rsearch.vsearch_executable}
