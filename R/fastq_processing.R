@@ -1,3 +1,18 @@
+#' Title
+#'
+#' @param executable_path path to VSEARCH executable on given computer
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' set_vsearch_path("C:/Program Files/vsearch/vsearch.exe")
+set_vsearch_path <- function(executable_path){
+  # Må fylles med noe som gjør at "vsearch" kommandoen kan brukes for alle
+}
+
+
+
 #' Parse output text from read merging to tibble
 #'
 #' @param output_text string of output from running fastq_mergepairs in vsearch
