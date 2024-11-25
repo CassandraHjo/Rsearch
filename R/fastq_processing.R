@@ -112,9 +112,16 @@ fastq_mergepairs <- function(fastq_file,
                              threads = 1,
                              fastqout = NULL){
 
+  # Check if vsearch is available
+  if (Sys.which("vsearch") == "") {
+    stop("vsearch is not installed or cannot be found in the system´s PATH.")
+  }
+
+  # Check is input files exist at given paths
   if (!file.exists(fastq_file)) stop("Cannot find input file: ", fastq_file)
   if (!file.exists(reverse)) stop("Cannot find reverse file: ", reverse)
 
+  # Normalize file paths
   fastq_file <- normalizePath(fastq_file)
   reverse <- normalizePath(reverse)
 
@@ -125,7 +132,7 @@ fastq_mergepairs <- function(fastq_file,
                                  args = c("--fastq_mergepairs", fastq_file,
                                           "--reverse", reverse,
                                           "--threads", threads,
-                                          "--log", log_file,
+                                          #"--log", log_file,
                                           "--fastqout", "-"),
                                  stdout = TRUE)
 
