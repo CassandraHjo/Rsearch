@@ -125,50 +125,97 @@ fastq_mergepairs <- function(fastq_file,
   fastq_file <- normalizePath(fastq_file)
   reverse <- normalizePath(reverse)
 
-  if (is.null(fastqout) || fastqout == "-") {
-    # Checks if vsearch should write output to file
-    message("No filename for output file. No output file will be written.")
-    merged_fastq_text <- system2(command = "vsearch",
-                                 args = c("--fastq_mergepairs", fastq_file,
-                                          "--reverse", reverse,
-                                          "--threads", threads,
-                                          #"--log", log_file,
-                                          "--fastqout", "-"),
-                                 stdout = TRUE)
+  if (is.null(log_file)) {
+    if (is.null(fastqout) || fastqout == "-") {
+      # Checks if vsearch should write output to file
+      message("No filename for output file. No output file will be written.")
+      merged_fastq_text <- system2(command = "vsearch",
+                                   args = c("--fastq_mergepairs", fastq_file,
+                                            "--reverse", reverse,
+                                            "--threads", threads,
+                                            "--fastqout", "-"),
+                                   stdout = TRUE)
 
-    # Transforming output string to tibble
-    if (length(merged_fastq_text) %% 4 != 0) {
-      stop("FASTQ-text is not valid or incomplete.")
+      # Transforming output string to tibble
+      if (length(merged_fastq_text) %% 4 != 0) {
+        stop("FASTQ-text is not valid or incomplete.")
+      }
+
+      headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
+      sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
+      qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
+
+      merged_fastq <- tibble::tibble(
+        Header = stringr::str_remove(headers, "^@"),
+        Sequence = sequences,
+        Quality = qualities
+      )
+      return(merged_fastq)
+
+    } else {
+      message("Writing output to file:", fastqout)
+      output_text <- system2("vsearch",
+                             args = c("--fastq_mergepairs", fastq_file,
+                                      "--reverse", reverse,
+                                      "--threads", threads,
+                                      "--fastqout", fastqout),
+                             stdout = TRUE,
+                             stderr = TRUE)
+
+      # output statistics in table
+      metrics <- parse_merge_pairs_output(output_text)
+
+      # merged reads in table
+      merged_fastq <- microseq::readFastq(fastqout)
+
+      return(list(metrics = metrics, merged_fastq = merged_fastq))
     }
-
-    headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
-    sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
-    qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
-
-    merged_fastq <- tibble::tibble(
-      Header = stringr::str_remove(headers, "^@"),
-      Sequence = sequences,
-      Quality = qualities
-    )
-    return(merged_fastq)
-
   } else {
-    message("Writing output to file:", fastqout)
-    output_text <- system2("vsearch",
-                           args = c("--fastq_mergepairs", fastq_file,
-                                    "--reverse", reverse,
-                                    "--threads", threads,
-                                    "--fastqout", fastqout),
-                           stdout = TRUE,
-                           stderr = TRUE)
+    if (is.null(fastqout) || fastqout == "-") {
+      # Checks if vsearch should write output to file
+      message("No filename for output file. No output file will be written.")
+      merged_fastq_text <- system2(command = "vsearch",
+                                   args = c("--fastq_mergepairs", fastq_file,
+                                            "--reverse", reverse,
+                                            "--threads", threads,
+                                            "--log", log_file,
+                                            "--fastqout", "-"),
+                                   stdout = TRUE)
 
-    # output statistics in table
-    metrics <- parse_merge_pairs_output(output_text)
+      # Transforming output string to tibble
+      if (length(merged_fastq_text) %% 4 != 0) {
+        stop("FASTQ-text is not valid or incomplete.")
+      }
 
-    # merged reads in table
-    merged_fastq <- microseq::readFastq(fastqout)
+      headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
+      sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
+      qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
 
-    return(list(metrics = metrics, merged_fastq = merged_fastq))
+      merged_fastq <- tibble::tibble(
+        Header = stringr::str_remove(headers, "^@"),
+        Sequence = sequences,
+        Quality = qualities
+      )
+      return(merged_fastq)
+
+    } else {
+      message("Writing output to file:", fastqout)
+      output_text <- system2("vsearch",
+                             args = c("--fastq_mergepairs", fastq_file,
+                                      "--reverse", reverse,
+                                      "--threads", threads,
+                                      "--fastqout", fastqout),
+                             stdout = TRUE,
+                             stderr = TRUE)
+
+      # output statistics in table
+      metrics <- parse_merge_pairs_output(output_text)
+
+      # merged reads in table
+      merged_fastq <- microseq::readFastq(fastqout)
+
+      return(list(metrics = metrics, merged_fastq = merged_fastq))
+    }
   }
 }
 
