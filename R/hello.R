@@ -24,13 +24,3 @@ hello <- function() {
   print("Hello, world!")
 }
 
-#' Prints goodbye message
-#'
-#' @return A character vector
-#' @export
-#'
-#' @examples
-#' bye()
-bye <- function() {
-  print("Goodbye, world!")
-}
