@@ -88,7 +88,6 @@ parse_merge_pairs_output <- function(output_text) {
 }
 
 
-# TODO: Må finne en måte å gjøre dette for mange samples
 # TODO: Skrive dokumentasjon
 # TODO: Skrive tester
 
@@ -105,7 +104,7 @@ parse_merge_pairs_output <- function(output_text) {
 #'
 fastq_mergepairs <- function(fastq_file,
                              reverse,
-                             #log_file = NULL,
+                             log_file = NULL,
                              #maxseqlength = 50000,
                              #minseqlength = 32,
                              #sample = NULL,
@@ -125,6 +124,7 @@ fastq_mergepairs <- function(fastq_file,
                                  args = c("--fastq_mergepairs", fastq_file,
                                           "--reverse", reverse,
                                           "--threads", threads,
+                                          "--log", log_file,
                                           "--fastqout", "-"),
                                  stdout = TRUE)
 
@@ -165,6 +165,17 @@ fastq_mergepairs <- function(fastq_file,
 }
 
 
+#' fastq_filter
+#'
+#' @param fastq_file A merged fastq file
+#' @param fastq_maxee_rate numeric
+#' @param fasta_width numeric
+#' @param fastaout output file in FASTA format
+#' @param threads number of threads
+#'
+#' @return a fasta file
+#' @export
+#'
 fastq_filter <- function(fastq_file,
                          fastq_maxee_rate,
                          fasta_width = 0,
