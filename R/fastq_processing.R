@@ -163,3 +163,13 @@ fastq_mergepairs <- function(fastq_file,
     return(list(metrics = metrics, merged_fastq = merged_fastq))
   }
 }
+
+
+fastq_filter <- function(fastq_file,
+                         fastq_maxee_rate,
+                         fasta_width = 0,
+                         fastaout = NULL,
+                         threads = 1){
+
+  # Her skal det skrives kode
+}
