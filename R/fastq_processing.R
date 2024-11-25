@@ -1,14 +1,3 @@
-#' Title
-#'
-#' @param executable_path path to VSEARCH executable on given computer
-#'
-#' @export
-#'
-#' @examples
-#' set_vsearch_path("C:/Program Files/vsearch/vsearch.exe")
-set_vsearch_path <- function(executable_path){
-  # Ma fylles med noe som gjør at "vsearch" kommandoen kan brukes for alle
-}
 
 
 
