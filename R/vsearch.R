@@ -1,6 +1,23 @@
 #' Set the VSEARCH executable
 #'
-#' @param executable full path to the VSEARCH executable on your computer.
+#' @description Specify the valid command to invoke VSEARCH.
+#'
+#' @param executable full path to the VSEARCH executable on your computer (text).
+#'
+#' @details Use this function to change the command used to invoke the external
+#' software VSEARCH on this computer. When the \code{Rsearch} package is installed this
+#' command is by default just \code{"vsearch"}.
+#'
+#' If you have a windows computer and have copied the binary \code{vsearch.exe}
+#' to the folder C:/Documents/ on your computer, you update R with this
+#' information by  \code{set_vsearch_executable("C:/Documents/vsearch")}.
+#'
+#' If you are running on a HPC using apptainer containers you update by
+#' \code{set_vsearch_executable("apptainer exec <containername> vsearch")}.
+#'
+#' @return Nothing is returned, but the option \code{Rsearch.vsearch_executable}
+#' is updated. The string is also saved to a file for later R sessions, i.e. you
+#' only need to update this once (or if you change how you run/install VSEARCH).
 #'
 #' @export set_vsearch_executable
 #'
