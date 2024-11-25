@@ -2,13 +2,12 @@
 #'
 #' @param executable_path path to VSEARCH executable on given computer
 #'
-#' @return
 #' @export
 #'
 #' @examples
 #' set_vsearch_path("C:/Program Files/vsearch/vsearch.exe")
 set_vsearch_path <- function(executable_path){
-  # Må fylles med noe som gjør at "vsearch" kommandoen kan brukes for alle
+  # Ma fylles med noe som gjør at "vsearch" kommandoen kan brukes for alle
 }
 
 
@@ -114,7 +113,7 @@ fastq_mergepairs <- function(fastq_file,
 
   # Check if vsearch is available
   if (Sys.which("vsearch") == "") {
-    stop("vsearch is not installed or cannot be found in the system´s PATH.")
+    stop("vsearch is not installed or cannot be found in the systems PATH.")
   }
 
   # Check is input files exist at given paths
