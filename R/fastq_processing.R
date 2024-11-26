@@ -90,6 +90,18 @@ merged_seq_to_tibble <- function(merged_fastq_text) {
   return(merged_fastq_tbl)
 }
 
+#' Validate log file extention
+#'
+#' @param log_file name of log file
+#'
+#' @noRd
+validate_log_file <- function(log_file) {
+  allowed_extensions <- c("\\.txt$", "\\.log$", "\\.json$", "\\.xml$")
+  if (!any(str_ends(log_file, allowed_extensions))) {
+    stop("The log file needs one of the following extentions: .txt, .log, .json, .xml.")
+  }
+}
+
 # TODO: Skrive dokumentasjon
 # TODO: Skrive tester
 
@@ -166,6 +178,9 @@ vs_fastq_mergepairs <- function(fastq_file,
       return(list(metrics = metrics, merged_fastq = merged_fastq))
     }
   } else {
+    # Check if log file extention is accepted
+    validate_log_file(log_file)
+
     if (is.null(fastqout) || fastqout == "-") {
       # Checks if vsearch should write output to file
       message("No filename for output file. No output file will be written.")
