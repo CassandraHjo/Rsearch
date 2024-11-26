@@ -26,9 +26,14 @@ set_vsearch_executable <- function(vsearch_executable){
   save(vsearch_executable, file = system.file("data/vsearch_executable.rds", package = "Rsearch"))
 }
 
-
-# Non-exported function to gracefully fail when vsearch_executable
-# does not contains a proper command line
+#' Check if vsearch executable is available
+#'
+#' @param vsearch_executable string with command to invoke VSEARCH.
+#'
+#' @details
+#' Function fails when vsearch_executable does not contain a proper command line
+#'
+#' @noRd
 vsearch_available <- function(vsearch_executable){
   chr <- NULL
   ok <- try(chr <- system2(vsearch_executable, stdout = TRUE), silent = TRUE)
