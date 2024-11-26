@@ -1,6 +1,6 @@
 #' Parse output text from read merging to tibble
 #'
-#' @param output_text string of output from running fastq_mergepairs in vsearch
+#' @param output_text string of output from running vs_fastq_mergepairs in vsearch
 #'
 #' @return table with merging metrics
 #' @noRd
@@ -87,7 +87,7 @@ parse_merge_pairs_output <- function(output_text) {
 #' @return A tibble with merged fastq sequences
 #' @export
 #'
-fastq_mergepairs <- function(fastq_file,
+vs_fastq_mergepairs <- function(fastq_file,
                              reverse,
                              log_file = NULL,
                              #maxseqlength = 50000,
@@ -215,11 +215,11 @@ fastq_mergepairs <- function(fastq_file,
 #' @return a fasta file
 #' @export
 #'
-fastq_filter <- function(fastq_file,
-                         fastq_maxee_rate,
-                         fasta_width = 0,
-                         fastaout = NULL,
-                         threads = 1){
+vs_fastq_filter <- function(fastq_file,
+                            fastq_maxee_rate,
+                            fasta_width = 0,
+                            fastaout = NULL,
+                            threads = 1){
 
   # Her skal det skrives kode
 }
