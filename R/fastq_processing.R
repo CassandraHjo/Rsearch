@@ -1,6 +1,6 @@
-#' Parse output text from read merging to tibble
+#' Parse statistics from output text in stdout from read merging to tibble
 #'
-#' @param output_text string of output from running vs_fastq_mergepairs in vsearch
+#' @param output_text string of output from running vs_fastq_mergepairs
 #'
 #' @return table with merging metrics
 #' @noRd
@@ -71,6 +71,24 @@ parse_merge_pairs_output <- function(output_text) {
   return(metrics)
 }
 
+#' Parse merged sequences from output text in stdout from read merging to tibble
+#'
+#' @param merged_fastq_text string of output with merged sequences from running vs_fastq_mergepairs
+#'
+#' @return table with merged sequences, their headers and quality scores
+#' @noRd
+merged_seq_to_tibble <- function(merged_fastq_text) {
+  headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
+  sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
+  qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
+
+  merged_fastq_tbl <- tibble::tibble(
+    Header = stringr::str_remove(headers, "^@"),
+    Sequence = sequences,
+    Quality = qualities
+  )
+  return(merged_fastq_tbl)
+}
 
 # TODO: Skrive dokumentasjon
 # TODO: Skrive tester
@@ -125,15 +143,8 @@ vs_fastq_mergepairs <- function(fastq_file,
         stop("FASTQ-text is not valid or incomplete.")
       }
 
-      headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
-      sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
-      qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
+      merged_fastq <- merged_seq_to_tibble(merged_fastq_text)
 
-      merged_fastq <- tibble::tibble(
-        Header = stringr::str_remove(headers, "^@"),
-        Sequence = sequences,
-        Quality = qualities
-      )
       return(merged_fastq)
 
     } else {
@@ -171,15 +182,8 @@ vs_fastq_mergepairs <- function(fastq_file,
         stop("FASTQ-text is not valid or incomplete.")
       }
 
-      headers <- merged_fastq_text[seq(1, length(merged_fastq_text), by = 4)]
-      sequences <- merged_fastq_text[seq(2, length(merged_fastq_text), by = 4)]
-      qualities <- merged_fastq_text[seq(4, length(merged_fastq_text), by = 4)]
+      merged_fastq <- merged_seq_to_tibble(merged_fastq_text)
 
-      merged_fastq <- tibble::tibble(
-        Header = stringr::str_remove(headers, "^@"),
-        Sequence = sequences,
-        Quality = qualities
-      )
       return(merged_fastq)
 
     } else {
