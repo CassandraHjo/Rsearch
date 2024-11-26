@@ -1,13 +1,9 @@
-
-
-
 #' Parse output text from read merging to tibble
 #'
 #' @param output_text string of output from running fastq_mergepairs in vsearch
 #'
 #' @return table with merging metrics
-#' @export
-#'
+#' @noRd
 parse_merge_pairs_output <- function(output_text) {
 
   # Ekstraher linjer og verdier fra output_text
