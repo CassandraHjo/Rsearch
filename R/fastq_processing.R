@@ -127,9 +127,8 @@ vs_fastq_mergepairs <- function(fastq_file,
                              fastqout = NULL){
 
   # Check if vsearch is available
-  if (Sys.which("vsearch") == "") {
-    stop("vsearch is not installed or cannot be found in the systems PATH.")
-  }
+  vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
+  vsearch_available(vsearch_executable)
 
   # Check is input files exist at given paths
   if (!file.exists(fastq_file)) stop("Cannot find input file: ", fastq_file)
