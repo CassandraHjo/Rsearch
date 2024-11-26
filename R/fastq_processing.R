@@ -239,5 +239,9 @@ vs_fastq_filter <- function(fastq_file,
                             fastaout = NULL,
                             threads = 1){
 
+  # Check if vsearch is available
+  vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
+  vsearch_available(vsearch_executable)
+
   # Her skal det skrives kode
 }
