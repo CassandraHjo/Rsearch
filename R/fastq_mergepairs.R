@@ -1,0 +1,160 @@
+# TODO: Skrive dokumentasjon
+# TODO: Skrive tester
+
+#' Merge FASTQ files
+#'
+#' @param fastq_file a FASTQ-file with forward reads (R1)
+#' @param reverse a FASTQ-file with reverse reads (R2)
+#' @param threads number of computational threads to use
+#' @param fastqout name of the FASTQ-file with the output.
+#' When defined as NULL, no file is written.
+#' @param log_file a log file with output from vsearch
+#'
+#' @return A list with a tibble with merged fastq sequences and a tibble contianing merging statistics
+#' @export
+#'
+vs_fastq_mergepairs <- function(fastq_file,
+                                reverse,
+                                log_file = NULL,
+                                threads = 1,
+                                fastqout = NULL){
+
+  # Check if vsearch is available
+  vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
+  vsearch_available(vsearch_executable)
+
+  # Check is input files exist at given paths
+  if (!file.exists(fastq_file)) stop("Cannot find input file: ", fastq_file)
+  if (!file.exists(reverse)) stop("Cannot find reverse file: ", reverse)
+
+  # Normalize file paths
+  fastq_file <- normalizePath(fastq_file)
+  reverse <- normalizePath(reverse)
+
+  # Determine output file
+  if (is.null(fastqout)) {
+    message("No filename for output file. No output file will be created.")
+    outfile <- tempfile(pattern = "merged", fileext = ".fq")
+  } else {
+    # Validate output file extention
+    validate_fastq_file(fastqout)
+
+    message("Writing merged sequences to file:", fastqout)
+    outfile <- fastqout
+  }
+
+  # Build argument string for command line
+  args <- c("--fastq_mergepairs", fastq_file,
+            "--reverse", reverse,
+            "--threads", threads,
+            "--fastqout", outfile)
+
+  # Add log file if specified by user
+  if (!is.null(log_file)) {
+    validate_log_file(log_file)
+    args <- c(args, "--log", log_file)
+  }
+
+  # Run vsearch
+  vsearch_output <- system2(command = vsearch_executable,
+                            args = args,
+                            stdout = TRUE,
+                            stderr = TRUE)
+
+  # Read output into fastq object (tbl)
+  merged_fastq <- microseq::readFastq(outfile)
+
+  if (!is.null(log_file)) {
+    vsearch_output <- readLines(log_file)
+  }
+
+  # Output statistics in table
+  statistics <- parse_merge_statistics(vsearch_output, fastq_file, reverse)
+
+  # Remove temp file if necessary
+  if (is.null(fastqout)) {
+    file.remove(outfile)
+  }
+
+  return(list(statistics = statistics, merged_fastq = merged_fastq))
+}
+
+
+#' fastq_filter
+#'
+#' @param fastq_file A merged fastq file
+#' @param fastq_maxee_rate numeric
+#' @param fasta_width numeric
+#' @param fastaout output file in FASTA format
+#' @param threads number of threads
+#'
+#' @return a fasta file
+#' @export
+#'
+vs_fastq_filter <- function(fastq_file,
+                            fastq_maxee_rate,
+                            fasta_width = 0,
+                            fastaout = NULL,
+                            threads = 1){
+
+  # Check if vsearch is available
+  vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
+  vsearch_available(vsearch_executable)
+
+  # Her skal det skrives kode
+}
+
+#' Parse statistics from output text in stdout from read merging to tibble
+#'
+#' @param output_text string of output from running vs_fastq_mergepairs
+#'
+#' @return table with merging metrics
+#' @noRd
+parse_merge_statistics <- function(output, R1_file, R2_file) {
+
+  # Extract values from output
+  pairs <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Pairs$"), "\\d+"))
+  merged <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Merged"), "\\d+"))
+  too_many_diff <- as.numeric(stringr::str_extract(stringr::str_subset(output, "too many differences"), "\\d+"))
+  alignment_low <- as.numeric(stringr::str_extract(stringr::str_subset(output, "alignment score too low"), "\\d+"))
+  mean_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Mean fragment length"), "\\d+\\.\\d+"))
+  stddev_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Standard deviation of fragment length"), "\\d+\\.\\d+"))
+
+  # Create table
+  result_table <- data.frame(
+    Tot_num_pairs = pairs,
+    Merged = merged,
+    Too_Many_Differences = too_many_diff,
+    Low_Alignment_Score_or_score_drop_too_high = alignment_low,
+    Mean_Fragment_Length = mean_frag_length,
+    StdDev_Fragment_Length = stddev_frag_length,
+    R1_file = basename(R1_file),
+    R2_file = basename(R2_file)
+  )
+
+  return(result_table)
+}
+
+#' Validate log file extention
+#'
+#' @param log_file name of log file
+#'
+#' @noRd
+validate_log_file <- function(log_file) {
+  allowed_extensions <- c("\\.txt$", "\\.log$", "\\.json$", "\\.xml$")
+  if (!any(stringr::str_ends(log_file, allowed_extensions))) {
+    stop("The log file needs one of the following extentions: .txt, .log, .json, .xml.")
+  }
+}
+
+#' Validate outfile extention
+#'
+#' @param fastqout
+#'
+#' @noRd
+validate_fastq_file <- function(fastqout) {
+  allowed_extensions <- c("\\.fq$", "\\.fastq$")
+  if (!any(stringr::str_ends(fastqout, allowed_extensions))) {
+    stop("The output file needs one of the following extentions: .fq, .fastq.")
+  }
+}
