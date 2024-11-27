@@ -16,8 +16,6 @@
 vs_fastq_mergepairs <- function(fastq_file,
                                 reverse,
                                 log_file = NULL,
-                                #maxseqlength = 50000,
-                                #minseqlength = 32,
                                 threads = 1,
                                 fastqout = NULL){
 
