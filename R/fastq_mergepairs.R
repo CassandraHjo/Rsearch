@@ -8,16 +8,16 @@
 #' @param threads number of computational threads to use
 #' @param fastqout name of the FASTQ-file with the output.
 #' When defined as NULL, no file is written.
+#' @param log_file a log file with output from vsearch
 #'
 #' @return A list with a tibble with merged fastq sequences and a tibble contianing merging statistics
 #' @export
 #'
 vs_fastq_mergepairs <- function(fastq_file,
                                 reverse,
-                                #log_file = NULL,
+                                log_file = NULL,
                                 #maxseqlength = 50000,
                                 #minseqlength = 32,
-                                #sample = NULL,
                                 threads = 1,
                                 fastqout = NULL){
 
@@ -51,6 +51,12 @@ vs_fastq_mergepairs <- function(fastq_file,
             "--threads", threads,
             "--fastqout", outfile)
 
+  # Add log file if specified by user
+  if (!is.null(log_file)) {
+    validate_log_file(log_file)
+    args <- c(args, "--log", log_file)
+  }
+
   # Run vsearch
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
@@ -59,6 +65,10 @@ vs_fastq_mergepairs <- function(fastq_file,
 
   # Read output into fastq object (tbl)
   merged_fastq <- microseq::readFastq(outfile)
+
+  if (!is.null(log_file)) {
+    vsearch_output <- readLines(log_file)
+  }
 
   # Output statistics in table
   statistics <- parse_merge_statistics(vsearch_output, fastq_file, reverse)

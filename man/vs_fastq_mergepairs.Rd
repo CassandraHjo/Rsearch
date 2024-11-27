@@ -4,12 +4,20 @@
 \alias{vs_fastq_mergepairs}
 \title{Merge FASTQ files}
 \usage{
-vs_fastq_mergepairs(fastq_file, reverse, threads = 1, fastqout = NULL)
+vs_fastq_mergepairs(
+  fastq_file,
+  reverse,
+  log_file = NULL,
+  threads = 1,
+  fastqout = NULL
+)
 }
 \arguments{
 \item{fastq_file}{a FASTQ-file with forward reads (R1)}
 
 \item{reverse}{a FASTQ-file with reverse reads (R2)}
+
+\item{log_file}{a log file with output from vsearch}
 
 \item{threads}{number of computational threads to use}
 
