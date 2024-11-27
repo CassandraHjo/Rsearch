@@ -1,23 +1,33 @@
 # TODO: Skrive dokumentasjon
 # TODO: Skrive tester
 
-#' Merge FASTQ files
+#' Merge read-pairs
 #'
-#' @param fastq_file a FASTQ-file with forward reads (R1)
-#' @param reverse a FASTQ-file with reverse reads (R2)
-#' @param threads number of computational threads to use
-#' @param fastqout name of the FASTQ-file with the output.
-#' When defined as NULL, no file is written.
-#' @param log_file a log file with output from vsearch
+#' @description Merging read-pairs with overlapping regions.
 #'
-#' @return A list with a tibble with merged fastq sequences and a tibble contianing merging statistics
+#' @param fastq_file a FASTQ-file with forward reads (R1).
+#' @param reverse a FASTQ-file with reverse reads (R2).
+#' @param fastqout name of the FASTQ-file with the output or NULL, see Details.
+#' @param log_file a log file with output from vsearch.
+#' @param threads number of computational threads to be used by vsearch..
+#'
+#' @details The read-pairs in the input fastq-files (\code{fastq_file} and \code{reverse})
+#' are merged if they have sufficient overlap, using vsearch.
+#'
+#' If \code{fastqout} is specified, the merged reads are output to this file in fastq-format.
+#' If unspecified (\code{NULL}) the result is returned as a fastq-object, i.e. a tibble with
+#' columns \code{Header}, \code{Sequence} and \code{Quality}.
+#'
+#' @return A list with two tibbles, one with merged fastq sequences and one with merging statistics. If
+#' \code{fastqout} was specified....
+#'
 #' @export
 #'
 vs_fastq_mergepairs <- function(fastq_file,
                                 reverse,
+                                fastqout = NULL,
                                 log_file = NULL,
-                                threads = 1,
-                                fastqout = NULL){
+                                threads = 1){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
