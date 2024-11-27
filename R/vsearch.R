@@ -23,7 +23,8 @@
 #'
 set_vsearch_executable <- function(vsearch_executable){
   options(Rsearch.vsearch_executable = vsearch_executable)
-  save(vsearch_executable, file = system.file("data/vsearch_executable.rds", package = "Rsearch"))
+  save(vsearch_executable,
+       file = system.file("data/vsearch_executable.rds", package = "Rsearch"))
 }
 
 #' Check if vsearch executable is available
@@ -36,9 +37,13 @@ set_vsearch_executable <- function(vsearch_executable){
 #' @noRd
 vsearch_available <- function(vsearch_executable){
   chr <- NULL
-  ok <- try(chr <- system2(vsearch_executable, stdout = TRUE), silent = TRUE)
+  ok <- try(chr <- system2(vsearch_executable,
+                           args = "-h",
+                           stdout = TRUE),
+            silent = TRUE)
   if(length(grep("Error", ok[1])) > 0){
-    stop("Cannot run ", vsearch_executable, " from R, use set_vsearch_executable()\nto set proper command to invoke vsearch")
+    stop("Cannot run ",
+         vsearch_executable, " from R, use set_vsearch_executable() to set proper command to invoke vsearch")
     return(FALSE)
   } else {
     return(TRUE)
