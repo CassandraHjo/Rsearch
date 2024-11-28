@@ -2,7 +2,7 @@
 #'
 #' @description Trim and/or filter sequences in the given FASTQ file
 #'
-#' @param fastq_file a FASTQ file with reads
+#' @param fastq_input a FASTQ file with reads or a FASTQ object, see Detalis.
 #' @param fastaout name of the FASTA-file with the output or NULL, see Details.
 #' @param fastq_maxee_rate threshold for average expected error. Value ranging form 0.0 to 1.0. See Details.
 #' @param fasta_width number of characters in the width of sequences in the output FASTA file. See Detalis.
@@ -10,6 +10,9 @@
 #' @param log_file name of the log file with messages from running vsearch or NULL, see Details.
 #'
 #' @details The reads in the input FASTQ-file (\code{fastq_file}) are filtered based on ..., using vsearch.
+#'
+#' \code{fastq_input} can either be a FASTQ file with reads or a FASTQ object. The FASTQ object needs to be a tibble
+#' with columns \code{Header}, \code{Sequence} and \code{Quality} (like the one outputed from \code{vs_fastq_mergepairs()}).
 #'
 #' If \code{fastaout} is specified, the remaining sequences after trimming/filtering are output to this file in FASTA-format.
 #' If unspecified (\code{NULL}) the result is returned as a FASTA-object, i.e. a tibble with
@@ -25,21 +28,29 @@
 #' #' If \code{log_file} is specified, the messages are output to this file.
 #' If unspecified (\code{NULL}) no log file is written.
 #'
-#' @return a tibble with FASTA sequences
+#' @return a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
 #' @export
 #'
-vs_fastq_filter <- function(fastq_file,
+vs_fastq_filter <- function(fastq_input,
                             fastaout = NULL,
                             fastq_maxee_rate,
                             fasta_width = 0,
                             threads = 1,
                             log_file = NULL){
 
-  # Må også legge inn mulighet for å ta inn en tabell og ikke bare fil
-
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Check if FASTQ input is file or tibble
+  if (!is.character(fastq_input)){
+    # Gjøre om tibble til temp fil
+    temp_file <- tempfile(pattern = "merged", fileext = ".fq")
+    microseq::writeFastq(fastq_input, temp_file)
+    fastq_file <- temp_file
+  } else {
+    fastq_file <- fastq_input
+  }
 
   # Check is input file exists at given path
   if (!file.exists(fastq_file)) stop("Cannot find input file: ", fastq_file)
@@ -55,7 +66,7 @@ vs_fastq_filter <- function(fastq_file,
     # Validate output file extention
     validate_fasta_file(fastaout)
 
-    message("Writing filtered sequences to file:", fastaout)
+    message("Writing filtered sequences to file: ", fastaout)
     outfile <- fastaout
   }
 
@@ -88,7 +99,12 @@ vs_fastq_filter <- function(fastq_file,
   # Output statistics in table
   statistics <- parse_filter_statistics(vsearch_output, fastq_file)
 
-  # Remove temp file if necessary
+  # Remove temp file for input if necessary
+  if (!is.character(fastq_input)) {
+    file.remove(fastq_file)
+  }
+
+  # Remove temp file for output if necessary
   if (is.null(fastaout)) {
     file.remove(outfile)
   }
