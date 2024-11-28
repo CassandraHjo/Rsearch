@@ -18,7 +18,7 @@
 #' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
 #' columns \code{Header}, \code{Sequence} and \code{Quality}.
 #'
-#' #' If \code{log_file} is specified, the messages are output to this file.
+#' If \code{log_file} is specified, the messages are output to this file.
 #' If unspecified (\code{NULL}) no log file is written.
 #'
 #' @return A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.

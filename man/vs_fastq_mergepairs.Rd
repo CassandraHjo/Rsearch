@@ -37,6 +37,6 @@ If \code{fastqout} is specified, the merged reads are output to this file in FAS
 If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
 columns \code{Header}, \code{Sequence} and \code{Quality}.
 
-#' If \code{log_file} is specified, the messages are output to this file.
+If \code{log_file} is specified, the messages are output to this file.
 If unspecified (\code{NULL}) no log file is written.
 }

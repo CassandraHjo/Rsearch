@@ -5,7 +5,7 @@
 \title{Filter sequences}
 \usage{
 vs_fastq_filter(
-  fastq_file,
+  fastq_input,
   fastaout = NULL,
   fastq_maxee_rate,
   fasta_width = 0,
@@ -14,7 +14,7 @@ vs_fastq_filter(
 )
 }
 \arguments{
-\item{fastq_file}{a FASTQ file with reads}
+\item{fastq_input}{a FASTQ file with reads or a FASTQ object, see Detalis.}
 
 \item{fastaout}{name of the FASTA-file with the output or NULL, see Details.}
 
@@ -27,13 +27,16 @@ vs_fastq_filter(
 \item{log_file}{name of the log file with messages from running vsearch or NULL, see Details.}
 }
 \value{
-a tibble with FASTA sequences
+a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
 }
 \description{
 Trim and/or filter sequences in the given FASTQ file
 }
 \details{
 The reads in the input FASTQ-file (\code{fastq_file}) are filtered based on ..., using vsearch.
+
+\code{fastq_input} can either be a FASTQ file with reads or a FASTQ object. The FASTQ object needs to be a tibble
+with columns \code{Header}, \code{Sequence} and \code{Quality} (like the one outputed from \code{vs_fastq_mergepairs()}).
 
 If \code{fastaout} is specified, the remaining sequences after trimming/filtering are output to this file in FASTA-format.
 If unspecified (\code{NULL}) the result is returned as a FASTA-object, i.e. a tibble with
