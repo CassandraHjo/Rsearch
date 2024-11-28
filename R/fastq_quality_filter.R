@@ -1,6 +1,6 @@
-#' Filter sequences
+#' Quality filtering
 #'
-#' @description Trim and/or filter sequences in the given FASTQ file
+#' @description Quality filtering of sequences in FASTQ file or object
 #'
 #' @param fastq_input a FASTQ file with reads or a FASTQ object, see Detalis.
 #' @param fastaout name of the FASTA-file with the output or NULL, see Details.
