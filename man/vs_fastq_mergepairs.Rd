@@ -19,22 +19,24 @@ vs_fastq_mergepairs(
 
 \item{fastqout}{name of the FASTQ-file with the output or NULL, see Details.}
 
-\item{log_file}{a log file with output from vsearch.}
+\item{log_file}{name of the log file with messages from running vsearch or NULL, see Details.}
 
-\item{threads}{number of computational threads to be used by vsearch..}
+\item{threads}{number of computational threads to be used by vsearch.}
 }
 \value{
-A list with two tibbles, one with merged fastq sequences and one with merging statistics. If
-\code{fastqout} was specified....
+A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.
 }
 \description{
 Merging read-pairs with overlapping regions.
 }
 \details{
-The read-pairs in the input fastq-files (\code{fastq_file} and \code{reverse})
+The read-pairs in the input FASTQ-files (\code{fastq_file} and \code{reverse})
 are merged if they have sufficient overlap, using vsearch.
 
-If \code{fastqout} is specified, the merged reads are output to this file in fastq-format.
-If unspecified (\code{NULL}) the result is returned as a fastq-object, i.e. a tibble with
+If \code{fastqout} is specified, the merged reads are output to this file in FASTQ-format.
+If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
 columns \code{Header}, \code{Sequence} and \code{Quality}.
+
+#' If \code{log_file} is specified, the messages are output to this file.
+If unspecified (\code{NULL}) no log file is written.
 }
