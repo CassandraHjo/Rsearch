@@ -11,17 +11,17 @@
 #' @param log_file name of the log file with messages from running vsearch or NULL, see Details.
 #' @param threads number of computational threads to be used by vsearch.
 #'
-#' @details The read-pairs in the input fastq-files (\code{fastq_file} and \code{reverse})
+#' @details The read-pairs in the input FASTQ-files (\code{fastq_file} and \code{reverse})
 #' are merged if they have sufficient overlap, using vsearch.
 #'
-#' If \code{fastqout} is specified, the merged reads are output to this file in fastq-format.
-#' If unspecified (\code{NULL}) the result is returned as a fastq-object, i.e. a tibble with
+#' If \code{fastqout} is specified, the merged reads are output to this file in FASTQ-format.
+#' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
 #' columns \code{Header}, \code{Sequence} and \code{Quality}.
 #'
 #' #' If \code{log_file} is specified, the messages are output to this file.
 #' If unspecified (\code{NULL}) no log file is written.
 #'
-#' @return A list with two tibbles, one with merged fastq sequences and one with merging statistics.
+#' @return A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.
 #'
 #' @export
 #'
@@ -93,7 +93,7 @@ vs_fastq_mergepairs <- function(fastq_file,
 
 #' Parse statistics from output text in stdout from read merging to tibble
 #'
-#' @param output_text string of output from running vs_fastq_mergepairs
+#' @param output string of output from running vs_fastq_mergepairs
 #'
 #' @return table with merging metrics
 #' @noRd
