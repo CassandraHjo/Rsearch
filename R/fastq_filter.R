@@ -116,18 +116,24 @@ validate_fasta_file <- function(fastaout) {
 #' @noRd
 parse_filter_statistics <- function(output, fastq_file) {
 
-  # Extract values from output
-  kept <- as.numeric(stringr::str_extract(stringr::str_subset(output, "sequences kept"), "\\d+"))
-  truncated <- as.numeric(stringr::str_extract(stringr::str_subset(output, "of which .* truncated"), "\\d+"))
-  discarded <- as.numeric(stringr::str_extract(stringr::str_subset(output, "sequences discarded"), "\\d+"))
+  # Find line with statistics
+  stats_line <- stringr::str_subset(output, "sequences kept")
+
+  # Extract number of kept sequences
+  kept <- as.numeric(stringr::str_extract(stats_line, "^\\d+"))
+
+  # Extract number of truncated sequences
+  truncated <- as.numeric(stringr::str_extract(stats_line, "(?<=of which )\\d+(?= truncated)"))
+
+  # Extract number of discarded sequences
+  discarded <- as.numeric(stringr::str_extract(stats_line, "(?<=, )\\d+(?= sequences discarded)"))
 
   # Create table
   result_table <- data.frame(
     Kept_Sequences = kept,
     Truncated_Sequences = truncated,
     Discarded_Sequences = discarded,
-    fastq_file = basename(fastq_file),
-    stringsAsFactors = FALSE
+    fastq_file = basename(fastq_file)
   )
 
   return(result_table)
