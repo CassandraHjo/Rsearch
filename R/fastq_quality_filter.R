@@ -14,7 +14,7 @@
 #' \code{fastq_input} can either be a FASTQ file with reads or a FASTQ object. The FASTQ object needs to be a tibble
 #' with columns \code{Header}, \code{Sequence} and \code{Quality} (like the one outputed from \code{vs_fastq_mergepairs()}).
 #'
-#' If \code{fastaout} is specified, the remaining sequences after trimming/filtering are output to this file in FASTA-format.
+#' If \code{fastaout} is specified, the remaining sequences after quality filtering are output to this file in FASTA-format.
 #' If unspecified (\code{NULL}) the result is returned as a FASTA-object, i.e. a tibble with
 #' columns \code{Header} and \code{Sequence}.
 #'
@@ -44,7 +44,6 @@ vs_fastq_filter <- function(fastq_input,
 
   # Check if FASTQ input is file or tibble
   if (!is.character(fastq_input)){
-    # Gjøre om tibble til temp fil
     temp_file <- tempfile(pattern = "merged", fileext = ".fq")
     microseq::writeFastq(fastq_input, temp_file)
     fastq_file <- temp_file
@@ -92,6 +91,7 @@ vs_fastq_filter <- function(fastq_input,
   # Read output into FASTA object (tbl)
   filt_fasta <- microseq::readFasta(outfile)
 
+  # Read output from log file if log file was specified
   if (!is.null(log_file)) {
     vsearch_output <- readLines(log_file)
   }
