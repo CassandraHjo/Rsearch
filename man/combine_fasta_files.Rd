@@ -11,6 +11,9 @@ combine_fasta_files(folder_path, output_file)
 
 \item{output_file}{name of output file}
 }
+\value{
+path to combined fasta file
+}
 \description{
 Combine fasta files into one file
 }
