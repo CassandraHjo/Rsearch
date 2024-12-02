@@ -1,9 +1,11 @@
-#' Combine fasta files into one file
+#' Combine FASTA files
 #'
-#' @param folder_path path to where the fasta files are stored
-#' @param output_file name of output file
+#' @description Combines all FASTA-files in given directory into one file.
 #'
-#' @return path to combined fasta file
+#' @param folder_path path to directory with FASTA files.
+#' @param output_file name of output FASTA-file.
+#'
+#' @return string with path to combined FASTA-file.
 #'
 #' @export
 combine_fasta_files <- function(folder_path, output_file) {
@@ -14,7 +16,7 @@ combine_fasta_files <- function(folder_path, output_file) {
   }
 
   # Full path to the combined output file
-  all_fasta <- file.path(folder_path, output_file)
+  all_fasta <- file.path(output_file)
 
   # Remove all.fasta if it already exists
   if (file.exists(all_fasta)) {
