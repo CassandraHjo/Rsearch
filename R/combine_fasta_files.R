@@ -3,6 +3,8 @@
 #' @param folder_path path to where the fasta files are stored
 #' @param output_file name of output file
 #'
+#' @return path to combined fasta file
+#'
 #' @export
 combine_fasta_files <- function(folder_path, output_file) {
 
