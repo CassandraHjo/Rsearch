@@ -11,7 +11,8 @@ vs_derep_fulllength(
   strand = "plus",
   sizein = TRUE,
   sizeout = TRUE,
-  relabel_sha1 = TRUE,
+  relabel_sha1 = FALSE,
+  relabel = NULL,
   fasta_width = 0
 )
 }
@@ -29,6 +30,8 @@ vs_derep_fulllength(
 \item{sizeout}{decides if abundance annotations should be added to FASTA headers.}
 
 \item{relabel_sha1}{relabel sequences using the SHA1 message digest algorithm.}
+
+\item{relabel}{relabel sequences using the given prefix and a ticker to construct new headers}
 
 \item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Detalis.}
 }

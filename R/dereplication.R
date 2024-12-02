@@ -10,6 +10,7 @@
 #' @param sizein decides if abundance annotations present in sequence headers should be taken into account. True by default.
 #' @param sizeout decides if abundance annotations should be added to FASTA headers.
 #' @param relabel_sha1 relabel sequences using the SHA1 message digest algorithm.
+#' @param relabel relabel sequences using the given prefix and a ticker to construct new headers
 #'
 #' @details Identical sequences in the input file/object are merged, using vsearch.
 #' Identical sequences are defined as sequences with the same length and the same string of nucleotides.
@@ -33,7 +34,8 @@ vs_derep_fulllength <- function(fasta_input,
                                 strand = "plus",
                                 sizein = TRUE,
                                 sizeout = TRUE,
-                                relabel_sha1 = TRUE,
+                                relabel_sha1 = FALSE,
+                                relabel = NULL,
                                 fasta_width = 0){
 
   # Check if vsearch is available
@@ -85,6 +87,10 @@ vs_derep_fulllength <- function(fasta_input,
 
   if (relabel_sha1) {
     args <- c(args, "--relabel_sha1", "")
+  }
+
+  if (!is.null(relabel)) {
+    args <- c(args, "--relabel", relabel)
   }
 
   # Run vsearch
