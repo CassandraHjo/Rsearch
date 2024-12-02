@@ -1,3 +1,12 @@
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
 useDynLib(Rsearch, .registration = TRUE)
+
+export(combine_fasta_files)
+export(set_vsearch_executable)
+export(vs_cluster_size)
+export(vs_derep_fulllength)
+export(vs_fastq_filter)
+export(vs_fastq_mergepairs)
+export(vs_fastq_trim)
+importFrom(magrittr,"%>%")
