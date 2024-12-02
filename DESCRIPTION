@@ -1,9 +1,11 @@
 Package: Rsearch
 Type: Package
-Title: R package for analyzing sequence data
+Title: Processing and analyzing amplicon sequence data
 Version: 0.1.0
-Author: Cassandra Hjortdahl
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: c(
+    person("Cassandra", "Hjortdahl", email = "cassandra.hjortdahl@nmbu.no", role = "cre"),
+    person("Lars", "Snipen", email = "lars.snipen@nmbu.no", role = "aut"))
+Maintainer: Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
