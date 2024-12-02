@@ -2,9 +2,9 @@
 #'
 #' @description Dereplication of sequences in FASTA file or object.
 #'
-#' @param fasta_input a FASTA file with reads or a FASTA object, see Detalis.
+#' @param fasta_input a FASTA file with reads or a FASTA object, see Details.
 #' @param output name of the FASTA-file with the output or NULL, see Details.
-#' @param fasta_width number of characters in the width of sequences in the output FASTA file. See Detalis.
+#' @param fasta_width number of characters in the width of sequences in the output FASTA file. See Details.
 #' @param minuniquesize minimum abundance value post-dereplication for sequence not to be discarded.
 #' @param strand plus or both. When comparing sequences only check the plus strand or both strands.
 #' @param sizein decides if abundance annotations present in sequence headers should be taken into account. True by default.
