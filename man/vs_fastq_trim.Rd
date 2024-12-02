@@ -62,3 +62,6 @@ Sequences with an average expected error greater than the specified \code{fastq_
 For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence,
 divided by the length of the sequence.
 }
+\references{
+https://github.com/torognes/vsearch
+}

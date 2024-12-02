@@ -32,6 +32,9 @@
 #' divided by the length of the sequence.
 #'
 #' @return A list with one or two tibbles with trimmed FASTQ sequences with columns \code{Header}, \code{Sequence} and \code{Quality}.
+#'
+#' @references https://github.com/torognes/vsearch
+#'
 #' @export
 #'
 vs_fastq_trim <- function(fastq_input,

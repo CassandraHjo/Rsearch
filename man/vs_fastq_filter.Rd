@@ -52,3 +52,6 @@ FASTA files produced by vsearch are wrapped (sequences are written on lines of i
 #' If \code{log_file} is specified, the messages are output to this file.
 If unspecified (\code{NULL}) no log file is written.
 }
+\references{
+https://github.com/torognes/vsearch
+}

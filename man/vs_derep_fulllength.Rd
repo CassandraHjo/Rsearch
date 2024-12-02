@@ -55,3 +55,6 @@ columns \code{Header} and \code{Sequence}.
 FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
 }
+\references{
+https://github.com/torognes/vsearch
+}

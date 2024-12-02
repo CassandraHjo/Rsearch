@@ -29,6 +29,9 @@
 #' If unspecified (\code{NULL}) no log file is written.
 #'
 #' @return a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
+#'
+#' @references https://github.com/torognes/vsearch
+#'
 #' @export
 #'
 vs_fastq_filter <- function(fastq_input,

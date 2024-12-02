@@ -2,18 +2,18 @@
 % Please edit documentation in R/combine_fasta_files.R
 \name{combine_fasta_files}
 \alias{combine_fasta_files}
-\title{Combine fasta files into one file}
+\title{Combine FASTA files}
 \usage{
 combine_fasta_files(folder_path, output_file)
 }
 \arguments{
-\item{folder_path}{path to where the fasta files are stored}
+\item{folder_path}{path to directory with FASTA files.}
 
-\item{output_file}{name of output file}
+\item{output_file}{name of output FASTA-file.}
 }
 \value{
-path to combined fasta file
+string with path to combined FASTA-file.
 }
 \description{
-Combine fasta files into one file
+Combines all FASTA-files in given directory into one file.
 }

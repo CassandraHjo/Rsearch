@@ -26,6 +26,9 @@
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
 #' @return a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
+#'
+#' @references https://github.com/torognes/vsearch
+#'
 #' @export
 #'
 vs_derep_fulllength <- function(fasta_input,

@@ -23,6 +23,8 @@
 #'
 #' @return A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.
 #'
+#' @references https://github.com/torognes/vsearch
+#'
 #' @export
 #'
 vs_fastq_mergepairs <- function(fastq_file,
