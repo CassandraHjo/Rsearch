@@ -10,7 +10,7 @@
 #' @param sizein decides if abundance annotations present in sequence headers should be taken into account. True by default.
 #' @param sizeout decides if abundance annotations should be added to FASTA headers.
 #' @param relabel_sha1 relabel sequences using the SHA1 message digest algorithm.
-#' @param relabel relabel sequences using the given prefix and a ticker to construct new headers
+#' @param relabel relabel sequences using the given prefix and a ticker to construct new headers.
 #'
 #' @details Identical sequences in the input file/object are merged, using vsearch.
 #' Identical sequences are defined as sequences with the same length and the same string of nucleotides.

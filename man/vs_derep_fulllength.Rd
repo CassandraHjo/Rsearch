@@ -17,7 +17,7 @@ vs_derep_fulllength(
 )
 }
 \arguments{
-\item{fasta_input}{a FASTA file with reads or a FASTA object, see Detalis.}
+\item{fasta_input}{a FASTA file with reads or a FASTA object, see Details.}
 
 \item{output}{name of the FASTA-file with the output or NULL, see Details.}
 
@@ -31,9 +31,9 @@ vs_derep_fulllength(
 
 \item{relabel_sha1}{relabel sequences using the SHA1 message digest algorithm.}
 
-\item{relabel}{relabel sequences using the given prefix and a ticker to construct new headers}
+\item{relabel}{relabel sequences using the given prefix and a ticker to construct new headers.}
 
-\item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Detalis.}
+\item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Details.}
 }
 \value{
 a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
