@@ -42,7 +42,7 @@ vs_cluster_size <- function(fasta_input,
                             strand = "plus",
                             sizein = TRUE,
                             sizeout = TRUE,
-                            relabel = NULL,
+                            relabel = "OTU",
                             threads = 1,
                             fasta_width = 0){
 
@@ -83,6 +83,7 @@ vs_cluster_size <- function(fasta_input,
             "--threads", 1,
             "--strand", strand,
             "--fasta_width", fasta_width,
+            "--relabel", relabel,
             "--centroids", outfile)
 
   if (sizein) {
@@ -91,10 +92,6 @@ vs_cluster_size <- function(fasta_input,
 
   if (sizeout) {
     args <- c(args, "--sizeout", "")
-  }
-
-  if (!is.null(relabel)) {
-    args <- c(args, "--relabel", relabel)
   }
 
   # Run vsearch
@@ -107,6 +104,8 @@ vs_cluster_size <- function(fasta_input,
   centroids_fasta <- microseq::readFasta(outfile) %>%
     dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) %>%
     dplyr::mutate(centroid_size = as.numeric(centroid_size))
+
+  # LEGGE INN STATISTIKK HER!
 
   # Remove temp file for input if necessary
   if (!is.character(fasta_input)) {
