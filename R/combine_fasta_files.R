@@ -3,7 +3,7 @@
 #' @param folder_path path to where the fasta files are stored
 #' @param output_file name of output file
 #'
-#' @noRd
+#' @export
 combine_fasta_files <- function(folder_path, output_file) {
 
   # Check if input directory exists
