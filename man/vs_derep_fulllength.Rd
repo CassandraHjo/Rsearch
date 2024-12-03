@@ -56,5 +56,5 @@ FASTA files produced by vsearch are wrapped (sequences are written on lines of i
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
 }
 \references{
-https://github.com/torognes/vsearch
+\url{https://github.com/torognes/vsearch}
 }

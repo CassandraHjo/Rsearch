@@ -23,7 +23,7 @@
 #'
 #' @return A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.
 #'
-#' @references https://github.com/torognes/vsearch
+#' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
 #'
@@ -96,6 +96,8 @@ vs_fastq_mergepairs <- function(fastq_file,
 #' Parse statistics from output text in stdout from read merging to tibble
 #'
 #' @param output string of output from running vs_fastq_mergepairs
+#' @param R1_file name of file with forward reads that was used in merging
+#' @param R2_file name of file with reverse reads that was used in merging
 #'
 #' @return table with merging metrics
 #' @noRd

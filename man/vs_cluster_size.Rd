@@ -11,7 +11,7 @@ vs_cluster_size(
   strand = "plus",
   sizein = TRUE,
   sizeout = TRUE,
-  relabel = NULL,
+  relabel = "OTU",
   threads = 1,
   fasta_width = 0
 )
@@ -36,7 +36,11 @@ vs_cluster_size(
 \item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Details.}
 }
 \value{
-SOMETHING....
+A list with two tibbles:
+\describe{
+  \item{statistics}{A tibble containing information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.}
+  \item{centroids_fasta}{A tibble with the centroid sequences in FASTA format. The tibble includes three columns Header, Sequence, and centroid_size.}
+  }
 }
 \description{
 Clustering the FASTA sequences in the given file or object.
@@ -60,5 +64,5 @@ FASTA files produced by vsearch are wrapped (sequences are written on lines of i
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
 }
 \references{
-https://github.com/torognes/vsearch
+\url{https://github.com/torognes/vsearch}
 }

@@ -33,7 +33,7 @@
 #'
 #' @return A list with one or two tibbles with trimmed FASTQ sequences with columns \code{Header}, \code{Sequence} and \code{Quality}.
 #'
-#' @references https://github.com/torognes/vsearch
+#' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
 #'

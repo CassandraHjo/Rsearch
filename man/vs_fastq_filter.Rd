@@ -53,5 +53,5 @@ FASTA files produced by vsearch are wrapped (sequences are written on lines of i
 If unspecified (\code{NULL}) no log file is written.
 }
 \references{
-https://github.com/torognes/vsearch
+\url{https://github.com/torognes/vsearch}
 }

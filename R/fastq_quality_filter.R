@@ -30,7 +30,7 @@
 #'
 #' @return a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
 #'
-#' @references https://github.com/torognes/vsearch
+#' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
 #'

@@ -41,5 +41,5 @@ If \code{log_file} is specified, the messages are output to this file.
 If unspecified (\code{NULL}) no log file is written.
 }
 \references{
-https://github.com/torognes/vsearch
+\url{https://github.com/torognes/vsearch}
 }

@@ -63,5 +63,5 @@ For a given sequence, the average expected error is the sum of error probabiliti
 divided by the length of the sequence.
 }
 \references{
-https://github.com/torognes/vsearch
+\url{https://github.com/torognes/vsearch}
 }
