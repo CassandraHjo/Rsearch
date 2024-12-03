@@ -31,8 +31,13 @@
 #'
 #' @importFrom magrittr %>%
 #'
-#' @return SOMETHING....
-#' @references https://github.com/torognes/vsearch
+#' @return A list with two tibbles:
+#' \describe{
+#'   \item{statistics}{A tibble containing information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.}
+#'   \item{centroids_fasta}{A tibble with the centroid sequences in FASTA format. The tibble includes three columns Header, Sequence, and centroid_size.}
+#'   }
+#'
+#' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
 #'
@@ -103,9 +108,12 @@ vs_cluster_size <- function(fasta_input,
   # Read output into FASTA object (tbl)
   centroids_fasta <- microseq::readFasta(outfile) %>%
     dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) %>%
-    dplyr::mutate(centroid_size = as.numeric(centroid_size))
+    dplyr::mutate(centroid_size = as.numeric(centroid_size)) %>%
+    dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
 
-  # LEGGE INN STATISTIKK HER!
+  # Output statistics in table
+  statistics <- parse_cluster_statistics(vsearch_output, fasta_file)
+
 
   # Remove temp file for input if necessary
   if (!is.character(fasta_input)) {
@@ -117,5 +125,47 @@ vs_cluster_size <- function(fasta_input,
     file.remove(outfile)
   }
 
-  return(list(centroids_fasta = centroids_fasta))
+  return(list(statistics = statistics, centroids_fasta = centroids_fasta))
 }
+
+#' Parse statistics from output text in stdout from clustering to tibble
+#'
+#' @param output string of output from running vs_cluster_size
+#' @param input_file name of file with sequences used in the clustering
+#'
+#' @return table with clustering metrics
+#' @noRd
+parse_cluster_statistics <- function(output, input_file) {
+
+  # Extract values from output
+  nucleotides <- as.numeric(stringr::str_extract(stringr::str_subset(output, " nt in"), "\\d+(?= nt )"))
+  sequences <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=nt in )\\d+"))
+  min_len_seq <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=min )\\d+"))
+  max_len_seq <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=max )\\d+"))
+  avg_len_seq <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=avg )\\d+"))
+
+  num_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=Clusters: )\\d+"))
+  min_size_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=min )\\d+"))
+  max_size_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=max )\\d+"))
+  avg_size_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=avg )\\d+\\.?\\d*"))
+
+  num_singletons <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Singletons: "), "(?<=Singletons: )\\d+"))
+
+  # Create table
+  result_table <- data.frame(
+    Tot_nucleotides = nucleotides,
+    Num_sequences = sequences,
+    Min_sequence_length = min_len_seq,
+    Max_sequence_length = max_len_seq,
+    Avg_sequence_length = avg_len_seq,
+    Num_clusters = num_clusters,
+    Min_size_clusters = min_size_clusters,
+    Max_size_clusters = max_size_clusters,
+    Avg_size_clusters = avg_size_clusters,
+    Num_singletons = num_singletons,
+    Input_file = basename(input_file)
+  )
+
+  return(result_table)
+}
+
