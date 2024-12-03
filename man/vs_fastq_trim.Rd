@@ -39,7 +39,13 @@ vs_fastq_trim(
 \item{fastqout_R2}{name of the FASTQ-file with the output from trimming R2 reads or NULL, see Details.}
 }
 \value{
-A list with one or two tibbles with trimmed FASTQ sequences with columns \code{Header}, \code{Sequence} and \code{Quality}.
+A list with one or two tibbles:
+\describe{
+  \item{trimmed_R1}{A tibble containing trimmed FASTQ sequences from the forward reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
+  This tibble is always returned.}
+  \item{trimmed_R2}{A tibble containing trimmed FASTQ sequences from the reverse reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
+  This tibble is only returned if a \code{reverse} was given to the function.}
+  }
 }
 \description{
 Trimming sequences in FASTQ file or object
@@ -51,16 +57,16 @@ The reads in the input FASTQ-file (\code{fastq_input}) are trimmed based on the 
 with columns \code{Header}, \code{Sequence} and \code{Quality} (like the one outputted from \code{vs_fastq_mergepairs()}).
 \code{reverse} is an optional argument, for when you want to trim two files at a time (e.g. forward and reverse reads).
 It can either be a FASTQ file with reads, a FASTQ object or \code{NULL}. The FASTQ object needs to be a tibble
-with columns \code{Header}, \code{Sequence} and \code{Quality} (like the one outputted from \code{vs_fastq_mergepairs()}).
+with columns \code{Header}, \code{Sequence} and \code{Quality}.
 If unspecified (\code{NULL}), only \code{fastq_input} is trimmed.
 
-If \code{fastqout} is specified, the remaining sequences after trimming are output to this file in FASTQ-format.
+If \code{fastqout_R1} is specified, the remaining sequences after trimming are output to this file in FASTQ-format.
 If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
 columns \code{Header} and \code{Sequence}.
 
-Sequences with an average expected error greater than the specified \code{fastq_maxee_rate} are discarded.
-For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence,
-divided by the length of the sequence.
+#' If \code{fastqout_R2} is specified, the remaining sequences after trimming are output to this file in FASTQ-format.
+If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
+columns \code{Header} and \code{Sequence}.
 }
 \references{
 \url{https://github.com/torognes/vsearch}

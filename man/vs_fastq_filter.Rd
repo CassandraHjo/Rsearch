@@ -27,16 +27,20 @@ vs_fastq_filter(
 \item{log_file}{name of the log file with messages from running vsearch or NULL, see Details.}
 }
 \value{
-a tibble with FASTA sequences with columns \code{Header} and \code{Sequence}.
+A list with two tibbles:
+\describe{
+  \item{filt_fasta}{A tibble containing the filtered FASTA sequences, with columns \code{Header} and \code{Sequence}.}
+  \item{statistics}{A tibble containing filtering statistics, including number of kept and discarded sequences, and the name of the FASTQ file that was filtered.}
+  }
 }
 \description{
 Quality filtering of sequences in FASTQ file or object
 }
 \details{
-The reads in the input FASTQ-file (\code{fastq_file}) are filtered based on ..., using vsearch.
+The reads in the input FASTQ-file (\code{fastq_file}) are filtered based on average expected error (\code{fastq_maxee_rate}), using vsearch.
 
 \code{fastq_input} can either be a FASTQ file with reads or a FASTQ object. The FASTQ object needs to be a tibble
-with columns \code{Header}, \code{Sequence} and \code{Quality} (like the one outputed from \code{vs_fastq_mergepairs()}).
+with columns \code{Header}, \code{Sequence} and \code{Quality}.
 
 If \code{fastaout} is specified, the remaining sequences after quality filtering are output to this file in FASTA-format.
 If unspecified (\code{NULL}) the result is returned as a FASTA-object, i.e. a tibble with
@@ -49,7 +53,7 @@ divided by the length of the sequence.
 FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
 
-#' If \code{log_file} is specified, the messages are output to this file.
+If \code{log_file} is specified, the messages are output to this file.
 If unspecified (\code{NULL}) no log file is written.
 }
 \references{

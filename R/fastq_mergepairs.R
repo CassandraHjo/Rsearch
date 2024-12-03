@@ -21,7 +21,11 @@
 #' If \code{log_file} is specified, the messages are output to this file.
 #' If unspecified (\code{NULL}) no log file is written.
 #'
-#' @return A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.
+#' @return A list with two tibbles:
+#' \describe{
+#'   \item{merged_fastq}{A tibble containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.}
+#'   \item{statistics}{A tibble containing merging statistics, including number of pairs, number of merged pairs, and length metrics.}
+#'   }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'

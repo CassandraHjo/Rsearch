@@ -24,7 +24,11 @@ vs_fastq_mergepairs(
 \item{threads}{number of computational threads to be used by vsearch.}
 }
 \value{
-A list with two tibbles, one with merged FASTQ sequences and one with merging statistics.
+A list with two tibbles:
+\describe{
+  \item{merged_fastq}{A tibble containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.}
+  \item{statistics}{A tibble containing merging statistics, including number of pairs, number of merged pairs, and length metrics.}
+  }
 }
 \description{
 Merging read-pairs with overlapping regions.
