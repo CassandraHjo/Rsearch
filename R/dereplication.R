@@ -68,9 +68,6 @@ vs_derep_fulllength <- function(fasta_input,
     message("No filename for output file. No output file will be created.")
     outfile <- tempfile(pattern = "derep", fileext = ".fa")
   } else {
-    # Validate output file extention
-    validate_fasta_file(output)
-
     message("Writing filtered sequences to file: ", output)
     outfile <- output
   }

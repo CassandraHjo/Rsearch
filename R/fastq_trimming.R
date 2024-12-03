@@ -78,9 +78,6 @@ vs_fastq_trim <- function(fastq_input,
     message("No filename for R1 output file. No output file will be created.")
     outfile <- tempfile(pattern = "trimmed_R1", fileext = ".fq")
   } else {
-    # Validate output file extention
-    validate_fastq_file(fastqout_R1)
-
     message("Writing trimmed R1 sequences to file: ", fastqout_R1)
     outfile <- fastqout_R1
   }
@@ -124,9 +121,6 @@ vs_fastq_trim <- function(fastq_input,
       message("No filename for R2 output file. No output file will be created.")
       outfile <- tempfile(pattern = "trimmed_R2", fileext = ".fq")
     } else {
-      # Validate output file extention
-      validate_fastq_file(fastqout_R2) # Denne funksjonen ligger i fastq_mergepairs.R
-
       message("Writing trimmed R2 sequences to file: ", fastqout_R2)
       outfile <- fastqout_R2
     }

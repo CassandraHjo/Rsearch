@@ -39,8 +39,9 @@
 #' @export
 #'
 vs_fastq_filter <- function(fastq_input,
+                            fastq_maxee_rate = 0.01
                             fastaout = NULL,
-                            fastq_maxee_rate,
+                            fastqout = NULL,
                             fasta_width = 0,
                             threads = 1,
                             log_file = NULL){
@@ -69,9 +70,6 @@ vs_fastq_filter <- function(fastq_input,
     message("No filename for output file. No output file will be created.")
     outfile <- tempfile(pattern = "filtered", fileext = ".fa")
   } else {
-    # Validate output file extention
-    validate_fasta_file(fastaout)
-
     message("Writing filtered sequences to file: ", fastaout)
     outfile <- fastaout
   }
@@ -85,7 +83,6 @@ vs_fastq_filter <- function(fastq_input,
 
   # Add log file if specified by user
   if (!is.null(log_file)) {
-    validate_log_file(log_file)
     args <- c(args, "--log", log_file)
   }
 
@@ -117,18 +114,6 @@ vs_fastq_filter <- function(fastq_input,
   }
 
   return(list(statistics = statistics, filt_fasta = filt_fasta))
-}
-
-#' Validate outfile extention
-#'
-#' @param fastaout
-#'
-#' @noRd
-validate_fasta_file <- function(fastaout) {
-  allowed_extensions <- c("\\.fa$", "\\.fasta$")
-  if (!any(stringr::str_ends(fastaout, allowed_extensions))) {
-    stop("The output file needs one of the following extentions: .fa, .fasta.")
-  }
 }
 
 #' Parse statistics from filtering sequences to tibble

@@ -54,9 +54,6 @@ vs_fastq_mergepairs <- function(fastq_file,
     message("No filename for output file. No output file will be created.")
     outfile <- tempfile(pattern = "merged", fileext = ".fq")
   } else {
-    # Validate output file extention
-    validate_fastq_file(fastqout)
-
     message("Writing merged sequences to file:", fastqout)
     outfile <- fastqout
   }
@@ -69,7 +66,6 @@ vs_fastq_mergepairs <- function(fastq_file,
 
   # Add log file if specified by user
   if (!is.null(log_file)) {
-    validate_log_file(log_file)
     args <- c(args, "--log", log_file)
   }
 
@@ -128,28 +124,4 @@ parse_merge_statistics <- function(output, R1_file, R2_file) {
   )
 
   return(result_table)
-}
-
-#' Validate log file extention
-#'
-#' @param log_file name of log file
-#'
-#' @noRd
-validate_log_file <- function(log_file) {
-  allowed_extensions <- c("\\.txt$", "\\.log$", "\\.json$", "\\.xml$")
-  if (!any(stringr::str_ends(log_file, allowed_extensions))) {
-    stop("The log file needs one of the following extentions: .txt, .log, .json, .xml.")
-  }
-}
-
-#' Validate outfile extention
-#'
-#' @param fastqout
-#'
-#' @noRd
-validate_fastq_file <- function(fastqout) {
-  allowed_extensions <- c("\\.fq$", "\\.fastq$")
-  if (!any(stringr::str_ends(fastqout, allowed_extensions))) {
-    stop("The output file needs one of the following extentions: .fq, .fastq.")
-  }
 }
