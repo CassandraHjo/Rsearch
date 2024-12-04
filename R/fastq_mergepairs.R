@@ -21,11 +21,10 @@
 #' If \code{log_file} is specified, the messages are output to this file.
 #' If unspecified (\code{NULL}) no log file is written.
 #'
-#' @return A list with two tibbles:
-#' \describe{
-#'   \item{merged_fastq}{A tibble containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.}
-#'   \item{statistics}{A tibble containing merging statistics, including number of pairs, number of merged pairs, and length metrics.}
-#'   }
+#' @return A tibble, \code{merged_fastq}, containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.
+#'
+#' The statistics from the merging, \code{statistics}, is an attribute of \code{merged_fastq}. This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics.
+#' The statistics can be accessed by running \code{attributes(merged_fastq)$statistics}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -85,12 +84,15 @@ vs_fastq_mergepairs <- function(fastq_file,
   # Output statistics in table
   statistics <- parse_merge_statistics(vsearch_output, fastq_file, reverse)
 
+  # add statistics as attribute to fastq merging table
+  attr(merged_fastq, "statistics") <- statistics
+
   # Remove temp file if necessary
   if (is.null(fastqout)) {
     file.remove(outfile)
   }
 
-  return(list(statistics = statistics, merged_fastq = merged_fastq))
+  return(merged_fastq)
 }
 
 #' Parse statistics from output text in stdout from read merging to tibble
