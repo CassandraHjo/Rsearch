@@ -6,55 +6,68 @@
 \usage{
 vs_fastq_filter(
   fastq_input,
+  reverse = NULL,
+  output_format = "fasta",
+  fastq_maxee_rate = 0.01,
   fastaout = NULL,
-  fastq_maxee_rate,
+  fastqout = NULL,
+  fastaout_rev = NULL,
+  fastqout_rev = NULL,
   fasta_width = 0,
   threads = 1,
   log_file = NULL
 )
 }
 \arguments{
-\item{fastq_input}{a FASTQ file with reads or a FASTQ object, see Detalis.}
+\item{fastq_input}{A FASTQ file path containing (forward) reads or a FASTQ object (tibble), see Details.}
 
-\item{fastaout}{name of the FASTA-file with the output or NULL, see Details.}
+\item{reverse}{An optional FASTQ file path containing reverse reads or a FASTQ object (tibble), see Details. If provided, it will be processed alongside \code{fastq_input}.}
 
-\item{fastq_maxee_rate}{threshold for average expected error. Value ranging form 0.0 to 1.0. See Details.}
+\item{output_format}{Desired output format of tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse outputs.}
 
-\item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Detalis.}
+\item{fastq_maxee_rate}{Threshold for average expected error. Numeric value ranging form \code{0.0} to \code{1.0}. See Details.}
 
-\item{threads}{number of computational threads to be used by vsearch.}
+\item{fastaout}{Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA output file will be written to file. See Details.}
 
-\item{log_file}{name of the log file with messages from running vsearch or NULL, see Details.}
+\item{fastqout}{Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ output file will be written to file. See Details.}
+
+\item{fastaout_rev}{Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA output file will be written to file. See Details.}
+
+\item{fastqout_rev}{Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ output file will be written to file. See Details.}
+
+\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Detalis.}
+
+\item{threads}{Number of computational threads to be used by vsearch.}
+
+\item{log_file}{Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.}
 }
 \value{
-A list with two tibbles:
+A list containing:
 \describe{
-  \item{filt_fasta}{A tibble containing the filtered FASTA sequences, with columns \code{Header} and \code{Sequence}.}
-  \item{statistics}{A tibble containing filtering statistics, including number of kept and discarded sequences, and the name of the FASTQ file that was filtered.}
+  \item{filt_seqs}{A tibble containing the filtered forward reads in the format specified by \code{output_format}.}
+  \item{filt_reverse}{A tibble containing the filtered reverse reads in the format specified by \code{output_format}.}
+  \item{statistics}{A tibble containing filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.}
   }
 }
 \description{
-Quality filtering of sequences in FASTQ file or object
+Quality filtering of FASTQ sequences using vsearch
 }
 \details{
-The reads in the input FASTQ-file (\code{fastq_file}) are filtered based on average expected error (\code{fastq_maxee_rate}), using vsearch.
+The function filters sequences from the input FASTQ file or object based on the average expected error rate using \code{vsearch}.
+If a \code{reverse} input is provided, it filters the reverse reads similarly. The output format for both primary and reverse sequences
+is determined by the \code{output_format} parameter.
 
-\code{fastq_input} can either be a FASTQ file with reads or a FASTQ object. The FASTQ object needs to be a tibble
-with columns \code{Header}, \code{Sequence} and \code{Quality}.
+\code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+\code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{fastq_maxee_rate} will be used for both FASTQ objects.
 
-If \code{fastaout} is specified, the remaining sequences after quality filtering are output to this file in FASTA-format.
-If unspecified (\code{NULL}) the result is returned as a FASTA-object, i.e. a tibble with
-columns \code{Header} and \code{Sequence}.
+If \code{fastaout}, \code{fastqout}, \code{fastaout_rev}, or \code{fastqout_rev} are specified, the remaining sequences after quality filtering are output to these files in either FASTA or FASTQ format.
+If unspecified (\code{NULL}) no output is written to file. \code{output_format} has to match the desired output files.
 
 Sequences with an average expected error greater than the specified \code{fastq_maxee_rate} are discarded.
-For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence,
-divided by the length of the sequence.
+For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence, divided by the length of the sequence.
 
-FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
+FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
-
-If \code{log_file} is specified, the messages are output to this file.
-If unspecified (\code{NULL}) no log file is written.
 }
 \references{
 \url{https://github.com/torognes/vsearch}
