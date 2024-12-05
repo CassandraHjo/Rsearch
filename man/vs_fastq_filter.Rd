@@ -42,12 +42,13 @@ vs_fastq_filter(
 \item{log_file}{Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.}
 }
 \value{
-A list containing:
-\describe{
-  \item{filt_seqs}{A tibble containing the filtered forward reads in the format specified by \code{output_format}.}
-  \item{filt_reverse}{A tibble containing the filtered reverse reads in the format specified by \code{output_format}.}
-  \item{statistics}{A tibble containing filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.}
-  }
+A tibble, \code{filt_seqs}, containing the filtered forward reads in the format specified by \code{output_format}.
+
+If \code{reverse} is specified, the resulting tibble (\code{filt_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{filt_seqs}).
+This table can be accessed by running \code{attributes(filt_seqs)$filt_reverse} or \code{attr(filt_seqs, "filt_reverse")}.
+
+The statistics from the filtering, \code{statistics}, is an attribute of \code{filt_seqs}. This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
+The statistics can be accessed by running \code{attributes(filt_seqs)$statistics} or \code{attr(filt_seqs, "statistics")}.
 }
 \description{
 Quality filtering of FASTQ sequences using vsearch

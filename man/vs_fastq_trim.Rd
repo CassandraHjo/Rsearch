@@ -39,13 +39,10 @@ vs_fastq_trim(
 \item{fastqout_R2}{name of the FASTQ-file with the output from trimming R2 reads or NULL, see Details.}
 }
 \value{
-A list with one or two tibbles:
-\describe{
-  \item{trimmed_R1}{A tibble containing trimmed FASTQ sequences from the forward reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
-  This tibble is always returned.}
-  \item{trimmed_R2}{A tibble containing trimmed FASTQ sequences from the reverse reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
-  This tibble is only returned if a \code{reverse} was given to the function.}
-  }
+A tibble, \code{trimmed_R1}, containing trimmed FASTQ sequences from the forward reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
+
+If \code{reverse} is specified, the resulting tibble (\code{trimmed_R2}) containing trimmed FASTQ sequences from the reverse reads, with columns \code{Header}, \code{Sequence} and \code{Quality} is an attribute to the primary table (\code{trimmed_R1}).
+This table can be accessed by running \code{attributes(trimmed_R1)$trimmed_R2} or \code{attr(trimmed_R1, "trimmed_R2")}.
 }
 \description{
 Trimming sequences in FASTQ file or object

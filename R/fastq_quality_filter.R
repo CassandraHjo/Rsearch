@@ -30,12 +30,13 @@
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return A list containing:
-#' \describe{
-#'   \item{filt_seqs}{A tibble containing the filtered forward reads in the format specified by \code{output_format}.}
-#'   \item{filt_reverse}{A tibble containing the filtered reverse reads in the format specified by \code{output_format}.}
-#'   \item{statistics}{A tibble containing filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.}
-#'   }
+#' @return A tibble, \code{filt_seqs}, containing the filtered forward reads in the format specified by \code{output_format}.
+#'
+#' If \code{reverse} is specified, the resulting tibble (\code{filt_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{filt_seqs}).
+#' This table can be accessed by running \code{attributes(filt_seqs)$filt_reverse} or \code{attr(filt_seqs, "filt_reverse")}.
+#'
+#' The statistics from the filtering, \code{statistics}, is an attribute of \code{filt_seqs}. This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
+#' The statistics can be accessed by running \code{attributes(filt_seqs)$statistics} or \code{attr(filt_seqs, "statistics")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -199,27 +200,34 @@ vs_fastq_filter <- function(fastq_input,
   }
 
   # Initialize return list
-  result <- list(statistics = statistics)
+  #result <- list(statistics = statistics)
 
   # Process primary sequences
   if (output_format == "fasta") {
     filt_seqs <- microseq::readFasta(outfile_fasta)
-    result$filt_seqs <- filt_seqs
+    #result$filt_seqs <- filt_seqs
   } else if (output_format == "fastq") {
     filt_seqs <- microseq::readFastq(outfile_fastq)
-    result$filt_seqs <- filt_seqs
+    #result$filt_seqs <- filt_seqs
   }
 
   # Process reverse sequences if provided
   if (!is.null(reverse)) {
     if (output_format == "fasta") {
       filt_reverse <- microseq::readFasta(outfile_fasta_rev)
-      result$filt_reverse <- filt_reverse
+      #result$filt_reverse <- filt_reverse
     } else if (output_format == "fastq") {
       filt_reverse <- microseq::readFastq(outfile_fastq_rev)
-      result$filt_reverse <- filt_reverse
+      #result$filt_reverse <- filt_reverse
     }
   }
+
+  # Add additional tables as attributes to the primary table
+  attr(filt_seqs, "statistics") <- statistics
+  if (!is.null(reverse)) {
+    attr(filt_seqs, "filt_reverse") <- filt_reverse
+  }
+
 
   # Cleanup temporary files
   if (length(temp_files) > 0) {
@@ -228,7 +236,8 @@ vs_fastq_filter <- function(fastq_input,
       add = TRUE)
   }
 
-  return(result)
+  #return(result)
+  return(filt_seqs)
 }
 
 

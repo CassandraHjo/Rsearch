@@ -36,11 +36,10 @@ vs_cluster_size(
 \item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Details.}
 }
 \value{
-A list with two tibbles:
-\describe{
-  \item{statistics}{A tibble containing information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.}
-  \item{centroids_fasta}{A tibble with the centroid sequences in FASTA format. The tibble includes three columns Header, Sequence, and centroid_size.}
-  }
+A tibble, \code{centroids_fasta}, with the centroid sequences in FASTA format. The tibble includes information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.
+
+The statistics from the clustering, \code{statistics}, is an attribute of \code{centroids_fasta}. This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
+The statistics can be accessed by running \code{attributes(centroids_fasta)$statistics} or \code{attr(centroids_fasta, "statistics")}.
 }
 \description{
 Clustering the FASTA sequences in the given file or object.

@@ -31,13 +31,10 @@
 #' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
 #' columns \code{Header} and \code{Sequence}.
 #'
-#' @return A list with one or two tibbles:
-#' \describe{
-#'   \item{trimmed_R1}{A tibble containing trimmed FASTQ sequences from the forward reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
-#'   This tibble is always returned.}
-#'   \item{trimmed_R2}{A tibble containing trimmed FASTQ sequences from the reverse reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
-#'   This tibble is only returned if a \code{reverse} was given to the function.}
-#'   }
+#' @return A tibble, \code{trimmed_R1}, containing trimmed FASTQ sequences from the forward reads, with columns \code{Header}, \code{Sequence} and \code{Quality}.
+#'
+#' If \code{reverse} is specified, the resulting tibble (\code{trimmed_R2}) containing trimmed FASTQ sequences from the reverse reads, with columns \code{Header}, \code{Sequence} and \code{Quality} is an attribute to the primary table (\code{trimmed_R1}).
+#' This table can be accessed by running \code{attributes(trimmed_R1)$trimmed_R2} or \code{attr(trimmed_R1, "trimmed_R2")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -59,9 +56,13 @@ vs_fastq_trim <- function(fastq_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
+  # Create empty vector for collecting temporary files
+  temp_files <- c()
+
   # Check if FASTQ R1 input is file or tibble
   if (!is.character(fastq_input)){
     temp_file_R1 <- tempfile(pattern = "R1_reads", fileext = ".fq")
+    temp_files <- c(temp_files, temp_file_R1)
     microseq::writeFastq(fastq_input, temp_file_R1)
     R1_file <- temp_file_R1
   } else {
@@ -77,6 +78,7 @@ vs_fastq_trim <- function(fastq_input,
   if (is.null(fastqout_R1)) {
     message("No filename for R1 output file. No output file will be created.")
     outfile <- tempfile(pattern = "trimmed_R1", fileext = ".fq")
+    temp_files <- c(temp_files, outfile)
   } else {
     message("Writing trimmed R1 sequences to file: ", fastqout_R1)
     outfile <- fastqout_R1
@@ -99,15 +101,16 @@ vs_fastq_trim <- function(fastq_input,
   # Read output into fastq object (tbl)
   trimmed_R1 <- microseq::readFastq(outfile)
 
-  # Remove temp file if necessary
-  if (is.null(fastqout_R1)) {
-    file.remove(outfile)
-  }
+  # # Remove temp file if necessary
+  # if (is.null(fastqout_R1)) {
+  #   file.remove(outfile)
+  # }
 
   # Check if FASTQ R2 input is given, and of which type (file or tibble)
   if (!is.null(reverse)){
     if (!is.character(reverse)){
       temp_file_R2 <- tempfile(pattern = "trimmed_R2", fileext = ".fq")
+      temp_files <- c(temp_files, temp_file_R2)
       microseq::writeFastq(reverse, temp_file_R2)
       R2_file <- temp_file_R2
     } else {
@@ -120,6 +123,7 @@ vs_fastq_trim <- function(fastq_input,
     if (is.null(fastqout_R2)) {
       message("No filename for R2 output file. No output file will be created.")
       outfile <- tempfile(pattern = "trimmed_R2", fileext = ".fq")
+      temp_files <- c(temp_files, outfile)
     } else {
       message("Writing trimmed R2 sequences to file: ", fastqout_R2)
       outfile <- fastqout_R2
@@ -142,14 +146,22 @@ vs_fastq_trim <- function(fastq_input,
     # Read output into fastq object (tbl)
     trimmed_R2 <- microseq::readFastq(outfile)
 
-    # Remove temp file if necessary
-    if (is.null(fastqout_R2)) {
-      file.remove(outfile)
-    }
+    # Add R2 tibble as attribute to main tibble
+    attr(trimmed_R1, "trimmed_R2") <- trimmed_R2
 
-    return(list(trimmed_R1 = trimmed_R1, trimmed_R2 = trimmed_R2))
-  } else {
-    return(list(trimmed_R1 = trimmed_R1))
+    # # Remove temp file if necessary
+    # if (is.null(fastqout_R2)) {
+    #   file.remove(outfile)
+    # }
   }
+
+  # Cleanup temporary files
+  if (length(temp_files) > 0) {
+    on.exit(
+      file.remove(temp_files),
+      add = TRUE)
+  }
+
+  return(trimmed_R1)
 }
 

@@ -31,11 +31,10 @@
 #'
 #' @importFrom magrittr %>%
 #'
-#' @return A list with two tibbles:
-#' \describe{
-#'   \item{statistics}{A tibble containing information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.}
-#'   \item{centroids_fasta}{A tibble with the centroid sequences in FASTA format. The tibble includes three columns Header, Sequence, and centroid_size.}
-#'   }
+#' @return A tibble, \code{centroids_fasta}, with the centroid sequences in FASTA format. The tibble includes information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.
+#'
+#' The statistics from the clustering, \code{statistics}, is an attribute of \code{centroids_fasta}. This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
+#' The statistics can be accessed by running \code{attributes(centroids_fasta)$statistics} or \code{attr(centroids_fasta, "statistics")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -55,9 +54,13 @@ vs_cluster_size <- function(fasta_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
+  # Create empty vector for collecting temporary files
+  temp_files <- c()
+
   # Check if FASTA input is file or tibble
   if (!is.character(fasta_input)){
     temp_file <- tempfile(pattern = "input", fileext = ".fa")
+    temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
   } else {
@@ -74,6 +77,7 @@ vs_cluster_size <- function(fasta_input,
   if (is.null(centroids)) {
     message("No filename for centroids file. No centroids file will be created.")
     outfile <- tempfile(pattern = "centroids", fileext = ".fa")
+    temp_files <- c(temp_files, outfile)
   } else {
     # Validate centroids file extention
     validate_fasta_file(centroids)
@@ -114,18 +118,27 @@ vs_cluster_size <- function(fasta_input,
   # Output statistics in table
   statistics <- parse_cluster_statistics(vsearch_output, fasta_file)
 
+  # Add additional tables as attributes to the primary table
+  attr(centroids_fasta, "statistics") <- statistics
 
-  # Remove temp file for input if necessary
-  if (!is.character(fasta_input)) {
-    file.remove(fasta_file)
+  # # Remove temp file for input if necessary
+  # if (!is.character(fasta_input)) {
+  #   file.remove(fasta_file)
+  # }
+  #
+  # # Remove temp file for output if necessary
+  # if (is.null(centroids)) {
+  #   file.remove(outfile)
+  # }
+
+  # Cleanup temporary files
+  if (length(temp_files) > 0) {
+    on.exit(
+      file.remove(temp_files),
+      add = TRUE)
   }
 
-  # Remove temp file for output if necessary
-  if (is.null(centroids)) {
-    file.remove(outfile)
-  }
-
-  return(list(statistics = statistics, centroids_fasta = centroids_fasta))
+  return(centroids_fasta)
 }
 
 #' Parse statistics from output text in stdout from clustering to tibble

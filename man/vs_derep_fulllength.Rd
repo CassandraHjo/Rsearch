@@ -36,10 +36,7 @@ vs_derep_fulllength(
 \item{fasta_width}{number of characters in the width of sequences in the output FASTA file. See Details.}
 }
 \value{
-A list with one tibble:
-\describe{
-  \item{derep_fasta}{A tibble containing the dereplicated FASTA sequences, with columns \code{Header} and \code{Sequence}.}
-  }
+A tibble containing the dereplicated FASTA sequences, with columns \code{Header} and \code{Sequence}.
 }
 \description{
 Dereplication of sequences in FASTA file or object.

@@ -25,10 +25,7 @@
 #' FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return A list with one tibble:
-#' \describe{
-#'   \item{derep_fasta}{A tibble containing the dereplicated FASTA sequences, with columns \code{Header} and \code{Sequence}.}
-#'   }
+#' @return A tibble containing the dereplicated FASTA sequences, with columns \code{Header} and \code{Sequence}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -48,9 +45,13 @@ vs_derep_fulllength <- function(fasta_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
+  # Create empty vector for collecting temporary files
+  temp_files <- c()
+
   # Check if FASTA input is file or tibble
   if (!is.character(fasta_input)){
     temp_file <- tempfile(pattern = "input", fileext = ".fa")
+    temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
   } else {
@@ -67,6 +68,7 @@ vs_derep_fulllength <- function(fasta_input,
   if (is.null(output)) {
     message("No filename for output file. No output file will be created.")
     outfile <- tempfile(pattern = "derep", fileext = ".fa")
+    temp_files <- c(temp_files, outfile)
   } else {
     message("Writing filtered sequences to file: ", output)
     outfile <- output
@@ -105,15 +107,22 @@ vs_derep_fulllength <- function(fasta_input,
   # Read output into FASTA object (tbl)
   derep_fasta <- microseq::readFasta(outfile)
 
-  # Remove temp file for input if necessary
-  if (!is.character(fasta_input)) {
-    file.remove(fasta_file)
+  # # Remove temp file for input if necessary
+  # if (!is.character(fasta_input)) {
+  #   file.remove(fasta_file)
+  # }
+  #
+  # # Remove temp file for output if necessary
+  # if (is.null(output)) {
+  #   file.remove(outfile)
+  # }
+
+  # Cleanup temporary files
+  if (length(temp_files) > 0) {
+    on.exit(
+      file.remove(temp_files),
+      add = TRUE)
   }
 
-  # Remove temp file for output if necessary
-  if (is.null(output)) {
-    file.remove(outfile)
-  }
-
-  return(list(derep_fasta = derep_fasta))
+  return(derep_fasta)
 }

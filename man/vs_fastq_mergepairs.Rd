@@ -27,7 +27,7 @@ vs_fastq_mergepairs(
 A tibble, \code{merged_fastq}, containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.
 
 The statistics from the merging, \code{statistics}, is an attribute of \code{merged_fastq}. This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics.
-The statistics can be accessed by running \code{attributes(merged_fastq)$statistics}.
+The statistics can be accessed by running \code{attributes(merged_fastq)$statistics} or \code{attr(merged_fastq, "statistics")}.
 }
 \description{
 Merging read-pairs with overlapping regions.
