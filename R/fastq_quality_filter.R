@@ -63,6 +63,20 @@ vs_fastq_filter <- function(fastq_input,
     stop("Invalid output_format. Choose from fasta or fastq.")
   }
 
+  # If output_format is "fasta", fastqout and fastqout_rev can not be defined
+  if (output_format == "fasta") {
+    if (!is.null(fastqout) || !is.null(fastqout_rev)) {
+      stop("When output_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
+    }
+  }
+
+  # If output_format is "fastq", fastaout and fastaout_rev can not be defined
+  if (output_format == "fastq") {
+    if (!is.null(fastaout) || !is.null(fastaout_rev)) {
+      stop("When output_format is defined as 'fastq', 'fastaout' and 'fastaout_rev' cannot be used. Use 'fastqout' and 'fastqout_rev' instead.")
+    }
+  }
+
   # Create empty vector for collecting temporary files
   temp_files <- c()
 
