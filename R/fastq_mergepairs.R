@@ -91,11 +91,6 @@ vs_fastq_mergepairs <- function(fastq_file,
   # Add statistics as attribute to merging table
   attr(merged_fastq, "statistics") <- statistics
 
-  # # Remove temp file if necessary
-  # if (is.null(fastqout)) {
-  #   file.remove(outfile)
-  # }
-
   # Cleanup temporary files
   if (length(temp_files) > 0) {
     on.exit(
@@ -144,8 +139,8 @@ parse_merge_statistics <- function(output, R1_file, R2_file) {
     Low_Alignment_Score_or_score_drop_too_high = alignment_low,
     Mean_Fragment_Length = mean_frag_length,
     StdDev_Fragment_Length = stddev_frag_length,
-    R1_source = R1_source,
-    R2_source = R2_source
+    R1 = R1_source,
+    R2 = R2_source
   )
 
   return(result_table)

@@ -199,26 +199,19 @@ vs_fastq_filter <- function(fastq_input,
     statistics <- parse_filter_statistics(vsearch_output, fastq_input)
   }
 
-  # Initialize return list
-  #result <- list(statistics = statistics)
-
   # Process primary sequences
   if (output_format == "fasta") {
     filt_seqs <- microseq::readFasta(outfile_fasta)
-    #result$filt_seqs <- filt_seqs
   } else if (output_format == "fastq") {
     filt_seqs <- microseq::readFastq(outfile_fastq)
-    #result$filt_seqs <- filt_seqs
   }
 
   # Process reverse sequences if provided
   if (!is.null(reverse)) {
     if (output_format == "fasta") {
       filt_reverse <- microseq::readFasta(outfile_fasta_rev)
-      #result$filt_reverse <- filt_reverse
     } else if (output_format == "fastq") {
       filt_reverse <- microseq::readFastq(outfile_fastq_rev)
-      #result$filt_reverse <- filt_reverse
     }
   }
 
@@ -236,7 +229,6 @@ vs_fastq_filter <- function(fastq_input,
       add = TRUE)
   }
 
-  #return(result)
   return(filt_seqs)
 }
 

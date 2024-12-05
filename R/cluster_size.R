@@ -79,9 +79,6 @@ vs_cluster_size <- function(fasta_input,
     outfile <- tempfile(pattern = "centroids", fileext = ".fa")
     temp_files <- c(temp_files, outfile)
   } else {
-    # Validate centroids file extention
-    validate_fasta_file(centroids)
-
     message("Writing filtered sequences to file: ", centroids)
     outfile <- centroids
   }
@@ -120,16 +117,6 @@ vs_cluster_size <- function(fasta_input,
 
   # Add additional tables as attributes to the primary table
   attr(centroids_fasta, "statistics") <- statistics
-
-  # # Remove temp file for input if necessary
-  # if (!is.character(fasta_input)) {
-  #   file.remove(fasta_file)
-  # }
-  #
-  # # Remove temp file for output if necessary
-  # if (is.null(centroids)) {
-  #   file.remove(outfile)
-  # }
 
   # Cleanup temporary files
   if (length(temp_files) > 0) {

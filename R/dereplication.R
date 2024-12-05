@@ -107,16 +107,6 @@ vs_derep_fulllength <- function(fasta_input,
   # Read output into FASTA object (tbl)
   derep_fasta <- microseq::readFasta(outfile)
 
-  # # Remove temp file for input if necessary
-  # if (!is.character(fasta_input)) {
-  #   file.remove(fasta_file)
-  # }
-  #
-  # # Remove temp file for output if necessary
-  # if (is.null(output)) {
-  #   file.remove(outfile)
-  # }
-
   # Cleanup temporary files
   if (length(temp_files) > 0) {
     on.exit(

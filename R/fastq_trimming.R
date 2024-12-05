@@ -101,11 +101,6 @@ vs_fastq_trim <- function(fastq_input,
   # Read output into fastq object (tbl)
   trimmed_R1 <- microseq::readFastq(outfile)
 
-  # # Remove temp file if necessary
-  # if (is.null(fastqout_R1)) {
-  #   file.remove(outfile)
-  # }
-
   # Check if FASTQ R2 input is given, and of which type (file or tibble)
   if (!is.null(reverse)){
     if (!is.character(reverse)){
@@ -149,10 +144,6 @@ vs_fastq_trim <- function(fastq_input,
     # Add R2 tibble as attribute to main tibble
     attr(trimmed_R1, "trimmed_R2") <- trimmed_R2
 
-    # # Remove temp file if necessary
-    # if (is.null(fastqout_R2)) {
-    #   file.remove(outfile)
-    # }
   }
 
   # Cleanup temporary files
