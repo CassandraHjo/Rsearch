@@ -131,9 +131,9 @@ parse_merge_statistics <- function(output, R1_file, R2_file) {
   }
 
   if (!is.character(R2_file)) {
-    R2_source <- deparse(substitute(R2_source))
+    R2_source <- deparse(substitute(R2_file))
   } else {
-    R2_source <- basename(R2_source)
+    R2_source <- basename(R2_file)
   }
 
   # Create table
