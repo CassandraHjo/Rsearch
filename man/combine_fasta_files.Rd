@@ -4,16 +4,19 @@
 \alias{combine_fasta_files}
 \title{Combine FASTA files}
 \usage{
-combine_fasta_files(folder_path, output_file)
+combine_fasta_files(fasta_dir, output_file = NULL)
 }
 \arguments{
-\item{folder_path}{path to directory with FASTA files.}
+\item{fasta_dir}{Path to directory with FASTA files.}
 
-\item{output_file}{name of output FASTA-file.}
+\item{output_file}{Name of output FASTA-file or \code{NULL}. If not specified, the function will only return a FASTA object (a tibble with the columns \code{Header} and \code{Sequence}).}
 }
 \value{
-string with path to combined FASTA-file.
+A string with path to combined FASTA file. If \code{output_file} is unspecified, a FASTA object will be returned.
+
+A FASTA object with the columns \code{Header} and \code{Sequence}. If \code{output_file} is specified the path to the resulting FASTA file will be an attribute (\code{file_path})of the FASTA object.
+This attribute can be accessed by running \code{attributes(all_fasta_tbl)$file_path} or \code{attr(all_fasta_tbl, "file_path")}.
 }
 \description{
-Combines all FASTA-files in given directory into one file.
+Combines all FASTA-files in given directory into one FASTA file or object.
 }
