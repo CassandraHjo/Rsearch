@@ -135,8 +135,15 @@ vs_fastq_filter <- function(fastq_input,
     microseq::writeFastq(fastq_input, temp_fastq_file)
     fastq_file <- temp_fastq_file
     temp_files <- c(temp_files, temp_fastq_file)
+
+    # Capture original name for statistics table later
+    fastq_input_name <- as.character(substitute(fastq_input))
+
   } else {
     fastq_file <- fastq_input
+
+    # Capture original name for statistics table later
+    fastq_input_name <- basename(fastq_input)
   }
 
   # Handle reverse: file or tibble
@@ -151,8 +158,15 @@ vs_fastq_filter <- function(fastq_input,
       microseq::writeFastq(reverse, temp_reverse_file)
       reverse_file <- temp_reverse_file
       temp_files <- c(temp_files, temp_reverse_file)
+
+      # Capture original name for statistics table later
+      reverse_name <- as.character(substitute(reverse))
+
     } else {
       reverse_file <- reverse
+
+      # Capture original name for statistics table later
+      reverse_name <- basename(reverse)
     }
   }
 
@@ -208,9 +222,9 @@ vs_fastq_filter <- function(fastq_input,
 
   # Extract statistics
   if (!is.null(reverse)){
-    statistics <- parse_filter_statistics(vsearch_output, fastq_input, reverse)
+    statistics <- parse_filter_statistics(vsearch_output, fastq_input_name, reverse_name)
   } else {
-    statistics <- parse_filter_statistics(vsearch_output, fastq_input)
+    statistics <- parse_filter_statistics(vsearch_output, fastq_input_name)
   }
 
   # Process primary sequences
@@ -269,28 +283,28 @@ parse_filter_statistics <- function(output, fastq, reverse = NULL) {
   # Extract number of discarded sequences
   discarded <- as.numeric(stringr::str_extract(stats_line, "(?<=, )\\d+(?= sequences discarded)"))
 
-  if (!is.character(fastq)) {
-    fastq_name <- deparse(substitute(fastq))
-  } else {
-    fastq_name <- basename(fastq)
-  }
+  # if (!is.character(fastq)) {
+  #   fastq_name <- deparse(substitute(fastq))
+  # } else {
+  #   fastq_name <- basename(fastq)
+  # }
 
   # Create table
   result_table <- data.frame(
     Kept_Sequences = kept,
     Truncated_Sequences = truncated,
     Discarded_Sequences = discarded,
-    fastq_source = fastq_name
+    fastq_source = fastq
   )
 
   # Add reverse column if provided
   if (!is.null(reverse)){
-    if (!is.character(reverse)) {
-      reverse_name <- deparse(substitute(reverse))
-    } else {
-      reverse_name <- basename(reverse)
-    }
-    result_table$reverse_source <- reverse_name
+    # if (!is.character(reverse)) {
+    #   reverse_name <- deparse(substitute(reverse))
+    # } else {
+    #   reverse_name <- basename(reverse)
+    # }
+    result_table$reverse_source <- reverse
   }
 
   return(result_table)

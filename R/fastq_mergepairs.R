@@ -53,8 +53,14 @@ vs_fastq_mergepairs <- function(fastq_input,
     temp_files <- c(temp_files, temp_fastq_file)
     microseq::writeFastq(fastq_input, temp_fastq_file)
     fastq_file <- temp_fastq_file
+
+    # Capture original name for statistics table later
+    fastq_input_name <- as.character(substitute(fastq_input))
   } else {
     fastq_file <- fastq_input
+
+    # Capture original name for statistics table later
+    fastq_input_name <- basename(fastq_input)
   }
 
   # Handle reverse: file or tibble
@@ -68,8 +74,14 @@ vs_fastq_mergepairs <- function(fastq_input,
     microseq::writeFastq(reverse, temp_reverse_file)
     reverse_file <- temp_reverse_file
     temp_files <- c(temp_files, temp_reverse_file)
+
+    # Capture original name for statistics table later
+    reverse_name <- as.character(substitute(reverse))
   } else {
     reverse_file <- reverse
+
+    # Capture original name for statistics table later
+    reverse_name <- basename(reverse)
   }
 
   # Check if input files exists
@@ -115,7 +127,7 @@ vs_fastq_mergepairs <- function(fastq_input,
   }
 
   # Output statistics in table
-  statistics <- parse_merge_statistics(vsearch_output, fastq_input, reverse)
+  statistics <- parse_merge_statistics(vsearch_output, fastq_input_name, reverse_name)
 
   # Add statistics as attribute to merging table
   attr(merged_fastq, "statistics") <- statistics
@@ -148,18 +160,6 @@ parse_merge_statistics <- function(output, R1_file, R2_file) {
   mean_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Mean fragment length"), "\\d+\\.\\d+"))
   stddev_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Standard deviation of fragment length"), "\\d+\\.\\d+"))
 
-  if (!is.character(R1_file)) {
-    R1_source <- deparse(substitute(R1_file))
-  } else {
-    R1_source <- basename(R1_file)
-  }
-
-  if (!is.character(R2_file)) {
-    R2_source <- deparse(substitute(R2_file))
-  } else {
-    R2_source <- basename(R2_file)
-  }
-
   # Create table
   result_table <- data.frame(
     Tot_num_pairs = pairs,
@@ -168,8 +168,8 @@ parse_merge_statistics <- function(output, R1_file, R2_file) {
     Low_Alignment_Score_or_score_drop_too_high = alignment_low,
     Mean_Fragment_Length = mean_frag_length,
     StdDev_Fragment_Length = stddev_frag_length,
-    R1 = R1_source,
-    R2 = R2_source
+    R1 = R1_file,
+    R2 = R2_file
   )
 
   return(result_table)
