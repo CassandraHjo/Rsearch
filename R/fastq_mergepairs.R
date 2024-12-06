@@ -5,21 +5,20 @@
 #'
 #' @description Merging read-pairs with overlapping regions.
 #'
-#' @param fastq_file a FASTQ-file with forward reads (R1).
-#' @param reverse a FASTQ-file with reverse reads (R2).
-#' @param fastqout name of the FASTQ-file with the output or NULL, see Details.
-#' @param log_file name of the log file with messages from running vsearch or NULL, see Details.
-#' @param threads number of computational threads to be used by vsearch.
+#' @param fastq_input A FASTQ file path containing (forward) reads or a FASTQ object (tibble), see Details.
+#' @param reverse A FASTQ file path containing reverse reads or a FASTQ object (tibble), see Details.
+#' @param fastqout Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.
+#' @param log_file Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.
+#' @param threads Number of computational threads to be used by vsearch.
 #'
-#' @details The read-pairs in the input FASTQ-files (\code{fastq_file} and \code{reverse})
-#' are merged if they have sufficient overlap, using vsearch.
+#' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and \code{reverse}) are merged if they have sufficient overlap, using vsearch.
+#'
+#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
 #' If \code{fastqout} is specified, the merged reads are output to this file in FASTQ-format.
-#' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
-#' columns \code{Header}, \code{Sequence} and \code{Quality}.
+#' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with columns \code{Header}, \code{Sequence} and \code{Quality}.
 #'
-#' If \code{log_file} is specified, the messages are output to this file.
-#' If unspecified (\code{NULL}) no log file is written.
+#' If \code{log_file} is specified, the messages are output to this file. If unspecified (\code{NULL}) no log file is written.
 #'
 #' @return A tibble, \code{merged_fastq}, containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.
 #'
@@ -30,7 +29,7 @@
 #'
 #' @export
 #'
-vs_fastq_mergepairs <- function(fastq_file,
+vs_fastq_mergepairs <- function(fastq_input,
                                 reverse,
                                 fastqout = NULL,
                                 log_file = NULL,
@@ -40,16 +39,46 @@ vs_fastq_mergepairs <- function(fastq_file,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
-  # Check is input files exist at given paths
-  if (!file.exists(fastq_file)) stop("Cannot find input file: ", fastq_file)
-  if (!file.exists(reverse)) stop("Cannot find reverse file: ", reverse)
+  # Create empty vector for collecting temporary files
+  temp_files <- c()
+
+  # Handle input: file or tibble
+  if (!is.character(fastq_input)){
+    # Ensure required columns exist
+    required_cols <- c("Header", "Sequence", "Quality")
+    if (!all(required_cols %in% colnames(fastq_input))) {
+      stop("FASTQ object must contain columns: Header, Sequence, Quality")
+    }
+    temp_fastq_file <- tempfile(pattern = "fastq_input_temp_", fileext = ".fq")
+    temp_files <- c(temp_files, temp_fastq_file)
+    microseq::writeFastq(fastq_input, temp_fastq_file)
+    fastq_file <- temp_fastq_file
+  } else {
+    fastq_file <- fastq_input
+  }
+
+  # Handle reverse: file or tibble
+  if (!is.character(reverse)){
+    # Ensure required columns exist
+    required_cols_rev <- c("Header", "Sequence", "Quality")
+    if (!all(required_cols_rev %in% colnames(reverse))) {
+      stop("Reverse FASTQ object must contain columns: Header, Sequence, Quality")
+    }
+    temp_reverse_file <- tempfile(pattern = "reverse_temp_", fileext = ".fq")
+    microseq::writeFastq(reverse, temp_reverse_file)
+    reverse_file <- temp_reverse_file
+    temp_files <- c(temp_files, temp_reverse_file)
+  } else {
+    reverse_file <- reverse
+  }
+
+  # Check if input files exists
+  if (!file.exists(fastq_file)) stop("Cannot find input FASTQ file: ", fastq_file)
+  if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
 
   # Normalize file paths
   fastq_file <- normalizePath(fastq_file)
-  reverse <- normalizePath(reverse)
-
-  # Create empty vector for collecting temporary files
-  temp_files <- c()
+  reverse_file <- normalizePath(reverse_file)
 
   # Determine output file
   if (is.null(fastqout)) {
@@ -63,7 +92,7 @@ vs_fastq_mergepairs <- function(fastq_file,
 
   # Build argument string for command line
   args <- c("--fastq_mergepairs", fastq_file,
-            "--reverse", reverse,
+            "--reverse", reverse_file,
             "--threads", threads,
             "--fastqout", outfile)
 
@@ -86,7 +115,7 @@ vs_fastq_mergepairs <- function(fastq_file,
   }
 
   # Output statistics in table
-  statistics <- parse_merge_statistics(vsearch_output, fastq_file, reverse)
+  statistics <- parse_merge_statistics(vsearch_output, fastq_input, reverse)
 
   # Add statistics as attribute to merging table
   attr(merged_fastq, "statistics") <- statistics

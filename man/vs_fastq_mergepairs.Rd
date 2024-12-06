@@ -5,7 +5,7 @@
 \title{Merge read-pairs}
 \usage{
 vs_fastq_mergepairs(
-  fastq_file,
+  fastq_input,
   reverse,
   fastqout = NULL,
   log_file = NULL,
@@ -13,15 +13,15 @@ vs_fastq_mergepairs(
 )
 }
 \arguments{
-\item{fastq_file}{a FASTQ-file with forward reads (R1).}
+\item{fastq_input}{A FASTQ file path containing (forward) reads or a FASTQ object (tibble), see Details.}
 
-\item{reverse}{a FASTQ-file with reverse reads (R2).}
+\item{reverse}{A FASTQ file path containing reverse reads or a FASTQ object (tibble), see Details.}
 
-\item{fastqout}{name of the FASTQ-file with the output or NULL, see Details.}
+\item{fastqout}{Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.}
 
-\item{log_file}{name of the log file with messages from running vsearch or NULL, see Details.}
+\item{log_file}{Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.}
 
-\item{threads}{number of computational threads to be used by vsearch.}
+\item{threads}{Number of computational threads to be used by vsearch.}
 }
 \value{
 A tibble, \code{merged_fastq}, containing the merged FASTQ sequences, with columns \code{Header}, \code{Sequence} and \code{Quality}.
@@ -33,15 +33,14 @@ The statistics can be accessed by running \code{attributes(merged_fastq)$statist
 Merging read-pairs with overlapping regions.
 }
 \details{
-The read-pairs in the input FASTQ-files (\code{fastq_file} and \code{reverse})
-are merged if they have sufficient overlap, using vsearch.
+The read-pairs in the input FASTQ-files (\code{fastq_input} and \code{reverse}) are merged if they have sufficient overlap, using vsearch.
+
+\code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 
 If \code{fastqout} is specified, the merged reads are output to this file in FASTQ-format.
-If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with
-columns \code{Header}, \code{Sequence} and \code{Quality}.
+If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with columns \code{Header}, \code{Sequence} and \code{Quality}.
 
-If \code{log_file} is specified, the messages are output to this file.
-If unspecified (\code{NULL}) no log file is written.
+If \code{log_file} is specified, the messages are output to this file. If unspecified (\code{NULL}) no log file is written.
 }
 \references{
 \url{https://github.com/torognes/vsearch}
