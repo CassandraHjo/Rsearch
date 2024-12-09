@@ -1,15 +1,15 @@
 #' Quality filtering
 #'
-#' @description Quality filtering of FASTQ sequences using vsearch
+#' @description Quality filtering of FASTQ sequences.
 #'
 #' @param fastq_input A FASTQ file path containing (forward) reads or a FASTQ object (tibble), see Details.
 #' @param reverse An optional FASTQ file path containing reverse reads or a FASTQ object (tibble), see Details. If provided, it will be processed alongside \code{fastq_input}.
 #' @param output_format Desired output format of tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse outputs.
 #' @param fastq_maxee_rate Threshold for average expected error. Numeric value ranging form \code{0.0} to \code{1.0}. See Details.
-#' @param fastaout Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA output file will be written to file. See Details.
-#' @param fastqout Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ output file will be written to file. See Details.
-#' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA output file will be written to file. See Details.
-#' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ output file will be written to file. See Details.
+#' @param fastaout Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA sequences will be written to file. See Details.
+#' @param fastqout Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ sequences will be written to file. See Details.
+#' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA sequences will be written to file. See Details.
+#' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.
 #' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Detalis.
 #' @param threads Number of computational threads to be used by vsearch.
 #' @param log_file Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.

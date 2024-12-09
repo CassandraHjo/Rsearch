@@ -1,11 +1,9 @@
 #' Combine FASTA files
 #'
-#' @description Combines all FASTA-files in given directory into one FASTA file or object.
+#' @description Combines all FASTA-files in given directory into one FASTA object.
 #'
 #' @param fasta_dir Path to directory with FASTA files.
 #' @param output_file Name of output FASTA-file or \code{NULL}. If not specified, the function will only return a FASTA object (a tibble with the columns \code{Header} and \code{Sequence}).
-#'
-#' @return A string with path to combined FASTA file. If \code{output_file} is unspecified, a FASTA object will be returned.
 #'
 #' @return A FASTA object with the columns \code{Header} and \code{Sequence}. If \code{output_file} is specified the path to the resulting FASTA file will be an attribute (\code{file_path})of the FASTA object.
 #' This attribute can be accessed by running \code{attributes(all_fasta_tbl)$file_path} or \code{attr(all_fasta_tbl, "file_path")}.
@@ -63,6 +61,5 @@ combine_fasta_files <- function(fasta_dir, output_file = NULL) {
       add = TRUE)
   }
 
-  # Return path to combined file
   return(all_fasta_tbl)
 }

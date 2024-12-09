@@ -27,13 +27,13 @@ vs_fastq_filter(
 
 \item{fastq_maxee_rate}{Threshold for average expected error. Numeric value ranging form \code{0.0} to \code{1.0}. See Details.}
 
-\item{fastaout}{Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA output file will be written to file. See Details.}
+\item{fastaout}{Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA sequences will be written to file. See Details.}
 
-\item{fastqout}{Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ output file will be written to file. See Details.}
+\item{fastqout}{Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ sequences will be written to file. See Details.}
 
-\item{fastaout_rev}{Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA output file will be written to file. See Details.}
+\item{fastaout_rev}{Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA sequences will be written to file. See Details.}
 
-\item{fastqout_rev}{Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ output file will be written to file. See Details.}
+\item{fastqout_rev}{Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Detalis.}
 
@@ -51,7 +51,7 @@ The statistics from the filtering, \code{statistics}, is an attribute of \code{f
 The statistics can be accessed by running \code{attributes(filt_seqs)$statistics} or \code{attr(filt_seqs, "statistics")}.
 }
 \description{
-Quality filtering of FASTQ sequences using vsearch
+Quality filtering of FASTQ sequences.
 }
 \details{
 The function filters sequences from the input FASTQ file or object based on the average expected error rate using \code{vsearch}.
