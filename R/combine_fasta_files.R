@@ -29,34 +29,31 @@ combine_fasta_files <- function(fasta_dir, output_file = NULL) {
     stop("No .fa files found in the specified folder: ", fasta_dir)
   }
 
-  # Read and combine the content of all .fa files
-  fasta_content <- lapply(fa_files, readLines)
-  combined_fasta <- unlist(fasta_content)
-
-  if (!is.null(output_file)){
-
-    # Full path to the combined output file
-    all_fasta <- file.path(output_file)
-
-    # Remove all.fasta if it already exists
-    if (file.exists(all_fasta)) {
-      file.remove(all_fasta)
-    }
-    # Write the combined content to all_fasta
-    writeLines(combined_fasta, all_fasta)
-    message("Sequences written to: ", all_fasta)
-
-    # Create FASTA object
-    all_fasta_tbl <- microseq::readFasta(all_fasta)
-
-    # Create file path attribute to FASTA object
-    attr(all_fasta_tbl, "file_path") <- all_fasta
-  } else {
+  # Handle output file if NULL
+  if (is.null(output_file)) {
+    # Create temporary output file
     temp_file_all_fasta <- tempfile(pattern = "all_fasta", fileext = ".fa")
     temp_files <- c(temp_files, temp_file_all_fasta)
-    writeLines(combined_fasta, temp_file_all_fasta)
+    output_file <- temp_file_all_fasta
+  }
 
-    all_fasta_tbl <- microseq::readFasta(temp_file_all_fasta)
+  # Full path to the combined output file
+  all_fasta <- file.path(output_file)
+
+  # Remove output file if it already exists
+  if (file.exists(all_fasta)) {
+    file.remove(all_fasta)
+  }
+
+  # Combine content of all fasta files
+  file.append(all_fasta, fa_files)
+
+  # Create FASTA object
+  all_fasta_tbl <- microseq::readFasta(all_fasta)
+
+  # Create attribute if output file is specified
+  if (!is.null(output_file)) {
+    attr(all_fasta_tbl, "file_path") <- all_fasta
   }
 
   # Cleanup temporary files
