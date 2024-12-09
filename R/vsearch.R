@@ -19,7 +19,7 @@
 #' is updated. The string is also saved to a file for later R sessions, i.e. you
 #' only need to update this once (or if you change how you run/install VSEARCH).
 #'
-#' @export set_vsearch_executable
+#' @export
 #'
 set_vsearch_executable <- function(vsearch_executable){
   options(Rsearch.vsearch_executable = vsearch_executable)

@@ -142,15 +142,20 @@ vs_fastq_mergepairs <- function(fastq_input,
   return(merged_fastq)
 }
 
-#' Parse statistics from output text in stdout from read merging to tibble
+#' Parse merging statistics from string to tibble
 #'
-#' @param output string of output from running vs_fastq_mergepairs
-#' @param R1_file name of file with forward reads that was used in merging
-#' @param R2_file name of file with reverse reads that was used in merging
+#' @description This function transforms the output from \code{vsearch} when running \code{vs_fastq_mergepairs()} into a tibble.
+#' The most important statistics are included in the tibble such as number of read pairs, merged reads, reasons that reads were not merged, and mean and standard deviation of read lengths.
 #'
-#' @return table with merging metrics
+#' @param output A string of output from merging reads with \code{vsearch}.
+#' @param fastq_input The name of the file/object with forward (R1) reads that was used in the merging.
+#' @param reverse The name of the file/object with reverse (R2) reads that was used in the merging.
+#'
+#' @return A tibble with merging metrics, including number of read pairs, merged reads, reasons that reads were not merged, and mean and standard deviation of read lengths.
+#'
 #' @noRd
-parse_merge_statistics <- function(output, R1_file, R2_file) {
+#'
+parse_merge_statistics <- function(output, fastq_input, reverse) {
 
   # Extract values from output
   pairs <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Pairs$"), "\\d+"))
@@ -168,8 +173,8 @@ parse_merge_statistics <- function(output, R1_file, R2_file) {
     Low_Alignment_Score_or_score_drop_too_high = alignment_low,
     Mean_Fragment_Length = mean_frag_length,
     StdDev_Fragment_Length = stddev_frag_length,
-    R1 = R1_file,
-    R2 = R2_file
+    R1 = fastq_input,
+    R2 = reverse
   )
 
   return(result_table)

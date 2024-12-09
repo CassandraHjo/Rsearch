@@ -261,13 +261,16 @@ vs_fastq_filter <- function(fastq_input,
 }
 
 
-#' Parse statistics from filtering sequences to tibble
+#' Parse filtering statistics from string to tibble
 #'
-#' @param output string of output from running vsearch
-#' @param fastq name of file/object with R1 reads
-#' @param reverse name of file/object with R2 reads
+#' @description This function transforms the output from \code{vsearch} when running \code{vs_fastq_filter()} into a tibble. The most important statistics are included in the tibble such as kept, truncated, and discarded sequences.
 #'
-#' @return table with filtering metrics
+#' @param output A string of output from filtering reads based on quality with \code{vsearch}.
+#' @param fastq The name of the file/object with R1 reads.
+#' @param reverse The name of the file/object with R2 reads
+#'
+#' @return A tibble with filtering metrics, including number of kept, truncated and discarded sequences after filtering.
+#'
 #' @noRd
 parse_filter_statistics <- function(output, fastq, reverse = NULL) {
 
@@ -283,12 +286,6 @@ parse_filter_statistics <- function(output, fastq, reverse = NULL) {
   # Extract number of discarded sequences
   discarded <- as.numeric(stringr::str_extract(stats_line, "(?<=, )\\d+(?= sequences discarded)"))
 
-  # if (!is.character(fastq)) {
-  #   fastq_name <- deparse(substitute(fastq))
-  # } else {
-  #   fastq_name <- basename(fastq)
-  # }
-
   # Create table
   result_table <- data.frame(
     Kept_Sequences = kept,
@@ -299,11 +296,6 @@ parse_filter_statistics <- function(output, fastq, reverse = NULL) {
 
   # Add reverse column if provided
   if (!is.null(reverse)){
-    # if (!is.character(reverse)) {
-    #   reverse_name <- deparse(substitute(reverse))
-    # } else {
-    #   reverse_name <- basename(reverse)
-    # }
     result_table$reverse_source <- reverse
   }
 

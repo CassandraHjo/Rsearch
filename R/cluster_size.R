@@ -128,13 +128,17 @@ vs_cluster_size <- function(fasta_input,
   return(centroids_fasta)
 }
 
-#' Parse statistics from output text in stdout from clustering to tibble
+#' Parse clustering statistics from string to tibble
 #'
-#' @param output string of output from running vs_cluster_size
-#' @param input_file name of file with sequences used in the clustering
+#' @description This function transforms the output from \code{vsearch} when running \code{vs_cluster_size()} into a tibble.
 #'
-#' @return table with clustering metrics
+#' @param output A string of output from clustering sequences with \code{vsearch}.
+#' @param input_file The name of the file/object with sequences used in the clustering
+#'
+#' @return A tibble with clustering metrics, including the number of nucleotides, sequences, clusters, and the lengths and sizes of the sequences and clusters.
+#'
 #' @noRd
+#'
 parse_cluster_statistics <- function(output, input_file) {
 
   # Extract values from output
