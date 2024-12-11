@@ -19,9 +19,9 @@ vs_fastq_mergepairs(
 
 \item{fastqout}{Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.}
 
-\item{log_file}{Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.}
+\item{log_file}{Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.}
 
-\item{threads}{Number of computational threads to be used by vsearch.}
+\item{threads}{Number of computational threads to be used by \code{vsearch}.}
 }
 \value{
 If \code{fastq_out} is not specified, a tibble containing the merged reads in FASTQ format is returned. If \code{output_file} is specified nothing is returned.

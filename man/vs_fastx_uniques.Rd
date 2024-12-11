@@ -59,7 +59,7 @@ If unspecified (\code{NULL}) the result is returned as a FASTA/FASTQ object, dep
 By default, the quality scores in FASTQ output files will correspond to the average error probability of the nucleotides in the each position.
 If \code{fastq_qout_max = TRUE}, the quality score will be the highest (best) quality score observed in each position.
 
-FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
+FASTA files produced by\code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
 }
 \references{

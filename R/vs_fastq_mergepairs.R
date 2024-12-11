@@ -5,8 +5,8 @@
 #' @param fastq_input A FASTQ file path or a FASTQ object (tibble) containing (forward) reads, see Details.
 #' @param reverse A FASTQ file path or a FASTQ object (tibble) containing (reverse) reads, see Details.
 #' @param fastqout Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.
-#' @param log_file Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.
-#' @param threads Number of computational threads to be used by vsearch.
+#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
 #'
 #' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and \code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
 #'

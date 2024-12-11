@@ -11,8 +11,8 @@
 #' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA sequences will be written to file. See Details.
 #' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.
 #' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.
-#' @param threads Number of computational threads to be used by vsearch.
-#' @param log_file Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.
 #'
 #' @details The function filters sequences from the input FASTQ file or object based on the average expected error rate using \code{vsearch}.
 #' If a \code{reverse} input is provided, it filters the reverse reads similarly. The output format for both primary and reverse sequences
@@ -107,7 +107,7 @@ vs_fastq_filter <- function(fastq_input,
     }
   }, add = TRUE)
 
-  # Hande output for primary sequences
+  # Handle output for primary sequences
   if (output_format == "fasta") {
     if (is.null(fastaout)) {
       outfile_fasta <- tempfile(pattern = "filtered_primary_", fileext = ".fa")
