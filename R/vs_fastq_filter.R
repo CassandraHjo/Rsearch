@@ -35,7 +35,7 @@
 #' If \code{reverse} is specified, the resulting tibble (\code{filt_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{filt_seqs}).
 #' This table can be accessed by running \code{attributes(filt_seqs)$filt_reverse} or \code{attr(filt_seqs, "filt_reverse")}.
 #'
-#' When a FASTQ object is returned, the statistics from the filtering, \code{statistics}, is an attribute of the filtering tibble (\code{filt_seqs}).
+#' When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics}, is an attribute of the filtering tibble (\code{filt_seqs}).
 #' This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
 #' The statistics can be accessed by running \code{attributes(filt_seqs)$statistics} or \code{attr(filt_seqs, "statistics")}.
 #'
