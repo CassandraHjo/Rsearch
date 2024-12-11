@@ -2,19 +2,27 @@
 % Please edit documentation in R/combine_fasta_files.R
 \name{combine_fasta_files}
 \alias{combine_fasta_files}
-\title{Combine FASTA files}
+\title{Combine content files in one directory}
 \usage{
-combine_fasta_files(fasta_dir, output_file = NULL)
+combine_fasta_files(
+  files_dir,
+  output_file = NULL,
+  file_ext = ".fa",
+  file_format = "fasta"
+)
 }
 \arguments{
-\item{fasta_dir}{Path to directory with FASTA files.}
+\item{files_dir}{Path to directory with files to combine.}
 
-\item{output_file}{Name of output FASTA-file or \code{NULL}. If not specified, the function will only return a FASTA object (a tibble with the columns \code{Header} and \code{Sequence}).}
+\item{output_file}{Name of output file or \code{NULL}. If not specified, the function will only return a FASTA/FASTQ object depending on \code{file_format}.}
+
+\item{file_ext}{The file extension for the files you want to combine. Must be written with a "." in front of the extension.}
+
+\item{file_format}{Format of files you want to combine, and desired output format: \code{"fasta"} or \code{"fastq"}.}
 }
 \value{
-A FASTA object with the columns \code{Header} and \code{Sequence}. If \code{output_file} is specified the path to the resulting FASTA file will be an attribute (\code{file_path})of the FASTA object.
-This attribute can be accessed by running \code{attributes(all_fasta_tbl)$file_path} or \code{attr(all_fasta_tbl, "file_path")}.
+If \code{output_file} is not specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
 }
 \description{
-Combines all FASTA-files in given directory into one FASTA object.
+Combines all files of given type in given directory into one file/object.
 }
