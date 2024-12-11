@@ -10,7 +10,7 @@
 #' @param fastqout Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ sequences will be written to file. See Details.
 #' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA sequences will be written to file. See Details.
 #' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.
-#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Detalis.
+#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.
 #' @param threads Number of computational threads to be used by vsearch.
 #' @param log_file Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.
 #'
@@ -30,12 +30,13 @@
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return A tibble, \code{filt_seqs}, containing the filtered forward reads in the format specified by \code{output_format}.
+#' @return If output files are not specified, a tibble containing the filtered reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If no output file is specified, nothing is returned.
 #'
 #' If \code{reverse} is specified, the resulting tibble (\code{filt_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{filt_seqs}).
 #' This table can be accessed by running \code{attributes(filt_seqs)$filt_reverse} or \code{attr(filt_seqs, "filt_reverse")}.
 #'
-#' The statistics from the filtering, \code{statistics}, is an attribute of \code{filt_seqs}. This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
+#' When a FASTQ object is returned, the statistics from the filtering, \code{statistics}, is an attribute of the filtering tibble (\code{filt_seqs}).
+#' This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
 #' The statistics can be accessed by running \code{attributes(filt_seqs)$statistics} or \code{attr(filt_seqs, "statistics")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
@@ -77,10 +78,36 @@ vs_fastq_filter <- function(fastq_input,
     }
   }
 
+  # If reverse is specified, ensure paired output parameters are both NULL or both character strings
+  if (!is.null(reverse)) {
+    if (output_format == "fasta") {
+      # Check that both fastaout and fastaout_rev are NULL or both are character strings
+      if ((is.null(fastaout) && !is.null(fastaout_rev)) ||
+          (!is.null(fastaout) && is.null(fastaout_rev))) {
+        stop("When 'reverse' is specified and output_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
+      }
+    }
+
+    if (output_format == "fastq") {
+      # Check that both fastqout and fastqout_rev are NULL or both are character strings
+      if ((is.null(fastqout) && !is.null(fastqout_rev)) ||
+          (!is.null(fastqout) && is.null(fastqout_rev))) {
+        stop("When 'reverse' is specified and output_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
+      }
+    }
+  }
+
   # Create empty vector for collecting temporary files
   temp_files <- c()
 
-  # Validate output file names based on output_format for primary sequences
+  # Set up cleanup of temporary files
+  on.exit({
+    if (length(temp_files) > 0) {
+      file.remove(temp_files)
+    }
+  }, add = TRUE)
+
+  # Hande output for primary sequences
   if (output_format == "fasta") {
     if (is.null(fastaout)) {
       outfile_fasta <- tempfile(pattern = "filtered_primary_", fileext = ".fa")
@@ -101,7 +128,7 @@ vs_fastq_filter <- function(fastq_input,
     }
   }
 
-  # Validate output file names based on output_format for reverse sequences
+  # Handle output for reverse sequences
   if (!is.null(reverse)) {
     if (output_format == "fasta") {
       if (is.null(fastaout_rev)) {
@@ -124,7 +151,7 @@ vs_fastq_filter <- function(fastq_input,
     }
   }
 
-  # Handle input: file or tibble
+  # Handle input for primary sequences: file or tibble
   if (!is.character(fastq_input)){
     # Ensure required columns exist
     required_cols <- c("Header", "Sequence", "Quality")
@@ -146,7 +173,7 @@ vs_fastq_filter <- function(fastq_input,
     fastq_input_name <- basename(fastq_input)
   }
 
-  # Handle reverse: file or tibble
+  # Handle input for reverse sequences: file or tibble
   if (!is.null(reverse)){
     if (!is.character(reverse)){
       # Ensure required columns exist
@@ -170,10 +197,9 @@ vs_fastq_filter <- function(fastq_input,
     }
   }
 
-  # Check is input files exists
+  # Check if input files exists
   if (!file.exists(fastq_file)) stop("Cannot find input FASTQ file: ", fastq_file)
   if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
-
 
   # Normalize file paths
   fastq_file <- normalizePath(fastq_file)
@@ -215,49 +241,47 @@ vs_fastq_filter <- function(fastq_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  # Read output from log file if specified
-  if (!is.null(log_file)) {
-    vsearch_output <- readLines(log_file)
-  }
+  # Handle output if output files are NULL
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
 
-  # Extract statistics
-  if (!is.null(reverse)){
-    statistics <- parse_filter_statistics(vsearch_output, fastq_input_name, reverse_name)
-  } else {
-    statistics <- parse_filter_statistics(vsearch_output, fastq_input_name)
-  }
+    # Extract statistics
+    if (!is.null(reverse)){
+      statistics <- parse_filter_statistics(vsearch_output, fastq_input_name, reverse_name)
+    } else {
+      statistics <- parse_filter_statistics(vsearch_output, fastq_input_name)
+    }
 
-  # Process primary sequences
-  if (output_format == "fasta") {
-    filt_seqs <- microseq::readFasta(outfile_fasta)
-  } else if (output_format == "fastq") {
-    filt_seqs <- microseq::readFastq(outfile_fastq)
-  }
-
-  # Process reverse sequences if provided
-  if (!is.null(reverse)) {
+    # Process primary sequences
     if (output_format == "fasta") {
-      filt_reverse <- microseq::readFasta(outfile_fasta_rev)
+      filt_seqs <- microseq::readFasta(outfile_fasta)
     } else if (output_format == "fastq") {
-      filt_reverse <- microseq::readFastq(outfile_fastq_rev)
+      filt_seqs <- microseq::readFastq(outfile_fastq)
+    }
+
+    # Process reverse sequences if provided
+    if (!is.null(reverse)) {
+      if (output_format == "fasta") {
+        filt_reverse <- microseq::readFasta(outfile_fasta_rev)
+      } else if (output_format == "fastq") {
+        filt_reverse <- microseq::readFastq(outfile_fastq_rev)
+      }
+    }
+
+    # Add additional tables as attributes to the primary table
+    attr(filt_seqs, "statistics") <- statistics
+    if (!is.null(reverse)) {
+      attr(filt_seqs, "filt_reverse") <- filt_reverse
     }
   }
 
-  # Add additional tables as attributes to the primary table
-  attr(filt_seqs, "statistics") <- statistics
-  if (!is.null(reverse)) {
-    attr(filt_seqs, "filt_reverse") <- filt_reverse
+  # Return results
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
+    return(filt_seqs)
+  } else {
+    return(invisible(NULL))
   }
-
-
-  # Cleanup temporary files
-  if (length(temp_files) > 0) {
-    on.exit(
-      file.remove(temp_files),
-      add = TRUE)
-  }
-
-  return(filt_seqs)
 }
 
 
