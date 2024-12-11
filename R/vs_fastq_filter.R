@@ -30,7 +30,7 @@
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return If output files are not specified, a tibble containing the filtered reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If no output file is specified, nothing is returned.
+#' @return If output files are not specified, a tibble containing the filtered reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
 #'
 #' If \code{reverse} is specified, the resulting tibble (\code{filt_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{filt_seqs}).
 #' This table can be accessed by running \code{attributes(filt_seqs)$filt_reverse} or \code{attr(filt_seqs, "filt_reverse")}.
