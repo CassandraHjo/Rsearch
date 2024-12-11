@@ -10,7 +10,7 @@
 #' @return If \code{output_file} is not specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
 #'
 #' @export
-combine_fasta_files <- function(files_dir, output_file = NULL, file_ext = ".fa", file_format = "fasta") {
+fastx_combine_files <- function(files_dir, output_file = NULL, file_ext = ".fa", file_format = "fasta") {
 
   # Check if input directory exists
   if (!dir.exists(files_dir)) {
