@@ -1,22 +1,21 @@
-#' Clusterize FASTA sequences
+#' Cluster FASTA sequences
 #'
 #' @description Clustering the FASTA sequences in the given file or object.
 #'
-#' @param fasta_input a file with FASTA sequences or a FASTA object, see Details.
-#' @param centroids file name for the FASTA file for output cluster centroid sequences. See Details.
-#' @param id pairwise identity threshold for sequence to be added to cluster. See Details.
-#' @param strand plus or both. When comparing sequences only check the plus strand or both strands.
-#' @param sizein decides if abundance annotations present in sequence headers should be taken into account. True by default.
-#' @param sizeout decides if abundance annotations should be added to FASTA headers.
-#' @param relabel relabel sequences using the given prefix and a ticker to construct new headers.
-#' @param threads number of computational threads to be used by vsearch.
-#' @param fasta_width number of characters in the width of sequences in the output FASTA file. See Details.
+#' @param fasta_input A FASTA file path or a FASTA object (tibble) with reads to cluster, see Details.
+#' @param centroids Name of the FASTA output file for the cluster centroid sequences. If \code{NULL} no FASTA output file will be written to file. See Details.
+#' @param id The pairwise identity threshold for sequence to be added to cluster. See Details.
+#' @param strand \code{plus} or \code{both}. When comparing sequences only check the \code{plus} strand or \code{both} strands.
+#' @param sizein Decides if abundance annotations present in sequence headers should be taken into account.
+#' @param sizeout Decides if abundance annotations should be added to FASTA headers.
+#' @param relabel Relabel sequences using the given prefix and a ticker to construct new headers.
+#' @param threads The number of computational threads to be used by \code{vsearch}.
+#' @param fasta_width The number of characters in the width of sequences in the output FASTA file. See Details.
 #'
-#' @details Sequences in the input file are clustered, using vsearch´s cluster_size.
+#' @details Sequences in the input file are clustered, using \code{vsearch}´s \code{cluster_size}.
 #' The function will automatically sort by decreasing sequence abundance beforehand.
 #'
-#' \code{fasta_input} can either be a file with FASTA sequences or a FASTA object. The FASTA object needs to be a tibble
-#' with columns \code{Header} and \code{Sequence}.
+#' \code{fasta_input} can either be a FASTA file or object. If provided as tibble, it must contain the columns \code{Header} and \code{Sequence}.
 #'
 #' The centroids in \code{centroids} are the sequences that seeded the clusters (i.e. the first sequence of the cluster).
 #' If \code{centroids} is specified, the remaining sequences after quality filtering are output to this file in FASTA-format.
@@ -26,15 +25,15 @@
 #' \code{id} is a value between 0 and 1, and describes the the minimum pairwise identity with the centroid for sequence to be added to cluster.
 #' The sequence is not added if pairwise identity is bellow \code{id}. The pairwise identity is defined as the number of (matching columns) / (alignment length - terminal gaps).
 #'
-#' FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
+#' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
 #' @importFrom magrittr %>%
 #'
-#' @return A tibble, \code{centroids_fasta}, with the centroid sequences in FASTA format. The tibble includes information about the clustering, including number of sequences, clusters, and singletons in addition to their min, max and average lengths and sizes.
+#' @return If \code{centroids} is not specified, a tibble containing the centroid sequences in FASTA format is returned. If \code{centroids} is specified nothing is returned.
 #'
-#' The statistics from the clustering, \code{statistics}, is an attribute of \code{centroids_fasta}. This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
-#' The statistics can be accessed by running \code{attributes(centroids_fasta)$statistics} or \code{attr(centroids_fasta, "statistics")}.
+#' When a FASTA object is returned, the statistics from the clustering, \code{statistics}, is an attribute of the centroids tibble (\code{centroids_fasta}).
+#' This tibble contains clustering statistics, including statistics about input sequences, number of clusters and their sizes. The statistics can be accessed by running \code{attributes(centroids_fasta)$statistics} or \code{attr(centroids_fasta, "statistics")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -57,14 +56,27 @@ vs_cluster_size <- function(fasta_input,
   # Create empty vector for collecting temporary files
   temp_files <- c()
 
+  # Set up cleanup of temporary files
+  on.exit({
+    if (length(temp_files) > 0) {
+      file.remove(temp_files)
+    }
+  }, add = TRUE)
+
   # Check if FASTA input is file or tibble
   if (!is.character(fasta_input)){
     temp_file <- tempfile(pattern = "input", fileext = ".fa")
     temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
+
+    # Capture original name for statistics table later
+    fasta_input_name <- as.character(substitute(fasta_input))
   } else {
     fasta_file <- fasta_input
+
+    # Capture original name for statistics table later
+    fasta_input_name <- basename(fasta_input)
   }
 
   # Check is input file exists at given path
@@ -106,26 +118,27 @@ vs_cluster_size <- function(fasta_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  # Read output into FASTA object (tbl)
-  centroids_fasta <- microseq::readFasta(outfile) %>%
-    dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) %>%
-    dplyr::mutate(centroid_size = as.numeric(centroid_size)) %>%
-    dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
+  if (is.null(centroids)) {
 
-  # Output statistics in table
-  statistics <- parse_cluster_statistics(vsearch_output, fasta_file)
+    # Read output into FASTA object (tbl)
+    centroids_fasta <- microseq::readFasta(outfile) %>%
+      dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) %>%
+      dplyr::mutate(centroid_size = as.numeric(centroid_size)) %>%
+      dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
 
-  # Add additional tables as attributes to the primary table
-  attr(centroids_fasta, "statistics") <- statistics
+    # Output statistics in table
+    statistics <- parse_cluster_statistics(vsearch_output, fasta_input_name)
 
-  # Cleanup temporary files
-  if (length(temp_files) > 0) {
-    on.exit(
-      file.remove(temp_files),
-      add = TRUE)
+    # Add additional tables as attributes to the primary table
+    attr(centroids_fasta, "statistics") <- statistics
   }
 
-  return(centroids_fasta)
+  # Return results
+  if (is.null(centroids)) { # Return tibble
+    return(centroids_fasta)
+  } else {
+    return(invisible(NULL)) # No return when output file is written
+  }
 }
 
 #' Parse clustering statistics from string to tibble
