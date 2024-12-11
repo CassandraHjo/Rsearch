@@ -2,14 +2,14 @@
 #'
 #' @param file1 A FASTQ/FASTA file path or a FASTQ/FASTA object (tibble), see Details.
 #' @param file2 A FASTQ/FASTA file path or a FASTQ/FASTA object (tibble), see Details.
-#' @param file_format Format of input files \code{file1} and \code{file2}, and desired output format of tibbles: \code{"fasta"} or \code{"fastq"}. Determines the format for both outputs.
+#' @param file_format Format of input files \code{file1} and \code{file2}, and desired output format: \code{"fasta"} or \code{"fastq"}. Determines the format for both outputs.
 #' @param file1_out Name of the output file for synchronized reads from \code{file1}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} no sequences will be written to file. See Details.
 #' @param file2_out Name of the output file for synchronized reads from \code{file2}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} no sequences will be written to file. See Details.
 #'
 #' @description The function synchronizes sequences in two FASTA/FASTQ files or objects, by retaining the common sequences.
 #'
 #' @details
-#' \code{file1} and \code{file2} can either be FASTQ/FASTA files or FASTQ/FASTA objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality} or the columns \code{Header} and \code{Sequence}, depending on the \code{file_format}.
+#' \code{file1} and \code{file2} can either be FASTQ/FASTA files or FASTQ/FASTA objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality} or the columns \code{Header} and \code{Sequence}, depending on \code{file_format}.
 #' In order for the synchronizing to work, it is necessary that the sequence IDs in the \code{Header}s are identical for each read pair in the two files.
 #'
 #' If \code{file1_out} or \code{file2_out} are specified, the remaining sequences after synchronizing are output to these files in either FASTA or FASTQ format depending on \code{file_format}.
