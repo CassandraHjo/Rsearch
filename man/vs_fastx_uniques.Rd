@@ -42,8 +42,6 @@ vs_fastx_uniques(
 \item{fastq_qout_max}{If \code{TRUE}, the quality score will be the highest (best) quality score observed in each position.}
 }
 \value{
-A tibble containing the dereplicated FASTA sequences, with columns \code{Header} and \code{Sequence}.
-
 If \code{fastx_output} is not specified, a tibble containing the dereplicated reads is returned. If \code{fastx_output} is specified nothing is returned.
 }
 \description{

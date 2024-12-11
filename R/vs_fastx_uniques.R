@@ -28,8 +28,6 @@
 #' FASTA files produced by vsearch are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return A tibble containing the dereplicated FASTA sequences, with columns \code{Header} and \code{Sequence}.
-#'
 #' @return If \code{fastx_output} is not specified, a tibble containing the dereplicated reads is returned. If \code{fastx_output} is specified nothing is returned.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
