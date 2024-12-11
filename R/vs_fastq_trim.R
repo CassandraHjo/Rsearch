@@ -13,14 +13,13 @@
 #' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ output file will be written to file. See Details.
 #' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Detalis.
 #' @param minlen The minimum number of bases in input sequences.
-#' @param threads Number of computational threads to be used by vsearch.
-#' @param log_file Name of the log file to capture messages from vsearch. If \code{NULL}, no log file is created.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
 #'
-#' @details The reads in the input FASTQ-file (\code{fastq_input}) are trimmed based on the specified number of bases for each en of the read, using vsearch.
+#' @details The reads in the input FASTQ-file (\code{fastq_input}) are trimmed based on the specified number of bases for each en of the read, using \code{vsearch}.
 #' If a \code{reverse} input is provided, it trims the reverse reads similarly. The output format for both primary and reverse sequences is determined by the \code{output_format} parameter.
 #'
 #' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
-#' \code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{fastq_maxee_rate} will be used for both FASTQ objects.
+#' \code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{stripright} and \code{stripleft} will be used for both FASTQ objects.
 #'
 #' If \code{fastaout}, \code{fastqout}, \code{fastaout_rev}, or \code{fastqout_rev} are specified, the remaining sequences after quality filtering are output to these files in either FASTA or FASTQ format.
 #' If unspecified (\code{NULL}) no output is written to file. \code{output_format} has to match the desired output files.
@@ -28,9 +27,9 @@
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return A tibble, \code{trimmed_seqs}, containing the trimmed forward reads in the format specified by \code{output_format}.
+#' @return If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
 #'
-#' If \code{reverse} is specified, the resulting tibble (\code{trimmed_reverse}) containing the trimmed reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{trimmed_seqs}).
+#' If \code{reverse} is specified, the resulting tibble (\code{trimmed_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{trimmed_seqs}).
 #' This table can be accessed by running \code{attributes(trimmed_seqs)$trimmed_reverse} or \code{attr(trimmed_seqs, "trimmed_reverse")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
@@ -48,8 +47,7 @@ vs_fastq_trim <- function(fastq_input,
                           fastqout_rev = NULL,
                           minlen = 1,
                           fasta_width = 0,
-                          threads = 1,
-                          log_file = NULL){
+                          threads = 1){
 
 
   # Check if vsearch is available
@@ -75,10 +73,36 @@ vs_fastq_trim <- function(fastq_input,
     }
   }
 
+  # If reverse is specified, ensure paired output parameters are both NULL or both character strings
+  if (!is.null(reverse)) {
+    if (output_format == "fasta") {
+      # Check that both fastaout and fastaout_rev are NULL or both are character strings
+      if ((is.null(fastaout) && !is.null(fastaout_rev)) ||
+          (!is.null(fastaout) && is.null(fastaout_rev))) {
+        stop("When 'reverse' is specified and output_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
+      }
+    }
+
+    if (output_format == "fastq") {
+      # Check that both fastqout and fastqout_rev are NULL or both are character strings
+      if ((is.null(fastqout) && !is.null(fastqout_rev)) ||
+          (!is.null(fastqout) && is.null(fastqout_rev))) {
+        stop("When 'reverse' is specified and output_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
+      }
+    }
+  }
+
   # Create empty vector for collecting temporary files
   temp_files <- c()
 
-  # Validate output file names based on output_format for primary sequences
+  # Set up cleanup of temporary files
+  on.exit({
+    if (length(temp_files) > 0) {
+      file.remove(temp_files)
+    }
+  }, add = TRUE)
+
+  # Handle output for primary sequences
   if (output_format == "fasta") {
     if (is.null(fastaout)) {
       outfile_fasta <- tempfile(pattern = "trimmed_primary_", fileext = ".fa")
@@ -99,7 +123,7 @@ vs_fastq_trim <- function(fastq_input,
     }
   }
 
-  # Validate output file names based on output_format for reverse sequences
+  # Handle output for reverse sequences
   if (!is.null(reverse)) {
     if (output_format == "fasta") {
       if (is.null(fastaout_rev)) {
@@ -122,7 +146,7 @@ vs_fastq_trim <- function(fastq_input,
     }
   }
 
-  # Handle input: file or tibble
+  # Handle input for primary sequences: file or tibble
   if (!is.character(fastq_input)){
     # Ensure required columns exist
     required_cols <- c("Header", "Sequence", "Quality")
@@ -137,7 +161,7 @@ vs_fastq_trim <- function(fastq_input,
     fastq_file <- fastq_input
   }
 
-  # Handle reverse: file or tibble
+  # Handle input for reverse sequences: file or tibble
   if (!is.null(reverse)){
     if (!is.character(reverse)){
       # Ensure required columns exist
@@ -190,50 +214,43 @@ vs_fastq_trim <- function(fastq_input,
     }
   }
 
-  # Add log file if specified
-  if (!is.null(log_file)) {
-    args <- c(args, "--log", log_file)
-  }
-
   # Run vsearch
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  # Read output from log file if specified
-  if (!is.null(log_file)) {
-    vsearch_output <- readLines(log_file)
-  }
+  # Handle output if output files are NULL
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
 
-  # Process primary sequences
-  if (output_format == "fasta") {
-    trimmed_seqs <- microseq::readFasta(outfile_fasta)
-  } else if (output_format == "fastq") {
-    trimmed_seqs <- microseq::readFastq(outfile_fastq)
-  }
-
-  # Process reverse sequences if provided
-  if (!is.null(reverse)) {
+    # Process primary sequences
     if (output_format == "fasta") {
-      trimmed_reverse <- microseq::readFasta(outfile_fasta_rev)
+      trimmed_seqs <- microseq::readFasta(outfile_fasta)
     } else if (output_format == "fastq") {
-      trimmed_reverse <- microseq::readFastq(outfile_fastq_rev)
+      trimmed_seqs <- microseq::readFastq(outfile_fastq)
+    }
+
+    # Process reverse sequences if provided
+    if (!is.null(reverse)) {
+      if (output_format == "fasta") {
+        trimmed_reverse <- microseq::readFasta(outfile_fasta_rev)
+      } else if (output_format == "fastq") {
+        trimmed_reverse <- microseq::readFastq(outfile_fastq_rev)
+      }
+    }
+
+    # Add additional tables as attributes to the primary table
+    if (!is.null(reverse)) {
+      attr(trimmed_seqs, "trimmed_reverse") <- trimmed_reverse
     }
   }
 
-  # Add additional tables as attributes to the primary table
-  if (!is.null(reverse)) {
-    attr(trimmed_seqs, "trimmed_reverse") <- trimmed_reverse
+  # Return results
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
+    return(trimmed_seqs)
+  } else {
+    return(invisible(NULL))
   }
-
-  # Cleanup temporary files
-  if (length(temp_files) > 0) {
-    on.exit(
-      file.remove(temp_files),
-      add = TRUE)
-  }
-
-  return(trimmed_seqs)
 }
-
