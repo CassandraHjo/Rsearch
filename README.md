@@ -1,39 +1,94 @@
 
 # Rsearch
 
-<!-- badges: start -->
-<!-- badges: end -->
+## Table of Contents
 
-Rsearch is a package for …
+- [Introduction](##Introduction)
+- [Example](##Example)
+- [Download and install](##Download-and-install)
+- [Rsearch licence and third party
+  licences](##Rsearch-licence-and-third-party-licences)
+- [Contributors](##Contributors)
+- [Citing Rsearch](##Citing-Rsearch)
+- [References](##References)
 
-## Installation
+## Introduction
 
-You can install the development version of Rsearch from
-[GitHub](https://github.com/) with:
+Rsearch is a R package designed for handling and analyzing sequence
+data. Many of its functions are based on the command-line based tool
+`VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch`
+provides significantly utility by making the software more accessible to
+a broad user base, particularly those who prefer or require an R-based
+workflow. In addition to the `VSEARCH`-based functions, `Rsearch`
+includes additional tools to aid in microbiome data analysis, such as
+visualizations.
+
+The core idea behind `Rsearch` is to retain the output from `VSEARCH`
+within R’s generic data structures, rather than always writing results
+to files. By offering the option to not to write results to specified
+files, users can choose to work entierly within R and Rstudio or to
+export results to files as `VSEARCH` typically does. Keeping all results
+in R data structures allows users to leverage the power of standard data
+wrangling and visualization tools familiar to R users.
+
+Another feature that enhances usability for R users is the consistent
+return format of the functions. All functions return a single table/data
+frame unless the user specifies that results should be written to a
+file. For functions that can return multiple results - such as those
+handeling read pairs with forward and reverse reads - the secondary
+table is included as an attribute of the primary table. The same
+approach applies to tables containing statistics from function
+executions. By ensuring that all functions return only one table,
+navigating and managing results become more straightforward.
+
+## Example
+
+``` r
+# Write an example here
+```
+
+## Download and install
+
+### Prerequisites
+
+A prerequisite for the `Rsearch` package to work on your computer is
+that `VSEARCH` is installed locally on your computer. Visit the
+[`VSEARCH`](https://github.com/torognes/vsearch) page for instructions
+on how to download and install the tool.
+
+### Installing `Rsearch`
+
+You can install the development version of `Rsearch` from
+[GitHub](https://github.com/) by using the `devtools` package from CRAN:
 
 ``` r
 # install.packages("devtools)
 devtools::install_github("CassandraHjo/Rsearch")
-#> Using GitHub PAT from the git credential store.
-#> Downloading GitHub repo CassandraHjo/Rsearch@HEAD
-#> data.table (1.16.2 -> 1.16.4) [CRAN]
-#> Installing 1 packages: data.table
-#> Installing package into '/private/var/folders/cw/l27s_m4x4snbrpl9qj2jmr3c0000gn/T/RtmpUpWcMK/temp_libpath72774aa34f7a'
-#> (as 'lib' is unspecified)
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/cw/l27s_m4x4snbrpl9qj2jmr3c0000gn/T//RtmpzzQdFy/downloaded_packages
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#> * checking for file ‘/private/var/folders/cw/l27s_m4x4snbrpl9qj2jmr3c0000gn/T/RtmpzzQdFy/remotes737c79f04774/CassandraHjo-Rsearch-e48136cdb610f6199861a3bd35ac5d0fcc8f377b/DESCRIPTION’ ... OK
-#> * preparing ‘Rsearch’:
-#> * checking DESCRIPTION meta-information ... OK
-#> * cleaning src
-#> * checking for LF line-endings in source and make files and shell scripts
-#> * checking for empty or unneeded directories
-#> * building ‘Rsearch_0.1.0.tar.gz’
-#> Installing package into '/private/var/folders/cw/l27s_m4x4snbrpl9qj2jmr3c0000gn/T/RtmpUpWcMK/temp_libpath72774aa34f7a'
-#> (as 'lib' is unspecified)
 ```
+
+## Rsearch licence and third party licences
+
+## Contributors
+
+The main contributors to `Rsearch`:
+
+- Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no> (Coding, testing,
+  documentation)
+
+## Citing Rsearch
+
+Please cite the following publication if you use `Rsearch`:
+
+xxx
+
+Please note that citing any of the underlying algorithms,
+e.g. `VSEARCH`, may also be appropriate.
+
+## References
+
+- Rognes T, Flouri T, Nichols B, Quince C, Mahé F (2016) **VSEARCH: a
+  versatile open source tool for metagenomics.** *PeerJ* 4:e2584. doi:
+  [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
 
 You’ll still need to render `README.Rmd` regularly, to keep `README.md`
 up-to-date. `devtools::build_readme()` is handy for this.
