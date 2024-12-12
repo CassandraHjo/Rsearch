@@ -1,17 +1,6 @@
 
 # Rsearch
 
-## Table of Contents
-
-- [Introduction](##Introduction)
-- [Example](##Example)
-- [Download and install](##Download-and-install)
-- [Rsearch licence and third party
-  licences](##Rsearch-licence-and-third-party-licences)
-- [Contributors](##Contributors)
-- [Citing Rsearch](##Citing-Rsearch)
-- [References](##References)
-
 ## Introduction
 
 Rsearch is a R package designed for handling and analyzing sequence
@@ -26,7 +15,7 @@ visualizations.
 The core idea behind `Rsearch` is to retain the output from `VSEARCH`
 within R’s generic data structures, rather than always writing results
 to files. By offering the option to not to write results to specified
-files, users can choose to work entierly within R and Rstudio or to
+files, users can choose to work entirely within R and Rstudio or to
 export results to files as `VSEARCH` typically does. Keeping all results
 in R data structures allows users to leverage the power of standard data
 wrangling and visualization tools familiar to R users.
@@ -35,19 +24,13 @@ Another feature that enhances usability for R users is the consistent
 return format of the functions. All functions return a single table/data
 frame unless the user specifies that results should be written to a
 file. For functions that can return multiple results - such as those
-handeling read pairs with forward and reverse reads - the secondary
-table is included as an attribute of the primary table. The same
-approach applies to tables containing statistics from function
-executions. By ensuring that all functions return only one table,
-navigating and managing results become more straightforward.
+handling read pairs with forward and reverse reads - the secondary table
+is included as an attribute of the primary table. The same approach
+applies to tables containing statistics from function executions. By
+ensuring that all functions return only one table, navigating and
+managing results become more straightforward.
 
-## Example
-
-``` r
-# Write an example here
-```
-
-## Download and install
+## Installation
 
 ### Prerequisites
 
@@ -66,7 +49,50 @@ You can install the development version of `Rsearch` from
 devtools::install_github("CassandraHjo/Rsearch")
 ```
 
-## Rsearch licence and third party licences
+## Documentation
+
+### Accessing help within R
+
+Documentation can be accessed directly in the R console. Here are some
+methods to access help:
+
+- **Function-specific help:** To get detailed information about a
+  specific function, use the `?` operator followed by the function name.
+  For example, to access help for the `vs_fastq_filter` function:
+
+``` r
+?vs_fastq_filter
+```
+
+Alternatively, you can use the `help()` function:
+
+``` r
+help(vs_fstq_filter)
+```
+
+- **Package-wide help**
+
+To get an overview of the `Rsearch` package an its available functions,
+use:
+
+``` r
+# library(Rsearch)
+help(package = "Rsearch")
+```
+
+## Usage
+
+### Example 1: Some basic example
+
+``` r
+# Write an example here
+```
+
+### Example 2: Some advanced example
+
+``` r
+# Write an example here
+```
 
 ## Contributors
 
