@@ -51,13 +51,13 @@ fastx_synchronize <- function(file1,
     if (file_format == "fastq") {
       required_cols <- c("Header", "Sequence", "Quality")
       if (!all(required_cols %in% colnames(file1))) {
-        stop("FASTQ object must contain columns: Header, Sequence, Quality")
+        stop("file1 FASTQ object must contain columns: Header, Sequence, Quality")
       }
     }
     if (file_format == "fasta") {
       required_cols <- c("Header", "Sequence")
       if (!all(required_cols %in% colnames(file1))) {
-        stop("FASTA object must contain columns: Header and Sequence")
+        stop("file1 FASTA object must contain columns: Header and Sequence")
       }
     }
   } else {
@@ -80,13 +80,13 @@ fastx_synchronize <- function(file1,
     if (file_format == "fastq") {
       required_cols <- c("Header", "Sequence", "Quality")
       if (!all(required_cols %in% colnames(file2))) {
-        stop("FASTQ object must contain columns: Header, Sequence, Quality")
+        stop("file2 FASTQ object must contain columns: Header, Sequence, Quality")
       }
     }
     if (file_format == "fasta") {
       required_cols <- c("Header", "Sequence")
       if (!all(required_cols %in% colnames(file2))) {
-        stop("FASTA object must contain columns: Header and Sequence")
+        stop("file2 FASTA object must contain columns: Header and Sequence")
       }
     }
   } else {
