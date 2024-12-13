@@ -14,6 +14,7 @@ vs_fastq_filter(
   fastaout_rev = NULL,
   fastqout_rev = NULL,
   fasta_width = 0,
+  minlen = 0,
   threads = 1,
   log_file = NULL
 )
@@ -36,6 +37,8 @@ vs_fastq_filter(
 \item{fastqout_rev}{Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.}
+
+\item{minlen}{The minimum number of bases a sequence must have to be retained. Default is 0. See Details.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}.}
 
@@ -70,6 +73,9 @@ For a given sequence, the average expected error is the sum of error probabiliti
 
 FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
+
+Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
+However, using the default value may allow empty sequences to remain in the results.
 }
 \references{
 \url{https://github.com/torognes/vsearch}

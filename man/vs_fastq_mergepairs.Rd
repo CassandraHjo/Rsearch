@@ -8,6 +8,7 @@ vs_fastq_mergepairs(
   fastq_input,
   reverse,
   fastqout = NULL,
+  minlen = 0,
   log_file = NULL,
   threads = 1
 )
@@ -18,6 +19,8 @@ vs_fastq_mergepairs(
 \item{reverse}{A FASTQ file path or a FASTQ object (tibble) containing (reverse) reads, see Details.}
 
 \item{fastqout}{Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.}
+
+\item{minlen}{The minimum number of bases a sequence must have to be retained. Default is 0. See Details.}
 
 \item{log_file}{Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.}
 
@@ -41,6 +44,9 @@ If \code{fastqout} is specified, the merged reads are output to this file in FAS
 If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with columns \code{Header}, \code{Sequence} and \code{Quality}.
 
 If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+
+Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
+However, using the default value may allow empty sequences to remain in the results.
 }
 \references{
 \url{https://github.com/torognes/vsearch}
