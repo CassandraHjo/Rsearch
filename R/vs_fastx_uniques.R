@@ -61,12 +61,13 @@ vs_fastx_uniques <- function(fastx_input,
   }
 
   # Create empty vector for collecting temporary files
-  temp_files <- c()
+  temp_files <- character()
 
   # Set up cleanup of temporary files
   on.exit({
-    if (length(temp_files) > 0) {
-      file.remove(temp_files)
+    existing_files <- temp_files[file.exists(temp_files)]
+    if (length(existing_files) > 0) {
+      file.remove(existing_files)
     }
   }, add = TRUE)
 

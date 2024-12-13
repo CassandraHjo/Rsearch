@@ -107,8 +107,9 @@ vs_fastq_filter <- function(fastq_input,
 
   # Set up cleanup of temporary files
   on.exit({
-    if (length(temp_files) > 0) {
-      file.remove(temp_files)
+    existing_files <- temp_files[file.exists(temp_files)]
+    if (length(existing_files) > 0) {
+      file.remove(existing_files)
     }
   }, add = TRUE)
 
