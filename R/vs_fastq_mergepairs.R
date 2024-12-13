@@ -5,6 +5,7 @@
 #' @param fastq_input A FASTQ file path or a FASTQ object (tibble) containing (forward) reads, see Details.
 #' @param reverse A FASTQ file path or a FASTQ object (tibble) containing (reverse) reads, see Details.
 #' @param fastqout Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Default is 0. See Details.
 #' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.
 #' @param threads Number of computational threads to be used by \code{vsearch}.
 #'
@@ -16,6 +17,9 @@
 #' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with columns \code{Header}, \code{Sequence} and \code{Quality}.
 #'
 #' If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+#'
+#' Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
+#' However, using the default value may allow empty sequences to remain in the results.
 #'
 #' @return If \code{fastq_out} is not specified, a tibble containing the merged reads in FASTQ format is returned. If \code{output_file} is specified nothing is returned.
 #'
@@ -29,6 +33,7 @@
 vs_fastq_mergepairs <- function(fastq_input,
                                 reverse,
                                 fastqout = NULL,
+                                minlen = 0,
                                 log_file = NULL,
                                 threads = 1){
 
@@ -110,6 +115,7 @@ vs_fastq_mergepairs <- function(fastq_input,
   args <- c("--fastq_mergepairs", fastq_file,
             "--reverse", reverse_file,
             "--threads", threads,
+            "--fastq_minlen", minlen,
             "--fastqout", outfile)
 
   # Add log file if specified by user

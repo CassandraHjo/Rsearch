@@ -11,8 +11,8 @@
 #' @param fastqout Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ output file will be written to file. See Details.
 #' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA output file will be written to file. See Details.
 #' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ output file will be written to file. See Details.
-#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Detalis.
-#' @param minlen The minimum number of bases in input sequences.
+#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Default is 0. See Details.
 #' @param threads Number of computational threads to be used by \code{vsearch}.
 #'
 #' @details The reads in the input FASTQ-file (\code{fastq_input}) are trimmed based on the specified number of bases for each en of the read, using \code{vsearch}.
@@ -26,6 +26,9 @@
 #'
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
+#'
+#' Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
+#' However, using the default value may allow empty sequences to remain in the results.
 #'
 #' @return If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
 #'
@@ -45,7 +48,7 @@ vs_fastq_trim <- function(fastq_input,
                           fastqout = NULL,
                           fastaout_rev = NULL,
                           fastqout_rev = NULL,
-                          minlen = 1,
+                          minlen = 0,
                           fasta_width = 0,
                           threads = 1){
 

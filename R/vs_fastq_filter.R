@@ -11,6 +11,7 @@
 #' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA sequences will be written to file. See Details.
 #' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.
 #' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Default is 0. See Details.
 #' @param threads Number of computational threads to be used by \code{vsearch}.
 #' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.
 #'
@@ -29,6 +30,9 @@
 #'
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
+#'
+#' Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
+#' However, using the default value may allow empty sequences to remain in the results.
 #'
 #' @return If output files are not specified, a tibble containing the filtered reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
 #'
@@ -52,6 +56,7 @@ vs_fastq_filter <- function(fastq_input,
                             fastaout_rev = NULL,
                             fastqout_rev = NULL,
                             fasta_width = 0,
+                            minlen = 0,
                             threads = 1,
                             log_file = NULL){
 
@@ -210,7 +215,8 @@ vs_fastq_filter <- function(fastq_input,
   # Build argument string for command line
   args <- c("--fastq_filter", fastq_file,
             "--threads", threads,
-            "--fastq_maxee_rate", fastq_maxee_rate)
+            "--fastq_maxee_rate", fastq_maxee_rate,
+            "--fastq_minlen", minlen)
 
   # Add reverse to arguments if provided
   if (!is.null(reverse)) {
