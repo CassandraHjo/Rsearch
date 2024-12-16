@@ -107,3 +107,27 @@ test_that("error when file2 has incorrect columns if input is tibble and file_fo
                                  file_format = file_format),
                "file2 FASTA object must contain columns: Header and Sequence")
 })
+
+test_that("error when input file1 does not exist", {
+
+  file1 <- "some_file.fq"
+  file2 <- test_path("testdata", "R2.fq")
+  file_format <- "fastq"
+
+  expect_error(fastx_synchronize(file1 = file1,
+                                 file2 = file2,
+                                 file_format = file_format),
+               paste("Cannot find input file:", file1))
+})
+
+test_that("error when input file2 does not exist", {
+
+  file1 <- test_path("testdata", "R1.fq")
+  file2 <- "some_file.fq"
+  file_format <- "fastq"
+
+  expect_error(fastx_synchronize(file1 = file1,
+                                 file2 = file2,
+                                 file_format = file_format),
+               paste("Cannot find input file:", file2))
+})
