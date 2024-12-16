@@ -66,10 +66,12 @@ test_that("two fasta files can be combined, and written to fasta file", {
   file_ext <- ".fa"
   file_format <- "fasta"
 
-  fastx_combine_files(files_dir = files_dir,
-                      output_file = output_file,
-                      file_ext = file_ext,
-                      file_format = file_format)
+  return_value <- fastx_combine_files(files_dir = files_dir,
+                                      output_file = output_file,
+                                      file_ext = file_ext,
+                                      file_format = file_format)
+
+  expect_null(return_value)
 
   expect_equal(microseq::readFasta(output_file),
                microseq::readFasta(test_path("testdata", "output", "combine_sample1.fa")))
