@@ -20,7 +20,7 @@ test_that("error when directory does not exist", {
 
 test_that("error when no files are found in specified folder", {
 
-  files_dir <- test_path("testdata")
+  files_dir <- test_path("testdata", "empty_dir")
   file_ext <- ".fa"
 
   expect_error(fastx_combine_files(files_dir = files_dir),
