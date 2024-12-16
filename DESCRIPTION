@@ -16,7 +16,8 @@ Imports:
     magrittr,
     microseq (>= 2.1.6),
     Rcpp (>= 1.0.13-1),
-    stringr (>= 1.5.1)
+    stringr (>= 1.5.1),
+    withr (>= 3.0.2)
 LinkingTo: Rcpp
 Suggests: 
     testthat (>= 3.0.0)
