@@ -1,6 +1,6 @@
 test_that("error when wrong file_format", {
 
-  fastx_input <- readRDS(test_path("testdata", "R1_dataframe.rds"))
+  fastx_input <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
   file_format <- "fastx"
 
   expect_error(vs_fastx_uniques(fastx_input = fastx_input,
@@ -10,7 +10,7 @@ test_that("error when wrong file_format", {
 
 test_that("error when wrong strand", {
 
-  fastx_input <- readRDS(test_path("testdata", "R1_dataframe.rds"))
+  fastx_input <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
   file_format <- "fastq"
   strand <- "something"
 
@@ -22,7 +22,7 @@ test_that("error when wrong strand", {
 
 test_that("error when fastx_input has incorrect columns if input is tibble and file_format = 'fastq'", {
 
-  fastx_input <- readRDS(test_path("testdata", "R1_dataframe.rds")) %>%
+  fastx_input <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds")) %>%
     dplyr::select(-Header)
 
   file_format <- "fastq"
@@ -33,7 +33,7 @@ test_that("error when fastx_input has incorrect columns if input is tibble and f
 
 test_that("error when fastx_input has incorrect columns if input is tibble and file_format = 'fasta'", {
 
-  fastx_input <- readRDS(test_path("testdata", "R1_dataframe.rds")) %>%
+  fastx_input <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds")) %>%
     dplyr::select(Header)
 
   file_format <- "fasta"

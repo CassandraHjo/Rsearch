@@ -1,7 +1,7 @@
 test_that("error when wrong output_format", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds"))
 
   expect_error(vs_fastq_trim(fastq_input = R1,
                                reverse = R2,
@@ -11,8 +11,8 @@ test_that("error when wrong output_format", {
 
 test_that("error when output_format is 'fasta', and fastqout and fastqout_rev are defined", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds"))
   output_format <- "fasta"
   fastqout <- "some_file.fq"
   fastqout_rev <- "some_other_file.fq"
@@ -27,8 +27,8 @@ test_that("error when output_format is 'fasta', and fastqout and fastqout_rev ar
 
 test_that("error when output_format is 'fastq', and fastaout and fastaout_rev are defined", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds"))
   output_format <- "fastq"
   fastaout <- "some_file.fa"
   fastaout_rev <- "some_other_file.fa"
@@ -43,8 +43,8 @@ test_that("error when output_format is 'fastq', and fastaout and fastaout_rev ar
 
 test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds"))
   output_format <- "fasta"
   fastaout <- "some_file.fa"
   fastaout_rev <- NULL
@@ -59,8 +59,8 @@ test_that("error when reverse is specified, but output files are not both NULL o
 
 test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds"))
   output_format <- "fastq"
   fastaout <- "some_file.fa"
   fastaout_rev <- NULL
@@ -75,10 +75,10 @@ test_that("error when reverse is specified, but output files are not both NULL o
 
 test_that("error when fastq_input has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds")) %>%
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds")) %>%
     dplyr::select(-Header)
 
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds"))
 
   expect_error(vs_fastq_trim(fastq_input = R1, reverse = R2),
                "FASTQ object must contain columns: Header, Sequence, Quality")
@@ -86,9 +86,9 @@ test_that("error when fastq_input has incorrect columns if input is tibble", {
 
 test_that("error when reverse has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "R1_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_sample1_fastq_dataframe.rds"))
 
-  R2 <- readRDS(test_path("testdata", "R2_dataframe.rds")) %>%
+  R2 <- readRDS(test_path("testdata", "R2_sample1_fastq_dataframe.rds")) %>%
     dplyr::select(-Header)
 
   expect_error(vs_fastq_trim(fastq_input = R1, reverse = R2),
@@ -98,7 +98,7 @@ test_that("error when reverse has incorrect columns if input is tibble", {
 test_that("error when input file does not exist", {
 
   fastq_input <- "some_file.fq"
-  reverse <- test_path("testdata", "R2.fq")
+  reverse <- test_path("testdata", "R2_sample1.fq")
 
   expect_error(vs_fastq_trim(fastq_input = fastq_input,
                                reverse = reverse),
@@ -107,7 +107,7 @@ test_that("error when input file does not exist", {
 
 test_that("error when reverse file does not exist", {
 
-  fastq_input <- test_path("testdata", "R2.fq")
+  fastq_input <- test_path("testdata", "R2_sample1.fq")
   reverse <- "some_file.fq"
 
   expect_error(vs_fastq_trim(fastq_input = fastq_input,
