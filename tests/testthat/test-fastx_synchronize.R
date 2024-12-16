@@ -180,7 +180,6 @@ test_that("two fastq files can be synchronized, and return fastq tibble with att
                attr(readRDS(test_path("testdata", "output", "sync_sample1_fastq.rds")), "sync_file2"))
 })
 
-
 test_that("two fasta files can be synchronized, and return two fasta files", {
 
   file1 <- test_path("testdata", "sample1", "R1_sample1.fa")
@@ -229,7 +228,6 @@ test_that("two fastq files can be synchronized, and return two fastq files", {
                microseq::readFastq(test_path("testdata", "output", "R2_sample1_sync.fq")))
 })
 
-
 test_that("two fasta tibbles can be synchronized, and return two fasta files", {
 
   file1 <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
@@ -277,7 +275,6 @@ test_that("two fastq tibbles can be synchronized, and return two fastq files", {
   expect_equal(microseq::readFastq(file2_out),
                microseq::readFastq(test_path("testdata", "output", "R2_sample1_sync.fq")))
 })
-
 
 test_that("two fasta tibbles can be synchronized, and return fasta tibble with attribute", {
 
