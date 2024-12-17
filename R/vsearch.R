@@ -31,7 +31,7 @@ set_vsearch_executable <- function(vsearch_executable){
 # does not contains a proper command line
 vsearch_available <- function(vsearch_executable){
   chr <- NULL
-  ok <- try(chr <- system2(vsearch_executable, args = "-h", stdout = TRUE), silent = TRUE)
+  ok <- try(chr <- system2(vsearch_executable, args = c("-h", "--quiet", ""), stdout = TRUE), silent = TRUE)
   if(length(grep("Error", ok[1])) > 0){
     stop("Cannot run ", vsearch_executable, " from R, use set_vsearch_executable() to set proper command to invoke vsearch")
     return(FALSE)
