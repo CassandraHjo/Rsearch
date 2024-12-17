@@ -90,7 +90,6 @@ vs_fastx_uniques <- function(fastx_input,
 
     # Handle output
     if (is.null(fastx_output)) {
-      message("No filename for output file. No output file will be created.")
       output_file <- tempfile(pattern = "derep", fileext = ".fa")
       temp_files <- c(temp_files, output_file)
     } else {
@@ -117,7 +116,6 @@ vs_fastx_uniques <- function(fastx_input,
 
     # Handle output
     if (is.null(fastx_output)) {
-      message("No filename for output file. No output file will be created.")
       output_file <- tempfile(pattern = "derep", fileext = ".fq")
       temp_files <- c(temp_files, output_file)
     } else {

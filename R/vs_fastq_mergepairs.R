@@ -103,11 +103,9 @@ vs_fastq_mergepairs <- function(fastq_input,
 
   # Determine output file
   if (is.null(fastqout)) {
-    message("No filename for output file. No output file will be created.")
     outfile <- tempfile(pattern = "merged", fileext = ".fq")
     temp_files <- c(temp_files, outfile)
   } else {
-    message("Writing merged sequences to file:", fastqout)
     outfile <- fastqout
   }
 

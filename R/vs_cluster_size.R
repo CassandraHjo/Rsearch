@@ -87,11 +87,9 @@ vs_cluster_size <- function(fasta_input,
 
   # Determine centroids file
   if (is.null(centroids)) {
-    message("No filename for centroids file. No centroids file will be created.")
     outfile <- tempfile(pattern = "centroids", fileext = ".fa")
     temp_files <- c(temp_files, outfile)
   } else {
-    message("Writing filtered sequences to file: ", centroids)
     outfile <- centroids
   }
 

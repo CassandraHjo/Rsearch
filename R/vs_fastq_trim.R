@@ -111,7 +111,6 @@ vs_fastq_trim <- function(fastq_input,
     if (is.null(fastaout)) {
       outfile_fasta <- tempfile(pattern = "trimmed_primary_", fileext = ".fa")
       temp_files <- c(temp_files, outfile_fasta)
-      message("No filename for fastaout. No output file will be created.")
     } else {
       outfile_fasta <- fastaout
     }
@@ -121,7 +120,6 @@ vs_fastq_trim <- function(fastq_input,
     if (is.null(fastqout)) {
       outfile_fastq <- tempfile(pattern = "trimmed_primary_", fileext = ".fq")
       temp_files <- c(temp_files, outfile_fastq)
-      message("No filename for fastqout. No output file will be created.")
     } else {
       outfile_fastq <- fastqout
     }
@@ -133,7 +131,6 @@ vs_fastq_trim <- function(fastq_input,
       if (is.null(fastaout_rev)) {
         outfile_fasta_rev <- tempfile(pattern = "trimmed_reverse_", fileext = ".fa")
         temp_files <- c(temp_files, outfile_fasta_rev)
-        message("No filename for fastaout_rev. No output file will be created.")
       } else {
         outfile_fasta_rev <- fastaout_rev
       }
@@ -143,7 +140,6 @@ vs_fastq_trim <- function(fastq_input,
       if (is.null(fastqout_rev)) {
         outfile_fastq_rev <- tempfile(pattern = "trimmed_reverse_", fileext = ".fq")
         temp_files <- c(temp_files, outfile_fastq_rev)
-        message("No filename for fastqout_rev. No output file will be created.")
       } else {
         outfile_fastq_rev <- fastqout_rev
       }
