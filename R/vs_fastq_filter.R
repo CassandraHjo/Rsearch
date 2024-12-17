@@ -103,13 +103,15 @@ vs_fastq_filter <- function(fastq_input,
   }
 
   # Create empty vector for collecting temporary files
-  temp_files <- c()
+  temp_files <- character()
 
   # Set up cleanup of temporary files
   on.exit({
-    existing_files <- temp_files[file.exists(temp_files)]
-    if (length(existing_files) > 0) {
-      file.remove(existing_files)
+    if (length(temp_files) > 0 && is.character(temp_files)) {
+      existing_files <- temp_files[file.exists(temp_files)]
+      if (length(existing_files) > 0) {
+        file.remove(existing_files)
+      }
     }
   }, add = TRUE)
 
@@ -169,6 +171,7 @@ vs_fastq_filter <- function(fastq_input,
     fastq_input_name <- as.character(substitute(fastq_input))
 
   } else {
+    if (!file.exists(fastq_input)) stop("Cannot find input FASTQ file: ", fastq_input)
     fastq_file <- fastq_input
 
     # Capture original name for statistics table later
@@ -192,16 +195,13 @@ vs_fastq_filter <- function(fastq_input,
       reverse_name <- as.character(substitute(reverse))
 
     } else {
+      if (!file.exists(reverse)) stop("Cannot find reverse FASTQ file: ", reverse)
       reverse_file <- reverse
 
       # Capture original name for statistics table later
       reverse_name <- basename(reverse)
     }
   }
-
-  # Check if input files exists
-  if (!file.exists(fastq_file)) stop("Cannot find input FASTQ file: ", fastq_file)
-  if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
 
   # Normalize file paths
   fastq_file <- normalizePath(fastq_file)
