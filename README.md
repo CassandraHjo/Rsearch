@@ -3,7 +3,7 @@
 
 ## Introduction
 
-Rsearch is a R package designed for handling and analyzing sequence
+Rsearch is an R package designed for handling and analyzing sequence
 data. Many of its functions are based on the command-line based tool
 `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch`
 provides significantly utility by making the software more accessible to
@@ -14,7 +14,7 @@ visualizations.
 
 The core idea behind `Rsearch` is to retain the output from `VSEARCH`
 within R’s generic data structures, rather than always writing results
-to files. By offering the option to not to write results to specified
+to files. By offering the additional option to output the results within R
 files, users can choose to work entirely within R and Rstudio or to
 export results to files as `VSEARCH` typically does. Keeping all results
 in R data structures allows users to leverage the power of standard data
