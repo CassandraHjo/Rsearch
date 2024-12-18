@@ -7,7 +7,7 @@
 #' @param file_ext The file extension for the files you want to combine. Must be written with a "." in front of the extension.
 #' @param file_format Format of files you want to combine, and desired output format: \code{"fasta"} or \code{"fastq"}.
 #'
-#' @return If \code{output_file} is not specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
+#' @return If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
 #'
 #' @export
 fastx_combine_files <- function(files_dir, output_file = NULL, file_ext = ".fa", file_format = "fasta") {
