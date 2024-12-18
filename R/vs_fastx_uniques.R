@@ -4,7 +4,7 @@
 #'
 #' @param fastx_input A FASTQ/FASTA file path or a FASTQ/FASTA object (tibble), see Details.
 #' @param fastx_output Name of the output file for dereplicated reads from \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} no sequences will be written to file. See Details.
-#' @param file_format Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}. Determines the format for both outputs.
+#' @param file_format Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}.
 #' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.
 #' @param minuniquesize The minimum abundance value post-dereplication for a sequence not to be discarded.
 #' @param strand \code{"plus"} or \code{"both"}. When comparing sequences only check the plus strand or both strands.

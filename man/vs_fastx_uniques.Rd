@@ -23,7 +23,7 @@ vs_fastx_uniques(
 
 \item{fastx_output}{Name of the output file for dereplicated reads from \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} no sequences will be written to file. See Details.}
 
-\item{file_format}{Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}. Determines the format for both outputs.}
+\item{file_format}{Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}.}
 
 \item{minuniquesize}{The minimum abundance value post-dereplication for a sequence not to be discarded.}
 
