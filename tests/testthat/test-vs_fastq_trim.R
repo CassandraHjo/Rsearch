@@ -4,8 +4,8 @@ test_that("error when wrong output_format", {
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
 
   expect_error(vs_fastq_trim(fastq_input = R1,
-                               reverse = R2,
-                               output_format = "fastx"),
+                             reverse = R2,
+                             output_format = "fastx"),
                "Invalid output_format. Choose from fasta or fastq.")
 })
 
@@ -18,10 +18,10 @@ test_that("error when output_format is 'fasta', and fastqout and fastqout_rev ar
   fastqout_rev <- "some_other_file.fq"
 
   expect_error(vs_fastq_trim(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format,
-                               fastqout = fastqout,
-                               fastqout_rev = fastqout_rev),
+                             reverse = R2,
+                             output_format = output_format,
+                             fastqout = fastqout,
+                             fastqout_rev = fastqout_rev),
                "When output_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
 })
 
@@ -34,10 +34,10 @@ test_that("error when output_format is 'fastq', and fastaout and fastaout_rev ar
   fastaout_rev <- "some_other_file.fa"
 
   expect_error(vs_fastq_trim(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format,
-                               fastaout = fastaout,
-                               fastaout_rev = fastaout_rev),
+                             reverse = R2,
+                             output_format = output_format,
+                             fastaout = fastaout,
+                             fastaout_rev = fastaout_rev),
                "When output_format is defined as 'fastq', 'fastaout' and 'fastaout_rev' cannot be used. Use 'fastqout' and 'fastqout_rev' instead.")
 })
 
@@ -50,10 +50,10 @@ test_that("error when reverse is specified, but output files are not both NULL o
   fastaout_rev <- NULL
 
   expect_error(vs_fastq_trim(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format,
-                               fastaout = fastaout,
-                               fastaout_rev = fastaout_rev),
+                             reverse = R2,
+                             output_format = output_format,
+                             fastaout = fastaout,
+                             fastaout_rev = fastaout_rev),
                "When 'reverse' is specified and output_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
 })
 
@@ -66,10 +66,10 @@ test_that("error when reverse is specified, but output files are not both NULL o
   fastaout_rev <- NULL
 
   expect_error(vs_fastq_trim(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format,
-                               fastqout = fastaout,
-                               fastqout_rev = fastaout_rev),
+                             reverse = R2,
+                             output_format = output_format,
+                             fastqout = fastaout,
+                             fastqout_rev = fastaout_rev),
                "When 'reverse' is specified and output_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
 })
 
@@ -101,7 +101,7 @@ test_that("error when input file does not exist", {
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
 
   expect_error(vs_fastq_trim(fastq_input = fastq_input,
-                               reverse = reverse),
+                             reverse = reverse),
                paste("Cannot find input FASTQ file:", fastq_input))
 })
 
@@ -111,6 +111,244 @@ test_that("error when reverse file does not exist", {
   reverse <- "some_file.fq"
 
   expect_error(vs_fastq_trim(fastq_input = fastq_input,
-                               reverse = reverse),
+                             reverse = reverse),
                paste("Cannot find reverse FASTQ file:", reverse))
+})
+
+# --------------------------------------------------------
+
+test_that("trim fastq sequences from two files, and return two fastq files", {
+
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastqout <- withr::local_tempfile()
+  fastqout_rev <- withr::local_tempfile()
+  output_format <- "fastq"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  return_value <- vs_fastq_trim(fastq_input = fastq_input,
+                                reverse = reverse,
+                                fastqout = fastqout,
+                                fastqout_rev = fastqout_rev,
+                                output_format = output_format,
+                                minlen = minlen,
+                                threads = threads,
+                                stripright = stripright,
+                                stripleft = stripleft)
+
+  expect_null(return_value)
+
+  expect_equal(microseq::readFastq(fastqout),
+               microseq::readFastq(test_path("testdata", "output", "R1_trimmed_sample1.fq")))
+
+  expect_equal(microseq::readFastq(fastqout_rev),
+               microseq::readFastq(test_path("testdata", "output", "R2_trimmed_sample1.fq")))
+})
+
+test_that("trim fastq sequences from two files, and return fastq tibble", {
+
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  output_format <- "fastq"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  trimmed_sample1 <- vs_fastq_trim(fastq_input = fastq_input,
+                                   reverse = reverse,
+                                   output_format = output_format,
+                                   minlen = minlen,
+                                   threads = threads,
+                                   stripright = stripright,
+                                   stripleft = stripleft)
+
+  expect_equal(trimmed_sample1,
+               readRDS(test_path("testdata", "output", "trimmed_sample1_fastq_files.rds")))
+
+})
+
+test_that("trim fastq sequences from two files, and return two fasta files", {
+
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastaout <- withr::local_tempfile()
+  fastaout_rev <- withr::local_tempfile()
+  output_format <- "fasta"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  return_value <- vs_fastq_trim(fastq_input = fastq_input,
+                                reverse = reverse,
+                                fastaout = fastaout,
+                                fastaout_rev = fastaout_rev,
+                                output_format = output_format,
+                                minlen = minlen,
+                                threads = threads,
+                                stripright = stripright,
+                                stripleft = stripleft)
+
+  expect_null(return_value)
+
+  expect_equal(microseq::readFasta(fastaout),
+               microseq::readFasta(test_path("testdata", "output", "R1_trimmed_sample1.fa")))
+
+  expect_equal(microseq::readFasta(fastaout_rev),
+               microseq::readFasta(test_path("testdata", "output", "R2_trimmed_sample1.fa")))
+})
+
+test_that("trim fastq sequences from two files, and return fasta tibble", {
+
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  output_format <- "fasta"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  trimmed_sample1 <- vs_fastq_trim(fastq_input = fastq_input,
+                                   reverse = reverse,
+                                   output_format = output_format,
+                                   minlen = minlen,
+                                   threads = threads,
+                                   stripright = stripright,
+                                   stripleft = stripleft)
+
+  expect_equal(trimmed_sample1,
+               readRDS(test_path("testdata", "output", "trimmed_sample1_fasta_files.rds")))
+})
+
+test_that("trim fastq sequences from two tibbles, and return two fastq files", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastqout <- withr::local_tempfile()
+  fastqout_rev <- withr::local_tempfile()
+  output_format <- "fastq"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  return_value <- vs_fastq_trim(fastq_input = fastq_input,
+                                reverse = reverse,
+                                fastqout = fastqout,
+                                fastqout_rev = fastqout_rev,
+                                output_format = output_format,
+                                minlen = minlen,
+                                threads = threads,
+                                stripright = stripright,
+                                stripleft = stripleft)
+
+  expect_null(return_value)
+
+  expect_equal(microseq::readFastq(fastqout),
+               microseq::readFastq(test_path("testdata", "output", "R1_trimmed_sample1.fq")))
+
+  expect_equal(microseq::readFastq(fastqout_rev),
+               microseq::readFastq(test_path("testdata", "output", "R2_trimmed_sample1.fq")))
+})
+
+test_that("trim fastq sequences from two tibbles, and return fastq tibble", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  output_format <- "fastq"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  trimmed_sample1 <- vs_fastq_trim(fastq_input = fastq_input,
+                                   reverse = reverse,
+                                   output_format = output_format,
+                                   minlen = minlen,
+                                   threads = threads,
+                                   stripright = stripright,
+                                   stripleft = stripleft)
+
+
+  expect_equal(trimmed_sample1,
+               readRDS(test_path("testdata", "output", "trimmed_sample1_fastq_tibbles.rds")))
+})
+
+test_that("trim fastq sequences from two tibbles, and return two fasta files", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastaout <- withr::local_tempfile()
+  fastaout_rev <- withr::local_tempfile()
+  output_format <- "fasta"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  return_value <- vs_fastq_trim(fastq_input = fastq_input,
+                                reverse = reverse,
+                                fastaout = fastaout,
+                                fastaout_rev = fastaout_rev,
+                                output_format = output_format,
+                                minlen = minlen,
+                                threads = threads,
+                                stripright = stripright,
+                                stripleft = stripleft)
+
+  expect_null(return_value)
+
+  expect_equal(microseq::readFasta(fastaout),
+               microseq::readFasta(test_path("testdata", "output", "R1_trimmed_sample1.fa")))
+
+  expect_equal(microseq::readFasta(fastaout_rev),
+               microseq::readFasta(test_path("testdata", "output", "R2_trimmed_sample1.fa")))
+})
+
+test_that("trim fastq sequences from two tibbles, and return fasta tibble", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  output_format <- "fasta"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  trimmed_sample1 <- vs_fastq_trim(fastq_input = fastq_input,
+                                   reverse = reverse,
+                                   output_format = output_format,
+                                   minlen = minlen,
+                                   threads = threads,
+                                   stripright = stripright,
+                                   stripleft = stripleft)
+
+
+  expect_equal(trimmed_sample1,
+               readRDS(test_path("testdata", "output", "trimmed_sample1_fasta_tibbles.rds")))
+})
+
+test_that("trim fastq sequences from one tibble, and return fasta tibble", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  output_format <- "fasta"
+  minlen <- 0
+  threads <- 1
+  stripright <- 10
+  stripleft <- 10
+
+  trimmed_sample1 <- vs_fastq_trim(fastq_input = fastq_input,
+                                   output_format = output_format,
+                                   minlen = minlen,
+                                   threads = threads,
+                                   stripright = stripright,
+                                   stripleft = stripleft)
+
+
+  expect_equal(trimmed_sample1,
+               readRDS(test_path("testdata", "output", "trimmed_sample1_R1_fasta_tibbles.rds")))
 })

@@ -115,8 +115,6 @@ test_that("error when reverse file does not exist", {
                paste("Cannot find reverse FASTQ file:", reverse))
 })
 
-# -----------------------------------------------------------------------------
-
 test_that("filter fastq sequences from two files, and return two fastq files", {
 
   fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")

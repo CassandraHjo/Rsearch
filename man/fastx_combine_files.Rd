@@ -21,7 +21,7 @@ fastx_combine_files(
 \item{file_format}{Format of files you want to combine, and desired output format: \code{"fasta"} or \code{"fastq"}.}
 }
 \value{
-If \code{output_file} is not specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
+If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
 }
 \description{
 Combines all files of given type in given directory into one file/object.
