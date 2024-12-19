@@ -23,7 +23,7 @@
 #'
 set_vsearch_executable <- function(vsearch_executable){
   options(Rsearch.vsearch_executable = vsearch_executable)
-  save(vsearch_executable, file = system.file("data/vsearch_executable.rds", package = "Rsearch"))
+  save(vsearch_executable, file = system.file("extdata/vsearch_executable.rds", package = "Rsearch"))
 }
 
 
