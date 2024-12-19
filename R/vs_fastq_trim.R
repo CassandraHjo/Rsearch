@@ -38,8 +38,8 @@
 #' @examples
 #' \dontrun{
 #' # Read example FASTQ files
-#' fastq_input <- file.path(file.path(path.package("Rsearch"), "inst/extdata"), "R1_sample1_small.fq")
-#' reverse <- file.path(file.path(path.package("Rsearch"), "inst/extdata"), "R2_sample1_small.fq")
+#' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 #'
 #' # Define other arguments
 #' output_format <- "fastq"
