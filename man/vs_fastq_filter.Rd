@@ -24,7 +24,7 @@ vs_fastq_filter(
 
 \item{reverse}{An optional FASTQ file path or a FASTQ object, if the input consists of paired sequences, containing reverse reads. If provided, it will be processed alongside \code{fastq_input}. Defaults to \code{NULL}. See Details.}
 
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse outputs (if provided). Defaults to \code{"fasta"}.}
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse (if provided) outputs. Defaults to \code{"fasta"}.}
 
 \item{fastq_maxee_rate}{Threshold for average expected error. Numeric value ranging form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.}
 

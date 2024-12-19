@@ -2,7 +2,7 @@
 % Please edit documentation in R/vs_fastq_trim.R
 \name{vs_fastq_trim}
 \alias{vs_fastq_trim}
-\title{Trimming of reads}
+\title{Trimming sequences in FASTQ format}
 \usage{
 vs_fastq_trim(
   fastq_input,
@@ -20,29 +20,29 @@ vs_fastq_trim(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path containing (forward) reads or a FASTQ object (tibble), see Details.}
+\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward) reads. See Details.}
 
-\item{reverse}{An optional FASTQ file path containing reverse reads or a FASTQ object (tibble), see Details. If provided, it will be processed alongside \code{fastq_input}.}
+\item{reverse}{An optional FASTQ file path or FASTQ object, if the input consists of paired sequences, containing reverse reads. If provided, it will be processed alongside \code{fastq_input}. Defaults to \code{NULL}. See Details.}
 
-\item{output_format}{Desired output format of tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse outputs.}
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse (if provided) outputs.Defaults to \code{"fasta"}.}
 
-\item{stripright}{The number of bases stripped from the right end of the reads.}
+\item{stripright}{The number of bases stripped from the right end of the reads. Defaults to \code{0}.}
 
-\item{stripleft}{The number of bases stripped from the left end of the reads.}
+\item{stripleft}{The number of bases stripped from the left end of the reads. Defaults to \code{0}.}
 
-\item{fastaout}{Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA output file will be written to file. See Details.}
+\item{fastaout}{Name of the FASTA output file for the sequences given in \code{fastq_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fastqout}{Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ output file will be written to file. See Details.}
+\item{fastqout}{fastqout Name of the FASTQ output file for the sequences given in \code{fastq_input}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fastaout_rev}{Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA output file will be written to file. See Details.}
+\item{fastaout_rev}{Name of the FASTA output file for the sequences given in \code{reverse}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fastqout_rev}{Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ output file will be written to file. See Details.}
+\item{fastqout_rev}{Name of the FASTQ output file for the sequences given in \code{reverse}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained. Default is 0. See Details.}
+\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.}
+\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}.}
+\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
 If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
@@ -51,16 +51,16 @@ If \code{reverse} is specified, the resulting tibble (\code{trimmed_reverse}) co
 This table can be accessed by running \code{attributes(trimmed_seqs)$trimmed_reverse} or \code{attr(trimmed_seqs, "trimmed_reverse")}.
 }
 \description{
-Trimming sequences in FASTQ file or object
+Removes given number of nucleotides from the ends of biological sequences (DNA) in the FASTQ format.
 }
 \details{
-The reads in the input FASTQ-file (\code{fastq_input}) are trimmed based on the specified number of bases for each en of the read, using \code{vsearch}.
-If a \code{reverse} input is provided, it trims the reverse reads similarly. The output format for both primary and reverse sequences is determined by the \code{output_format} parameter.
+The reads in the input FASTQ-file (\code{fastq_input}) are trimmed based on the specified number of bases for each end of the read, using \code{vsearch}.
+If a \code{reverse} input is provided, it trims the reverse reads similarly. The output format for both primary and reverse sequences is determined by \code{output_format}.
 
-\code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
-\code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{stripright} and \code{stripleft} will be used for both FASTQ objects.
+\code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+\code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{stripright} and \code{stripleft} will be used for both inputs.
 
-If \code{fastaout}, \code{fastqout}, \code{fastaout_rev}, or \code{fastqout_rev} are specified, the remaining sequences after quality filtering are output to these files in either FASTA or FASTQ format.
+If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev} are specified, the remaining sequences after trimming are output to these files in either FASTA or FASTQ format.
 If unspecified (\code{NULL}) no output is written to file. \code{output_format} has to match the desired output files.
 
 FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
@@ -68,6 +68,33 @@ FASTA files produced by \code{vsearch} are wrapped (sequences are written on lin
 
 Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
 However, using the default value may allow empty sequences to remain in the results.
+}
+\examples{
+\dontrun{
+# Read example FASTQ files
+fastq_input <- file.path(file.path(path.package("Rsearch"), "inst/extdata"), "R1_sample1_small.fq")
+reverse <- file.path(file.path(path.package("Rsearch"), "inst/extdata"), "R2_sample1_small.fq")
+
+# Define other arguments
+output_format <- "fastq"
+stripright <- 10
+stripleft <- 10
+minlen <- 0
+
+# Execute trimming, with tibble as output
+trim_seqs <- vs_fastq_trim(fastq_input = fastq_input,
+                           reverse = reverse,
+                           output_format = output_format,
+                           stripright = stripright,
+                           stripleft = stripleft,
+                           minlen = minlen)
+
+# Extract tibbles with trimmed sequences
+R1_trim <- trim_seqs
+R2_trim <- attr(trim_seqs, "trimmed_reverse")
+
+}
+
 }
 \references{
 \url{https://github.com/torognes/vsearch}
