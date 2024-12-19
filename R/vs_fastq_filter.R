@@ -1,29 +1,28 @@
-#' Quality filtering
+#' Quality filtering sequences in FASTQ format
 #'
-#' @description Quality filtering of FASTQ sequences.
+#' @description Filters biological sequences (DNA) based on quality in the FASTQ format.
 #'
-#' @param fastq_input A FASTQ file path containing (forward) reads or a FASTQ object (tibble), see Details.
-#' @param reverse An optional FASTQ file path containing reverse reads or a FASTQ object (tibble), see Details. If provided, it will be processed alongside \code{fastq_input}.
-#' @param output_format Desired output format of tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse outputs.
-#' @param fastq_maxee_rate Threshold for average expected error. Numeric value ranging form \code{0.0} to \code{1.0}. See Details.
-#' @param fastaout Name of the FASTA output file for primary sequences (forward reads). If \code{NULL} no FASTA sequences will be written to file. See Details.
-#' @param fastqout Name of the FASTQ output file for primary sequences (forward reads). If \code{NULL} no FASTQ sequences will be written to file. See Details.
-#' @param fastaout_rev Name of the FASTA output file for reverse reads. If \code{NULL} no FASTA sequences will be written to file. See Details.
-#' @param fastqout_rev Name of the FASTQ output file for reverse reads. If \code{NULL} no FASTQ sequences will be written to file. See Details.
-#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Default is 0. See Details.
-#' @param threads Number of computational threads to be used by \code{vsearch}.
-#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.
+#' @param fastq_input A FASTQ file path or a FASTQ object containing (forward) reads. See Details.
+#' @param reverse An optional FASTQ file path or a FASTQ object, if the input consists of paired sequences, containing reverse reads. If provided, it will be processed alongside \code{fastq_input}. Defaults to \code{NULL}. See Details.
+#' @param output_format Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse outputs (if provided). Defaults to \code{"fasta"}.
+#' @param fastq_maxee_rate Threshold for average expected error. Numeric value ranging form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.
+#' @param fastaout Name of the FASTA output file for the sequences given in \code{fastq_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fastqout Name of the FASTQ output file for the sequences given in \code{fastq_input}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fastaout_rev Name of the FASTA output file for the sequences given in \code{reverse}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fastqout_rev Name of the FASTQ output file for the sequences given in \code{reverse}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.
+#' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
+#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.
 #'
 #' @details The function filters sequences from the input FASTQ file or object based on the average expected error rate using \code{vsearch}.
-#' If a \code{reverse} input is provided, it filters the reverse reads similarly. The output format for both primary and reverse sequences
-#' is determined by the \code{output_format} parameter.
+#' If a \code{reverse} input is provided, it filters the reverse reads similarly. The output format is determined by \code{output_format}.
 #'
-#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
-#' \code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{fastq_maxee_rate} will be used for both FASTQ objects.
+#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' \code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{fastq_maxee_rate} will be used for both inputs.
 #'
-#' If \code{fastaout}, \code{fastqout}, \code{fastaout_rev}, or \code{fastqout_rev} are specified, the remaining sequences after quality filtering are output to these files in either FASTA or FASTQ format.
-#' If unspecified (\code{NULL}) no output is written to file. \code{output_format} has to match the desired output files.
+#' If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev} are specified, the remaining sequences after quality filtering are output to these files in either FASTA or FASTQ format.
+#' If unspecified (\code{NULL}), results are returned as a tibble, and no output is written to file. \code{output_format} has to match the desired output files.
 #'
 #' Sequences with an average expected error greater than the specified \code{fastq_maxee_rate} are discarded.
 #' For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence, divided by the length of the sequence.
@@ -42,6 +41,32 @@
 #' When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics}, is an attribute of the filtering tibble (\code{filt_seqs}).
 #' This tibble contains filtering statistics, including number of kept and discarded sequences, and the names of the FASTQ files or objects that were filtered.
 #' The statistics can be accessed by running \code{attributes(filt_seqs)$statistics} or \code{attr(filt_seqs, "statistics")}.
+#'
+#' @examples
+#' \dontrun{
+#' # Read example FASTQ files
+#' fastq_input <- file.path(file.path(path.package("Rsearch"), "inst/extdata"), "R1_sample1_small.fq")
+#' reverse <- file.path(file.path(path.package("Rsearch"), "inst/extdata"), "R2_sample1_small.fq")
+#'
+#' # Define other arguments
+#' output_format <- "fastq"
+#' fastq_maxee_rate <- 0.01
+#' minlen <- 0
+#'
+#' # Execute filtering, with tibble as output
+#' filt_seqs <- vs_fastq_filter(fastq_input = fastq_input,
+#'                              reverse = reverse,
+#'                              output_format = output_format,
+#'                              fastq_maxee_rate = fastq_maxee_rate,
+#'                              minlen = minlen)
+#'
+#' # Extract tibbles with filtered sequences
+#' R1_filt <- filt_seqs
+#' R2_filt <- attr(filt_seqs, "filt_reverse")
+#'
+#' # Extract filtering statistics
+#' statistics <- attr(filt_seqs, "statistics")
+#' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
