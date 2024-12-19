@@ -1,30 +1,38 @@
-#' Merge read-pairs
+#' Merge paired-end sequence reads
 #'
-#' @description Merging read-pairs with overlapping regions.
+#' @description Merges paired-end sequence reads with overlapping regions into one sequence.
 #'
-#' @param fastq_input A FASTQ file path or a FASTQ object (tibble) containing (forward) reads, see Details.
-#' @param reverse A FASTQ file path or a FASTQ object (tibble) containing (reverse) reads, see Details.
-#' @param fastqout Name of the FASTQ output file for merged sequences. If \code{NULL} no FASTQ output file will be written to file. See Details.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Default is 0. See Details.
-#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created.
-#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' @param fastq_input A FASTQ file path or a FASTQ object containing (forward) reads. See Details.
+#' @param reverse A FASTQ file path or a FASTQ object containing (reverse) reads See Details.
+#' @param output_format Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Defaults to \code{"fasta"}.
+#' @param fastaout Name of the FASTA output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
+#' @param fastqout Name of the FASTQ output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
+#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.
+#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.
+#' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
 #' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and \code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
 #'
-#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. If provided as tibbles, they must contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' Forward and reverse reads must appear in the same order and total number in both files.
 #'
-#' If \code{fastqout} is specified, the merged reads are output to this file in FASTQ-format.
-#' If unspecified (\code{NULL}) the result is returned as a FASTQ-object, i.e. a tibble with columns \code{Header}, \code{Sequence} and \code{Quality}.
+#' If \code{fastaout} or \code{fastqout} is specified, the merged reads are output to this file in either FASTA or FASTQ format.
+#' If unspecified (\code{NULL}) the results are returned as a FASTA or FASTQ object, and no output is written to file. \code{output_format} has to match the desired output files/objects.
 #'
-#' If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+#' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
+#' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
 #' Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
 #' However, using the default value may allow empty sequences to remain in the results.
 #'
-#' @return If \code{fastq_out} is not specified, a tibble containing the merged reads in FASTQ format is returned. If \code{output_file} is specified nothing is returned.
+#' If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 #'
-#' When a FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_fastq}).
-#' This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics. The statistics can be accessed by running \code{attributes(merged_fastq)$statistics} or \code{attr(merged_fastq, "statistics")}.
+#'
+#' @return If output files are not specified, a tibble containing the merged reads in FASTQ format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
+#'
+#' When a FASTA/FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
+#' This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics. The statistics can be accessed by running \code{attributes(merged_seqs)$statistics} or \code{attr(merged_seqs, "statistics")}.
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
@@ -32,7 +40,10 @@
 #'
 vs_fastq_mergepairs <- function(fastq_input,
                                 reverse,
+                                output_format = "fasta",
+                                fastaout = NULL,
                                 fastqout = NULL,
+                                fasta_width = 0,
                                 minlen = 0,
                                 log_file = NULL,
                                 threads = 1){
@@ -40,6 +51,25 @@ vs_fastq_mergepairs <- function(fastq_input,
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Validate output_format
+  if (!output_format %in% c("fasta", "fastq")) {
+    stop("Invalid output_format. Choose from fasta or fastq.")
+  }
+
+  # If output_format is "fasta", fastqout can not be defined
+  if (output_format == "fasta") {
+    if (!is.null(fastqout)) {
+      stop("When output_format is defined as 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
+    }
+  }
+
+  # If output_format is "fastq", fastaout can not be defined
+  if (output_format == "fastq") {
+    if (!is.null(fastaout)) {
+      stop("When output_format is defined as 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
+    }
+  }
 
   # Create empty vector for collecting temporary files
   temp_files <- c()
@@ -102,21 +132,40 @@ vs_fastq_mergepairs <- function(fastq_input,
   reverse_file <- normalizePath(reverse_file)
 
   # Determine output file
-  if (is.null(fastqout)) {
-    outfile <- tempfile(pattern = "merged", fileext = ".fq")
-    temp_files <- c(temp_files, outfile)
-  } else {
-    outfile <- fastqout
+  if (output_format == "fasta") {
+
+    if (is.null(fastaout)) {
+      outfile_fasta <- tempfile(pattern = "merged_", fileext = ".fa")
+      temp_files <- c(temp_files, outfile_fasta)
+    } else {
+      outfile_fasta <- fastaout
+    }
   }
+
+  if (output_format == "fastq") {
+    if (is.null(fastqout)) {
+      outfile_fastq <- tempfile(pattern = "merged_", fileext = ".fq")
+      temp_files <- c(temp_files, outfile_fastq)
+    } else {
+      outfile_fastq <- fastqout
+    }
+  }
+
 
   # Build argument string for command line
   args <- c("--fastq_mergepairs", fastq_file,
             "--reverse", reverse_file,
             "--threads", threads,
-            "--fastq_minlen", minlen,
-            "--fastqout", outfile)
+            "--fastq_minlen", minlen)
 
-  # Add log file if specified by user
+  # Add output files based on output_format
+  if (output_format == "fastq") {
+    args <- c(args, "--fastqout", outfile_fastq)
+  } else if (output_format == "fasta") {
+    args <- c(args, "--fastaout", outfile_fasta, "--fasta_width", fasta_width)
+  }
+
+  # Add log file if specified
   if (!is.null(log_file)) {
     args <- c(args, "--log", log_file)
   }
@@ -127,22 +176,30 @@ vs_fastq_mergepairs <- function(fastq_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  if (is.null(fastqout)) {
-    # Read output into fastq object (tbl)
-    merged_fastq <- microseq::readFastq(outfile)
+  # Handle output if output file is NULL
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
 
-    # Output statistics in table
+    # Extract statistics
     statistics <- parse_merge_statistics(vsearch_output, fastq_input_name, reverse_name)
 
+    # Create results tibble
+    if (output_format == "fastq") {
+      merged_seqs <- microseq::readFastq(outfile_fastq)
+    } else if (output_format == "fasta") {
+      merged_seqs <- microseq::readFasta(outfile_fasta)
+    }
+
     # Add statistics as attribute to merging table
-    attr(merged_fastq, "statistics") <- statistics
+    attr(merged_seqs, "statistics") <- statistics
   }
 
   # Return results
-  if (is.null(fastqout)) { # Return tibble
-    return(merged_fastq)
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
+    return(merged_seqs)
   } else {
-    return(invisible(NULL)) # No return when output file is written
+    return(invisible(NULL))
   }
 }
 
