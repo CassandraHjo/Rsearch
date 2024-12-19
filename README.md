@@ -70,16 +70,6 @@ Alternatively, you can use the `help()` function:
 help(vs_fstq_filter)
 ```
 
-- **Package-wide help**
-
-To get an overview of the `Rsearch` package an its available functions,
-use:
-
-``` r
-# library(Rsearch)
-help(package = "Rsearch")
-```
-
 ## Usage
 
 ### Example 1: Some basic example
