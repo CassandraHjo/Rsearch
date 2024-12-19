@@ -2,10 +2,11 @@ test_that("error when wrong output_format", {
 
   R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  output_format <- "fastx"
 
   expect_error(vs_fastq_filter(fastq_input = R1,
                                reverse = R2,
-                               output_format = "fastx"),
+                               output_format = output_format),
                "Invalid output_format. Choose from fasta or fastq.")
 })
 

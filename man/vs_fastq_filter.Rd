@@ -15,8 +15,8 @@ vs_fastq_filter(
   fastqout_rev = NULL,
   fasta_width = 0,
   minlen = 0,
-  threads = 1,
-  log_file = NULL
+  log_file = NULL,
+  threads = 1
 )
 }
 \arguments{
@@ -40,12 +40,12 @@ vs_fastq_filter(
 
 \item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
-
 \item{log_file}{Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
+
+\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
-If output files are not specified, a tibble containing the filtered reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
+If output files are not specified, a tibble containing the filtered reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, results are written to file and nothing is returned.
 
 If \code{reverse} is specified, the resulting tibble (\code{filt_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{filt_seqs}).
 This table can be accessed by running \code{attributes(filt_seqs)$filt_reverse} or \code{attr(filt_seqs, "filt_reverse")}.
@@ -65,7 +65,7 @@ If a \code{reverse} input is provided, it filters the reverse reads similarly. T
 \code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{fastq_maxee_rate} will be used for both inputs.
 
 If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev} are specified, the remaining sequences after quality filtering are output to these files in either FASTA or FASTQ format.
-If unspecified (\code{NULL}), results are returned as a tibble, and no output is written to file. \code{output_format} has to match the desired output files.
+If unspecified (\code{NULL}), results are returned as a tibble, and no output is written to file. \code{output_format} has to match the desired output files/objects.
 
 Sequences with an average expected error greater than the specified \code{fastq_maxee_rate} are discarded.
 For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence, divided by the length of the sequence.

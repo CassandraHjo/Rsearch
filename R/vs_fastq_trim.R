@@ -22,7 +22,7 @@
 #' \code{reverse} is an optional argument to the function. If provided, it will be processed alongside \code{fastq_input}, meaning the same \code{stripright} and \code{stripleft} will be used for both inputs.
 #'
 #' If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev} are specified, the remaining sequences after trimming are output to these files in either FASTA or FASTQ format.
-#' If unspecified (\code{NULL}) no output is written to file. \code{output_format} has to match the desired output files.
+#' If unspecified (\code{NULL}) no output is written to file. \code{output_format} has to match the desired output files/objects.
 #'
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
@@ -30,7 +30,7 @@
 #' Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
 #' However, using the default value may allow empty sequences to remain in the results.
 #'
-#' @return If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, nothing is returned.
+#' @return If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, results are written to file and nothing is returned.
 #'
 #' If \code{reverse} is specified, the resulting tibble (\code{trimmed_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{trimmed_seqs}).
 #' This table can be accessed by running \code{attributes(trimmed_seqs)$trimmed_reverse} or \code{attr(trimmed_seqs, "trimmed_reverse")}.
