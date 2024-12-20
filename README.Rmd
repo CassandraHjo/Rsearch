@@ -24,15 +24,30 @@ Another feature that enhances usability for R users is the consistent return for
 ## Installation
 
 ### Prerequisites
-A prerequisite for the `Rsearch` package to work on your computer is that `VSEARCH` is installed locally on your computer. Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for instructions on how to download and install the tool. 
+
+A prerequisite for the `Rsearch` package to work on your computer is that `VSEARCH` is installed locally on the computer. Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for [instructions](https://github.com/torognes/vsearch?tab=readme-ov-file#download-and-install) on how to download and install the tool. 
+
+#### Installing `VSEARCH` 
+
+The latest release of `VSEARCH`, with corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). After downloading the binary, the correct command used to invoke `VSEARCH` on the computer can be set by using the `set_vsearch_executable()` function in `Rsearch` (see [Set correct vsearch executable](####set-correct-vsearch-executable)).
+
 
 ### Installing `Rsearch`
 
 You can install the development version of `Rsearch` from [GitHub](https://github.com/) by using the `devtools` package from CRAN:
 
 ```{r, eval=FALSE}
-# install.packages("devtools)
+install.packages("devtools")
 devtools::install_github("CassandraHjo/Rsearch")
+```
+
+#### Set correct `VSEARCH` executable
+
+`set_vsearch_executable` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
+
+```{r eval=FALSE}
+# Given that the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
+set_vsearch_executable("C:/Documents/vsearch")
 ```
 
 ## Documentation
@@ -63,7 +78,6 @@ To get an overview of the `Rsearch` package an its available functions, use:
 help(package = "Rsearch")
 ```
 
-
 ## Usage
 
 ### Example 1: Some basic example
@@ -77,8 +91,6 @@ help(package = "Rsearch")
 ```{r}
 # Write an example here
 ```
-
-
 
 ## Contributors
 

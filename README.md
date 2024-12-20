@@ -3,7 +3,7 @@
 
 ## Introduction
 
-Rsearch is an R package designed for handling and analyzing sequence
+Rsearch is a R package designed for handling and analyzing sequence
 data. Many of its functions are based on the command-line based tool
 `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch`
 provides significantly utility by making the software more accessible to
@@ -14,7 +14,7 @@ visualizations.
 
 The core idea behind `Rsearch` is to retain the output from `VSEARCH`
 within R’s generic data structures, rather than always writing results
-to files. By offering the additional option to output the results within R
+to files. By offering the option to not to write results to specified
 files, users can choose to work entirely within R and Rstudio or to
 export results to files as `VSEARCH` typically does. Keeping all results
 in R data structures allows users to leverage the power of standard data
@@ -35,9 +35,20 @@ managing results become more straightforward.
 ### Prerequisites
 
 A prerequisite for the `Rsearch` package to work on your computer is
-that `VSEARCH` is installed locally on your computer. Visit the
-[`VSEARCH`](https://github.com/torognes/vsearch) page for instructions
+that `VSEARCH` is installed locally on the computer. Visit the
+[`VSEARCH`](https://github.com/torognes/vsearch) page for
+[instructions](https://github.com/torognes/vsearch?tab=readme-ov-file#download-and-install)
 on how to download and install the tool.
+
+#### Installing `VSEARCH`
+
+The latest release of `VSEARCH`, with corresponding binaries, for
+installation can be found under
+[Releases](https://github.com/torognes/vsearch/releases). After
+downloading the binary, the correct command used to invoke `VSEARCH` on
+the computer can be set by using the `set_vsearch_executable()` function
+in `Rsearch` (see [Set correct vsearch
+executable](####set-correct-vsearch-executable)).
 
 ### Installing `Rsearch`
 
@@ -45,8 +56,18 @@ You can install the development version of `Rsearch` from
 [GitHub](https://github.com/) by using the `devtools` package from CRAN:
 
 ``` r
-# install.packages("devtools)
+install.packages("devtools")
 devtools::install_github("CassandraHjo/Rsearch")
+```
+
+#### Set correct `VSEARCH` executable
+
+`set_vsearch_executable` can be used to set the correct command to
+invoke `VSEARCH` on the computer like this:
+
+``` r
+# Given that the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
+set_vsearch_executable("C:/Documents/vsearch")
 ```
 
 ## Documentation
@@ -68,6 +89,16 @@ Alternatively, you can use the `help()` function:
 
 ``` r
 help(vs_fstq_filter)
+```
+
+- **Package-wide help**
+
+To get an overview of the `Rsearch` package an its available functions,
+use:
+
+``` r
+# library(Rsearch)
+help(package = "Rsearch")
 ```
 
 ## Usage
