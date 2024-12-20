@@ -36,6 +36,8 @@ vs_cluster_size(
 \item{fasta_width}{The number of characters in the width of sequences in the output FASTA file. Defaults to \code{0}. See Details.}
 }
 \value{
+Tibble or \code{NULL}.
+
 If \code{centroids} is not specified, a FASTA object containing the centroid sequences is returned. If \code{centroids} is specified, results are written to file, and nothing is returned.
 
 When a FASTA object is returned, the statistics from the clustering, \code{statistics}, is an attribute, called \code{"statistics"} of the centroids tibble.

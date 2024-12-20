@@ -7,8 +7,8 @@
 fastx_combine_files(
   files_dir,
   output_file = NULL,
-  file_ext = ".fa",
-  file_format = "fasta"
+  file_ext = ".fq",
+  file_format = "fastq"
 )
 }
 \arguments{
@@ -16,11 +16,13 @@ fastx_combine_files(
 
 \item{output_file}{Name of the output file or \code{NULL}. If not specified, a FASTA/FASTQ object depending on \code{file_format} is returned.}
 
-\item{file_ext}{The file extension of the files that are to be combined. Must be written with a "." in front of the extension.}
+\item{file_ext}{The file extension of the files that are to be combined. Must be written with a "." in front of the extension. Defaults to \code{".fq"}.}
 
-\item{file_format}{Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"}. See Details.}
+\item{file_format}{Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.}
 }
 \value{
+Tibble or \code{NULL}.
+
 If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified, the results are written to file and nothing is returned.
 }
 \description{

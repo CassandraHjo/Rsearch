@@ -29,7 +29,9 @@
 #'
 #' @importFrom magrittr %>%
 #'
-#' @return If \code{centroids} is not specified, a FASTA object containing the centroid sequences is returned. If \code{centroids} is specified, results are written to file, and nothing is returned.
+#' @return Tibble or \code{NULL}.
+#'
+#' If \code{centroids} is not specified, a FASTA object containing the centroid sequences is returned. If \code{centroids} is specified, results are written to file, and nothing is returned.
 #'
 #' When a FASTA object is returned, the statistics from the clustering, \code{statistics}, is an attribute, called \code{"statistics"} of the centroids tibble.
 #' This tibble contains clustering statistics, including statistics about input sequences, number of clusters and their sizes.

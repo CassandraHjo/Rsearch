@@ -7,7 +7,7 @@
 vs_fastq_mergepairs(
   fastq_input,
   reverse,
-  output_format = "fasta",
+  output_format = "fastq",
   fastaout = NULL,
   fastqout = NULL,
   fasta_width = 0,
@@ -21,7 +21,7 @@ vs_fastq_mergepairs(
 
 \item{reverse}{A FASTQ file path or a FASTQ object containing (reverse) reads See Details.}
 
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Defaults to \code{"fasta"}.}
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default).}
 
 \item{fastaout}{Name of the FASTA output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.}
 
@@ -36,6 +36,8 @@ vs_fastq_mergepairs(
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
+Tibble or \code{NULL}.
+
 If output files are not specified, a tibble containing the merged reads in FASTQ format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
 
 When a FASTA/FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).

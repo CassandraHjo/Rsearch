@@ -4,7 +4,7 @@
 #'
 #' @param fastx_input A FASTQ/FASTA file path or object. See Details.
 #' @param fastx_output Name of the output file for dereplicated reads from \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.
-#' @param file_format Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}. Defaults to \code{"fastq"}.
+#' @param file_format Format of input file \code{fastx_input}, and desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
 #' @param minuniquesize The minimum abundance value post-dereplication for a sequence not to be discarded. Defaults to \code{1}.
 #' @param strand \code{"plus"} (default) or \code{"both"}. When comparing sequences only check the plus strand or both strands.
 #' @param sizein Decides if abundance annotations present in sequence headers in \code{fastx_input} should be taken into account. Defaults to \code{TRUE}.
@@ -28,7 +28,9 @@
 #' By default, the quality scores in FASTQ output files will correspond to the average error probability of the nucleotides in the each position.
 #' If \code{fastq_qout_max = TRUE}, the quality score will be the highest (best) quality score observed in each position.
 #'
-#' @return If \code{fastx_output} is not specified, a tibble containing the dereplicated reads is returned. If \code{fastx_output} is specified nothing is returned.
+#' @return Tibble or \code{NULL}.
+#'
+#' If \code{fastx_output} is not specified, a tibble containing the dereplicated reads is returned. If \code{fastx_output} is specified nothing is returned.
 #'
 #' @examples
 #' \dontrun{

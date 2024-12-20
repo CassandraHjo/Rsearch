@@ -4,13 +4,15 @@
 #'
 #' @param files_dir A path to a directory with files to combine.
 #' @param output_file Name of the output file or \code{NULL}. If not specified, a FASTA/FASTQ object depending on \code{file_format} is returned.
-#' @param file_ext The file extension of the files that are to be combined. Must be written with a "." in front of the extension.
-#' @param file_format Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"}. See Details.
+#' @param file_ext The file extension of the files that are to be combined. Must be written with a "." in front of the extension. Defaults to \code{".fq"}.
+#' @param file_format Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.
 #'
 #' @details
 #' A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}. A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
-#' @return If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified, the results are written to file and nothing is returned.
+#' @return Tibble or \code{NULL}.
+#'
+#' If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified, the results are written to file and nothing is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -30,8 +32,8 @@
 #' @export
 fastx_combine_files <- function(files_dir,
                                 output_file = NULL,
-                                file_ext = ".fa",
-                                file_format = "fasta") {
+                                file_ext = ".fq",
+                                file_format = "fastq") {
 
   # Check if input directory exists
   if (!dir.exists(files_dir)) {

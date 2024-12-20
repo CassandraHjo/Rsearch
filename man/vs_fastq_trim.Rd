@@ -7,7 +7,7 @@
 vs_fastq_trim(
   fastq_input,
   reverse = NULL,
-  output_format = "fasta",
+  output_format = "fastq",
   stripright = 0,
   stripleft = 0,
   fastaout = NULL,
@@ -24,7 +24,7 @@ vs_fastq_trim(
 
 \item{reverse}{An optional FASTQ file path or FASTQ object, if the input consists of paired sequences, containing reverse reads. If provided, it will be processed alongside \code{fastq_input}. Defaults to \code{NULL}. See Details.}
 
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Determines the format for both forward and reverse (if provided) outputs.Defaults to \code{"fasta"}.}
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default). Determines the format for both forward and reverse (if provided) outputs.}
 
 \item{stripright}{The number of bases stripped from the right end of the reads. Defaults to \code{0}.}
 
@@ -45,6 +45,8 @@ vs_fastq_trim(
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
+Tibble or \code{NULL}.
+
 If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, results are written to file and nothing is returned.
 
 If \code{reverse} is specified, the resulting tibble containing the trimmed reverse reads in the format specified by \code{output_format} is an attribute, called \code{"trimmed_reverse"}, to the primary table.

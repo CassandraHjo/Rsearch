@@ -22,8 +22,11 @@ test_that("error when no files are found in specified folder", {
 
   files_dir <- test_path("testdata", "empty_dir")
   file_ext <- ".fa"
+  file_format <- "fasta"
 
-  expect_error(fastx_combine_files(files_dir = files_dir),
+  expect_error(fastx_combine_files(files_dir = files_dir,
+                                   file_ext = file_ext,
+                                   file_format = file_format),
                paste("No", file_ext, "files found in the specified folder:", files_dir))
 })
 

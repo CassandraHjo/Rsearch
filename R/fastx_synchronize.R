@@ -4,7 +4,7 @@
 #'
 #' @param file1 A FASTQ/FASTA file path or object. See Details.
 #' @param file2 A FASTQ/FASTA file path or object. See Details.
-#' @param file_format Format of input files \code{file1} and \code{file2}, and desired output format: \code{"fasta"} or \code{"fastq"}. Determines the format for both outputs. Defaults to \code{"fasta"}.
+#' @param file_format Format of input files \code{file1} and \code{file2}, and desired output format: \code{"fasta"} or \code{"fastq"} (default). Determines the format for both outputs.
 #' @param file1_out Name of the output file for synchronized reads from \code{file1}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.
 #' @param file2_out Name of the output file for synchronized reads from \code{file2}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.
 #'
@@ -15,7 +15,9 @@
 #' If \code{file1_out} or \code{file2_out} are specified, the remaining sequences after synchronizing are output to these files in either FASTA or FASTQ format depending on \code{file_format}.
 #' If unspecified (\code{NULL}) no output is written to file, and the synchronized reads are returned as a FASTQ/FASTA object. \code{file1_out} or \code{file2_out} must either both be \code{NULL} or both \code{charachter}.
 #'
-#' @return If output files are not specified, a tibble containing the synchronized reads from \code{file1} is returned. The tibble containing the synchronized reads from \code{file2} is an attribute, called \code{"sync_file2"}, to the primary tibble.
+#' @return Tibble or \code{NULL}.
+#'
+#' If output files are not specified, a tibble containing the synchronized reads from \code{file1} is returned. The tibble containing the synchronized reads from \code{file2} is an attribute, called \code{"sync_file2"}, to the primary tibble.
 #' If output files, \code{file1_out} or \code{file2_out} are specified, results are written to file and nothing is returned.
 #'
 #' @examples

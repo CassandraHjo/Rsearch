@@ -17,13 +17,15 @@ fastx_synchronize(
 
 \item{file2}{A FASTQ/FASTA file path or object. See Details.}
 
-\item{file_format}{Format of input files \code{file1} and \code{file2}, and desired output format: \code{"fasta"} or \code{"fastq"}. Determines the format for both outputs. Defaults to \code{"fasta"}.}
+\item{file_format}{Format of input files \code{file1} and \code{file2}, and desired output format: \code{"fasta"} or \code{"fastq"} (default). Determines the format for both outputs.}
 
 \item{file1_out}{Name of the output file for synchronized reads from \code{file1}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.}
 
 \item{file2_out}{Name of the output file for synchronized reads from \code{file2}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.}
 }
 \value{
+Tibble or \code{NULL}.
+
 If output files are not specified, a tibble containing the synchronized reads from \code{file1} is returned. The tibble containing the synchronized reads from \code{file2} is an attribute, called \code{"sync_file2"}, to the primary tibble.
 If output files, \code{file1_out} or \code{file2_out} are specified, results are written to file and nothing is returned.
 }

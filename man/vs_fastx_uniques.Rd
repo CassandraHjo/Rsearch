@@ -23,7 +23,7 @@ vs_fastx_uniques(
 
 \item{fastx_output}{Name of the output file for dereplicated reads from \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.}
 
-\item{file_format}{Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}. Defaults to \code{"fastq"}.}
+\item{file_format}{Format of input file \code{fastx_input}, and desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
 
 \item{minuniquesize}{The minimum abundance value post-dereplication for a sequence not to be discarded. Defaults to \code{1}.}
 
@@ -42,6 +42,8 @@ vs_fastx_uniques(
 \item{fastq_qout_max}{If \code{TRUE}, the quality score will be the highest (best) quality score observed in each position. Defaults to \code{FALSE}.}
 }
 \value{
+Tibble or \code{NULL}.
+
 If \code{fastx_output} is not specified, a tibble containing the dereplicated reads is returned. If \code{fastx_output} is specified nothing is returned.
 }
 \description{

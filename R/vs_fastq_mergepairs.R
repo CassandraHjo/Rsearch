@@ -4,7 +4,7 @@
 #'
 #' @param fastq_input A FASTQ file path or a FASTQ object containing (forward) reads. See Details.
 #' @param reverse A FASTQ file path or a FASTQ object containing (reverse) reads See Details.
-#' @param output_format Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"}. Defaults to \code{"fasta"}.
+#' @param output_format Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default).
 #' @param fastaout Name of the FASTA output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
 #' @param fastqout Name of the FASTQ output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
 #' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
@@ -28,8 +28,9 @@
 #'
 #' If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 #'
+#' @return Tibble or \code{NULL}.
 #'
-#' @return If output files are not specified, a tibble containing the merged reads in FASTQ format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
+#' If output files are not specified, a tibble containing the merged reads in FASTQ format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
 #'
 #' When a FASTA/FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
 #' This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics. The statistics can be accessed by running \code{attributes(merged_seqs)$statistics} or \code{attr(merged_seqs, "statistics")}.
@@ -58,7 +59,7 @@
 #'
 vs_fastq_mergepairs <- function(fastq_input,
                                 reverse,
-                                output_format = "fasta",
+                                output_format = "fastq",
                                 fastaout = NULL,
                                 fastqout = NULL,
                                 fasta_width = 0,
