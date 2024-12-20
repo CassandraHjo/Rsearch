@@ -19,27 +19,27 @@ vs_fastx_uniques(
 )
 }
 \arguments{
-\item{fastx_input}{A FASTQ/FASTA file path or a FASTQ/FASTA object (tibble), see Details.}
+\item{fastx_input}{A FASTQ/FASTA file path or object. See Details.}
 
-\item{fastx_output}{Name of the output file for dereplicated reads from \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} no sequences will be written to file. See Details.}
+\item{fastx_output}{Name of the output file for dereplicated reads from \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.}
 
-\item{file_format}{Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}.}
+\item{file_format}{Format of input files \code{fastx_input} and \code{fastx_output}, and desired output format: \code{"fasta"} or \code{"fastq"}. Defaults to \code{"fastq"}.}
 
-\item{minuniquesize}{The minimum abundance value post-dereplication for a sequence not to be discarded.}
+\item{minuniquesize}{The minimum abundance value post-dereplication for a sequence not to be discarded. Defaults to \code{1}.}
 
-\item{strand}{\code{"plus"} or \code{"both"}. When comparing sequences only check the plus strand or both strands.}
+\item{strand}{\code{"plus"} (default) or \code{"both"}. When comparing sequences only check the plus strand or both strands.}
 
-\item{sizein}{Decides if abundance annotations present in sequence headers in \code{fastx_input} should be taken into account.}
+\item{sizein}{Decides if abundance annotations present in sequence headers in \code{fastx_input} should be taken into account. Defaults to \code{TRUE}.}
 
-\item{sizeout}{Decides if abundance annotations should be added to headers in output table or output file (\code{fastx_output}).}
+\item{sizeout}{Decides if abundance annotations should be added to headers in output table or output file (\code{fastx_output}). Defaults to \code{TRUE}.}
 
-\item{relabel_sha1}{Relabel sequences using the SHA1 message digest algorithm.}
+\item{relabel_sha1}{Relabel sequences using the SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{relabel}{Relabel sequences using the given prefix and a ticker to construct new headers.}
+\item{relabel}{Relabel sequences using the given prefix and a ticker to construct new headers. Defaults to \code{NULL}.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. See Details.}
+\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
 
-\item{fastq_qout_max}{If \code{TRUE}, the quality score will be the highest (best) quality score observed in each position.}
+\item{fastq_qout_max}{If \code{TRUE}, the quality score will be the highest (best) quality score observed in each position. Defaults to \code{FALSE}.}
 }
 \value{
 If \code{fastx_output} is not specified, a tibble containing the dereplicated reads is returned. If \code{fastx_output} is specified nothing is returned.
@@ -51,16 +51,30 @@ Dereplication of sequences in FASTA/FASTQ file or object.
 The reads in the input file/object (\code{fastx_input}) are dereplicated by merging identical sequences, using \code{vsearch}.
 Identical sequences are defined as sequences with the same length and the same string of nucleotides (case insensitive, T and U are considered the same).
 
-\code{fastx_input} can either be a FASTA/FASTQ file with reads or a FASTA/FASTQ object. If provided as tibble, it must contain the columns \code{Header}, \code{Sequence}, and \code{Quality} or the columns \code{Header} and \code{Sequence}, depending on \code{file_format}.
+\code{fastx_input} can either be a FASTA/FASTQ file or object with reads. FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}. FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 
 If \code{fastx_output} is specified, the dereplicated sequences are output to this file in format given by \code{file_format}.
 If unspecified (\code{NULL}) the result is returned as a FASTA/FASTQ object, depending on \code{file_format}.
 
-By default, the quality scores in FASTQ output files will correspond to the average error probability of the nucleotides in the each position.
-If \code{fastq_qout_max = TRUE}, the quality score will be the highest (best) quality score observed in each position.
-
 FASTA files produced by\code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
+
+By default, the quality scores in FASTQ output files will correspond to the average error probability of the nucleotides in the each position.
+If \code{fastq_qout_max = TRUE}, the quality score will be the highest (best) quality score observed in each position.
+}
+\examples{
+\dontrun{
+# Define arguments
+fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+fastx_output <- NULL
+file_format <- "fastq"
+
+# Dereplicate sequences, with tibble as output
+derep_R1 <- vs_fastx_uniques(fastx_input = fastx_input,
+                             fastx_output = fastx_output,
+                             file_format = file_format)
+}
+
 }
 \references{
 \url{https://github.com/torognes/vsearch}

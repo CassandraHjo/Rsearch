@@ -61,6 +61,25 @@ However, using the default value may allow empty sequences to remain in the resu
 
 If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 }
+\examples{
+\dontrun{
+# Read example FASTQ files
+fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+
+# Define other arguments
+output_format <- "fastq"
+
+# Execute merging, with tibble as output
+merge_seqs <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                  reverse = reverse,
+                                  output_format = output_format)
+
+# Extract filtering statistics
+statistics <- attr(merge_seqs, "statistics")
+}
+
+}
 \references{
 \url{https://github.com/torognes/vsearch}
 }

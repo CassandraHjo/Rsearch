@@ -34,6 +34,24 @@
 #' When a FASTA/FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
 #' This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics. The statistics can be accessed by running \code{attributes(merged_seqs)$statistics} or \code{attr(merged_seqs, "statistics")}.
 #'
+#' @examples
+#' \dontrun{
+#' # Read example FASTQ files
+#' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+#'
+#' # Define other arguments
+#' output_format <- "fastq"
+#'
+#' # Execute merging, with tibble as output
+#' merge_seqs <- vs_fastq_mergepairs(fastq_input = fastq_input,
+#'                                   reverse = reverse,
+#'                                   output_format = output_format)
+#'
+#' # Extract filtering statistics
+#' statistics <- attr(merge_seqs, "statistics")
+#' }
+#'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export

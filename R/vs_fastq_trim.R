@@ -32,8 +32,7 @@
 #'
 #' @return If output files are not specified, a tibble containing the trimmed reads from \code{fastq_input} in the format specified by \code{output_format} is returned. If output files are specified, results are written to file and nothing is returned.
 #'
-#' If \code{reverse} is specified, the resulting tibble (\code{trimmed_reverse}) containing the filtered reverse reads in the format specified by \code{output_format} is an attribute to the primary table (\code{trimmed_seqs}).
-#' This table can be accessed by running \code{attributes(trimmed_seqs)$trimmed_reverse} or \code{attr(trimmed_seqs, "trimmed_reverse")}.
+#' If \code{reverse} is specified, the resulting tibble containing the trimmed reverse reads in the format specified by \code{output_format} is an attribute, called \code{"trimmed_reverse"}, to the primary table.
 #'
 #' @examples
 #' \dontrun{

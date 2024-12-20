@@ -1,16 +1,37 @@
-#' Combine content files in one directory
+#' Combine files
 #'
-#' @description Combines all files of given type in given directory into one file/object.
+#' @description Combine all files of given type in given directory into one file/object.
 #'
-#' @param files_dir Path to directory with files to combine.
-#' @param output_file Name of output file or \code{NULL}. If not specified, the function will only return a FASTA/FASTQ object depending on \code{file_format}.
-#' @param file_ext The file extension for the files you want to combine. Must be written with a "." in front of the extension.
-#' @param file_format Format of files you want to combine, and desired output format: \code{"fasta"} or \code{"fastq"}.
+#' @param files_dir A path to a directory with files to combine.
+#' @param output_file Name of the output file or \code{NULL}. If not specified, a FASTA/FASTQ object depending on \code{file_format} is returned.
+#' @param file_ext The file extension of the files that are to be combined. Must be written with a "." in front of the extension.
+#' @param file_format Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"}. See Details.
 #'
-#' @return If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
+#' @details
+#' A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}. A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#'
+#' @return If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified, the results are written to file and nothing is returned.
+#'
+#' @examples
+#' \dontrun{
+#' # Define arguments
+#' files_dir <- file.path(path.package("Rsearch"), "extdata")
+#' output_file <- NULL
+#' file_ext <- ".fq"
+#' file_format <- "fastq"
+#'
+#' # Combine files, with tibble as output
+#' combined_files <- fastx_combine_files(files_dir = files_dir,
+#'                                       output_file = output_file,
+#'                                       file_ext = file_ext,
+#'                                       file_format = file_format)
+#' }
 #'
 #' @export
-fastx_combine_files <- function(files_dir, output_file = NULL, file_ext = ".fa", file_format = "fasta") {
+fastx_combine_files <- function(files_dir,
+                                output_file = NULL,
+                                file_ext = ".fa",
+                                file_format = "fasta") {
 
   # Check if input directory exists
   if (!dir.exists(files_dir)) {

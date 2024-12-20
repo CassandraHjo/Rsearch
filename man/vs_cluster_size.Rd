@@ -17,49 +17,63 @@ vs_cluster_size(
 )
 }
 \arguments{
-\item{fasta_input}{A FASTA file path or a FASTA object (tibble) with reads to cluster, see Details.}
+\item{fasta_input}{A FASTA file path or a FASTA object with reads to cluster. See Details.}
 
-\item{centroids}{Name of the FASTA output file for the cluster centroid sequences. If \code{NULL} no FASTA output file will be written to file. See Details.}
+\item{centroids}{Name of the FASTA output file for the cluster centroid sequences. If \code{NULL} (default) no output will be written to file. See Details.}
 
-\item{id}{The pairwise identity threshold for sequence to be added to cluster. See Details.}
+\item{id}{The pairwise identity threshold for sequence to be added to cluster. Defaults to \code{0.97}. See Details.}
 
-\item{strand}{\code{plus} or \code{both}. When comparing sequences only check the \code{plus} strand or \code{both} strands.}
+\item{strand}{\code{"plus"} (default) or \code{"both"}. When comparing sequences only check the \code{plus} strand or \code{both} strands.}
 
-\item{sizein}{Decides if abundance annotations present in sequence headers should be taken into account.}
+\item{sizein}{Decides if abundance annotations present in sequence headers should be taken into account. Defaults to \code{TRUE}.}
 
-\item{sizeout}{Decides if abundance annotations should be added to FASTA headers.}
+\item{sizeout}{Decides if abundance annotations should be added to FASTA headers. Defaults to \code{TRUE}.}
 
-\item{relabel}{Relabel sequences using the given prefix and a ticker to construct new headers.}
+\item{relabel}{Relabel sequences using the given prefix and a ticker to construct new headers. Defaults to \code{"OTU"}.}
 
-\item{threads}{The number of computational threads to be used by \code{vsearch}.}
+\item{threads}{The number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 
-\item{fasta_width}{The number of characters in the width of sequences in the output FASTA file. See Details.}
+\item{fasta_width}{The number of characters in the width of sequences in the output FASTA file. Defaults to \code{0}. See Details.}
 }
 \value{
-If \code{centroids} is not specified, a tibble containing the centroid sequences in FASTA format is returned. If \code{centroids} is specified nothing is returned.
+If \code{centroids} is not specified, a FASTA object containing the centroid sequences is returned. If \code{centroids} is specified, results are written to file, and nothing is returned.
 
-When a FASTA object is returned, the statistics from the clustering, \code{statistics}, is an attribute of the centroids tibble (\code{centroids_fasta}).
-This tibble contains clustering statistics, including statistics about input sequences, number of clusters and their sizes. The statistics can be accessed by running \code{attributes(centroids_fasta)$statistics} or \code{attr(centroids_fasta, "statistics")}.
+When a FASTA object is returned, the statistics from the clustering, \code{statistics}, is an attribute, called \code{"statistics"} of the centroids tibble.
+This tibble contains clustering statistics, including statistics about input sequences, number of clusters and their sizes.
 }
 \description{
-Clustering the FASTA sequences in the given file or object.
+Cluster FASTA sequences in the given file or object.
 }
 \details{
 Sequences in the input file are clustered, using \code{vsearch}´s \code{cluster_size}.
 The function will automatically sort by decreasing sequence abundance beforehand.
 
-\code{fasta_input} can either be a FASTA file or object. If provided as tibble, it must contain the columns \code{Header} and \code{Sequence}.
+\code{fasta_input} can either be a FASTA file or object. FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
 
 The centroids in \code{centroids} are the sequences that seeded the clusters (i.e. the first sequence of the cluster).
-If \code{centroids} is specified, the remaining sequences after quality filtering are output to this file in FASTA-format.
-If unspecified (\code{NULL}) the result is returned as a FASTA-object, i.e. a tibble with
-columns \code{Header}, \code{centroid_size} and \code{Sequence}.
+If \code{centroids} is specified, the remaining sequences after quality filtering are output to this file in FASTA format.
+If unspecified (\code{NULL}) the result is returned as a FASTA-object.
 
 \code{id} is a value between 0 and 1, and describes the the minimum pairwise identity with the centroid for sequence to be added to cluster.
 The sequence is not added if pairwise identity is bellow \code{id}. The pairwise identity is defined as the number of (matching columns) / (alignment length - terminal gaps).
 
 FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
+}
+\examples{
+\dontrun{
+# Define arguments
+fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fa")
+centroids <- NULL
+
+# Cluster sequences, and return fasta tibble
+cluster_seqs <- vs_cluster_size(fasta_input = fasta_input,
+                                centroids = centroids)
+
+# Extract clustering statistics
+statistics <- attr(cluster_seqs, "statistics")
+}
+
 }
 \references{
 \url{https://github.com/torognes/vsearch}

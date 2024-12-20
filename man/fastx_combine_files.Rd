@@ -2,7 +2,7 @@
 % Please edit documentation in R/fastx_combine_files.R
 \name{fastx_combine_files}
 \alias{fastx_combine_files}
-\title{Combine content files in one directory}
+\title{Combine files}
 \usage{
 fastx_combine_files(
   files_dir,
@@ -12,17 +12,36 @@ fastx_combine_files(
 )
 }
 \arguments{
-\item{files_dir}{Path to directory with files to combine.}
+\item{files_dir}{A path to a directory with files to combine.}
 
-\item{output_file}{Name of output file or \code{NULL}. If not specified, the function will only return a FASTA/FASTQ object depending on \code{file_format}.}
+\item{output_file}{Name of the output file or \code{NULL}. If not specified, a FASTA/FASTQ object depending on \code{file_format} is returned.}
 
-\item{file_ext}{The file extension for the files you want to combine. Must be written with a "." in front of the extension.}
+\item{file_ext}{The file extension of the files that are to be combined. Must be written with a "." in front of the extension.}
 
-\item{file_format}{Format of files you want to combine, and desired output format: \code{"fasta"} or \code{"fastq"}.}
+\item{file_format}{Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"}. See Details.}
 }
 \value{
-If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified nothing is returned.
+If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified, the results are written to file and nothing is returned.
 }
 \description{
-Combines all files of given type in given directory into one file/object.
+Combine all files of given type in given directory into one file/object.
+}
+\details{
+A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}. A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+}
+\examples{
+\dontrun{
+# Define arguments
+files_dir <- file.path(path.package("Rsearch"), "extdata")
+output_file <- NULL
+file_ext <- ".fq"
+file_format <- "fastq"
+
+# Combine files, with tibble as output
+combined_files <- fastx_combine_files(files_dir = files_dir,
+                                      output_file = output_file,
+                                      file_ext = file_ext,
+                                      file_format = file_format)
+}
+
 }
