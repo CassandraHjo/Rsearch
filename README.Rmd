@@ -25,16 +25,17 @@ Another feature that enhances usability for R users is the consistent return for
 
 ### Prerequisites
 
-A prerequisite for the `Rsearch` package to work on your computer is that `VSEARCH` is installed locally on the computer. Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for [instructions](https://github.com/torognes/vsearch?tab=readme-ov-file#download-and-install) on how to download and install the tool. 
+For the `Rsearch` package to function on your computer, `VSEARCH` must be installed locally. Please ensure that you are using `VSEARCH` version 2.29.1 or above.
+
+Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for [instructions](https://github.com/torognes/vsearch?tab=readme-ov-file#download-and-install) on how to download and install the tool. 
 
 #### Installing `VSEARCH` 
 
-The latest release of `VSEARCH`, with corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). After downloading the binary, the correct command used to invoke `VSEARCH` on the computer can be set by using the `set_vsearch_executable()` function in `Rsearch` (see [Set correct vsearch executable](####set-correct-vsearch-executable)).
-
+The latest release of `VSEARCH`, with corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). After downloading the binary, the correct command used to invoke `VSEARCH` on the computer can be set by using the `set_vsearch_executable()` function in `Rsearch` (see [Set correct vsearch executable](#set-correct-vsearch-executable)).
 
 ### Installing `Rsearch`
 
-You can install the development version of `Rsearch` from [GitHub](https://github.com/) by using the `devtools` package from CRAN:
+You can install the development version of `Rsearch` from [GitHub](https://github.com/CassandraHjo/Rsearch) by using the `devtools` package from CRAN:
 
 ```{r, eval=FALSE}
 install.packages("devtools")
@@ -43,10 +44,12 @@ devtools::install_github("CassandraHjo/Rsearch")
 
 #### Set correct `VSEARCH` executable
 
+In order for most of the functions in `Rsearch` to work, the command to invoke VSEARCH must be set correctly if it is something other than the default `vsearch`.
+
 `set_vsearch_executable` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
 
 ```{r eval=FALSE}
-# Given that the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
+# For example, if the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
 set_vsearch_executable("C:/Documents/vsearch")
 ```
 
@@ -80,16 +83,35 @@ help(package = "Rsearch")
 
 ## Usage
 
-### Example 1: Some basic example
+Additional usage examples can be found in the [documentation](#documentation) for each individual function.
 
-```{r}
-# Write an example here
-```
+### Example: Filter paired-end reads based on quality
 
-### Example 2: Some advanced example
+```{r eval=FALSE}
+library(Rsearch)
 
-```{r}
-# Write an example here
+# Define FASTQ files
+fastq_input <- "R1_sample1.fq"
+reverse <- "R2_sample1.fq"
+
+# Define other arguments
+output_format <- "fastq"
+fastq_maxee_rate <- 0.01
+minlen <- 0
+
+# Execute filtering, with tibble as output
+filt_seqs <- vs_fastq_filter(fastq_input = fastq_input,
+                             reverse = reverse,
+                             output_format = output_format,
+                             fastq_maxee_rate = fastq_maxee_rate,
+                             minlen = minlen)
+
+# Extract tibbles with filtered sequences
+R1_filt <- filt_seqs
+R2_filt <- attr(filt_seqs, "filt_reverse")
+
+# Extract filtering statistics
+statistics <- attr(filt_seqs, "statistics")
 ```
 
 ## Contributors
@@ -112,7 +134,3 @@ Please note that citing any of the underlying algorithms, e.g. `VSEARCH`, may al
 **VSEARCH: a versatile open source tool for metagenomics.**
 *PeerJ* 4:e2584.
 doi: [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
-
-
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
