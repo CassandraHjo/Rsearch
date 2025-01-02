@@ -48,7 +48,7 @@ The latest release of `VSEARCH`, with corresponding binaries, for
 installation can be found under
 [Releases](https://github.com/torognes/vsearch/releases). After
 downloading the correct binary for your computer, the correct command used to invoke `VSEARCH` on
-the computer can be set by using the `set_vsearch_executable()` function
+the computer can be set by using the function called `set_vsearch_executable()`,
 in `Rsearch` (see [Set correct vsearch
 executable](#set-correct-vsearch-executable)).
 
@@ -95,7 +95,7 @@ methods to access help:
 Alternatively, you can use the `help()` function:
 
 ``` r
-help(vs_fstq_filter)
+help(vs_fastq_filter)
 ```
 
 - **Package-wide help**
