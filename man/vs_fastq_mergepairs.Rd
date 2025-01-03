@@ -38,7 +38,7 @@ vs_fastq_mergepairs(
 \value{
 Tibble or \code{NULL}.
 
-If output files are not specified, a tibble containing the merged reads in FASTQ format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
+If output files are not specified, a tibble containing the merged reads in the format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
 
 When a FASTA/FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
 This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics. The statistics can be accessed by running \code{attributes(merged_seqs)$statistics} or \code{attr(merged_seqs, "statistics")}.
@@ -77,7 +77,7 @@ merge_seqs <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                   reverse = reverse,
                                   output_format = output_format)
 
-# Extract filtering statistics
+# Extract merging statistics
 statistics <- attr(merge_seqs, "statistics")
 }
 

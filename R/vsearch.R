@@ -10,7 +10,12 @@
 #'
 #' If you have a windows computer and have copied the binary \code{vsearch.exe}
 #' to the folder C:/Documents/ on your computer, you update R with this
+<<<<<<< HEAD
 #' information by  \code{set_vsearch_executable("C:/Documents/vsearch")}.
+=======
+#' information by  \code{set_vsearch_executable("C:/Documents/vsearch")}. Note that
+#' in R we use the \code{/} and not the \code{\\} to separate folders as in Windows.
+>>>>>>> 0ad1d3e98dc50db4dd4721b17982d5de2754c002
 #'
 #' You may use the function \code{\link{vsearch}} to test if the command is valid.
 #'
