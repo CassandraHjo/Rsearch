@@ -3,7 +3,7 @@
 
 ## Introduction
 
-Rsearch is an R package designed for handling and analyzing sequence
+Rsearch is a R package designed for handling and analyzing sequence
 data. Many of its functions are based on the command-line based tool
 `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch`
 provides significantly utility by making the software more accessible to
@@ -38,7 +38,7 @@ For the `Rsearch` package to function on your computer, `VSEARCH` must
 be installed locally. Please ensure that you are using `VSEARCH` version
 2.29.1 or above.
 
-Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for more detailed
+Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for
 [instructions](https://github.com/torognes/vsearch?tab=readme-ov-file#download-and-install)
 on how to download and install the tool.
 
@@ -47,8 +47,8 @@ on how to download and install the tool.
 The latest release of `VSEARCH`, with corresponding binaries, for
 installation can be found under
 [Releases](https://github.com/torognes/vsearch/releases). After
-downloading the correct binary for your computer, the correct command used to invoke `VSEARCH` on
-the computer can be set by using the function called `set_vsearch_executable()`,
+downloading the binary, the correct command used to invoke `VSEARCH` on
+the computer can be set by using the `set_vsearch_executable()` function
 in `Rsearch` (see [Set correct vsearch
 executable](#set-correct-vsearch-executable)).
 
@@ -65,8 +65,8 @@ devtools::install_github("CassandraHjo/Rsearch")
 
 #### Set correct `VSEARCH` executable
 
-In order for the functions based on `VSEARCH` in `Rsearch` to work, the command to
-invoke `VSEARCH` must be set correctly if it is something other than the
+In order for most of the functions in `Rsearch` to work, the command to
+invoke VSEARCH must be set correctly if it is something other than the
 default `vsearch`.
 
 `set_vsearch_executable` can be used to set the correct command to
@@ -95,7 +95,7 @@ methods to access help:
 Alternatively, you can use the `help()` function:
 
 ``` r
-help(vs_fastq_filter)
+help(vs_fstq_filter)
 ```
 
 - **Package-wide help**
