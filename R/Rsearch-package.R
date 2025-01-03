@@ -4,6 +4,4 @@
 #'
 #' @keywords internal
 #' @importFrom magrittr %>%
-#' @importFrom Rcpp evalCpp
-#' @useDynLib Rsearch, .registration = TRUE
 "_PACKAGE"
