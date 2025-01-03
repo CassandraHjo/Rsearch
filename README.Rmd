@@ -15,23 +15,29 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Rsearch is a R package designed for handling and analyzing sequence data. Many of its functions are based on the command-line based tool `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch` provides significantly utility by making the software more accessible to a broad user base, particularly those who prefer or require an R-based workflow. In addition to the `VSEARCH`-based functions, `Rsearch` includes additional tools to aid in microbiome data analysis, such as data processing functions and visualizations of some of the results from the functions. 
+Rsearch is a R package designed for handling and analyzing targeted sequencing data. Many of its functions are based on the command-line based tool `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch` provides significantly utility by making the software more accessible to a broad user base, particularly those who prefer or require an R-based workflow. In addition to the `VSEARCH`-based functions, `Rsearch` includes additional tools to aid in microbiome data analysis, such as data processing functions and visualizations of some of the results from the functions. 
 
-The core idea behind `Rsearch` is to retain the output from `VSEARCH` within R's generic data structures, rather than writing results to files as the original `VSEARCH` functions. By offering the option not to write results to specified files, users can choose to work entirely within R and Rstudio or to export results to files as `VSEARCH` typically does. Keeping all results in R data structures allows users to leverage the power of standard data wrangling and visualization tools familiar to R users. 
+The core idea behind `Rsearch` is to retain the output from `VSEARCH` within R's generic data structures, rather than writing results to files as the original `VSEARCH` functions. By offering this option users can choose between working entirely within R and Rstudio or to export results to files as `VSEARCH` typically does. Keeping all results in R data structures allows users to leverage the power of standard data wrangling and visualization tools familiar to R users. 
 
 Another feature that enhances usability for R users is the consistent return format of the functions. All functions return a single table/data frame unless the user specifies that results should be written to a file. For functions that can return multiple results - such as those handling read pairs with forward and reverse reads - the secondary table is included as an attribute of the primary table. The same approach applies to tables containing statistics from function executions. By ensuring that all functions return only one table, navigating and managing results become more straightforward. 
 
 ## Installation
 
+* [A short video on how to install on a Windows laptop](){target="blank"}
+* [A short video on how to install on a Mac laptop](){target="blank"}
+
+
 ### Prerequisites
 
-For the `Rsearch` package to function on your computer, `VSEARCH` must be installed locally. Please ensure that you are using `VSEARCH` version 2.29.1 or above.
+For the `Rsearch` package to function properly on your computer, `VSEARCH` must be installed locally. Please ensure that you are using `VSEARCH` version 2.29.1 or newer.
 
-Visit the [`VSEARCH`](https://github.com/torognes/vsearch) page for [instructions](https://github.com/torognes/vsearch?tab=readme-ov-file#download-and-install) on how to download and install the tool. 
+Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site for learning more about `VSEARCH`.
 
-#### Installing `VSEARCH` 
+### Installing `VSEARCH` 
 
-The latest release of `VSEARCH`, with corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). After downloading the binary, the correct command used to invoke `VSEARCH` on the computer can be set by using the `set_vsearch_executable()` function in `Rsearch` (see [Set correct vsearch executable](#set-correct-vsearch-executable)).
+You typically install `VSEARCH` by simply downloading a pre-compiled binary file to your computer (Windows or Mac). The latest release of `VSEARCH`, with corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). On a High Performance Computing (HPC) cluster we prefer to use an `apptainer` container for `VSEARCH`. These are freely available from many sites, e.g. https://depot.galaxyproject.org/singularity/
+
+After downloading the binary you may edit your `PATH` environment variable to tell your operating system where to find the `VSEARCH` binary. However, this is not required since the `Rsearch` package has a function  `set_vsearch_executable()` function where you specify where your `VSEARCH` binary file is found (see [Set correct vsearch executable](#set-correct-vsearch-executable)) below.
 
 ### Installing `Rsearch`
 
@@ -42,16 +48,23 @@ install.packages("devtools")
 devtools::install_github("CassandraHjo/Rsearch")
 ```
 
-#### Set correct `VSEARCH` executable
+### Set correct `VSEARCH` executable
 
-In order for most of the functions in `Rsearch` to work, the command to invoke VSEARCH must be set correctly if it is something other than the default `vsearch`.
+In order for most of the functions (those starting with `vs_`) in `Rsearch` to work, the command to invoke VSEARCH must be set correctly. The default is simply `vsearch`, but this will only work if the file `vsearch.exe` is found in a folder that is included in the `PATH` environment variable. 
 
-`set_vsearch_executable` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
+The `Rsearch` function `set_vsearch_executable` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
 
 ```{r eval=FALSE}
 # For example, if the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
-set_vsearch_executable("C:/Documents/vsearch")
+Rsearch::set_vsearch_executable("C:/Documents/vsearch")
 ```
+
+Note that on a UNIX system where you use an `apptainer` container this would look something like this:
+```{r eval=FALSE}
+Rsearch::set_vsearch_executable("apptainer exec <container name> vsearch")
+```
+
+
 
 ## Documentation
 
