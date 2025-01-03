@@ -26,6 +26,8 @@ If you have a windows computer and have copied the binary \code{vsearch.exe}
 to the folder C:/Documents/ on your computer, you update R with this
 information by  \code{set_vsearch_executable("C:/Documents/vsearch")}.
 
-If you are running on a HPC using apptainer containers you update by
-\code{set_vsearch_executable("apptainer exec <containername> vsearch")}.
+You may use the function \code{\link{vsearch}} to test if the command is valid.
+}
+\seealso{
+\code{\link{vsearch}}.
 }

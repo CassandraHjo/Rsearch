@@ -10,8 +10,7 @@
 #'
 #' If you have a windows computer and have copied the binary \code{vsearch.exe}
 #' to the folder C:/Documents/ on your computer, you update R with this
-#' information by  \code{set_vsearch_executable("C:/Documents/vsearch")}. Note that
-#' in R we use the \code{/} and not the \code{\} to separate folders as in Windows.
+#' information by  \code{set_vsearch_executable("C:/Documents/vsearch")}.
 #'
 #' You may use the function \code{\link{vsearch}} to test if the command is valid.
 #'
@@ -20,6 +19,7 @@
 #' only need to update this once (or if you change how you run/install VSEARCH).
 #'
 #' @seealso \code{\link{vsearch}}.
+#'
 #' @export
 #'
 set_vsearch_executable <- function(vsearch_executable){
@@ -37,7 +37,7 @@ set_vsearch_executable <- function(vsearch_executable){
 #'
 #' @seealso \code{\link{set_vsearch_executable}}.
 #'
-#' @export
+#' @export vsearch
 #'
 vsearch <- function(){
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
