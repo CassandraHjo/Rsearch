@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`Rsearch` is an R package designed for handling and analyzing targeted sequencing data. Many of its functions are based on the command-line based tool `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch` provides significantly utility by making the software more accessible to a broad user base, particularly those who prefer or require an R-based workflow. In addition to the `VSEARCH`-based functions, `Rsearch` includes additional tools to aid in microbiome data analysis, such as data processing functions and visualizations of some of the results from the functions. 
+`Rsearch` is an R package designed for handling and analyzing targeted sequencing data. Many of its functions are based on the command-line based tool `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch` provides significant utility by making the software more accessible to a broad user base, particularly those who prefer or require an R-based workflow. In addition to the `VSEARCH`-based functions, `Rsearch` includes additional tools to aid in microbiome data analysis, such as data processing functions and visualizations of some of the results from the functions. 
 
 The core idea behind `Rsearch` is to retain the output from `VSEARCH` within R's generic data structures, rather than writing results to files as the original `VSEARCH` functions. By offering this option users can choose between working entirely within R and Rstudio or to export results to files as `VSEARCH` typically does. Keeping all results in R data structures allows users to leverage the power of standard data wrangling and visualization tools familiar to R users. 
 
@@ -23,13 +23,13 @@ Another feature that enhances usability for R users is the consistent return for
 
 ## Installation
 
-* [A short video on how to install on a Windows laptop](){target="blank"}
+* [A short video on how to install on a Windows laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps){target="blank"}
 * [A short video on how to install on a Mac laptop](){target="blank"}
 
 
 ### Prerequisites
 
-For the `Rsearch` package to function properly on your computer, `VSEARCH` must be installed locally. Please ensure that you are using `VSEARCH` version 2.29.1 or newer.
+For the `Rsearch` package to function properly on your computer, `VSEARCH` must be installed as well (see below). Please ensure that you are using `VSEARCH` version 2.29.1 or newer.
 
 Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site for learning more about `VSEARCH`.
 
@@ -50,9 +50,9 @@ devtools::install_github("CassandraHjo/Rsearch")
 
 ### Set correct `VSEARCH` executable
 
-In order for most of the functions (those starting with `vs_`) in `Rsearch` to work, the command to invoke VSEARCH must be set correctly. The default is simply `vsearch`, but this will only work if the file `vsearch.exe` is found in a folder that is included in the `PATH` environment variable. 
+In order for most of the functions (those starting with `vs_`) in `Rsearch` to work, the command to invoke VSEARCH must be set correctly. The default command is simply `vsearch`, but this will only work if the file `vsearch.exe` is found in a folder that is included in the `PATH` environment variable. 
 
-The `Rsearch` function `set_vsearch_executable` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
+The `Rsearch` function `set_vsearch_executable()` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
 
 ```{r eval=FALSE}
 # For example, if the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
@@ -63,6 +63,12 @@ Note that on a UNIX system where you use an `apptainer` container this would loo
 ```{r eval=FALSE}
 Rsearch::set_vsearch_executable("apptainer exec <container name> vsearch")
 ```
+
+You may test if your executable is working properly by running the following command:
+```{r, eval= FALSE}
+Rsearch::vsearch()
+```
+
 
 ## Documentation
 
