@@ -6,7 +6,7 @@
 `Rsearch` is an R package designed for handling and analyzing targeted
 sequencing data. Many of its functions are based on the command-line
 based tool `VSEARCH`. By integrating `VSEARCH` into an R package,
-`Rsearch` provides significantly utility by making the software more
+`Rsearch` provides significant utility by making the software more
 accessible to a broad user base, particularly those who prefer or
 require an R-based workflow. In addition to the `VSEARCH`-based
 functions, `Rsearch` includes additional tools to aid in microbiome data
@@ -33,16 +33,16 @@ managing results become more straightforward.
 
 ## Installation
 
-- <a href="" target="blank">A short video on how to install on a Windows
-  laptop</a>
+- <a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps"
+  target="blank">A short video on how to install on a Windows laptop</a>
 - <a href="" target="blank">A short video on how to install on a Mac
   laptop</a>
 
 ### Prerequisites
 
 For the `Rsearch` package to function properly on your computer,
-`VSEARCH` must be installed locally. Please ensure that you are using
-`VSEARCH` version 2.29.1 or newer.
+`VSEARCH` must be installed as well (see below). Please ensure that you
+are using `VSEARCH` version 2.29.1 or newer.
 
 Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site
 for learning more about `VSEARCH`.
@@ -79,11 +79,11 @@ devtools::install_github("CassandraHjo/Rsearch")
 
 In order for most of the functions (those starting with `vs_`) in
 `Rsearch` to work, the command to invoke VSEARCH must be set correctly.
-The default is simply `vsearch`, but this will only work if the file
-`vsearch.exe` is found in a folder that is included in the `PATH`
+The default command is simply `vsearch`, but this will only work if the
+file `vsearch.exe` is found in a folder that is included in the `PATH`
 environment variable.
 
-The `Rsearch` function `set_vsearch_executable` can be used to set the
+The `Rsearch` function `set_vsearch_executable()` can be used to set the
 correct command to invoke `VSEARCH` on the computer like this:
 
 ``` r
@@ -96,6 +96,13 @@ would look something like this:
 
 ``` r
 Rsearch::set_vsearch_executable("apptainer exec <container name> vsearch")
+```
+
+You may test if your executable is working properly by running the
+following command:
+
+``` r
+Rsearch::vsearch()
 ```
 
 ## Documentation
