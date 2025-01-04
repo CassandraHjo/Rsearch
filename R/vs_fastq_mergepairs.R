@@ -12,28 +12,45 @@
 #' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
-#' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and \code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
+#' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and
+#' \code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
 #'
-#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects. FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
-#' Forward and reverse reads must appear in the same order and total number in both files.
+#' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ
+#' objects. FASTQ objects are tibbles that contain the columns \code{Header},
+#' \code{Sequence}, and \code{Quality}.
+#' Forward and reverse reads must appear in the same order and total number in
+#' both files.
 #'
-#' If \code{fastaout} or \code{fastqout} is specified, the merged reads are output to this file in either FASTA or FASTQ format.
-#' If unspecified (\code{NULL}) the results are returned as a FASTA or FASTQ object, and no output is written to file. \code{output_format} has to match the desired output files/objects.
+#' If \code{fastaout} or \code{fastqout} is specified, the merged reads are
+#' output to this file in either FASTA or FASTQ format.
+#' If unspecified (\code{NULL}) the results are returned as a FASTA or FASTQ
+#' object, and no output is written to file. \code{output_format} has to match
+#' the desired output files/objects.
 #'
-#' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
+#' FASTA files produced by \code{vsearch} are wrapped (sequences are written on
+#' lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
-#' However, using the default value may allow empty sequences to remain in the results.
+#' Any input sequence with fewer bases than the value set in \code{minlen} will
+#' be discarded. By default, \code{minlen} is set to 0, which means that no
+#' sequences are removed.
+#' However, using the default value may allow empty sequences to remain in
+#' the results.
 #'
 #' If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 #'
 #' @return Tibble or \code{NULL}.
 #'
-#' If output files are not specified, a tibble containing the merged reads in the format specified by \code{output_format} is returned. If an output file is specified, results are written to file and nothing is returned.
+#' If output files are not specified, a tibble containing the merged reads in the
+#' format specified by \code{output_format} is returned. If an output file is
+#' specified, results are written to file and nothing is returned.
 #'
-#' When a FASTA/FASTQ object is returned, the statistics from the merging, \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
-#' This tibble contains merging statistics, including number of pairs, number of merged pairs, and length metrics. The statistics can be accessed by running \code{attributes(merged_seqs)$statistics} or \code{attr(merged_seqs, "statistics")}.
+#' When a FASTA/FASTQ object is returned, the statistics from the merging,
+#' \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
+#' This tibble contains merging statistics, including number of pairs, number
+#' of merged pairs, and length metrics. The statistics can be accessed by
+#' running \code{attributes(merged_seqs)$statistics} or
+#' \code{attr(merged_seqs, "statistics")}.
 #'
 #' @examples
 #' \dontrun{
@@ -224,14 +241,19 @@ vs_fastq_mergepairs <- function(fastq_input,
 
 #' Parse merging statistics from string to tibble
 #'
-#' @description This function transforms the output from \code{vsearch} when running \code{vs_fastq_mergepairs()} into a tibble.
-#' The most important statistics are included in the tibble such as number of read pairs, merged reads, reasons that reads were not merged, and mean and standard deviation of read lengths.
+#' @description This function transforms the output from \code{vsearch} when
+#' running \code{vs_fastq_mergepairs()} into a tibble.
+#' The most important statistics are included in the tibble such as number of
+#' read pairs, merged reads, reasons that reads were not merged, and mean and
+#' standard deviation of read lengths.
 #'
 #' @param output A string of output from merging reads with \code{vsearch}.
 #' @param fastq_input The name of the file/object with forward (R1) reads that was used in the merging.
 #' @param reverse The name of the file/object with reverse (R2) reads that was used in the merging.
 #'
-#' @return A tibble with merging metrics, including number of read pairs, merged reads, reasons that reads were not merged, and mean and standard deviation of read lengths.
+#' @return A tibble with merging metrics, including number of read pairs,
+#' merged reads, reasons that reads were not merged, and mean and standard
+#' deviation of read lengths.
 #'
 #' @noRd
 #'
