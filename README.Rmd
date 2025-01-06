@@ -21,6 +21,8 @@ The core idea behind `Rsearch` is to retain the output from `VSEARCH` within R's
 
 Another feature that enhances usability for R users is the consistent return format of the functions. All functions return a single table/data frame unless the user specifies that results should be written to a file. For functions that can return multiple results - such as those handling read pairs with forward and reverse reads - the secondary table is included as an attribute of the primary table. The same approach applies to tables containing statistics from function executions. By ensuring that all functions return only one table, navigating and managing results become more straightforward. 
 
+More information about attributes in R can be found [here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and [here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
+
 ## Installation
 
 * [A short video on how to install on a Windows laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps){target="blank"}

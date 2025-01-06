@@ -31,6 +31,10 @@ applies to tables containing statistics from function executions. By
 ensuring that all functions return only one table, navigating and
 managing results become more straightforward.
 
+More information about attributes in R can be found
+[here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and
+[here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
+
 ## Installation
 
 - <a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps"
