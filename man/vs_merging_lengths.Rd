@@ -17,10 +17,12 @@ vs_merging_lengths(fastq_input, reverse, minlen = 0, threads = 1)
 }
 \value{
 A data frame with the following columns:
-\itemize{length_1}{The length of the forward reads.}
-\itemize{length_2}{The length of the reverse reads.}
-\itemize{length_merged}{The length of the merged reads.}
-\itemize{length_overlap}{The length of the overlap between the forward and reverse reads.}
+\itemize{
+  \item \code{length_1}: The length of the forward reads.
+  \item \code{length_2}: The length of the reverse reads.
+  \item \code{length_merged}: The length of the merged reads.
+  \item \code{length_overlap}: The length of the overlap between the forward and reverse reads.
+}
 
 In case of missing values for the latter two columns, it means that the
 corresponding reads were not merged.
