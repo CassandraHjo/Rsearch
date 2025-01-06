@@ -151,20 +151,20 @@ Additional usage examples can be found in the
 library(Rsearch)
 
 # Define FASTQ files
-fastq_input <- "R1_sample1.fq"
+fastx_input <- "R1_sample1.fq"
 reverse <- "R2_sample1.fq"
 
 # Define other arguments
-output_format <- "fastq"
-fastq_maxee_rate <- 0.01
+file_format <- "fastq"
+maxee_rate <- 0.01
 minlen <- 0
 
 # Execute filtering, with tibble as output
-filt_seqs <- vs_fastq_filter(fastq_input = fastq_input,
-                             reverse = reverse,
-                             output_format = output_format,
-                             fastq_maxee_rate = fastq_maxee_rate,
-                             minlen = minlen)
+filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
+                                reverse = reverse,
+                                file_format = file_format,
+                                maxee_rate = maxee_rate,
+                                minlen = minlen)
 
 # Extract tibbles with filtered sequences
 R1_filt <- filt_seqs
@@ -180,9 +180,9 @@ The main contributors to `Rsearch`:
 
 - Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no> (Coding, testing,
   documentation, maintaining)
-- Lars Snipen <lars.snipen@nmbu.no> (Coding, testing)
-- Torbjørn Rognes <torognes@ifi.uio.no> (Coding, testing)
-- Hilde Vinje <hilde.vinje@nmbu.no> (Coding, testing)
+- Lars Snipen <lars.snipen@nmbu.no> (Coding, documentation)
+- Torbjørn Rognes <torognes@ifi.uio.no> (Coding, documentation)
+- Hilde Vinje <hilde.vinje@nmbu.no> (Coding, documentation)
 
 ## Citing Rsearch
 
