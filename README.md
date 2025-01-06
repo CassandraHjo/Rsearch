@@ -118,16 +118,16 @@ methods to access help:
 
 - **Function-specific help:** To get detailed information about a
   specific function, use the `?` operator followed by the function name.
-  For example, to access help for the `vs_fastq_filter` function:
+  For example, to access help for the `vs_fastx_trim_filt` function:
 
 ``` r
-?vs_fastq_filter
+?vs_fastx_trim_filt
 ```
 
 Alternatively, you can use the `help()` function:
 
 ``` r
-help(vs_fstq_filter)
+help(vs_fastx_trim_filt)
 ```
 
 - **Package-wide help**
