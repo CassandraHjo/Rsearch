@@ -51,6 +51,9 @@
 #' pass them separately to this function, get two result files/objects,  and then
 #' use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 #'
+#' Note that certain options are not compatible with both file formats. For instance, options that trim or filter sequences based on quality scores are unavailable when the \code{file_format} is set to \code{"fasta"}.
+#' Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation} for more details.
+#'
 #' If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev}
 #' are specified, the remaining sequences after trimming and/or filtering are output
 #' to these files in either FASTA or FASTQ format.
