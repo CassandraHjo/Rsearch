@@ -341,9 +341,11 @@ vs_fastx_trim_filt <- function(fastx_input,
   }
 
   # Normalize file paths
-  fastx_file <- normalizePath(fastx_file)
+  fastx_file <- normalizePath(fastx_file) |>
+    shQuote()
   if (!is.null(reverse)) {
-    reverse_file <- normalizePath(reverse_file)
+    reverse_file <- normalizePath(reverse_file) |>
+      shQuote()
   }
 
   # Build argument string for command line
