@@ -379,7 +379,9 @@ test_that("trim/filter fasta sequences from two tibbles, and return fasta tibble
                                           truncqual = truncqual,
                                           truncee = truncee,
                                           log_file = log_file,
-                                          threads = threads)
+                                          threads = threads,
+                                          maxlen = maxlen,
+                                          trunclen = trunclen)
 
 
   expect_equal(trim_filt_sample1,
