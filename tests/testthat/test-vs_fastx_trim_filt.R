@@ -175,7 +175,7 @@ test_that("error when reverse file does not exist when file format is fasta", {
 })
 
 
-test_that("filter fastq sequences from two files, and return two fastq files", {
+test_that("trim/filter fastq sequences from two files, and return two fastq files", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
@@ -183,9 +183,10 @@ test_that("filter fastq sequences from two files, and return two fastq files", {
   fastqout_rev <- withr::local_tempfile()
   file_format <- "fastq"
   maxee_rate <- 0.01
-  trunclen <- 150
-  minlen <- 0
-  log_file <- NULL
+  minlen <- 1
+  maxns <- 0
+  truncqual <- 20
+  truncee <- 0.01
   threads <- 1
   log_file <- withr::local_tempfile()
 
@@ -196,7 +197,9 @@ test_that("filter fastq sequences from two files, and return two fastq files", {
                                      file_format = file_format,
                                      maxee_rate = maxee_rate,
                                      minlen = minlen,
-                                     trunclen = trunclen,
+                                     maxns = maxns,
+                                     truncqual = truncqual,
+                                     truncee = truncee,
                                      log_file = log_file,
                                      threads = threads)
 
@@ -211,7 +214,7 @@ test_that("filter fastq sequences from two files, and return two fastq files", {
                microseq::readFastq(test_path("testdata", "output", "R2_trim_filt_sample1.fq")))
 })
 
-test_that("filter fastq sequences from two files, and return fastq tibble", {
+test_that("trim/filter fastq sequences from two files, and return fastq tibble", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
@@ -219,8 +222,10 @@ test_that("filter fastq sequences from two files, and return fastq tibble", {
   fastqout_rev <- NULL
   file_format <- "fastq"
   maxee_rate <- 0.01
-  trunclen <- 150
-  minlen <- 0
+  minlen <- 1
+  maxns <- 0
+  truncqual <- 20
+  truncee <- 0.01
   log_file <- NULL
   threads <- 1
 
@@ -231,7 +236,9 @@ test_that("filter fastq sequences from two files, and return fastq tibble", {
                                           file_format = file_format,
                                           maxee_rate = maxee_rate,
                                           minlen = minlen,
-                                          trunclen = trunclen,
+                                          maxns = maxns,
+                                          truncqual = truncqual,
+                                          truncee = truncee,
                                           log_file = log_file,
                                           threads = threads)
 
@@ -240,29 +247,98 @@ test_that("filter fastq sequences from two files, and return fastq tibble", {
 
 })
 
-test_that("filter fasta sequences from two files, and return two fasta files", {
+test_that("trim/filter fastq sequences from one file, and return fastq tibble", {
+
+  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- NULL
+  fastqout <- NULL
+  fastqout_rev <- NULL
+  file_format <- "fastq"
+  maxee_rate <- 0.01
+  minlen <- 1
+  maxns <- 0
+  truncqual <- 20
+  truncee <- 0.01
+  log_file <- NULL
+  threads <- 1
+
+  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+                                          reverse = reverse,
+                                          fastqout = fastqout,
+                                          fastqout_rev = fastqout_rev,
+                                          file_format = file_format,
+                                          maxee_rate = maxee_rate,
+                                          minlen = minlen,
+                                          maxns = maxns,
+                                          truncqual = truncqual,
+                                          truncee = truncee,
+                                          log_file = log_file,
+                                          threads = threads)
+
+  expect_equal(trim_filt_sample1,
+               readRDS(test_path("testdata", "output", "trim_filt_sample1_R1_fastq_file.rds")))
+
+})
+
+test_that("trim/filter fastq sequences from two tibbles, and return fastq tibble", {
+
+  fastx_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastqout <- NULL
+  fastqout_rev <- NULL
+  file_format <- "fastq"
+  maxee_rate <- 0.01
+  minlen <- 1
+  maxns <- 0
+  truncqual <- 20
+  truncee <- 0.01
+  log_file <- NULL
+  threads <- 1
+
+  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+                                          reverse = reverse,
+                                          fastqout = fastqout,
+                                          fastqout_rev = fastqout_rev,
+                                          file_format = file_format,
+                                          maxee_rate = maxee_rate,
+                                          minlen = minlen,
+                                          maxns = maxns,
+                                          truncqual = truncqual,
+                                          truncee = truncee,
+                                          log_file = log_file,
+                                          threads = threads)
+
+  expect_equal(trim_filt_sample1,
+               readRDS(test_path("testdata", "output", "trim_filt_sample1_fastq_tibbles.rds")))
+})
+
+test_that("trim/filter fasta sequences from two files, and return two fasta files", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fa")
   reverse <- test_path("testdata", "sample1", "R2_sample1.fa")
   fastaout <- withr::local_tempfile()
   fastaout_rev <- withr::local_tempfile()
   file_format <- "fasta"
-  maxlen <- 1000
-  maxns <- 100
-  trunclen <- 150
-  minlen <- 0
+  maxee_rate <- NULL
+  minlen <- 1
+  maxns <- 0
+  truncqual <- NULL
+  truncee <- NULL
   log_file <- NULL
   threads <- 1
+  maxlen <- 1000
+  trunclen <- 150
 
   return_value <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                      reverse = reverse,
                                      fastaout = fastaout,
                                      fastaout_rev = fastaout_rev,
                                      file_format = file_format,
-                                     maxlen = maxlen,
+                                     maxee_rate = maxee_rate,
                                      minlen = minlen,
                                      maxns = maxns,
-                                     trunclen = trunclen,
+                                     truncqual = truncqual,
+                                     truncee = truncee,
                                      log_file = log_file,
                                      threads = threads)
 
@@ -275,91 +351,37 @@ test_that("filter fasta sequences from two files, and return two fasta files", {
                microseq::readFasta(test_path("testdata", "output", "R2_trim_filt_sample1.fa")))
 })
 
-test_that("filter fastq sequences from two tibbles, and return fastq tibble", {
-
-  fastx_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
-  fastqout <- NULL
-  fastqout_rev <- NULL
-  file_format <- "fastq"
-  maxee_rate <- 0.01
-  trunclen <- 150
-  minlen <- 0
-  log_file <- NULL
-  threads <- 1
-
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
-                                          reverse = reverse,
-                                          fastqout = fastqout,
-                                          fastqout_rev = fastqout_rev,
-                                          file_format = file_format,
-                                          maxee_rate = maxee_rate,
-                                          minlen = minlen,
-                                          trunclen = trunclen,
-                                          log_file = log_file,
-                                          threads = threads)
-
-
-  expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_fastq_tibbles.rds")))
-})
-
-test_that("filter fasta sequences from two tibbles, and return fasta tibble", {
+test_that("trim/filter fasta sequences from two tibbles, and return fasta tibble", {
 
   fastx_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
   reverse <- microseq::readFasta(test_path("testdata", "sample1", "R2_sample1.fa"))
   fastaout <- NULL
   fastaout_rev <- NULL
   file_format <- "fasta"
-  maxlen <- 1000
-  maxns <- 100
-  trunclen <- 150
-  minlen <- 0
+  maxee_rate <- NULL
+  minlen <- 1
+  maxns <- 0
+  truncqual <- NULL
+  truncee <- NULL
   log_file <- NULL
   threads <- 1
+  maxlen <- 1000
+  trunclen <- 150
 
   trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           reverse = reverse,
                                           fastaout = fastaout,
                                           fastaout_rev = fastaout_rev,
                                           file_format = file_format,
-                                          maxlen = maxlen,
+                                          maxee_rate = maxee_rate,
                                           minlen = minlen,
                                           maxns = maxns,
-                                          trunclen = trunclen,
+                                          truncqual = truncqual,
+                                          truncee = truncee,
                                           log_file = log_file,
                                           threads = threads)
 
 
   expect_equal(trim_filt_sample1,
                readRDS(test_path("testdata", "output", "trim_filt_sample1_fasta_tibbles.rds")))
-})
-
-test_that("filter fastq sequences from one file, and return fastq tibble", {
-
-  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- NULL
-  fastqout <- NULL
-  fastqout_rev <- NULL
-  file_format <- "fastq"
-  maxee_rate <- 0.01
-  trunclen <- 150
-  minlen <- 0
-  log_file <- NULL
-  threads <- 1
-
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
-                                          reverse = reverse,
-                                          fastqout = fastqout,
-                                          fastqout_rev = fastqout_rev,
-                                          file_format = file_format,
-                                          maxee_rate = maxee_rate,
-                                          minlen = minlen,
-                                          trunclen = trunclen,
-                                          log_file = log_file,
-                                          threads = threads)
-
-  expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_R1_fastq_file.rds")))
-
 })
