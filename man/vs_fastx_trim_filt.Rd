@@ -17,6 +17,8 @@ vs_fastx_trim_filt(
   trunclen = NULL,
   truncqual = 20,
   truncee = 0.01,
+  stripright = 0,
+  stripleft = 0,
   fastaout = NULL,
   fastqout = NULL,
   fastaout_rev = NULL,
@@ -62,6 +64,10 @@ specified base quality score value or lower. Defaults to \code{20}.}
 
 \item{truncee}{The sequences are truncated so that their total expected error is
 not higher than the specified value. Defaults to \code{0.01}.}
+
+\item{stripright}{The number of bases stripped from the right end of the reads. Defaults to \code{0}.}
+
+\item{stripleft}{The number of bases stripped from the left end of the reads. Defaults to \code{0}.}
 
 \item{fastaout}{Name of the FASTA output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
 

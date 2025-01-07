@@ -26,6 +26,8 @@
 #' specified base quality score value or lower. Defaults to \code{20}.
 #' @param truncee The sequences are truncated so that their total expected error is
 #' not higher than the specified value. Defaults to \code{0.01}.
+#' @param stripright The number of bases stripped from the right end of the reads. Defaults to \code{0}.
+#' @param stripleft The number of bases stripped from the left end of the reads. Defaults to \code{0}.
 #' @param fastaout Name of the FASTA output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
 #' @param fastqout Name of the FASTQ output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
 #' @param fastaout_rev Name of the FASTA output file for the sequences given in \code{reverse}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
@@ -121,6 +123,8 @@ vs_fastx_trim_filt <- function(fastx_input,
                                trunclen = NULL,
                                truncqual = 20,
                                truncee = 0.01,
+                               stripright = 0,
+                               stripleft = 0,
                                fastaout = NULL,
                                fastqout = NULL,
                                fastaout_rev = NULL,
@@ -383,6 +387,14 @@ vs_fastx_trim_filt <- function(fastx_input,
 
   if (!is.null(truncee)) {
     args <- c(args, "--fastq_truncee", truncee)
+  }
+
+  if (stripright > 0) {
+    args <- c(args, "--fastq_stripright", stripright)
+  }
+
+  if (stripleft > 0) {
+    args <- c(args, "--fastq_stripleft", stripleft)
   }
 
   # Add output files based on file_format
