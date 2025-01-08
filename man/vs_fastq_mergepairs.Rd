@@ -18,9 +18,9 @@ vs_fastq_mergepairs(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or a FASTQ object containing (forward) reads. See Details.}
+\item{fastq_input}{A FASTQ file path or object containing (forward) reads. See Details.}
 
-\item{reverse}{A FASTQ file path or a FASTQ object containing (reverse) reads See Details.}
+\item{reverse}{A FASTQ file path or object containing (reverse) reads See Details.}
 
 \item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
 

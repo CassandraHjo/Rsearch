@@ -7,9 +7,9 @@
 vs_merging_lengths(fastq_input, reverse, minlen = 0, threads = 1)
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or a FASTQ object containing (forward) reads.}
+\item{fastq_input}{A FASTQ file path or object containing (forward) reads.}
 
-\item{reverse}{A FASTQ file path or a FASTQ object containing (reverse) reads.}
+\item{reverse}{A FASTQ file path or object containing (reverse) reads.}
 
 \item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}.}
 

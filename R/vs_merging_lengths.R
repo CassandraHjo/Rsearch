@@ -2,8 +2,8 @@
 #'
 #' @description Statistics of read lengths before and after merging.
 #'
-#' @param fastq_input A FASTQ file path or a FASTQ object containing (forward) reads.
-#' @param reverse A FASTQ file path or a FASTQ object containing (reverse) reads.
+#' @param fastq_input A FASTQ file path or object containing (forward) reads.
+#' @param reverse A FASTQ file path or object containing (reverse) reads.
 #' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}.
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
