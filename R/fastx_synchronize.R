@@ -129,12 +129,12 @@ fastx_synchronize <- function(file1,
   }
 
   # Create tag column with sequence id
-  file1 <- file1 %>%
+  file1 <- file1 |>
     dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) |>
     dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) |>
     dplyr::mutate(tag = stringr::str_remove(tag, "/2$"))
 
-  file2 <- file2 %>%
+  file2 <- file2 |>
     dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) |>
     dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) |>
     dplyr::mutate(tag = stringr::str_remove(tag, "/2$"))
@@ -143,14 +143,14 @@ fastx_synchronize <- function(file1,
   common_tags <- intersect(file1$tag, file2$tag)
 
   # Keep only sequences from common tags
-  sync_file1 <- file1 %>%
-    dplyr::filter(tag %in% common_tags) %>%
-    dplyr::arrange(tag) %>%
+  sync_file1 <- file1 |>
+    dplyr::filter(tag %in% common_tags) |>
+    dplyr::arrange(tag) |>
     dplyr::select(-tag)
 
-  sync_file2 <- file2 %>%
-    dplyr::filter(tag %in% common_tags) %>%
-    dplyr::arrange(tag) %>%
+  sync_file2 <- file2 |>
+    dplyr::filter(tag %in% common_tags) |>
+    dplyr::arrange(tag) |>
     dplyr::select(-tag)
 
   # Write output files if specified

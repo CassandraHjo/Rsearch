@@ -4,6 +4,7 @@
 #'
 #' @param fastq_input A FASTQ file path or a FASTQ object containing (forward) reads. See Details.
 #' @param reverse A FASTQ file path or a FASTQ object containing (reverse) reads See Details.
+#' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default).
 #' @param fastaout Name of the FASTA output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
 #' @param fastqout Name of the FASTQ output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
@@ -76,6 +77,7 @@
 #'
 vs_fastq_mergepairs <- function(fastq_input,
                                 reverse,
+                                minovlen = 10,
                                 output_format = "fastq",
                                 fastaout = NULL,
                                 fastqout = NULL,
@@ -193,8 +195,10 @@ vs_fastq_mergepairs <- function(fastq_input,
   # Build argument string for command line
   args <- c("--fastq_mergepairs", fastq_file,
             "--reverse", reverse_file,
+            "--fastq_minovlen", minovlen,
             "--threads", threads,
-            "--fastq_minlen", minlen)
+            "--fastq_minlen", minlen
+            )
 
   # Add output files based on output_format
   if (output_format == "fastq") {
