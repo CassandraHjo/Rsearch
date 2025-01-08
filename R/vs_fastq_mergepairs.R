@@ -164,8 +164,10 @@ vs_fastq_mergepairs <- function(fastq_input,
   if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
 
   # Normalize file paths
-  fastq_file <- normalizePath(fastq_file)
-  reverse_file <- normalizePath(reverse_file)
+  fastq_file <- normalizePath(fastq_file) |>
+    shQuote()
+  reverse_file <- normalizePath(reverse_file) |>
+    shQuote()
 
   # Determine output file
   if (output_format == "fasta") {

@@ -98,7 +98,8 @@ vs_cluster_size <- function(fasta_input,
   if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
 
   # Normalize file paths
-  fasta_file <- normalizePath(fasta_file)
+  fasta_file <- normalizePath(fasta_file) |>
+    shQuote()
 
   # Determine centroids file
   if (is.null(centroids)) {
