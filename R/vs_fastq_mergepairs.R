@@ -268,7 +268,15 @@ parse_merge_statistics <- function(output, fastq_input, reverse) {
   # Extract values from output
   pairs <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Pairs$"), "\\d+"))
   merged <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Merged"), "\\d+"))
-  too_many_diff <- as.numeric(stringr::str_extract(stringr::str_subset(output, "too many differences"), "\\d+"))
+
+  #too_many_diff <- as.numeric(stringr::str_extract(stringr::str_subset(output, "too many differences"), "\\d+"))
+  too_many_diff_txt <- stringr::str_subset(output, "too many differences")
+  if (length(too_many_diff_txt) == 0) {
+    too_many_diff <- 0
+  } else {
+    too_many_diff <- as.numeric(stringr::str_extract(too_many_diff_txt, "\\d+"))
+  }
+
   alignment_low <- as.numeric(stringr::str_extract(stringr::str_subset(output, "alignment score too low"), "\\d+"))
   mean_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Mean fragment length"), "\\d+\\.\\d+"))
   stddev_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Standard deviation of fragment length"), "\\d+\\.\\d+"))
