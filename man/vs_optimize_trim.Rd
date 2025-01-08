@@ -4,7 +4,14 @@
 \alias{vs_optimize_trim}
 \title{Optimize trimming for best possible merging}
 \usage{
-vs_optimize_trim(fastq_input, reverse, minovlen = 10, minlen = 0, threads = 1)
+vs_optimize_trim(
+  fastq_input,
+  reverse,
+  minovlen = 10,
+  truncqual = 20,
+  minlen = 0,
+  threads = 1
+)
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or object containing (forward) reads.}
@@ -13,12 +20,15 @@ vs_optimize_trim(fastq_input, reverse, minovlen = 10, minlen = 0, threads = 1)
 
 \item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
 
+\item{truncqual}{The sequences are truncated starting from the first base with the
+specified base quality score value or lower. Defaults to \code{20}.}
+
 \item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
-x
+Results table
 }
 \description{
 Optimizes trimming to get the best possible merging results. The function searches for the best parameters by looping through different parameter values for the trimming options.

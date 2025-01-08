@@ -4,6 +4,7 @@
 #'
 #' @param fastq_input A FASTQ file path or object containing (forward) reads.
 #' @param reverse A FASTQ file path or object containing (reverse) reads.
+#' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
 #' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}.
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
@@ -54,6 +55,7 @@
 #'
 vs_merging_lengths <- function(fastq_input,
                                reverse,
+                               minovlen = 10,
                                minlen = 0,
                                threads = 1){
   # The forward reads
@@ -83,6 +85,7 @@ vs_merging_lengths <- function(fastq_input,
   # The merged read lengths and overlap lengths
   merged.tbl <- vs_fastq_mergepairs(R1.tbl,
                                     R2.tbl,
+                                    minovlen = minovlen,
                                     minlen = minlen,
                                     threads = threads)
 

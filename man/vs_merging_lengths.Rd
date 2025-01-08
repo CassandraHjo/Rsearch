@@ -4,12 +4,20 @@
 \alias{vs_merging_lengths}
 \title{Length statistics after merging}
 \usage{
-vs_merging_lengths(fastq_input, reverse, minlen = 0, threads = 1)
+vs_merging_lengths(
+  fastq_input,
+  reverse,
+  minovlen = 10,
+  minlen = 0,
+  threads = 1
+)
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or object containing (forward) reads.}
 
 \item{reverse}{A FASTQ file path or object containing (reverse) reads.}
+
+\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
 
 \item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}.}
 
