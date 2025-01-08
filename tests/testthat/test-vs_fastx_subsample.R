@@ -40,7 +40,7 @@ test_that("error if both sample_size and sample_pct are specified", {
 
 test_that("error when fastx_input has incorrect columns if input is tibble and file_format = 'fastq'", {
 
-  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) %>%
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
   file_format <- "fastq"
@@ -54,7 +54,7 @@ test_that("error when fastx_input has incorrect columns if input is tibble and f
 
 test_that("error when fastx_input has incorrect columns if input is tibble and file_format = 'fasta'", {
 
-  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) %>%
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(Header)
 
   file_format <- "fasta"

@@ -54,7 +54,7 @@ test_that("error if input is neither character or NULL", {
 
 test_that("error when file1 has incorrect columns if input is tibble and file_format = 'fastq'", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) %>%
+  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
   file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
 
@@ -69,7 +69,7 @@ test_that("error when file1 has incorrect columns if input is tibble and file_fo
 test_that("error when file2 has incorrect columns if input is tibble and file_format = 'fastq'", {
 
   file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) %>%
+  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
   file_format <- "fastq"
@@ -82,7 +82,7 @@ test_that("error when file2 has incorrect columns if input is tibble and file_fo
 
 test_that("error when file1 has incorrect columns if input is tibble and file_format = 'fasta'", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) %>%
+  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(Quality)
   file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
 
@@ -97,7 +97,7 @@ test_that("error when file1 has incorrect columns if input is tibble and file_fo
 test_that("error when file2 has incorrect columns if input is tibble and file_format = 'fasta'", {
 
   file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) %>%
+  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
     dplyr::select(Quality)
 
   file_format <- "fasta"

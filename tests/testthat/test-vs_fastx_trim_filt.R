@@ -76,7 +76,7 @@ test_that("error when reverse is specified, but output files are not both NULL o
 
 test_that("error when fastx_input has incorrect columns if input is fastq tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) %>%
+  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
@@ -89,7 +89,7 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
   R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) %>%
+  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1, reverse = R2),
@@ -98,7 +98,7 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
 test_that("error when fastx_input has incorrect columns if input is fasta tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds")) %>%
+  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds")) |>
     dplyr::select(-Header)
 
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds"))
@@ -115,7 +115,7 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
   R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds")) %>%
+  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds")) |>
     dplyr::select(-Header)
 
   file_format <- "fasta"

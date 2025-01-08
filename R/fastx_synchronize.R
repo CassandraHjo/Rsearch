@@ -130,13 +130,13 @@ fastx_synchronize <- function(file1,
 
   # Create tag column with sequence id
   file1 <- file1 %>%
-    dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) %>%
-    dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) %>%
+    dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) |>
+    dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) |>
     dplyr::mutate(tag = stringr::str_remove(tag, "/2$"))
 
   file2 <- file2 %>%
-    dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) %>%
-    dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) %>%
+    dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) |>
+    dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) |>
     dplyr::mutate(tag = stringr::str_remove(tag, "/2$"))
 
   # Find common tags

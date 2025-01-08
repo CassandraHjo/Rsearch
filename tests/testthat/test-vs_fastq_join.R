@@ -40,7 +40,7 @@ test_that("error when output_format is 'fastq', and fastaout is defined", {
 
 test_that("error when fastq_input has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) %>%
+  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
@@ -57,7 +57,7 @@ test_that("error when reverse has incorrect columns if input is tibble", {
 
   R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) %>%
+  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
   output_format <- "fastq"

@@ -30,6 +30,7 @@
 #' }
 #'
 #' @export
+#'
 fastx_combine_files <- function(files_dir,
                                 output_file = NULL,
                                 file_ext = ".fq",

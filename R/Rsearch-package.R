@@ -10,5 +10,4 @@
 #' of some of the results from the functions.
 #'
 #' @keywords internal
-#' @importFrom magrittr %>%
 "_PACKAGE"

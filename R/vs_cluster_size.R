@@ -27,8 +27,6 @@
 #' FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @importFrom magrittr %>%
-#'
 #' @return Tibble or \code{NULL}.
 #'
 #' If \code{centroids} is not specified, a FASTA object containing the centroid sequences is returned. If \code{centroids} is specified, results are written to file, and nothing is returned.
@@ -135,9 +133,9 @@ vs_cluster_size <- function(fasta_input,
   if (is.null(centroids)) {
 
     # Read output into FASTA object (tbl)
-    centroids_fasta <- microseq::readFasta(outfile) %>%
-      dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) %>%
-      dplyr::mutate(centroid_size = as.numeric(centroid_size)) %>%
+    centroids_fasta <- microseq::readFasta(outfile) |>
+      dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) |>
+      dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
       dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
 
     # Output statistics in table
