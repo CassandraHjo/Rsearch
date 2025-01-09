@@ -26,7 +26,9 @@
 #' In case of missing values for the latter two columns, it means that the
 #' corresponding reads were not merged.
 #'
-#' The data frame has an attribute \code{statistics} containing the same
+#' The data frame has an attribute \code{plot} containing a grid plot based on the returned data frame.
+#'
+#' The data frame also has an attribute \code{statistics} containing the same
 #' attribute returned from \code{\link{vs_fastq_mergepairs}}.
 #'
 #' @seealso \code{\link{vs_fastq_mergepairs}}
@@ -38,17 +40,16 @@
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 #'
 #' # Execute merging
-#' lengths.tbl <- vs_merging_lengths(fastq_input = fastq_input,
-#'                                   reverse = reverse)
-#' # Plotting results
-#' library(tidyverse)
-#' lengths.tbl |>
-#' pivot_longer(-read_id, names_to = "type", values_to = "length") |>
-#' ggplot() +
-#'   geom_histogram(aes(x = length)) +
-#'   facet_wrap(vars(type), scales = "free")
-#' }
+#' merging.tbl <- vs_merging_lengths(fastq_input = fastq_input,
+#'                                   reverse = reverse,
+#'                                   minovlen = 10,
+#'                                   minlen = 0,
+#'                                   threads = 1)
 #'
+#' # Extract plot
+#' merging_stats_plot <- attr(merging.tbl, "plot")
+#'
+#' }
 #' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
@@ -111,5 +112,15 @@ vs_merging_lengths <- function(fastq_input,
     dplyr::relocate(read_id = tag, length_1, length_2, length_merged, length_overlap)
 
   attr(res.tbl, "statistics") <- attr(merged.tbl, "statistics")
+
+  # Plotting
+  plot1 <- res.tbl |>
+    tidyr::pivot_longer(-read_id, names_to = "type", values_to = "length") |>
+    ggplot2::ggplot() +
+    ggplot2::geom_histogram(ggplot2::aes(x = length)) +
+    ggplot2::facet_wrap(dplyr::vars(type), scales = "free")
+
+  attr(res.tbl, "plot") <- plot1
+
   return(res.tbl)
 }

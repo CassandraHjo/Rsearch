@@ -35,7 +35,9 @@ A data frame with the following columns:
 In case of missing values for the latter two columns, it means that the
 corresponding reads were not merged.
 
-The data frame has an attribute \code{statistics} containing the same
+The data frame has an attribute \code{plot} containing a grid plot based on the returned data frame.
+
+The data frame also has an attribute \code{statistics} containing the same
 attribute returned from \code{\link{vs_fastq_mergepairs}}.
 }
 \description{
@@ -56,17 +58,16 @@ fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_samp
 reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 
 # Execute merging
-lengths.tbl <- vs_merging_lengths(fastq_input = fastq_input,
-                                  reverse = reverse)
-# Plotting results
-library(tidyverse)
-lengths.tbl |>
-pivot_longer(-read_id, names_to = "type", values_to = "length") |>
-ggplot() +
-  geom_histogram(aes(x = length)) +
-  facet_wrap(vars(type), scales = "free")
-}
+merging.tbl <- vs_merging_lengths(fastq_input = fastq_input,
+                                  reverse = reverse,
+                                  minovlen = 10,
+                                  minlen = 0,
+                                  threads = 1)
 
+# Extract plot
+merging_stats_plot <- attr(merging.tbl, "plot")
+
+}
 }
 \references{
 \url{https://github.com/torognes/vsearch}
