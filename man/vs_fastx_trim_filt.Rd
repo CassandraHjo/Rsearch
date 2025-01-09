@@ -16,7 +16,7 @@ vs_fastx_trim_filt(
   minsize = NULL,
   trunclen = NULL,
   truncqual = 20,
-  truncee = 0.01,
+  truncee = NULL,
   stripright = 0,
   stripleft = 0,
   fastaout = NULL,
@@ -63,7 +63,7 @@ are discarded. Defaults to \code{NULL}.}
 specified base quality score value or lower. Defaults to \code{20}.}
 
 \item{truncee}{The sequences are truncated so that their total expected error is
-not higher than the specified value. Defaults to \code{0.01}.}
+not higher than the specified value. Defaults to \code{NULL}.}
 
 \item{stripright}{The number of bases stripped from the right end of the reads. Defaults to \code{0}.}
 

@@ -25,7 +25,7 @@
 #' @param truncqual The sequences are truncated starting from the first base with the
 #' specified base quality score value or lower. Defaults to \code{20}.
 #' @param truncee The sequences are truncated so that their total expected error is
-#' not higher than the specified value. Defaults to \code{0.01}.
+#' not higher than the specified value. Defaults to \code{NULL}.
 #' @param stripright The number of bases stripped from the right end of the reads. Defaults to \code{0}.
 #' @param stripleft The number of bases stripped from the left end of the reads. Defaults to \code{0}.
 #' @param fastaout Name of the FASTA output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
@@ -122,7 +122,7 @@ vs_fastx_trim_filt <- function(fastx_input,
                                minsize = NULL,
                                trunclen = NULL,
                                truncqual = 20,
-                               truncee = 0.01,
+                               truncee = NULL,
                                stripright = 0,
                                stripleft = 0,
                                fastaout = NULL,
