@@ -19,7 +19,7 @@ vs_merging_lengths(
 
 \item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}.}
+\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{1}.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
@@ -35,7 +35,8 @@ A data frame with the following columns:
 In case of missing values for the latter two columns, it means that the
 corresponding reads were not merged.
 
-The data frame has an attribute \code{plot} containing a grid plot based on the returned data frame.
+The data frame has an attribute \code{plot} containing a \code{\link{ggplot2}}
+object based on the returned data frame.
 
 The data frame also has an attribute \code{statistics} containing the same
 attribute returned from \code{\link{vs_fastq_mergepairs}}.
@@ -54,18 +55,16 @@ and trimming of reads such that the merged reads are of high quality.
 \examples{
 \dontrun{
 # Read example FASTQ files
-fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 
 # Execute merging
-merging.tbl <- vs_merging_lengths(fastq_input = fastq_input,
-                                  reverse = reverse,
-                                  minovlen = 10,
-                                  minlen = 0,
-                                  threads = 1)
+merging.tbl <- vs_merging_lengths(fastq_input = R1.file,
+                                  reverse = R2.file)
 
-# Extract plot
+# Display plot
 merging_stats_plot <- attr(merging.tbl, "plot")
+print(merging_stats_plot)
 
 }
 }

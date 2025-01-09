@@ -5,7 +5,7 @@
 #' @param fastq_input A FASTQ file path or object containing (forward) reads.
 #' @param reverse A FASTQ file path or object containing (reverse) reads.
 #' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{1}.
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
 #' @details This function calculates the length of the forward reads, reverse reads,
@@ -26,7 +26,8 @@
 #' In case of missing values for the latter two columns, it means that the
 #' corresponding reads were not merged.
 #'
-#' The data frame has an attribute \code{plot} containing a grid plot based on the returned data frame.
+#' The data frame has an attribute \code{plot} containing a \code{\link{ggplot2}}
+#' object based on the returned data frame.
 #'
 #' The data frame also has an attribute \code{statistics} containing the same
 #' attribute returned from \code{\link{vs_fastq_mergepairs}}.
@@ -36,18 +37,16 @@
 #' @examples
 #' \dontrun{
 #' # Read example FASTQ files
-#' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-#' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+#' R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 #'
 #' # Execute merging
-#' merging.tbl <- vs_merging_lengths(fastq_input = fastq_input,
-#'                                   reverse = reverse,
-#'                                   minovlen = 10,
-#'                                   minlen = 0,
-#'                                   threads = 1)
+#' merging.tbl <- vs_merging_lengths(fastq_input = R1.file,
+#'                                   reverse = R2.file)
 #'
-#' # Extract plot
+#' # Display plot
 #' merging_stats_plot <- attr(merging.tbl, "plot")
+#' print(merging_stats_plot)
 #'
 #' }
 #' @references \url{https://github.com/torognes/vsearch}
@@ -118,7 +117,9 @@ vs_merging_lengths <- function(fastq_input,
     tidyr::pivot_longer(-read_id, names_to = "type", values_to = "length") |>
     ggplot2::ggplot() +
     ggplot2::geom_histogram(ggplot2::aes(x = length)) +
-    ggplot2::facet_wrap(dplyr::vars(type), scales = "free")
+    ggplot2::facet_wrap(dplyr::vars(type), scales = "free") +
+    ggplot2::labs(title = paste0("Merged ", sum(!is.na(res.tbl$length_merged)), " read pairs out of ",
+                  nrow(res.tbl), " (", round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)"))
 
   attr(res.tbl, "plot") <- plot1
 
