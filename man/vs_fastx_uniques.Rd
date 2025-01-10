@@ -4,7 +4,9 @@
 \alias{vs_fastx_uniques}
 \alias{vs_fastq_uniques}
 \alias{vs_fasta_uniques}
-\alias{vs_fastx_dereplication}
+\alias{vs_fastx_dereplicate}
+\alias{vs_fastq_dereplicate}
+\alias{vs_fasta_dereplicate}
 \title{Dereplicate sequences}
 \usage{
 vs_fastx_uniques(
