@@ -79,6 +79,10 @@ vs_fastx_uniques <- function(fastx_input,
     stop("Invalid output_format. Choose from fasta or fastq.")
   }
 
+  if (input_format == "fasta" && output_format == "fastq") {
+    stop("Invalid output_format when input_format is 'fasta'")
+  }
+
   # Validate strand
   if (!strand %in% c("plus", "both")) {
     stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")

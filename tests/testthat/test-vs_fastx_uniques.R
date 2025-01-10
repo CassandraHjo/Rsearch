@@ -18,6 +18,18 @@ test_that("error when wrong output_format", {
                "Invalid output_format. Choose from fasta or fastq.")
 })
 
+test_that("error when input_format is fasta and output_format is fastq", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
+  input_format <- "fasta"
+  output_format <- "fastq"
+
+  expect_error(vs_fastx_uniques(fastx_input = fastx_input,
+                                input_format = input_format,
+                                output_format = output_format),
+               "Invalid output_format when input_format is 'fasta'")
+})
+
 test_that("error when wrong strand", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
@@ -35,7 +47,8 @@ test_that("error when fastx_input has incorrect columns if input is tibble and i
 
   input_format <- "fastq"
 
-  expect_error(vs_fastx_uniques(fastx_input = fastx_input, input_format = input_format),
+  expect_error(vs_fastx_uniques(fastx_input = fastx_input,
+                                input_format = input_format),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
@@ -45,8 +58,11 @@ test_that("error when fastx_input has incorrect columns if input is tibble and i
     dplyr::select(Header)
 
   input_format <- "fasta"
+  output_format <- "fasta"
 
-  expect_error(vs_fastx_uniques(fastx_input = fastx_input, input_format = input_format),
+  expect_error(vs_fastx_uniques(fastx_input = fastx_input,
+                                input_format = input_format,
+                                output_format = output_format),
                "FASTA object must contain columns: Header and Sequence")
 })
 
