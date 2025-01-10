@@ -86,12 +86,17 @@ not higher than the specified value. Defaults to \code{NULL}.}
 \value{
 A tibble or \code{NULL}.
 
-If output files are not specified, a tibble containing the filtered reads from \code{fastx_input} in the format specified by \code{file_format} is returned. If output files are specified, results are written to file and nothing is returned.
+If output files are not specified, a tibble containing the filtered reads from \code{fastx_input}
+in the format specified by \code{file_format} is returned. If output files are specified,
+results are written to file and nothing is returned.
 
-If \code{reverse} is specified, the resulting tibble containing the trimmed and/or filtered reverse reads in the format specified by \code{file_format} is an attribute, called \code{"filt_reverse"}, to the primary table.
+If \code{reverse} is specified, the resulting tibble containing the trimmed and/or filtered reverse reads
+in the format specified by \code{file_format} is an attribute, called \code{"reverse"}, to the primary table.
 
-When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics}, is an attribute, called \code{"statistics"}, to the primary filtering tibble.
-This tibble contains statistics, including number of kept and discarded sequences, and the names of the FASTA/FASTQ files or objects that were used as input.
+When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics},
+is an attribute, called \code{"statistics"}, to the primary filtering tibble.
+This tibble contains statistics, including number of kept and discarded sequences,
+and the names of the FASTA/FASTQ files or objects that were used as input.
 }
 \description{
 Trim and/or filters biological sequences (DNA) in the FASTA/FASTQ format.
@@ -114,8 +119,11 @@ Note that if you want to trim/filter the forward and reverse reads differently, 
 pass them separately to this function, get two result files/objects,  and then
 use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 
-Note that certain options are not compatible with both file formats. For instance, options that trim or filter sequences based on quality scores are unavailable when the \code{file_format} is set to \code{"fasta"}.
-Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation} for more details.
+Note that certain options are not compatible with both file formats. For instance,
+options that trim or filter sequences based on quality scores are unavailable when the \code{file_format}
+is set to \code{"fasta"}.
+Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
+for more details.
 
 If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev}
 are specified, the remaining sequences after trimming and/or filtering are output
@@ -124,9 +132,11 @@ If unspecified (\code{NULL}), results are returned as a tibble, and no output is
 written to file. \code{file_format} has to match the desired output files/objects.
 
 Sequences with an average expected error greater than the specified \code{maxee_rate} are discarded.
-For a given sequence, the average expected error is the sum of error probabilities for all the positions in the sequence, divided by the length of the sequence.
+For a given sequence, the average expected error is the sum of error probabilities
+for all the positions in the sequence, divided by the length of the sequence.
 
-Any input sequence with fewer bases than the value set in \code{minlen} will be discarded. By default, \code{minlen} is set to 0, which means that no sequences are removed.
+Any input sequence with fewer bases than the value set in \code{minlen} will be discarded.
+By default, \code{minlen} is set to 0, which means that no sequences are removed.
 However, using the default value may allow empty sequences to remain in the results.
 
 FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
@@ -152,7 +162,7 @@ filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
 
 # Extract tibbles with filtered sequences
 R1_filt <- filt_seqs
-R2_filt <- attr(filt_seqs, "filt_reverse")
+R2_filt <- attr(filt_seqs, "reverse")
 
 # Extract filtering statistics
 statistics <- attr(filt_seqs, "statistics")
