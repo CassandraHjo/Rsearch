@@ -168,7 +168,7 @@ filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
 
 # Extract tibbles with filtered sequences
 R1_filt <- filt_seqs
-R2_filt <- attr(filt_seqs, "filt_reverse")
+R2_filt <- attr(filt_seqs, "reverse")
 
 # Extract filtering statistics
 statistics <- attr(filt_seqs, "statistics")
