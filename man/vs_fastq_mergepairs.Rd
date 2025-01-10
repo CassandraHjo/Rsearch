@@ -2,6 +2,8 @@
 % Please edit documentation in R/vs_fastq_mergepairs.R
 \name{vs_fastq_mergepairs}
 \alias{vs_fastq_mergepairs}
+\alias{vs_fastx_mergepairs}
+\alias{vs_fasta_mergepairs}
 \title{Merge paired-end sequence reads}
 \usage{
 vs_fastq_mergepairs(
@@ -22,21 +24,29 @@ vs_fastq_mergepairs(
 
 \item{reverse}{A FASTQ file path or object containing (reverse) reads See Details.}
 
-\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
+\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5.
+Defaults to \code{10}.}
 
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default).}
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
+or \code{"fastq"} (default).}
 
-\item{fastaout}{Name of the FASTA output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.}
+\item{fastaout}{Name of the FASTA output file with the merged reads.
+If \code{NULL} (default) no output will be written to file. See Details.}
 
-\item{fastqout}{Name of the FASTQ output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.}
+\item{fastqout}{Name of the FASTQ output file with the merged reads.
+If \code{NULL} (default) no output will be written to file. See Details.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
+\item{fasta_width}{Number of characters per line in the output FASTA file.
+Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.}
+\item{minlen}{The minimum number of bases a sequence must have to be retained.
+Defaults to \code{0}. See Details.}
 
-\item{log_file}{Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
+\item{log_file}{Name of the log file to capture messages from \code{vsearch}.
+If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
+\item{threads}{Number of computational threads to be used by \code{vsearch}.
+Defaults to \code{1}.}
 }
 \value{
 Tibble or \code{NULL}.
@@ -81,7 +91,9 @@ sequences are removed.
 However, using the default value may allow empty sequences to remain in
 the results.
 
-If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+If \code{log_file} is specified, the messages and merging statistics are output to this file.
+If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified,
+then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 }
 \examples{
 \dontrun{

@@ -3,16 +3,22 @@
 #' @description Combine all files of given type in given directory into one file/object.
 #'
 #' @param files_dir A path to a directory with files to combine.
-#' @param output_file Name of the output file or \code{NULL}. If not specified, a FASTA/FASTQ object depending on \code{file_format} is returned.
-#' @param file_ext The file extension of the files that are to be combined. Must be written with a "." in front of the extension. Defaults to \code{".fq"}.
-#' @param file_format Format of files that are to be combined, and desired output format of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.
+#' @param output_file Name of the output file or \code{NULL}. If not specified,
+#' a FASTA/FASTQ object depending on \code{file_format} is returned.
+#' @param file_ext The file extension of the files that are to be combined.
+#' Must be written with a "." in front of the extension. Defaults to \code{".fq"}.
+#' @param file_format Format of files that are to be combined, and desired output format
+#' of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.
 #'
 #' @details
-#' A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}. A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}.
+#' A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
 #' @return Tibble or \code{NULL}.
 #'
-#' If \code{output_file} is specified, a tibble containing the combined reads in the format specified in \code{file_format} is returned. If \code{output_file} is specified, the results are written to file and nothing is returned.
+#' If \code{output_file} is specified, a tibble containing the combined reads
+#' in the format specified in \code{file_format} is returned.
+#' If \code{output_file} is specified, the results are written to file and nothing is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -29,6 +35,7 @@
 #'                                       file_format = file_format)
 #' }
 #'
+#' @aliases fastx_combine_files fastq_combine_files fasta_combine_files
 #' @export
 #'
 fastx_combine_files <- function(files_dir,

@@ -2,6 +2,8 @@
 % Please edit documentation in R/vs_fastx_trim_filt.R
 \name{vs_fastx_trim_filt}
 \alias{vs_fastx_trim_filt}
+\alias{vs_fastq_trim_filt}
+\alias{vs_fasta_trim_filt}
 \title{Trim and/or filter sequences in FASTA/FASTQ format}
 \usage{
 vs_fastx_trim_filt(
@@ -65,21 +67,29 @@ specified base quality score value or lower. Defaults to \code{20}.}
 \item{truncee}{The sequences are truncated so that their total expected error is
 not higher than the specified value. Defaults to \code{NULL}.}
 
-\item{stripright}{The number of bases stripped from the right end of the reads. Defaults to \code{0}.}
+\item{stripright}{The number of bases stripped from the right end of the reads.
+Defaults to \code{0}.}
 
-\item{stripleft}{The number of bases stripped from the left end of the reads. Defaults to \code{0}.}
+\item{stripleft}{The number of bases stripped from the left end of the reads.
+Defaults to \code{0}.}
 
-\item{fastaout}{Name of the FASTA output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastaout}{Name of the FASTA output file for the sequences given in \code{fastx_input}.
+If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fastqout}{Name of the FASTQ output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastqout}{Name of the FASTQ output file for the sequences given in \code{fastx_input}.
+If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fastaout_rev}{Name of the FASTA output file for the sequences given in \code{reverse}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastaout_rev}{Name of the FASTA output file for the sequences given in \code{reverse}.
+If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fastqout_rev}{Name of the FASTQ output file for the sequences given in \code{reverse}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastqout_rev}{Name of the FASTQ output file for the sequences given in \code{reverse}.
+If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
+\item{fasta_width}{Number of characters per line in the output FASTA file.
+Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
 
-\item{log_file}{Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
+\item{log_file}{Name of the log file to capture messages from \code{vsearch}.
+If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }

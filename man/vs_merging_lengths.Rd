@@ -17,11 +17,14 @@ vs_merging_lengths(
 
 \item{reverse}{A FASTQ file path or object containing (reverse) reads.}
 
-\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
+\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5.
+Defaults to \code{10}.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{1}.}
+\item{minlen}{The minimum number of bases a sequence must have to be retained.
+Defaults to \code{1}.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
+\item{threads}{Number of computational threads to be used by \code{vsearch}.
+Defaults to \code{1}.}
 }
 \value{
 A data frame with the following columns:

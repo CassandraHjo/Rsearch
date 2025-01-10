@@ -26,14 +26,22 @@
 #' specified base quality score value or lower. Defaults to \code{20}.
 #' @param truncee The sequences are truncated so that their total expected error is
 #' not higher than the specified value. Defaults to \code{NULL}.
-#' @param stripright The number of bases stripped from the right end of the reads. Defaults to \code{0}.
-#' @param stripleft The number of bases stripped from the left end of the reads. Defaults to \code{0}.
-#' @param fastaout Name of the FASTA output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
-#' @param fastqout Name of the FASTQ output file for the sequences given in \code{fastx_input}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
-#' @param fastaout_rev Name of the FASTA output file for the sequences given in \code{reverse}. If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
-#' @param fastqout_rev Name of the FASTQ output file for the sequences given in \code{reverse}. If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
-#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
-#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.
+#' @param stripright The number of bases stripped from the right end of the reads.
+#' Defaults to \code{0}.
+#' @param stripleft The number of bases stripped from the left end of the reads.
+#' Defaults to \code{0}.
+#' @param fastaout Name of the FASTA output file for the sequences given in \code{fastx_input}.
+#' If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fastqout Name of the FASTQ output file for the sequences given in \code{fastx_input}.
+#' If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fastaout_rev Name of the FASTA output file for the sequences given in \code{reverse}.
+#' If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fastqout_rev Name of the FASTQ output file for the sequences given in \code{reverse}.
+#' If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.
+#' @param fasta_width Number of characters per line in the output FASTA file.
+#' Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
+#' @param log_file Name of the log file to capture messages from \code{vsearch}.
+#' If \code{NULL}, no log file is created. Defaults to \code{NULL}.
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
 #' @details The function trims and/or filters sequences from the input FASTA/FASTQ
@@ -118,6 +126,8 @@
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
+#'
+#' @aliases vs_fastx_trim_filt vs_fastq_trim_filt vs_fasta_trim_filt
 #'
 #' @export
 #'

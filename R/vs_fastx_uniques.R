@@ -50,6 +50,8 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
+#' @aliases vs_fastx_uniques vs_fastq_uniques vs_fasta_uniques vs_fastx_dereplication
+#'
 #' @export
 #'
 vs_fastx_uniques <- function(fastx_input,

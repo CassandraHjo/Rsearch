@@ -4,14 +4,22 @@
 #'
 #' @param fastq_input A FASTQ file path or object containing (forward) reads. See Details.
 #' @param reverse A FASTQ file path or object containing (reverse) reads See Details.
-#' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
-#' @param output_format Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default).
-#' @param fastaout Name of the FASTA output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
-#' @param fastqout Name of the FASTQ output file with the merged reads. If \code{NULL} (default) no output will be written to file. See Details.
-#' @param fasta_width Number of characters per line in the output FASTA file. Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.
-#' @param log_file Name of the log file to capture messages from \code{vsearch}. If \code{NULL}, no log file is created. Defaults to \code{NULL}.
-#' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
+#' @param minovlen The minimum overlap between the merged reads. Must be at least 5.
+#' Defaults to \code{10}.
+#' @param output_format Desired output format of file or tibble: \code{"fasta"}
+#' or \code{"fastq"} (default).
+#' @param fastaout Name of the FASTA output file with the merged reads.
+#' If \code{NULL} (default) no output will be written to file. See Details.
+#' @param fastqout Name of the FASTQ output file with the merged reads.
+#' If \code{NULL} (default) no output will be written to file. See Details.
+#' @param fasta_width Number of characters per line in the output FASTA file.
+#' Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained.
+#' Defaults to \code{0}. See Details.
+#' @param log_file Name of the log file to capture messages from \code{vsearch}.
+#' If \code{NULL}, no log file is created. Defaults to \code{NULL}.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' Defaults to \code{1}.
 #'
 #' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and
 #' \code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
@@ -38,7 +46,9 @@
 #' However, using the default value may allow empty sequences to remain in
 #' the results.
 #'
-#' If \code{log_file} is specified, the messages and merging statistics are output to this file. If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified, then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+#' If \code{log_file} is specified, the messages and merging statistics are output to this file.
+#' If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified,
+#' then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 #'
 #' @return Tibble or \code{NULL}.
 #'
@@ -72,6 +82,8 @@
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
+#'
+#' @aliases vs_fastq_mergepairs vs_fastx_mergepairs vs_fasta_mergepairs
 #'
 #' @export
 #'

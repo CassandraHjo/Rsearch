@@ -4,9 +4,12 @@
 #'
 #' @param fastq_input A FASTQ file path or object containing (forward) reads.
 #' @param reverse A FASTQ file path or object containing (reverse) reads.
-#' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{1}.
-#' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
+#' @param minovlen The minimum overlap between the merged reads. Must be at least 5.
+#' Defaults to \code{10}.
+#' @param minlen The minimum number of bases a sequence must have to be retained.
+#' Defaults to \code{1}.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' Defaults to \code{1}.
 #'
 #' @details This function calculates the length of the forward reads, reverse reads,
 #' the merged reads, and the overlap lengths. It uses \code{\link{vs_fastq_mergepairs}} where

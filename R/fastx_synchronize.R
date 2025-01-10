@@ -4,21 +4,37 @@
 #'
 #' @param file1 A FASTQ/FASTA file path or object. See Details.
 #' @param file2 A FASTQ/FASTA file path or object. See Details.
-#' @param file_format Format of input files \code{file1} and \code{file2}, and desired output format: \code{"fasta"} or \code{"fastq"} (default). Determines the format for both outputs.
-#' @param file1_out Name of the output file for synchronized reads from \code{file1}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.
-#' @param file2_out Name of the output file for synchronized reads from \code{file2}. File can be in either FASTA or FASTQ format, depending on \code{file_format}. If \code{NULL} (default) no sequences will be written to file. See Details.
+#' @param file_format Format of input files \code{file1} and \code{file2},
+#' and desired output format: \code{"fasta"} or \code{"fastq"} (default).
+#' Determines the format for both outputs.
+#' @param file1_out Name of the output file for synchronized reads from \code{file1}.
+#' File can be in either FASTA or FASTQ format, depending on \code{file_format}. I
+#' f \code{NULL} (default) no sequences will be written to file. See Details.
+#' @param file2_out Name of the output file for synchronized reads from \code{file2}.
+#' File can be in either FASTA or FASTQ format, depending on \code{file_format}.
+#' If \code{NULL} (default) no sequences will be written to file. See Details.
 #'
 #' @details
-#' \code{file1} and \code{file2} can either be FASTQ/FASTA files or objects. FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}. FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
-#' In order for the synchronizing to work, it is necessary that the sequence IDs in the \code{Header}s are identical for each read pair in the two files.
+#' \code{file1} and \code{file2} can either be FASTQ/FASTA files or objects.
+#' FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
+#' FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' In order for the synchronizing to work, it is necessary that the sequence IDs
+#' in the \code{Header}s are identical for each read pair in the two files.
 #'
-#' If \code{file1_out} or \code{file2_out} are specified, the remaining sequences after synchronizing are output to these files in either FASTA or FASTQ format depending on \code{file_format}.
-#' If unspecified (\code{NULL}) no output is written to file, and the synchronized reads are returned as a FASTQ/FASTA object. \code{file1_out} or \code{file2_out} must either both be \code{NULL} or both \code{charachter}.
+#' If \code{file1_out} or \code{file2_out} are specified, the remaining sequences
+#' after synchronizing are output to these files in either FASTA or FASTQ format
+#' depending on \code{file_format}.
+#' If unspecified (\code{NULL}) no output is written to file,
+#' and the synchronized reads are returned as a FASTQ/FASTA object.
+#' \code{file1_out} or \code{file2_out} must either both be \code{NULL} or both \code{charachter}.
 #'
 #' @return Tibble or \code{NULL}.
 #'
-#' If output files are not specified, a tibble containing the synchronized reads from \code{file1} is returned. The tibble containing the synchronized reads from \code{file2} is an attribute, called \code{"sync_file2"}, to the primary tibble.
-#' If output files, \code{file1_out} or \code{file2_out} are specified, results are written to file and nothing is returned.
+#' If output files are not specified, a tibble containing the synchronized reads
+#' from \code{file1} is returned. The tibble containing the synchronized
+#' reads from \code{file2} is an attribute, called \code{"sync_file2"}, to the primary tibble.
+#' If output files, \code{file1_out} or \code{file2_out} are specified, results are written to
+#' file and nothing is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -40,6 +56,8 @@
 #' R1_sync <- sync_seqs
 #' R2_sync <- attr(sync_seqs, "sync_file2")
 #' }
+#'
+#' @aliases fastx_synchronize fastq_synchronize fasta_synchronize
 #'
 #' @export
 #'

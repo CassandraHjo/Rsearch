@@ -2,6 +2,9 @@
 % Please edit documentation in R/vs_fastx_uniques.R
 \name{vs_fastx_uniques}
 \alias{vs_fastx_uniques}
+\alias{vs_fastq_uniques}
+\alias{vs_fasta_uniques}
+\alias{vs_fastx_dereplication}
 \title{Dereplicate sequences}
 \usage{
 vs_fastx_uniques(
