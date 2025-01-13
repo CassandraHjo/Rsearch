@@ -1,77 +1,91 @@
-test_that("error when wrong file_format", {
+test_that("error when wrong input_format", {
 
   R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
-  file_format <- "fastx"
+  input_format <- "fastx"
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
                                    reverse = R2,
-                                   file_format = file_format),
-               "Invalid file_format. Choose from fasta or fastq.")
+                                   input_format = input_format),
+               "Invalid input_format. Choose from fasta or fastq.")
 })
 
-test_that("error when file_format is 'fasta', and fastqout and fastqout_rev are defined", {
+test_that("error when wrong output_format", {
 
   R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
-  file_format <- "fasta"
+  output_format <- "fastx"
+
+  expect_error(vs_fastx_trim_filt(fastx_input = R1,
+                                  reverse = R2,
+                                  output_format = output_format),
+               "Invalid output_format. Choose from fasta or fastq.")
+})
+
+test_that("error when input_format is fasta and output_format is fastq", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
+  input_format <- "fasta"
+  output_format <- "fastq"
+
+  expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
+                                  input_format = input_format,
+                                  output_format = output_format),
+               "Invalid output_format when input_format is 'fasta'")
+})
+
+test_that("error when input_format is 'fasta', and fastqout and fastqout_rev are defined", {
+
+  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  input_format <- "fasta"
+  output_format <- "fasta"
   fastqout <- "some_file.fq"
   fastqout_rev <- "some_other_file.fq"
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
+                                  reverse = R2,
+                                  input_format = input_format,
+                                  output_format = output_format,
+                                  fastqout = fastqout,
+                                  fastqout_rev = fastqout_rev),
+               "When input_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
+})
+
+test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
+
+  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds"))
+  input_format <- "fasta"
+  output_format <- "fasta"
+  fastaout <- "some_file.fa"
+  fastaout_rev <- NULL
+
+  expect_error(vs_fastx_trim_filt(fastx_input = R1,
                                    reverse = R2,
-                                   file_format = file_format,
+                                   input_format = input_format,
+                                  output_format = output_format,
+                                   fastaout = fastaout,
+                                   fastaout_rev = fastaout_rev),
+               "When 'reverse' is specified and output_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
+})
+
+test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
+
+  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  input_format <- "fastq"
+  output_format <- "fastq"
+  fastqout <- "some_file.fq"
+  fastqout_rev <- NULL
+
+  expect_error(vs_fastx_trim_filt(fastx_input = R1,
+                                   reverse = R2,
+                                  input_format = input_format,
+                                  output_format = output_format,
                                    fastqout = fastqout,
                                    fastqout_rev = fastqout_rev),
-               "When file_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
-})
-
-test_that("error when file_format is 'fastq', and fastaout and fastaout_rev are defined", {
-
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
-  file_format <- "fastq"
-  fastaout <- "some_file.fa"
-  fastaout_rev <- "some_other_file.fa"
-
-  expect_error(vs_fastx_trim_filt(fastx_input = R1,
-                                   reverse = R2,
-                                   file_format = file_format,
-                                   fastaout = fastaout,
-                                   fastaout_rev = fastaout_rev),
-               "When file_format is defined as 'fastq', 'fastaout' and 'fastaout_rev' cannot be used. Use 'fastqout' and 'fastqout_rev' instead.")
-})
-
-test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
-
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
-  file_format <- "fasta"
-  fastaout <- "some_file.fa"
-  fastaout_rev <- NULL
-
-  expect_error(vs_fastx_trim_filt(fastx_input = R1,
-                                   reverse = R2,
-                                   file_format = file_format,
-                                   fastaout = fastaout,
-                                   fastaout_rev = fastaout_rev),
-               "When 'reverse' is specified and file_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
-})
-
-test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
-
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
-  file_format <- "fastq"
-  fastaout <- "some_file.fa"
-  fastaout_rev <- NULL
-
-  expect_error(vs_fastx_trim_filt(fastx_input = R1,
-                                   reverse = R2,
-                                   file_format = file_format,
-                                   fastqout = fastaout,
-                                   fastqout_rev = fastaout_rev),
-               "When 'reverse' is specified and file_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
+               "When 'reverse' is specified and output_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
 })
 
 test_that("error when fastx_input has incorrect columns if input is fastq tibble", {
@@ -103,11 +117,13 @@ test_that("error when fastx_input has incorrect columns if input is fasta tibble
 
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds"))
 
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
                                   reverse = R2,
-                                  file_format = file_format),
+                                  input_format = input_format,
+                                  output_format = output_format),
                "FASTA object must contain columns: Header and Sequence")
 })
 
@@ -118,11 +134,13 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds")) |>
     dplyr::select(-Header)
 
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
                                   reverse = R2,
-                                  file_format = file_format),
+                                  input_format = input_format,
+                                  output_format = output_format),
                "FASTA object must contain columns: Header and Sequence")
 })
 
@@ -130,11 +148,13 @@ test_that("error when input file does not exist when file format is fastq", {
 
   fastx_input <- "some_file.fq"
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
                                    reverse = reverse,
-                                  file_format = file_format),
+                                  input_format = input_format,
+                                  output_format = output_format),
                paste("Cannot find input FASTQ file:", fastx_input))
 })
 
@@ -142,11 +162,13 @@ test_that("error when reverse file does not exist when file format is fastq", {
 
   fastx_input <- test_path("testdata", "sample1", "R2_sample1.fq")
   reverse <- "some_file.fq"
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
-                                   reverse = reverse,
-                                  file_format = file_format),
+                                  reverse = reverse,
+                                  input_format = input_format,
+                                  output_format = output_format),
                paste("Cannot find reverse FASTQ file:", reverse))
 })
 
@@ -154,11 +176,13 @@ test_that("error when input file does not exist when file format is fasta", {
 
   fastx_input <- "some_file.fa"
   reverse <- test_path("testdata", "sample1", "R2_sample1.fa")
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
                                   reverse = reverse,
-                                  file_format = file_format),
+                                  input_format = input_format,
+                                  output_format = output_format),
                paste("Cannot find input FASTA file:", fastx_input))
 })
 
@@ -166,11 +190,13 @@ test_that("error when reverse file does not exist when file format is fasta", {
 
   fastx_input <- test_path("testdata", "sample1", "R2_sample1.fa")
   reverse <- "some_file.fa"
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
                                   reverse = reverse,
-                                  file_format = file_format),
+                                  input_format = input_format,
+                                  output_format = output_format),
                paste("Cannot find reverse FASTA file:", reverse))
 })
 
@@ -181,7 +207,8 @@ test_that("trim/filter fastq sequences from two files, and return two fastq file
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
   fastqout <- withr::local_tempfile()
   fastqout_rev <- withr::local_tempfile()
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   maxee_rate <- 0.01
   minlen <- 1
   maxns <- 0
@@ -194,7 +221,8 @@ test_that("trim/filter fastq sequences from two files, and return two fastq file
                                      reverse = reverse,
                                      fastqout = fastqout,
                                      fastqout_rev = fastqout_rev,
-                                     file_format = file_format,
+                                     input_format = input_format,
+                                     output_format = output_format,
                                      maxee_rate = maxee_rate,
                                      minlen = minlen,
                                      maxns = maxns,
@@ -253,7 +281,8 @@ test_that("trim/filter fastq sequences from one file, and return fastq tibble", 
   reverse <- NULL
   fastqout <- NULL
   fastqout_rev <- NULL
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   maxee_rate <- 0.01
   minlen <- 1
   maxns <- 0
@@ -266,7 +295,8 @@ test_that("trim/filter fastq sequences from one file, and return fastq tibble", 
                                           reverse = reverse,
                                           fastqout = fastqout,
                                           fastqout_rev = fastqout_rev,
-                                          file_format = file_format,
+                                          input_format = input_format,
+                                          output_format = output_format,
                                           maxee_rate = maxee_rate,
                                           minlen = minlen,
                                           maxns = maxns,
@@ -318,7 +348,8 @@ test_that("trim/filter fasta sequences from two files, and return two fasta file
   reverse <- test_path("testdata", "sample1", "R2_sample1.fa")
   fastaout <- withr::local_tempfile()
   fastaout_rev <- withr::local_tempfile()
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
   maxee_rate <- NULL
   minlen <- 1
   maxns <- 0
@@ -333,7 +364,8 @@ test_that("trim/filter fasta sequences from two files, and return two fasta file
                                      reverse = reverse,
                                      fastaout = fastaout,
                                      fastaout_rev = fastaout_rev,
-                                     file_format = file_format,
+                                     input_format = input_format,
+                                     output_format = output_format,
                                      maxee_rate = maxee_rate,
                                      minlen = minlen,
                                      maxns = maxns,

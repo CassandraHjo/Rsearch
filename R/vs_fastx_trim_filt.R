@@ -6,8 +6,8 @@
 #' @param reverse An optional FASTA/FASTQ file path or object, if the input consists of
 #' paired sequences, containing reverse reads. If provided, it will be processed alongside
 #' \code{fastx_input}. Defaults to \code{NULL}. See Details.
-#' @param file_format Format of input files \code{fastx_input} (and \code{reverse}), and
-#' desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
+#' @param input_format Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).
+#' @param output_format The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
 #' @param maxee_rate Threshold for average expected error. Numeric value ranging form
 #' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.
 #' @param minlen The minimum number of bases a sequence must have to be retained.
@@ -47,7 +47,7 @@
 #' @details The function trims and/or filters sequences from the input FASTA/FASTQ
 #' file or object based on the specified options, using \code{vsearch}.
 #' If a \code{reverse} input is provided, these reads are processed in the same way.
-#' The the format of the output is determined by \code{file_format}.
+#' The the format of the output is determined by \code{output_format}.
 #'
 #' \code{fastx_input} and \code{reverse} can either be FASTA/FASTQ files or objects.
 #' FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
@@ -62,7 +62,7 @@
 #' use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 #'
 #' Note that certain options are not compatible with both file formats. For instance,
-#' options that trim or filter sequences based on quality scores are unavailable when the \code{file_format}
+#' options that trim or filter sequences based on quality scores are unavailable when the \code{input_format}
 #' is set to \code{"fasta"}.
 #' Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
 #' for more details.
@@ -71,7 +71,7 @@
 #' are specified, the remaining sequences after trimming and/or filtering are output
 #' to these files in either FASTA or FASTQ format.
 #' If unspecified (\code{NULL}), results are returned as a tibble, and no output is
-#' written to file. \code{file_format} has to match the desired output files/objects.
+#' written to file. \code{output_format} has to match the desired output files/objects.
 #'
 #' Sequences with an average expected error greater than the specified \code{maxee_rate} are discarded.
 #' For a given sequence, the average expected error is the sum of error probabilities
@@ -88,11 +88,11 @@
 #' @return A tibble or \code{NULL}.
 #'
 #' If output files are not specified, a tibble containing the filtered reads from \code{fastx_input}
-#' in the format specified by \code{file_format} is returned. If output files are specified,
+#' in the format specified by \code{output_format} is returned. If output files are specified,
 #' results are written to file and nothing is returned.
 #'
 #' If \code{reverse} is specified, the resulting tibble containing the trimmed and/or filtered reverse reads
-#' in the format specified by \code{file_format} is an attribute, called \code{"reverse"}, to the primary table.
+#' in the format specified by \code{output_format} is an attribute, called \code{"reverse"}, to the primary table.
 #'
 #' When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics},
 #' is an attribute, called \code{"statistics"}, to the primary filtering tibble.
@@ -106,14 +106,16 @@
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 #'
 #' # Define other arguments
-#' file_format <- "fastq"
+#' input_format <- "fastq"
+#' output_format <- "fastq"
 #' maxee_rate <- 0.01
 #' minlen <- 0
 #'
 #' # Execute filtering, with tibble as output
 #' filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
 #'                                 reverse = reverse,
-#'                                 file_format = file_format,
+#'                                 input_format = input_format,
+#'                                 output_format = output_format,
 #'                                 maxee_rate = maxee_rate,
 #'                                 minlen = minlen)
 #'
@@ -133,7 +135,8 @@
 #'
 vs_fastx_trim_filt <- function(fastx_input,
                                reverse = NULL,
-                               file_format = "fastq",
+                               input_format = "fastq",
+                               output_format = "fastq",
                                maxee_rate = 0.01,
                                minlen = 1,
                                maxlen = NULL,
@@ -157,40 +160,49 @@ vs_fastx_trim_filt <- function(fastx_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
-  # Validate file_format
-  if (!file_format %in% c("fasta", "fastq")) {
-    stop("Invalid file_format. Choose from fasta or fastq.")
+  # Validate input_format
+  if (!input_format %in% c("fasta", "fastq")) {
+    stop("Invalid input_format. Choose from fasta or fastq.")
   }
 
-  # If file_format is "fasta", fastqout and fastqout_rev can not be defined
-  if (file_format == "fasta") {
+  # Validate output_format
+  if (!output_format %in% c("fasta", "fastq")) {
+    stop("Invalid output_format. Choose from fasta or fastq.")
+  }
+
+  if (input_format == "fasta" && output_format == "fastq") {
+    stop("Invalid output_format when input_format is 'fasta'")
+  }
+
+  # If input_format is "fasta", fastqout and fastqout_rev can not be defined
+  if (input_format == "fasta") {
     if (!is.null(fastqout) || !is.null(fastqout_rev)) {
-      stop("When file_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
+      stop("When input_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
     }
   }
 
-  # If file_format is "fastq", fastaout and fastaout_rev can not be defined
-  if (file_format == "fastq") {
+  # If output_format is "fastq", fastaout and fastaout_rev can not be defined
+  if (output_format == "fastq") {
     if (!is.null(fastaout) || !is.null(fastaout_rev)) {
-      stop("When file_format is defined as 'fastq', 'fastaout' and 'fastaout_rev' cannot be used. Use 'fastqout' and 'fastqout_rev' instead.")
+      stop("When output_format is defined as 'fastq', 'fastaout' and 'fastaout_rev' cannot be used. Use 'fastqout' and 'fastqout_rev' instead.")
     }
   }
 
   # If reverse is specified, ensure paired output parameters are both NULL or both character strings
   if (!is.null(reverse)) {
-    if (file_format == "fasta") {
+    if (output_format == "fasta") {
       # Check that both fastaout and fastaout_rev are NULL or both are character strings
       if ((is.null(fastaout) && !is.null(fastaout_rev)) ||
           (!is.null(fastaout) && is.null(fastaout_rev))) {
-        stop("When 'reverse' is specified and file_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
+        stop("When 'reverse' is specified and output_format is 'fasta', both 'fastaout' and 'fastaout_rev' must be NULL or both specified as character strings.")
       }
     }
 
-    if (file_format == "fastq") {
+    if (output_format == "fastq") {
       # Check that both fastqout and fastqout_rev are NULL or both are character strings
       if ((is.null(fastqout) && !is.null(fastqout_rev)) ||
           (!is.null(fastqout) && is.null(fastqout_rev))) {
-        stop("When 'reverse' is specified and file_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
+        stop("When 'reverse' is specified and output_format is 'fastq', both 'fastqout' and 'fastqout_rev' must be NULL or both specified as character strings.")
       }
     }
   }
@@ -208,8 +220,8 @@ vs_fastx_trim_filt <- function(fastx_input,
     }
   }, add = TRUE)
 
-  # Handle input when file_format = "fasta"
-  if (file_format == "fasta") {
+  # Handle input when input_format = "fasta"
+  if (input_format == "fasta") {
 
     # Handle input for primary sequences: file or tibble
     if (!is.character(fastx_input)){
@@ -264,8 +276,8 @@ vs_fastx_trim_filt <- function(fastx_input,
     }
   }
 
-  # Handle input when file_format = "fastq"
-  if (file_format == "fastq") {
+  # Handle input when input_format = "fastq"
+  if (input_format == "fastq") {
 
     # Handle input for primary sequences: file or tibble
     if (!is.character(fastx_input)){
@@ -321,7 +333,7 @@ vs_fastx_trim_filt <- function(fastx_input,
   }
 
   # Handle output for primary sequences
-  if (file_format == "fasta") {
+  if (output_format == "fasta") {
     if (is.null(fastaout)) {
       outfile_fasta <- tempfile(pattern = "filtered_primary_", fileext = ".fa")
       temp_files <- c(temp_files, outfile_fasta)
@@ -330,7 +342,7 @@ vs_fastx_trim_filt <- function(fastx_input,
     }
   }
 
-  if (file_format == "fastq") {
+  if (output_format == "fastq") {
     if (is.null(fastqout)) {
       outfile_fastq <- tempfile(pattern = "filtered_primary_", fileext = ".fq")
       temp_files <- c(temp_files, outfile_fastq)
@@ -341,7 +353,7 @@ vs_fastx_trim_filt <- function(fastx_input,
 
   # Handle output for reverse sequences
   if (!is.null(reverse)) {
-    if (file_format == "fasta") {
+    if (output_format == "fasta") {
       if (is.null(fastaout_rev)) {
         outfile_fasta_rev <- tempfile(pattern = "filtered_reverse_", fileext = ".fa")
         temp_files <- c(temp_files, outfile_fasta_rev)
@@ -350,7 +362,7 @@ vs_fastx_trim_filt <- function(fastx_input,
       }
     }
 
-    if (file_format == "fastq") {
+    if (output_format == "fastq") {
       if (is.null(fastqout_rev)) {
         outfile_fastq_rev <- tempfile(pattern = "filtered_reverse_", fileext = ".fq")
         temp_files <- c(temp_files, outfile_fastq_rev)
@@ -419,13 +431,13 @@ vs_fastx_trim_filt <- function(fastx_input,
     args <- c(args, "--fastq_stripleft", stripleft)
   }
 
-  # Add output files based on file_format
-  if (file_format == "fastq") {
+  # Add output files based on output_format
+  if (output_format == "fastq") {
     args <- c(args, "--fastqout", outfile_fastq)
     if (!is.null(reverse)) {
       args <- c(args, "--fastqout_rev", outfile_fastq_rev)
     }
-  } else if(file_format == "fasta") {
+  } else if(output_format == "fasta") {
     args <- c(args, "--fastaout", outfile_fasta, "--fasta_width", fasta_width)
     if (!is.null(reverse)) {
       args <- c(args, "--fastaout_rev", outfile_fasta_rev)
@@ -444,8 +456,8 @@ vs_fastx_trim_filt <- function(fastx_input,
                             stderr = TRUE)
 
   # Handle output if output files are NULL
-  if ((file_format == "fasta" && is.null(fastaout)) ||
-      (file_format == "fastq" && is.null(fastqout))) {
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
 
     # Extract statistics
     if (!is.null(reverse)){
@@ -455,17 +467,17 @@ vs_fastx_trim_filt <- function(fastx_input,
     }
 
     # Process primary sequences
-    if (file_format == "fasta") {
+    if (output_format == "fasta") {
       filt_seqs <- microseq::readFasta(outfile_fasta)
-    } else if (file_format == "fastq") {
+    } else if (output_format == "fastq") {
       filt_seqs <- microseq::readFastq(outfile_fastq)
     }
 
     # Process reverse sequences if provided
     if (!is.null(reverse)) {
-      if (file_format == "fasta") {
+      if (output_format == "fasta") {
         filt_reverse <- microseq::readFasta(outfile_fasta_rev)
-      } else if (file_format == "fastq") {
+      } else if (output_format == "fastq") {
         filt_reverse <- microseq::readFastq(outfile_fastq_rev)
       }
     }
@@ -478,8 +490,8 @@ vs_fastx_trim_filt <- function(fastx_input,
   }
 
   # Return results
-  if ((file_format == "fasta" && is.null(fastaout)) ||
-      (file_format == "fastq" && is.null(fastqout))) {
+  if ((output_format == "fasta" && is.null(fastaout)) ||
+      (output_format == "fastq" && is.null(fastqout))) {
     return(filt_seqs)
   } else {
     return(invisible(NULL))

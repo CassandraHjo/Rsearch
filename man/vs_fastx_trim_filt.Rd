@@ -9,7 +9,8 @@
 vs_fastx_trim_filt(
   fastx_input,
   reverse = NULL,
-  file_format = "fastq",
+  input_format = "fastq",
+  output_format = "fastq",
   maxee_rate = 0.01,
   minlen = 1,
   maxlen = NULL,
@@ -37,8 +38,9 @@ vs_fastx_trim_filt(
 paired sequences, containing reverse reads. If provided, it will be processed alongside
 \code{fastx_input}. Defaults to \code{NULL}. See Details.}
 
-\item{file_format}{Format of input files \code{fastx_input} (and \code{reverse}), and
-desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
+\item{input_format}{Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).}
+
+\item{output_format}{The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
 
 \item{maxee_rate}{Threshold for average expected error. Numeric value ranging form
 \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.}
@@ -97,11 +99,11 @@ If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 A tibble or \code{NULL}.
 
 If output files are not specified, a tibble containing the filtered reads from \code{fastx_input}
-in the format specified by \code{file_format} is returned. If output files are specified,
+in the format specified by \code{output_format} is returned. If output files are specified,
 results are written to file and nothing is returned.
 
 If \code{reverse} is specified, the resulting tibble containing the trimmed and/or filtered reverse reads
-in the format specified by \code{file_format} is an attribute, called \code{"reverse"}, to the primary table.
+in the format specified by \code{output_format} is an attribute, called \code{"reverse"}, to the primary table.
 
 When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics},
 is an attribute, called \code{"statistics"}, to the primary filtering tibble.
@@ -115,7 +117,7 @@ Trim and/or filters biological sequences (DNA) in the FASTA/FASTQ format.
 The function trims and/or filters sequences from the input FASTA/FASTQ
 file or object based on the specified options, using \code{vsearch}.
 If a \code{reverse} input is provided, these reads are processed in the same way.
-The the format of the output is determined by \code{file_format}.
+The the format of the output is determined by \code{output_format}.
 
 \code{fastx_input} and \code{reverse} can either be FASTA/FASTQ files or objects.
 FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
@@ -130,7 +132,7 @@ pass them separately to this function, get two result files/objects,  and then
 use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 
 Note that certain options are not compatible with both file formats. For instance,
-options that trim or filter sequences based on quality scores are unavailable when the \code{file_format}
+options that trim or filter sequences based on quality scores are unavailable when the \code{input_format}
 is set to \code{"fasta"}.
 Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
 for more details.
@@ -139,7 +141,7 @@ If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout
 are specified, the remaining sequences after trimming and/or filtering are output
 to these files in either FASTA or FASTQ format.
 If unspecified (\code{NULL}), results are returned as a tibble, and no output is
-written to file. \code{file_format} has to match the desired output files/objects.
+written to file. \code{output_format} has to match the desired output files/objects.
 
 Sequences with an average expected error greater than the specified \code{maxee_rate} are discarded.
 For a given sequence, the average expected error is the sum of error probabilities
@@ -159,14 +161,16 @@ fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_samp
 reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 
 # Define other arguments
-file_format <- "fastq"
+input_format <- "fastq"
+output_format <- "fastq"
 maxee_rate <- 0.01
 minlen <- 0
 
 # Execute filtering, with tibble as output
 filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                 reverse = reverse,
-                                file_format = file_format,
+                                input_format = input_format,
+                                output_format = output_format,
                                 maxee_rate = maxee_rate,
                                 minlen = minlen)
 
