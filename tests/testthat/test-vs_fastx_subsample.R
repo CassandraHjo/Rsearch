@@ -1,24 +1,50 @@
-test_that("error when wrong file_format", {
+test_that("error when wrong input_format", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file_format <- "fastx"
+  input_format <- "fastx"
   sample_size <- 10
 
   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-                                  file_format = file_format,
+                                  input_format = input_format,
                                   sample_size = sample_size),
-               "Invalid file_format. Choose from fasta or fastq.")
+               "Invalid input_format. Choose from fasta or fastq.")
+})
+
+test_that("error when wrong output_format", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  output_format <- "fastx"
+  sample_size <- 10
+
+  expect_error(vs_fastx_subsample(fastx_input = fastx_input,
+                                  output_format = output_format,
+                                  sample_size = sample_size),
+               "Invalid output_format. Choose from fasta or fastq.")
+})
+
+test_that("error when input_format is fasta and output_format is fastq", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
+  input_format <- "fasta"
+  output_format <- "fastq"
+
+  expect_error(vs_fastx_subsample(fastx_input = fastx_input,
+                                input_format = input_format,
+                                output_format = output_format),
+               "Invalid output_format when input_format is 'fasta'")
 })
 
 test_that("error if neither sample_size or sample_pct is specified", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- NULL
   sample_pct <- NULL
 
   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-                                  file_format = file_format,
+                                  input_format = input_format,
+                                  output_format = output_format,
                                   sample_size = sample_size,
                                   sample_pct = sample_pct),
                "Either sample_size or sample_pct must be specified.")
@@ -27,41 +53,47 @@ test_that("error if neither sample_size or sample_pct is specified", {
 test_that("error if both sample_size and sample_pct are specified", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 10
   sample_pct <- 10.0
 
   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-                                  file_format = file_format,
+                                  input_format = input_format,
+                                  output_format = output_format,
                                   sample_size = sample_size,
                                   sample_pct = sample_pct),
                "Only specify one of the following parameters, not both: sample_size, sample_pct ")
 })
 
-test_that("error when fastx_input has incorrect columns if input is tibble and file_format = 'fastq'", {
+test_that("error when fastx_input has incorrect columns if input is fastq tibble", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(-Header)
 
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 10
 
   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-                                  file_format = file_format,
+                                  input_format = input_format,
+                                  output_format = output_format,
                                   sample_size = sample_size),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
-test_that("error when fastx_input has incorrect columns if input is tibble and file_format = 'fasta'", {
+test_that("error when fastx_input has incorrect columns if input is fasta tibble", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
     dplyr::select(Header)
 
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
   sample_size <- 10
 
   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-                                  file_format = file_format,
+                                  input_format = input_format,
+                                  output_format = output_format,
                                   sample_size = sample_size),
                "FASTA object must contain columns: Header and Sequence")
 })
@@ -81,13 +113,15 @@ test_that("subsample fastq file with size, and return fastq file", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   fastx_output <- withr::local_tempfile()
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 100
   randseed <- 1
 
   return_value <- vs_fastx_subsample(fastx_input = fastx_input,
                                      fastx_output = fastx_output,
-                                     file_format = file_format,
+                                     input_format = input_format,
+                                     output_format = output_format,
                                      sample_size = sample_size,
                                      randseed = randseed
   )
@@ -103,13 +137,15 @@ test_that("subsample fastq file with size, and return fastq tibble", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   fastx_output <- NULL
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 100
   randseed <- 1
 
   subsample_sample1_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
                                              fastx_output = fastx_output,
-                                             file_format = file_format,
+                                             input_format = input_format,
+                                             output_format = output_format,
                                              sample_size = sample_size,
                                              randseed = randseed
   )
@@ -123,13 +159,15 @@ test_that("subsample fasta file with pct, and return fasta file", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fa")
   fastx_output <- withr::local_tempfile()
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
   sample_pct <- 10.0
   randseed <- 1
 
   return_value <- vs_fastx_subsample(fastx_input = fastx_input,
                                      fastx_output = fastx_output,
-                                     file_format = file_format,
+                                     input_format = input_format,
+                                     output_format = output_format,
                                      sample_pct = sample_pct,
                                      randseed = randseed
   )
@@ -145,13 +183,15 @@ test_that("subsample fasta file with pct, and return fasta tibble", {
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fa")
   fastx_output <- NULL
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
   sample_pct <- 10.0
   randseed <- 1
 
   subsample_sample1_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
                                              fastx_output = fastx_output,
-                                             file_format = file_format,
+                                             input_format = input_format,
+                                             output_format = output_format,
                                              sample_pct = sample_pct,
                                              randseed = randseed
   )
@@ -165,14 +205,16 @@ test_that("subsample fastq file with size, and return fastq file with relabeling
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   fastx_output <- withr::local_tempfile()
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 100
   randseed <- 1
   relabel <- "OTU"
 
   return_value <- vs_fastx_subsample(fastx_input = fastx_input,
                                      fastx_output = fastx_output,
-                                     file_format = file_format,
+                                     input_format = input_format,
+                                     output_format = output_format,
                                      sample_size = sample_size,
                                      randseed = randseed,
                                      relabel = relabel
@@ -189,14 +231,16 @@ test_that("subsample fastq file with size, and return fastq file with sha1 relab
 
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   fastx_output <- withr::local_tempfile()
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 100
   randseed <- 1
   relabel_sha1 <- TRUE
 
   return_value <- vs_fastx_subsample(fastx_input = fastx_input,
                                      fastx_output = fastx_output,
-                                     file_format = file_format,
+                                     input_format = input_format,
+                                     output_format = output_format,
                                      sample_size = sample_size,
                                      randseed = randseed,
                                      relabel_sha1 = relabel_sha1
@@ -213,13 +257,15 @@ test_that("subsample fastq tibble with size, and return fastq tibble", {
 
   fastx_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
   fastx_output <- NULL
-  file_format <- "fastq"
+  input_format <- "fastq"
+  output_format <- "fastq"
   sample_size <- 100
   randseed <- 1
 
   subsample_sample1_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
                                              fastx_output = fastx_output,
-                                             file_format = file_format,
+                                             input_format = input_format,
+                                             output_format = output_format,
                                              sample_size = sample_size,
                                              randseed = randseed
   )
@@ -233,13 +279,15 @@ test_that("subsample fasta tibble with size, and return fasta tibble", {
 
   fastx_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
   fastx_output <- NULL
-  file_format <- "fasta"
+  input_format <- "fasta"
+  output_format <- "fasta"
   sample_size <- 100
   randseed <- 1
 
   subsample_sample1_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
                                              fastx_output = fastx_output,
-                                             file_format = file_format,
+                                             input_format = input_format,
+                                             output_format = output_format,
                                              sample_size = sample_size,
                                              randseed = randseed
   )

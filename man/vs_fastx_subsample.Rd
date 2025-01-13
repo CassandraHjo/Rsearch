@@ -9,7 +9,8 @@
 vs_fastx_subsample(
   fastx_input,
   fastx_output = NULL,
-  file_format = "fastq",
+  input_format = "fastq",
+  output_format = "fastq",
   sample_pct = NULL,
   sample_size = NULL,
   randseed = NULL,
@@ -25,11 +26,12 @@ vs_fastx_subsample(
 \item{fastx_input}{A FASTQ/FASTA file path or object. See Details.}
 
 \item{fastx_output}{Name of the output file for dereplicated reads from \code{fastx_input}.
-File can be in either FASTA or FASTQ format, depending on \code{file_format}.
+File can be in either FASTA or FASTQ format, depending on \code{output_format}.
 If \code{NULL} (default) no sequences will be written to file. See Details.}
 
-\item{file_format}{Format of input file \code{fastx_input}, and desired output format
-for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
+\item{input_format}{Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).}
+
+\item{output_format}{The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
 
 \item{sample_pct}{The given percentage of the input sequences to be subsampled.
 Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.}
@@ -80,9 +82,9 @@ FASTA objects are tibbles that contain the columns \code{Header} and \code{Seque
 FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 
 If \code{fastx_output} is specified, the sampled sequences are output to this
-file in format given by \code{file_format}.
+file in format given by \code{output_format}.
 If unspecified (\code{NULL}) the result is returned as a FASTA/FASTQ object,
-depending on \code{file_format}.
+depending on \code{output_format}.
 
 FASTA files produced by\code{vsearch} are wrapped
 (sequences are written on lines of integer nucleotides).
@@ -93,13 +95,15 @@ FASTA files produced by\code{vsearch} are wrapped
 # Define arguments
 fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
 fastx_output <- NULL
-file_format <- "fastq"
+input_format <- "fastq"
+output_format <- "fastq"
 sample_size <- 1
 
 # Subsample sequences, with tibble as output
 subsample_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
                                    fastx_output = fastx_output,
-                                   file_format = file_format,
+                                   input_format = input_format,
+                                   output_format = output_format,
                                    sample_size = sample_size)
 }
 
