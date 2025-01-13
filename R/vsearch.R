@@ -23,6 +23,10 @@
 #' @export
 #'
 set_vsearch_executable <- function(vsearch_executable){
+  if(vsearch_executable != "vsearch"){
+    vsearch_executable <- stringr::str_remove(vsearch_executable, "vsearch$|vsearch.exe$")
+    vsearch_executable <- file.path(vsearch_executable, "vsearch")
+  }
   options(Rsearch.vsearch_executable = vsearch_executable)
   save(vsearch_executable, file = system.file("extdata/vsearch_executable.rds", package = "Rsearch"))
 }
