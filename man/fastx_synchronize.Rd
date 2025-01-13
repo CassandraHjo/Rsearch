@@ -36,7 +36,7 @@ Tibble or \code{NULL}.
 
 If output files are not specified, a tibble containing the synchronized reads
 from \code{file1} is returned. The tibble containing the synchronized
-reads from \code{file2} is an attribute, called \code{"sync_file2"}, to the primary tibble.
+reads from \code{file2} is an attribute, called \code{"reverse"}, to the primary tibble.
 If output files, \code{file1_out} or \code{file2_out} are specified, results are written to
 file and nothing is returned.
 }
@@ -75,7 +75,7 @@ sync_seqs <- fastx_synchronize(file1 = file1,
 
 # Extract tibbles with synchronized sequences
 R1_sync <- sync_seqs
-R2_sync <- attr(sync_seqs, "sync_file2")
+R2_sync <- attr(sync_seqs, "reverse")
 }
 
 }
