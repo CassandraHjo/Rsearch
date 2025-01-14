@@ -7,8 +7,8 @@
 #' @param fastx_output Name of the output file for dereplicated reads from \code{fastx_input}.
 #' File can be in either FASTA or FASTQ format, depending on \code{output_format}.
 #' If \code{NULL} (default) no sequences will be written to file. See Details.
-#' @param input_format Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).
 #' @param output_format The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
+#' If \code{fastx_input} is a FASTA file path or object, \code{output_format} can not be \code{"fastq"}.
 #' @param sample_pct The given percentage of the input sequences to be subsampled.
 #' Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.
 #' @param sample_size The given number of sequences to extract.
@@ -57,14 +57,12 @@
 #' # Define arguments
 #' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
 #' fastx_output <- NULL
-#' input_format <- "fastq"
 #' output_format <- "fastq"
 #' sample_size <- 1
 #'
 #' # Subsample sequences, with tibble as output
 #' subsample_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
 #'                                    fastx_output = fastx_output,
-#'                                    input_format = input_format,
 #'                                    output_format = output_format,
 #'                                    sample_size = sample_size)
 #' }
@@ -76,7 +74,6 @@
 #'
 vs_fastx_subsample <- function(fastx_input,
                                fastx_output = NULL,
-                               input_format = "fastq",
                                output_format = "fastq",
                                sample_pct = NULL,
                                sample_size = NULL,
@@ -92,18 +89,9 @@ vs_fastx_subsample <- function(fastx_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
-  # Validate input_format
-  if (!input_format %in% c("fasta", "fastq")) {
-    stop("Invalid input_format. Choose from fasta or fastq.")
-  }
-
   # Validate output_format
   if (!output_format %in% c("fasta", "fastq")) {
     stop("Invalid output_format. Choose from fasta or fastq.")
-  }
-
-  if (input_format == "fasta" && output_format == "fastq") {
-    stop("Invalid output_format when input_format is 'fasta'")
   }
 
   # Validate that only sample_pct or sample_size is specified
@@ -129,40 +117,40 @@ vs_fastx_subsample <- function(fastx_input,
     }
   }, add = TRUE)
 
-  # Handle input_format = "fasta"
-  if (input_format == "fasta") {
-    # Handle input: file or tibble
-    if (!is.character(fastx_input)){
-      # Validate tibble
-      required_cols <- c("Header", "Sequence")
-      if (!all(required_cols %in% colnames(fastx_input))) {
-        stop("FASTA object must contain columns: Header and Sequence")
-      }
-      temp_file <- tempfile(pattern = "input", fileext = ".fa")
-      temp_files <- c(temp_files, temp_file)
-      microseq::writeFasta(fastx_input, temp_file)
-      input_file <- temp_file
-    } else {
-      input_file <- fastx_input
-    }
-  }
+  # Handle input
+  if (!is.character(fastx_input)){
+    if ("Quality" %in% colnames(fastx_input)){
+      input_format <- "fastq"
 
-  # Handle input_format = "fastq"
-  if (input_format == "fastq") {
-    # Handle input: file or tibble
-    if (!is.character(fastx_input)){
       # Validate tibble
       required_cols <- c("Header", "Sequence", "Quality")
       if (!all(required_cols %in% colnames(fastx_input))) {
         stop("FASTQ object must contain columns: Header, Sequence, Quality")
       }
+
       temp_file <- tempfile(pattern = "input", fileext = ".fq")
       temp_files <- c(temp_files, temp_file)
       microseq::writeFastq(fastx_input, temp_file)
       input_file <- temp_file
     } else {
-      input_file <- fastx_input
+      input_format <- "fasta"
+
+      if (output_format == "fastq") {
+        stop("Invalid output_format when input tibble is of type 'fasta'")
+      }
+
+      required_cols <- c("Header", "Sequence")
+      if (!all(required_cols %in% colnames(fastx_input))) {
+        stop("FASTA object must contain columns: Header and Sequence")
+      }
+
+      temp_file <- tempfile(pattern = "input", fileext = ".fa")
+      temp_files <- c(temp_files, temp_file)
+      microseq::writeFasta(fastx_input, temp_file)
+      input_file <- temp_file
     }
+  } else {
+    input_file <- fastx_input
   }
 
   # Handle output_format = "fasta"

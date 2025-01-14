@@ -9,7 +9,6 @@
 vs_fastx_subsample(
   fastx_input,
   fastx_output = NULL,
-  input_format = "fastq",
   output_format = "fastq",
   sample_pct = NULL,
   sample_size = NULL,
@@ -29,9 +28,8 @@ vs_fastx_subsample(
 File can be in either FASTA or FASTQ format, depending on \code{output_format}.
 If \code{NULL} (default) no sequences will be written to file. See Details.}
 
-\item{input_format}{Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).}
-
-\item{output_format}{The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
+\item{output_format}{The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
+If \code{fastx_input} is a FASTA file path or object, \code{output_format} can not be \code{"fastq"}.}
 
 \item{sample_pct}{The given percentage of the input sequences to be subsampled.
 Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.}
@@ -95,14 +93,12 @@ FASTA files produced by\code{vsearch} are wrapped
 # Define arguments
 fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
 fastx_output <- NULL
-input_format <- "fastq"
 output_format <- "fastq"
 sample_size <- 1
 
 # Subsample sequences, with tibble as output
 subsample_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
                                    fastx_output = fastx_output,
-                                   input_format = input_format,
                                    output_format = output_format,
                                    sample_size = sample_size)
 }
