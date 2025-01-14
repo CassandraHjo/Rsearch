@@ -120,7 +120,6 @@ vs_fastx_subsample <- function(fastx_input,
   # Handle input
   if (!is.character(fastx_input)){
     if ("Quality" %in% colnames(fastx_input)){
-      input_format <- "fastq"
 
       # Validate tibble
       required_cols <- c("Header", "Sequence", "Quality")
@@ -133,7 +132,6 @@ vs_fastx_subsample <- function(fastx_input,
       microseq::writeFastq(fastx_input, temp_file)
       input_file <- temp_file
     } else {
-      input_format <- "fasta"
 
       if (output_format == "fastq") {
         stop("Invalid output_format when input tibble is of type 'fasta'")
