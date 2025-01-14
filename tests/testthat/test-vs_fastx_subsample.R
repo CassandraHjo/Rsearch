@@ -1,15 +1,3 @@
-# test_that("error when wrong input_format", {
-#
-#   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-#   input_format <- "fastx"
-#   sample_size <- 10
-#
-#   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-#                                   input_format = input_format,
-#                                   sample_size = sample_size),
-#                "Invalid input_format. Choose from fasta or fastq.")
-# })
-
 test_that("error when wrong output_format", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
