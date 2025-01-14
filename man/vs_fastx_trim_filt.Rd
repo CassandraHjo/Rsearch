@@ -9,7 +9,6 @@
 vs_fastx_trim_filt(
   fastx_input,
   reverse = NULL,
-  input_format = "fastq",
   output_format = "fastq",
   maxee_rate = 0.01,
   minlen = 1,
@@ -37,8 +36,6 @@ vs_fastx_trim_filt(
 \item{reverse}{An optional FASTA/FASTQ file path or object, if the input consists of
 paired sequences, containing reverse reads. If provided, it will be processed alongside
 \code{fastx_input}. Defaults to \code{NULL}. See Details.}
-
-\item{input_format}{Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).}
 
 \item{output_format}{The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
 
@@ -132,8 +129,8 @@ pass them separately to this function, get two result files/objects,  and then
 use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 
 Note that certain options are not compatible with both file formats. For instance,
-options that trim or filter sequences based on quality scores are unavailable when the \code{input_format}
-is set to \code{"fasta"}.
+options that trim or filter sequences based on quality scores are unavailable when
+the input is of type \code{"fasta"}.
 Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
 for more details.
 
@@ -161,7 +158,6 @@ fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_samp
 reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 
 # Define other arguments
-input_format <- "fastq"
 output_format <- "fastq"
 maxee_rate <- 0.01
 minlen <- 0
@@ -169,7 +165,6 @@ minlen <- 0
 # Execute filtering, with tibble as output
 filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                 reverse = reverse,
-                                input_format = input_format,
                                 output_format = output_format,
                                 maxee_rate = maxee_rate,
                                 minlen = minlen)

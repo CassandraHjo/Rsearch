@@ -6,7 +6,6 @@
 #' @param reverse An optional FASTA/FASTQ file path or object, if the input consists of
 #' paired sequences, containing reverse reads. If provided, it will be processed alongside
 #' \code{fastx_input}. Defaults to \code{NULL}. See Details.
-#' @param input_format Format of input file or object \code{fastx_input}: \code{"fasta"} or \code{"fastq"} (default).
 #' @param output_format The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
 #' @param maxee_rate Threshold for average expected error. Numeric value ranging form
 #' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.
@@ -62,8 +61,8 @@
 #' use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 #'
 #' Note that certain options are not compatible with both file formats. For instance,
-#' options that trim or filter sequences based on quality scores are unavailable when the \code{input_format}
-#' is set to \code{"fasta"}.
+#' options that trim or filter sequences based on quality scores are unavailable when
+#' the input is of type \code{"fasta"}.
 #' Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
 #' for more details.
 #'
@@ -106,7 +105,6 @@
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
 #'
 #' # Define other arguments
-#' input_format <- "fastq"
 #' output_format <- "fastq"
 #' maxee_rate <- 0.01
 #' minlen <- 0
@@ -114,7 +112,6 @@
 #' # Execute filtering, with tibble as output
 #' filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
 #'                                 reverse = reverse,
-#'                                 input_format = input_format,
 #'                                 output_format = output_format,
 #'                                 maxee_rate = maxee_rate,
 #'                                 minlen = minlen)
@@ -135,7 +132,6 @@
 #'
 vs_fastx_trim_filt <- function(fastx_input,
                                reverse = NULL,
-                               input_format = "fastq",
                                output_format = "fastq",
                                maxee_rate = 0.01,
                                minlen = 1,
@@ -160,31 +156,22 @@ vs_fastx_trim_filt <- function(fastx_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
-  # Validate input_format
-  if (!input_format %in% c("fasta", "fastq")) {
-    stop("Invalid input_format. Choose from fasta or fastq.")
-  }
-
   # Validate output_format
   if (!output_format %in% c("fasta", "fastq")) {
     stop("Invalid output_format. Choose from fasta or fastq.")
-  }
-
-  if (input_format == "fasta" && output_format == "fastq") {
-    stop("Invalid output_format when input_format is 'fasta'")
-  }
-
-  # If input_format is "fasta", fastqout and fastqout_rev can not be defined
-  if (input_format == "fasta") {
-    if (!is.null(fastqout) || !is.null(fastqout_rev)) {
-      stop("When input_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
-    }
   }
 
   # If output_format is "fastq", fastaout and fastaout_rev can not be defined
   if (output_format == "fastq") {
     if (!is.null(fastaout) || !is.null(fastaout_rev)) {
       stop("When output_format is defined as 'fastq', 'fastaout' and 'fastaout_rev' cannot be used. Use 'fastqout' and 'fastqout_rev' instead.")
+    }
+  }
+
+  # If output_format is "fasta", fastqout and fastqout_rev can not be defined
+  if (output_format == "fasta") {
+    if (!is.null(fastqout) || !is.null(fastqout_rev)) {
+      stop("When output_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
     }
   }
 
@@ -220,115 +207,102 @@ vs_fastx_trim_filt <- function(fastx_input,
     }
   }, add = TRUE)
 
-  # Handle input when input_format = "fasta"
-  if (input_format == "fasta") {
+  # Handle input for primary sequences
+  if (!is.character(fastx_input)){
+    if ("Quality" %in% colnames(fastx_input)){
 
-    # Handle input for primary sequences: file or tibble
-    if (!is.character(fastx_input)){
-      # Ensure required columns exist
-      required_cols <- c("Header", "Sequence")
-      if (!all(required_cols %in% colnames(fastx_input))) {
-        stop("FASTA object must contain columns: Header and Sequence")
-      }
-      temp_file_primary <- tempfile(pattern = "primary_input", fileext = ".fa")
-      microseq::writeFasta(fastx_input, temp_file_primary)
-      temp_files <- c(temp_files, temp_file_primary)
-
-      fastx_file <- temp_file_primary
-
-      # Capture original name for statistics table later
-      fastx_input_name <- as.character(substitute(fastx_input))
-
-    } else {
-      if (!file.exists(fastx_input)) stop("Cannot find input FASTA file: ", fastx_input)
-
-      fastx_file <- fastx_input
-
-      # Capture original name for statistics table later
-      fastx_input_name <- basename(fastx_input)
-    }
-
-    # Handle input for reverse sequences: file or tibble
-    if (!is.null(reverse)){
-      if (!is.character(reverse)){
-        # Ensure required columns exist
-        required_cols_rev <- c("Header", "Sequence")
-        if (!all(required_cols_rev %in% colnames(reverse))) {
-          stop("Reverse FASTA object must contain columns: Header and Sequence")
-        }
-        temp_reverse_file <- tempfile(pattern = "reverse_temp_", fileext = ".fa")
-        microseq::writeFasta(reverse, temp_reverse_file)
-        temp_files <- c(temp_files, temp_reverse_file)
-
-        reverse_file <- temp_reverse_file
-
-        # Capture original name for statistics table later
-        reverse_name <- as.character(substitute(reverse))
-
-      } else {
-        if (!file.exists(reverse)) stop("Cannot find reverse FASTA file: ", reverse)
-
-        reverse_file <- reverse
-
-        # Capture original name for statistics table later
-        reverse_name <- basename(reverse)
-      }
-    }
-  }
-
-  # Handle input when input_format = "fastq"
-  if (input_format == "fastq") {
-
-    # Handle input for primary sequences: file or tibble
-    if (!is.character(fastx_input)){
-      # Ensure required columns exist
+      # Validate tibble
       required_cols <- c("Header", "Sequence", "Quality")
       if (!all(required_cols %in% colnames(fastx_input))) {
         stop("FASTQ object must contain columns: Header, Sequence, Quality")
       }
+
       temp_file_primary <- tempfile(pattern = "primary_input", fileext = ".fq")
-      microseq::writeFastq(fastx_input, temp_file_primary)
       temp_files <- c(temp_files, temp_file_primary)
+      microseq::writeFastq(fastx_input, temp_file_primary)
 
       fastx_file <- temp_file_primary
 
       # Capture original name for statistics table later
       fastx_input_name <- as.character(substitute(fastx_input))
-
     } else {
-      if (!file.exists(fastx_input)) stop("Cannot find input FASTQ file: ", fastx_input)
 
-      fastx_file <- fastx_input
+      if (output_format == "fastq") {
+        stop("Invalid output_format when input tibble is of type 'fasta'")
+      }
+
+      # Validate tibble
+      required_cols <- c("Header", "Sequence")
+      if (!all(required_cols %in% colnames(fastx_input))) {
+        stop("FASTA object must contain columns: Header and Sequence")
+      }
+
+      temp_file_primary <- tempfile(pattern = "primary_input", fileext = ".fa")
+      temp_files <- c(temp_files, temp_file_primary)
+      microseq::writeFasta(fastx_input, temp_file_primary)
+
+      fastx_file <- temp_file_primary
 
       # Capture original name for statistics table later
-      fastx_input_name <- basename(fastx_input)
+      fastx_input_name <- as.character(substitute(fastx_input))
     }
+  } else {
+    if (!file.exists(fastx_input)) stop("Cannot find input file: ", fastx_input)
 
-    # Handle input for reverse sequences: file or tibble
-    if (!is.null(reverse)){
-      if (!is.character(reverse)){
-        # Ensure required columns exist
-        required_cols_rev <- c("Header", "Sequence", "Quality")
-        if (!all(required_cols_rev %in% colnames(reverse))) {
+    fastx_file <- fastx_input
+
+    # Capture original name for statistics table later
+    fastx_input_name <- basename(fastx_input)
+  }
+
+  # Handle input for reverse sequences
+  if (!is.null(reverse)){
+    if (!is.character(reverse)){
+      if ("Quality" %in% colnames(reverse)){
+
+        # Validate tibble
+        required_cols <- c("Header", "Sequence", "Quality")
+        if (!all(required_cols %in% colnames(reverse))) {
           stop("Reverse FASTQ object must contain columns: Header, Sequence, Quality")
         }
-        temp_reverse_file <- tempfile(pattern = "reverse_temp_", fileext = ".fq")
-        microseq::writeFastq(reverse, temp_reverse_file)
-        temp_files <- c(temp_files, temp_reverse_file)
 
-        reverse_file <- temp_reverse_file
+        temp_file_reverse <- tempfile(pattern = "reverse_input", fileext = ".fq")
+        temp_files <- c(temp_files, temp_file_reverse)
+        microseq::writeFastq(reverse, temp_file_reverse)
+
+        reverse_file <- temp_file_reverse
 
         # Capture original name for statistics table later
         reverse_name <- as.character(substitute(reverse))
 
       } else {
-        if (!file.exists(reverse)) stop("Cannot find reverse FASTQ file: ", reverse)
 
-        reverse_file <- reverse
+        if (output_format == "fastq") {
+          stop("Invalid output_format when input tibble is of type 'fasta'")
+        }
+
+        # Validate tibble
+        required_cols <- c("Header", "Sequence")
+        if (!all(required_cols %in% colnames(reverse))) {
+          stop("Reverse FASTA object must contain columns: Header and Sequence")
+        }
+
+        temp_file_reverse <- tempfile(pattern = "reverse_input", fileext = ".fa")
+        temp_files <- c(temp_files, temp_file_reverse)
+        microseq::writeFasta(reverse, temp_file_reverse)
+
+        reverse_file <- temp_file_reverse
 
         # Capture original name for statistics table later
-        reverse_name <- basename(reverse)
+        reverse_name <- as.character(substitute(reverse))
       }
+    } else {
+      if (!file.exists(reverse)) stop("Cannot find reverse file: ", reverse)
+
+      reverse_file <- reverse
+
+      # Capture original name for statistics table later
+      reverse_name <- basename(reverse)
     }
   }
 
