@@ -7,9 +7,11 @@
 vs_optimize_trim(
   fastq_input,
   reverse,
+  stripright_R1_range = c(10, 20, 50),
+  stripright_R2_range = c(10, 20, 50),
   minovlen = 10,
   truncqual = 1,
-  maxee_rate = 1,
+  maxee_rate = 0.01,
   minlen = 1,
   threads = 1
 )
@@ -18,6 +20,14 @@ vs_optimize_trim(
 \item{fastq_input}{A FASTQ file path or object containing (forward) reads.}
 
 \item{reverse}{A FASTQ file path or object containing (reverse) reads See Details.}
+
+\item{stripright_R1_range}{The stripright values to be tested. The number of
+bases stripped from the right end of the forward reads. Defaults to \code{c(0, 10, 50)}.
+The range must be given as a vector with numbers.}
+
+\item{stripright_R2_range}{The stripright values to be tested. The number of
+bases stripped from the right end of the reverse reads. Defaults to \code{c(0, 10, 50)}.
+The range must be given as a vector with numbers.}
 
 \item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
 
@@ -32,14 +42,29 @@ specified base quality score value or lower. Defaults to \code{1}.}
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
-Results table
+A data frame with the following columns:
+\itemize{
+  \item \code{stripright_R1}: The stripright value used on the R1 reads in the trimming.
+  \item \code{stripright_R2}: The stripright value used on the R2 reads in the trimming.
+  \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences with copynumber above 1.
+  \item \code{R1}: The name of the R1 table/file.
+  \item \code{R2}: The name of the R2 table/file.
+}
 }
 \description{
 Optimizes trimming to get the best possible merging results. The function searches for the best parameters by looping through different parameter values for the trimming options.
 }
 \details{
-The function uses \code{\link{vs_fastq_mergepairs}} and \code{\link{vs_fastx_trim_filt}} where the arguments to this function are described in detail.
+The function uses \code{\link{vs_fastq_mergepairs}},
+\code{\link{vs_fastx_trim_filt}}, \code{\link{fastx_synchronize}}, and
+\code{\link{vs_fastx_uniques}} where the arguments to this functions are
+described in detail.
+
+The best possible merging option is measured by the sum of copy numbers after
+dereplication of the merged reads bigger than 1
+(singletons are removed when summing).
 }
 \seealso{
-\code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}}
+\code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
+\code{\link{fastx_synchronize}}, \code{\link{vs_fastx_uniques}}
 }

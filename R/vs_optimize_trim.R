@@ -4,6 +4,12 @@
 #'
 #' @param fastq_input A FASTQ file path or object containing (forward) reads.
 #' @param reverse A FASTQ file path or object containing (reverse) reads See Details.
+#' @param stripright_R1_range The stripright values to be tested. The number of
+#' bases stripped from the right end of the forward reads. Defaults to \code{c(0, 10, 50)}.
+#' The range must be given as a vector with numbers.
+#' @param stripright_R2_range The stripright values to be tested. The number of
+#' bases stripped from the right end of the reverse reads. Defaults to \code{c(0, 10, 50)}.
+#' The range must be given as a vector with numbers.
 #' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
 #' @param truncqual The sequences are truncated starting from the first base with the
 #' specified base quality score value or lower. Defaults to \code{1}.
@@ -13,18 +19,36 @@
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
 #' @details
-#' The function uses \code{\link{vs_fastq_mergepairs}} and \code{\link{vs_fastx_trim_filt}} where the arguments to this function are described in detail.
+#' The function uses \code{\link{vs_fastq_mergepairs}},
+#' \code{\link{vs_fastx_trim_filt}}, \code{\link{fastx_synchronize}}, and
+#' \code{\link{vs_fastx_uniques}} where the arguments to this functions are
+#' described in detail.
 #'
-#' @returns Results table
+#' The best possible merging option is measured by the sum of copy numbers after
+#' dereplication of the merged reads bigger than 1
+#' (singletons are removed when summing).
 #'
-#' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}}
+#' @return A data frame with the following columns:
+#' \itemize{
+#'   \item \code{stripright_R1}: The stripright value used on the R1 reads in the trimming.
+#'   \item \code{stripright_R2}: The stripright value used on the R2 reads in the trimming.
+#'   \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences with copynumber above 1.
+#'   \item \code{R1}: The name of the R1 table/file.
+#'   \item \code{R2}: The name of the R2 table/file.
+#' }
+#'
+#' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
+#' \code{\link{fastx_synchronize}}, \code{\link{vs_fastx_uniques}}
+#'
 #' @export
 #'
 vs_optimize_trim <- function(fastq_input,
                              reverse,
+                             stripright_R1_range = c(10, 20, 50),
+                             stripright_R2_range = c(10, 20, 50),
                              minovlen = 10,
                              truncqual = 1,
-                             maxee_rate = 1,
+                             maxee_rate = 0.01,
                              minlen = 1,
                              threads = 1){
 
@@ -32,22 +56,32 @@ vs_optimize_trim <- function(fastq_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
+
   # Create empty data frame for storing results
   res.df <- data.frame(
     stripright_R1 = numeric(0),
     stripright_R2 = numeric(0),
     sum_size = numeric(0),
-    R1_file = character(),
-    R2_file = character()
+    R1 = character(),
+    R2 = character()
   )
 
-  # Decide which stripping values to use
-  stripright_R1_values <- c(0, 10, 50)
-  stripright_R2_values <- c(0, 10, 50)
+  # Setting up progress bar
+  pb = utils::txtProgressBar(min = 0,
+                             max = length(stripright_R1_range) * length(stripright_R1_range),
+                             initial = 0,
+                             style = 3)
+
+  # Create counting variable
+  stepi <- 0
 
   # Looping
-  for (R1.val in stripright_R1_values) {
-    for (R2.val in stripright_R2_values){
+  for (R1.val in stripright_R1_range) {
+    for (R2.val in stripright_R2_range){
+
+      # Update counting variable and progress bar
+      stepi <- stepi + 1
+      utils::setTxtProgressBar(pb,stepi)
 
       # Trim R1 reads
       trim_R1.df <- vs_fastx_trim_filt(fastx_input = fastq_input,
@@ -73,7 +107,6 @@ vs_optimize_trim <- function(fastq_input,
       sync_R2 <- attr(sync_R1, "reverse")
 
       # Merge R1 and R2 reads
-      # Her er det noe som skjer, som gjør at det blir veldig få reads som merger
       merge.df <- vs_fastq_mergepairs(fastq_input = sync_R1,
                                       reverse = sync_R2,
                                       minovlen = minovlen,
@@ -97,13 +130,20 @@ vs_optimize_trim <- function(fastq_input,
         stripright_R1 = R1.val,
         stripright_R2 = R2.val,
         sum_size = sum(tbl$size),
-        R1_file = as.character(substitute(fastq_input)),
-        R2_file = as.character(substitute(reverse))
+        R1 = as.character(substitute(fastq_input)),
+        R2 = as.character(substitute(reverse))
       )
 
       res.df <- rbind(new_row, res.df)
-
     }
   }
+
+  # Close progress bar
+  close(pb)
+
+  # Sort results table
+  res.df <- res.df |>
+    dplyr::arrange(stripright_R1)
+
   return(res.df)
 }
