@@ -8,8 +8,9 @@ vs_optimize_trim(
   fastq_input,
   reverse,
   minovlen = 10,
-  truncqual = 20,
-  minlen = 0,
+  truncqual = 1,
+  maxee_rate = 1,
+  minlen = 1,
   threads = 1
 )
 }
@@ -21,9 +22,12 @@ vs_optimize_trim(
 \item{minovlen}{The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.}
 
 \item{truncqual}{The sequences are truncated starting from the first base with the
-specified base quality score value or lower. Defaults to \code{20}.}
+specified base quality score value or lower. Defaults to \code{1}.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.}
+\item{maxee_rate}{Threshold for average expected error. Numeric value ranging form
+\code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.}
+
+\item{minlen}{The minimum number of bases a sequence must have to be retained. Defaults to \code{1}. See Details.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }

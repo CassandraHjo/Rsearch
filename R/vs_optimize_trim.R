@@ -6,8 +6,10 @@
 #' @param reverse A FASTQ file path or object containing (reverse) reads See Details.
 #' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
 #' @param truncqual The sequences are truncated starting from the first base with the
-#' specified base quality score value or lower. Defaults to \code{20}.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{0}. See Details.
+#' specified base quality score value or lower. Defaults to \code{1}.
+#' @param maxee_rate Threshold for average expected error. Numeric value ranging form
+#' \code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{1}. See Details.
 #' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
 #'
 #' @details
@@ -21,8 +23,9 @@
 vs_optimize_trim <- function(fastq_input,
                              reverse,
                              minovlen = 10,
-                             truncqual = 20,
-                             minlen = 0,
+                             truncqual = 1,
+                             maxee_rate = 1,
+                             minlen = 1,
                              threads = 1){
 
   # Check if vsearch is available
@@ -33,14 +36,14 @@ vs_optimize_trim <- function(fastq_input,
   res.df <- data.frame(
     stripright_R1 = numeric(0),
     stripright_R2 = numeric(0),
-    num_merged = numeric(0),
+    sum_size = numeric(0),
     R1_file = character(),
     R2_file = character()
   )
 
   # Decide which stripping values to use
-  stripright_R1_values <- c(0, 10, 20, 50, 80, 100)
-  stripright_R2_values <- c(0, 10, 20, 50, 80, 100)
+  stripright_R1_values <- c(0, 10, 50)
+  stripright_R2_values <- c(0, 10, 50)
 
   # Looping
   for (R1.val in stripright_R1_values) {
@@ -49,45 +52,53 @@ vs_optimize_trim <- function(fastq_input,
       # Trim R1 reads
       trim_R1.df <- vs_fastx_trim_filt(fastx_input = fastq_input,
                                        reverse = NULL,
-                                       maxee_rate = NULL,
+                                       maxee_rate = maxee_rate,
                                        minlen = minlen,
                                        truncqual = truncqual,
-                                       truncee = NULL,
                                        stripright = R1.val,
                                        threads = threads)
 
       # Trim R2 reads
-      trim_R2.df <- vs_fastx_trim_filt(fastx_input = fastq_input,
+      trim_R2.df <- vs_fastx_trim_filt(fastx_input = reverse,
                                        reverse = NULL,
-                                       maxee_rate = NULL,
+                                       maxee_rate = maxee_rate,
                                        minlen = minlen,
                                        truncqual = truncqual,
-                                       truncee = NULL,
                                        stripright = R2.val,
                                        threads = threads)
 
       # Sync R1 and R2 files
       sync_R1 <- fastx_synchronize(file1 = trim_R1.df,
                                    file2 = trim_R2.df)
-      sync_R2 <- attr(sync_R1, "sync_file2")
+      sync_R2 <- attr(sync_R1, "reverse")
 
       # Merge R1 and R2 reads
-      merge.df <- vs_merging_lengths(fastq_input = sync_R1,
-                                     reverse = sync_R2,
-                                     minovlen = minovlen,
-                                     minlen = minlen,
-                                     threads = threads)
+      # Her er det noe som skjer, som gjør at det blir veldig få reads som merger
+      merge.df <- vs_fastq_mergepairs(fastq_input = sync_R1,
+                                      reverse = sync_R2,
+                                      minovlen = minovlen,
+                                      output_format = "fasta",
+                                      minlen = minlen,
+                                      threads = threads)
 
-      # Find number of merged read pairs
-      num_merged <- sum(!is.na(merge.df$length_overlap))
+      # Dereplicate merged reads
+      derep.df <- vs_fastx_uniques(fastx_input = merge.df,
+                                   output_format = "fasta",
+                                   relabel_sha1 = TRUE)
+
+      # Find number of reads with size > 1
+      tbl <- derep.df |>
+        dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
+        dplyr::mutate(size = as.numeric(size)) |>
+        dplyr::filter(size > 1)
 
       # Add results to table
       new_row <- data.frame(
         stripright_R1 = R1.val,
         stripright_R2 = R2.val,
-        num_merged = num_merged,
-        R1_file = basename(fastq_input),
-        R2_file = basename(reverse)
+        sum_size = sum(tbl$size),
+        R1_file = as.character(substitute(fastq_input)),
+        R2_file = as.character(substitute(reverse))
       )
 
       res.df <- rbind(new_row, res.df)
