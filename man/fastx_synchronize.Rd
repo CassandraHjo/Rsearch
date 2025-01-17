@@ -32,7 +32,7 @@ File can be in either FASTA or FASTQ format, depending on \code{file_format}.
 If \code{NULL} (default) no sequences will be written to file. See Details.}
 }
 \value{
-Tibble or \code{NULL}.
+A tibble or \code{NULL}.
 
 If output files are not specified, a tibble containing the synchronized reads
 from \code{file1} is returned. The tibble containing the synchronized

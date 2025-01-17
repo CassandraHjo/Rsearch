@@ -47,7 +47,7 @@
 #' (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
-#' @return Tibble or \code{NULL}.
+#' @return A tibble or \code{NULL}.
 #'
 #' If \code{fastx_output} is not specified, a tibble containing the dereplicated
 #' reads is returned. If \code{fastx_output} is specified nothing is returned.

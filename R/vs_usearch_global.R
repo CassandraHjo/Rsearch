@@ -4,12 +4,15 @@
 #' Compare target sequences to the query sequences in FASTA or FASTQ format,
 #' using global pairwise alignment.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or object containing the query sequences. See details.
-#' @param db A FASTA/FASTQ file path or object containing the target sequences in FASTQ/FASTA format.
+#' @param fastx_input A FASTA/FASTQ file path or object containing the query
+#' sequences. See details.
+#' @param db A FASTA/FASTQ file path or object containing the target sequences
+#' in FASTQ/FASTA format.
 #' @param blast6out Name of the output file for the search results in a blast-like
 #' tab-separated format of twelve fields, with one line per query-target matching.
 #' @param id The pairwise identity threshold. Defaults to \code{0.8}. See Details.
-#' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' Defaults to \code{1}.
 #'
 #' @details
 #'

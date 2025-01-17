@@ -1,24 +1,27 @@
 #' Combine files
 #'
-#' @description Combine all files of given type in given directory into one file/object.
+#' @description Combine all files of given type in given directory into one
+#' file/object.
 #'
 #' @param files_dir A path to a directory with files to combine.
 #' @param output_file Name of the output file or \code{NULL}. If not specified,
 #' a FASTA/FASTQ object depending on \code{file_format} is returned.
 #' @param file_ext The file extension of the files that are to be combined.
 #' Must be written with a "." in front of the extension. Defaults to \code{".fq"}.
-#' @param file_format Format of files that are to be combined, and desired output format
-#' of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.
+#' @param file_format Format of files that are to be combined, and desired output
+#' format of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.
 #'
 #' @details
 #' A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}.
-#' A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence},
+#' and \code{Quality}.
 #'
-#' @return Tibble or \code{NULL}.
+#' @return A tibble or \code{NULL}.
 #'
 #' If \code{output_file} is specified, a tibble containing the combined reads
 #' in the format specified in \code{file_format} is returned.
-#' If \code{output_file} is specified, the results are written to file and nothing is returned.
+#' If \code{output_file} is specified, the results are written to file and
+#' nothing is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -64,7 +67,9 @@ fastx_combine_files <- function(files_dir,
   }, add = TRUE)
 
   # Find all files in the folder
-  comb_files <- list.files(files_dir, pattern = paste0("\\", file_ext, "$"), full.names = TRUE)
+  comb_files <- list.files(files_dir,
+                           pattern = paste0("\\", file_ext, "$"),
+                           full.names = TRUE)
 
   # Check if any files are found
   if (length(comb_files) == 0) {

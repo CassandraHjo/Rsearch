@@ -50,7 +50,7 @@
 #' If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified,
 #' then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
 #'
-#' @return Tibble or \code{NULL}.
+#' @return A tibble or \code{NULL}.
 #'
 #' If output files are not specified, a tibble containing the merged reads in the
 #' format specified by \code{output_format} is returned. If an output file is

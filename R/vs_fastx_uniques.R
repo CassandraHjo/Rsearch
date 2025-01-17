@@ -49,7 +49,7 @@
 #' If \code{fastq_qout_max = TRUE}, the quality score will be the highest (best)
 #' quality score observed in each position.
 #'
-#' @return Tibble or \code{NULL}.
+#' @return A tibble or \code{NULL}.
 #'
 #' If \code{fastx_output} is not specified, a tibble containing the dereplicated
 #' reads is returned. If \code{fastx_output} is specified nothing is returned.

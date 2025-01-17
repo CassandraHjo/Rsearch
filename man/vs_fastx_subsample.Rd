@@ -59,7 +59,7 @@ Only applies if the output file is in FASTA format. Defaults to \code{0}. See De
 Defaults to \code{1}.}
 }
 \value{
-Tibble or \code{NULL}.
+A tibble or \code{NULL}.
 
 If \code{fastx_output} is not specified, a tibble containing the dereplicated
 reads is returned. If \code{fastx_output} is specified nothing is returned.

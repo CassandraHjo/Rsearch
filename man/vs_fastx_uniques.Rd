@@ -58,7 +58,7 @@ Only applies if the output file is in FASTA format. Defaults to \code{0}. See De
 highest (best) quality score observed in each position. Defaults to \code{FALSE}.}
 }
 \value{
-Tibble or \code{NULL}.
+A tibble or \code{NULL}.
 
 If \code{fastx_output} is not specified, a tibble containing the dereplicated
 reads is returned. If \code{fastx_output} is specified nothing is returned.

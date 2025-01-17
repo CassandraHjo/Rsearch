@@ -7,16 +7,19 @@
 vs_usearch_global(fastx_input, db, blast6out, id = 0.8, threads = 1)
 }
 \arguments{
-\item{fastx_input}{A FASTA/FASTQ file path or object containing the query sequences. See details.}
+\item{fastx_input}{A FASTA/FASTQ file path or object containing the query
+sequences. See details.}
 
-\item{db}{A FASTA/FASTQ file path or object containing the target sequences in FASTQ/FASTA format.}
+\item{db}{A FASTA/FASTQ file path or object containing the target sequences
+in FASTQ/FASTA format.}
 
 \item{blast6out}{Name of the output file for the search results in a blast-like
 tab-separated format of twelve fields, with one line per query-target matching.}
 
 \item{id}{The pairwise identity threshold. Defaults to \code{0.8}. See Details.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
+\item{threads}{Number of computational threads to be used by \code{vsearch}.
+Defaults to \code{1}.}
 }
 \value{
 \code{NULL} (Output is written to file specified by \code{blast6out}).

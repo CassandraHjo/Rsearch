@@ -27,7 +27,7 @@ Defaults to \code{1}.}
 Defaults to \code{1}.}
 }
 \value{
-A data frame with the following columns:
+A tibble with the following columns:
 \itemize{
   \item \code{length_1}: The length of the forward reads.
   \item \code{length_2}: The length of the reverse reads.

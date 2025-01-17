@@ -41,10 +41,10 @@
 #' If \code{log_file} is specified, the messages and joining statistics are output to this file.
 #' If unspecified (\code{NULL}) no log file is written.
 #'
-#' @return Tibble or \code{NULL}.
+#' @return A tibble or \code{NULL}.
 #'
-#' If output files are not specified, a tibble containing the joined reads in the format
-#' specified by \code{output_format} is returned. If an output file is specified,
+#' If output file is not specified, a tibble containing the joined reads in the format
+#' specified by \code{output_format} is returned. If output file is specified,
 #' results are written to file and nothing is returned.
 #'
 #' @examples

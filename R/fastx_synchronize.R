@@ -28,7 +28,7 @@
 #' and the synchronized reads are returned as a FASTQ/FASTA object.
 #' \code{file1_out} or \code{file2_out} must either both be \code{NULL} or both \code{charachter}.
 #'
-#' @return Tibble or \code{NULL}.
+#' @return A tibble or \code{NULL}.
 #'
 #' If output files are not specified, a tibble containing the synchronized reads
 #' from \code{file1} is returned. The tibble containing the synchronized

@@ -46,10 +46,10 @@ If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 \item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
 }
 \value{
-Tibble or \code{NULL}.
+A tibble or \code{NULL}.
 
-If output files are not specified, a tibble containing the joined reads in the format
-specified by \code{output_format} is returned. If an output file is specified,
+If output file is not specified, a tibble containing the joined reads in the format
+specified by \code{output_format} is returned. If output file is specified,
 results are written to file and nothing is returned.
 }
 \description{

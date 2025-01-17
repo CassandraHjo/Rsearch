@@ -49,7 +49,7 @@ If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 Defaults to \code{1}.}
 }
 \value{
-Tibble or \code{NULL}.
+A tibble or \code{NULL}.
 
 If output files are not specified, a tibble containing the merged reads in the
 format specified by \code{output_format} is returned. If an output file is
