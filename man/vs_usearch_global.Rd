@@ -4,7 +4,14 @@
 \alias{vs_usearch_global}
 \title{Global pairwise alignment}
 \usage{
-vs_usearch_global(fastx_input, db, blast6out, id = 0.8, threads = 1)
+vs_usearch_global(
+  fastx_input,
+  db,
+  blast6out,
+  id = 0.8,
+  threads = 1,
+  strand = "plus"
+)
 }
 \arguments{
 \item{fastx_input}{A FASTA/FASTQ file path or object containing the query
@@ -20,6 +27,9 @@ tab-separated format of twelve fields, with one line per query-target matching.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}.
 Defaults to \code{1}.}
+
+\item{strand}{\code{"plus"} (default) or \code{"both"}.
+When comparing sequences only check the plus strand or both strands.}
 }
 \value{
 \code{NULL} (Output is written to file specified by \code{blast6out}).

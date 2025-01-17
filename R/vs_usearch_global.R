@@ -13,6 +13,8 @@
 #' @param id The pairwise identity threshold. Defaults to \code{0.8}. See Details.
 #' @param threads Number of computational threads to be used by \code{vsearch}.
 #' Defaults to \code{1}.
+#' @param strand \code{"plus"} (default) or \code{"both"}.
+#' When comparing sequences only check the plus strand or both strands.
 #'
 #' @details
 #'
@@ -35,11 +37,17 @@ vs_usearch_global <- function(fastx_input,
                               blast6out,
                               # userout,
                               id = 0.8,
-                              threads = 1){
+                              threads = 1,
+                              strand = "plus"){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Validate strand
+  if (!strand %in% c("plus", "both")) {
+    stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")
+  }
 
   # Create empty vector for collecting temporary files
   temp_files <- character()
@@ -143,7 +151,8 @@ vs_usearch_global <- function(fastx_input,
             "--blast6out", blast6out,
             # "--userout", userout,
             # "--userfields", "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
-            "--threads", threads)
+            "--threads", threads,
+            "--strand", strand)
 
   # Run vsearch
   vsearch_output <- system2(command = vsearch_executable,
