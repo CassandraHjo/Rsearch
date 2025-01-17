@@ -235,7 +235,7 @@ vs_fastq_mergepairs <- function(fastq_input,
       (output_format == "fastq" && is.null(fastqout))) {
 
     # Extract statistics
-    statistics <- parse_merge_statistics(vsearch_output, fastq_input_name, reverse_name)
+    # statistics <- parse_merge_statistics(vsearch_output, fastq_input_name, reverse_name)
 
     # Create results tibble
     if (output_format == "fastq") {
@@ -245,7 +245,7 @@ vs_fastq_mergepairs <- function(fastq_input,
     }
 
     # Add statistics as attribute to merging table
-    attr(merged_seqs, "statistics") <- statistics
+    # attr(merged_seqs, "statistics") <- statistics
   }
 
   # Return results
