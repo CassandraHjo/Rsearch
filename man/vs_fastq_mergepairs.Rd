@@ -16,16 +16,19 @@ vs_fastq_mergepairs(
   fasta_width = 0,
   minlen = 0,
   log_file = NULL,
-  threads = 1
+  threads = 1,
+  vsearch_options = NULL
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or object containing (forward) reads. See Details.}
+\item{fastq_input}{A FASTQ file path or object containing (forward) reads.
+See Details.}
 
-\item{reverse}{A FASTQ file path or object containing (reverse) reads See Details.}
+\item{reverse}{A FASTQ file path or object containing (reverse) reads.
+See Details.}
 
-\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5.
-Defaults to \code{10}.}
+\item{minovlen}{The minimum overlap between the merged reads.
+Must be at least 5. Defaults to \code{10}.}
 
 \item{output_format}{Desired output format of file or tibble: \code{"fasta"}
 or \code{"fastq"} (default).}
@@ -37,16 +40,20 @@ If \code{NULL} (default) no output will be written to file. See Details.}
 If \code{NULL} (default) no output will be written to file. See Details.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
+Only applies if the output file is in FASTA format. Defaults to \code{0}.
+See Details.}
 
 \item{minlen}{The minimum number of bases a sequence must have to be retained.
 Defaults to \code{0}. See Details.}
 
-\item{log_file}{Name of the log file to capture messages from \code{vsearch}.
+\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}.
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
+
+\item{vsearch_options}{A character string of additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
 }
 \value{
 A tibble or \code{NULL}.
@@ -63,11 +70,12 @@ running \code{attributes(merged_seqs)$statistics} or
 \code{attr(merged_seqs, "statistics")}.
 }
 \description{
-Merges paired-end sequence reads with overlapping regions into one sequence.
+Merges paired-end sequence reads with overlapping regions into
+one sequence.
 }
 \details{
 The read-pairs in the input FASTQ-files (\code{fastq_input} and
-\code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
+\code{reverse}) are merged if they have sufficient overlap, using \code{VSEARCH}.
 
 \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ
 objects. FASTQ objects are tibbles that contain the columns \code{Header},
@@ -81,7 +89,7 @@ If unspecified (\code{NULL}) the results are returned as a FASTA or FASTQ
 object, and no output is written to file. \code{output_format} has to match
 the desired output files/objects.
 
-FASTA files produced by \code{vsearch} are wrapped (sequences are written on
+FASTA files produced by \code{VSEARCH} are wrapped (sequences are written on
 lines of integer nucleotides).
 \code{fasta_width} is by default set to zero to eliminate the wrapping.
 
@@ -91,9 +99,16 @@ sequences are removed.
 However, using the default value may allow empty sequences to remain in
 the results.
 
-If \code{log_file} is specified, the messages and merging statistics are output to this file.
-If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified,
-then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+If \code{log_file} is specified, the messages and merging statistics are
+output to this file.
+If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is
+specified,
+then \code{log_file} needs to be specified in order to get the merging
+statistics from \code{VSEARCH}.
+
+\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+additional arguments, and how to use them.
 }
 \examples{
 \dontrun{

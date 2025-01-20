@@ -13,7 +13,8 @@ vs_cluster_size(
   sizeout = TRUE,
   relabel = "OTU",
   threads = 1,
-  fasta_width = 0
+  fasta_width = 0,
+  vsearch_options = NULL
 )
 }
 \arguments{
@@ -38,11 +39,14 @@ FASTA headers. Defaults to \code{TRUE}.}
 \item{relabel}{Relabel sequences using the given prefix and a ticker to construct
 new headers. Defaults to \code{"OTU"}.}
 
-\item{threads}{The number of computational threads to be used by \code{vsearch}.
+\item{threads}{The number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
 \item{fasta_width}{The number of characters in the width of sequences in the
 output FASTA file. Defaults to \code{0}. See Details.}
+
+\item{vsearch_options}{A character string of additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
 }
 \value{
 A tibble or \code{NULL}.
@@ -61,7 +65,7 @@ Cluster FASTA sequences in the given file or object.
 }
 \details{
 Sequences in the input file are clustered,
-using \code{vsearch}´s \code{cluster_size}.The function will automatically
+using \code{VSEARCH}´s \code{cluster_size}.The function will automatically
 sort by decreasing sequence abundance beforehand.
 
 \code{fasta_input} can either be a FASTA file or object. FASTA objects are
@@ -78,9 +82,13 @@ The sequence is not added if pairwise identity is bellow \code{id}.
 The pairwise identity is defined as the number of
 (matching columns) / (alignment length - terminal gaps).
 
-FASTA files produced by \code{vsearch} are wrapped
+FASTA files produced by \code{VSEARCH} are wrapped
 (sequences are written on lines of integer nucleotides).\code{fasta_width} is
 by default set to zero to eliminate the wrapping.
+
+\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+additional arguments, and how to use them.
 }
 \examples{
 \dontrun{

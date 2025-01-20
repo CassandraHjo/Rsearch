@@ -3,13 +3,14 @@
 #' @description Dereplication of sequences in FASTA/FASTQ file or object.
 #'
 #' @param fastx_input A FASTQ/FASTA file path or object. See Details.
-#' @param fastx_output Name of the output file for dereplicated reads from \code{fastx_input}.
-#' File can be in either FASTA or FASTQ format, depending on \code{output_format}.
-#' If \code{NULL} (default) no sequences will be written to file. See Details.
+#' @param fastx_output Name of the output file for dereplicated reads from
+#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
+#' \code{output_format}. If \code{NULL} (default) no sequences will be written
+#' to file. See Details.
 #' @param output_format The desired output format for file/tibble:
 #' \code{"fasta"} or \code{"fastq"} (default).
-#' @param minuniquesize The minimum abundance value post-dereplication for a sequence
-#' not to be discarded. Defaults to \code{1}.
+#' @param minuniquesize The minimum abundance value post-dereplication for a
+#' sequence not to be discarded. Defaults to \code{1}.
 #' @param strand \code{"plus"} (default) or \code{"both"}.
 #' When comparing sequences only check the plus strand or both strands.
 #' @param sizein Decides if abundance annotations present in sequence headers
@@ -21,12 +22,15 @@
 #' @param relabel Relabel sequences using the given prefix and a ticker to
 #' construct new headers. Defaults to \code{NULL}.
 #' @param fasta_width Number of characters per line in the output FASTA file.
-#' Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
+#' Only applies if the output file is in FASTA format. Defaults to \code{0}.
+#' See Details.
 #' @param fastq_qout_max If \code{TRUE}, the quality score will be the
 #' highest (best) quality score observed in each position. Defaults to \code{FALSE}.
+#' @param vsearch_options A character string of additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
 #' @details The reads in the input file/object (\code{fastx_input}) are dereplicated
-#' by merging identical sequences, using \code{vsearch}.
+#' by merging identical sequences, using \code{VSEARCH}.
 #' Identical sequences are defined as sequences with the same length and
 #' the same string of nucleotides (case insensitive, T and U are considered the same).
 #'
@@ -40,7 +44,7 @@
 #' If unspecified (\code{NULL}) the result is returned as a FASTA/FASTQ object,
 #' depending on \code{output_format}.
 #'
-#' FASTA files produced by\code{vsearch} are wrapped
+#' FASTA files produced by\code{VSEARCH} are wrapped
 #' (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
@@ -48,6 +52,10 @@
 #' average error probability of the nucleotides in the each position.
 #' If \code{fastq_qout_max = TRUE}, the quality score will be the highest (best)
 #' quality score observed in each position.
+#'
+#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+#' additional arguments, and how to use them.
 #'
 #' @return A tibble or \code{NULL}.
 #'
@@ -84,7 +92,8 @@ vs_fastx_uniques <- function(fastx_input,
                              relabel_sha1 = FALSE,
                              relabel = NULL,
                              fasta_width = 0,
-                             fastq_qout_max = FALSE){
+                             fastq_qout_max = FALSE,
+                             vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -206,6 +215,11 @@ vs_fastx_uniques <- function(fastx_input,
 
   if (fastq_qout_max) {
     args <- c(args, "--fastq_qout_max", "")
+  }
+
+  # Add additional arguments is specified
+  if (!is.null(vsearch_options)) {
+    args <- c(args, vsearch_options)
   }
 
   # Run vsearch

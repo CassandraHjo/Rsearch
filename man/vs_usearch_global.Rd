@@ -10,7 +10,8 @@ vs_usearch_global(
   blast6out,
   id = 0.8,
   threads = 1,
-  strand = "plus"
+  strand = "plus",
+  vsearch_options = NULL
 )
 }
 \arguments{
@@ -25,11 +26,14 @@ tab-separated format of twelve fields, with one line per query-target matching.}
 
 \item{id}{The pairwise identity threshold. Defaults to \code{0.8}. See Details.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}.
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
 \item{strand}{\code{"plus"} (default) or \code{"both"}.
 When comparing sequences only check the plus strand or both strands.}
+
+\item{vsearch_options}{A character string of additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
 }
 \value{
 \code{NULL} (Output is written to file specified by \code{blast6out}).
@@ -46,4 +50,8 @@ FASTQ objects are tibbles that contain the columns \code{Header},
 
 The pairwise identity \code{id} is defined as
 the number of (matching columns) / (alignment length - terminal gaps)
+
+\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+additional arguments, and how to use them.
 }

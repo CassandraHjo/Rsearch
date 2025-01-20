@@ -16,15 +16,19 @@ vs_fastq_join(
   join_padgapq = "IIIIIIII",
   fasta_width = 0,
   log_file = NULL,
-  threads = 1
+  threads = 1,
+  vsearch_options = NULL
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or a FASTQ object containing (forward) reads. See Details.}
+\item{fastq_input}{A FASTQ file path or a FASTQ object containing (forward)
+reads. See Details.}
 
-\item{reverse}{A FASTQ file path or a FASTQ object containing (reverse) reads See Details.}
+\item{reverse}{A FASTQ file path or a FASTQ object containing (reverse) reads.
+See Details.}
 
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"} or \code{"fastq"} (default).}
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
+or \code{"fastq"} (default).}
 
 \item{fastaout}{Name of the FASTA output file with the joined reads.
 If \code{NULL} (default) no output will be written to file. See Details.}
@@ -32,18 +36,25 @@ If \code{NULL} (default) no output will be written to file. See Details.}
 \item{fastqout}{Name of the FASTQ output file with the joined reads.
 If \code{NULL} (default) no output will be written to file. See Details.}
 
-\item{join_padgap}{The padding sequence to use in the gap between the sequences. Defaults to \code{"NNNNNNNN"}.}
+\item{join_padgap}{The padding sequence to use in the gap between the sequences.
+Defaults to \code{"NNNNNNNN"}.}
 
-\item{join_padgapq}{The quality of the padding sequence. Defaults to \code{"IIIIIIII"},
-corresponding to a base quality score of 40 (a very high quality score with error probability \code{0.0001}).}
+\item{join_padgapq}{The quality of the padding sequence. Defaults to
+\code{"IIIIIIII"}, corresponding to a base quality score of 40
+(a very high quality score with error probability \code{0.0001}).}
 
 \item{fasta_width}{Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
+Only applies if the output file is in FASTA format. Defaults to \code{0}.
+See Details.}
 
-\item{log_file}{Name of the log file to capture messages from \code{vsearch}.
+\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
+Defaults to \code{1}.}
+
+\item{vsearch_options}{A character string of additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
 }
 \value{
 A tibble or \code{NULL}.
@@ -53,31 +64,43 @@ specified by \code{output_format} is returned. If output file is specified,
 results are written to file and nothing is returned.
 }
 \description{
-Joins paired-end sequence reads into one sequence with a gap between them.
+Joins paired-end sequence reads into one sequence with a gap
+between them.
 }
 \details{
-The read-pairs in the input FASTQ-files (\code{fastq_input} and \code{reverse})
-are joined into one sequence by adding a gap between them with a padding sequence, using \code{vsearch}.
-The resulting sequences consist of the forward read, the padding sequence and the reverse complement of the reverse read.
+The read-pairs in the input FASTQ-files (\code{fastq_input} and
+\code{reverse})
+are joined into one sequence by adding a gap between them with a padding sequence,
+using \code{VSEARCH}.
+The resulting sequences consist of the forward read, the padding sequence and
+the reverse complement of the reverse read.
 
 \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ objects.
-FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence},
+and \code{Quality}.
 Forward and reverse reads must appear in the same order and total number in both files.
 
 If \code{fastaout} or \code{fastqout} is specified, the joined reads are output
 to this file in either FASTA or FASTQ format.
 If unspecified (\code{NULL}) the results are returned as a FASTA or FASTQ object,
-and no output is written to file. \code{output_format} has to match the desired output files/objects.
+and no output is written to file. \code{output_format} has to match the
+desired output files/objects.
 
-FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
-\code{fasta_width} is by default set to zero to eliminate the wrapping.
+FASTA files produced by \code{VSEARCH} are wrapped (sequences are written on
+lines of integer nucleotides). \code{fasta_width} is by default set to zero
+to eliminate the wrapping.
 
-Any input sequence with fewer bases than the value set in \code{minlen} will be discarded.
-By default, \code{minlen} is set to 0, which means that no sequences are removed.
-However, using the default value may allow empty sequences to remain in the results.
+Any input sequence with fewer bases than the value set in \code{minlen} will
+be discarded. By default, \code{minlen} is set to 0, which means that no
+sequences are removed. However, using the default value may allow empty
+sequences to remain in the results.
 
-If \code{log_file} is specified, the messages and joining statistics are output to this file.
-If unspecified (\code{NULL}) no log file is written.
+If \code{log_file} is specified, the messages and joining statistics are
+output to this file. If unspecified (\code{NULL}) no log file is written.
+
+\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+additional arguments, and how to use them.
 }
 \examples{
 \dontrun{

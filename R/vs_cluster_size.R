@@ -16,13 +16,15 @@
 #' FASTA headers. Defaults to \code{TRUE}.
 #' @param relabel Relabel sequences using the given prefix and a ticker to construct
 #' new headers. Defaults to \code{"OTU"}.
-#' @param threads The number of computational threads to be used by \code{vsearch}.
+#' @param threads The number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param fasta_width The number of characters in the width of sequences in the
 #' output FASTA file. Defaults to \code{0}. See Details.
+#' @param vsearch_options A character string of additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
 #' @details Sequences in the input file are clustered,
-#' using \code{vsearch}´s \code{cluster_size}.The function will automatically
+#' using \code{VSEARCH}´s \code{cluster_size}.The function will automatically
 #' sort by decreasing sequence abundance beforehand.
 #'
 #' \code{fasta_input} can either be a FASTA file or object. FASTA objects are
@@ -39,9 +41,13 @@
 #' The pairwise identity is defined as the number of
 #' (matching columns) / (alignment length - terminal gaps).
 #'
-#' FASTA files produced by \code{vsearch} are wrapped
+#' FASTA files produced by \code{VSEARCH} are wrapped
 #' (sequences are written on lines of integer nucleotides).\code{fasta_width} is
 #' by default set to zero to eliminate the wrapping.
+#'
+#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+#' additional arguments, and how to use them.
 #'
 #' @return A tibble or \code{NULL}.
 #'
@@ -80,7 +86,8 @@ vs_cluster_size <- function(fasta_input,
                             sizeout = TRUE,
                             relabel = "OTU",
                             threads = 1,
-                            fasta_width = 0){
+                            fasta_width = 0,
+                            vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -144,6 +151,11 @@ vs_cluster_size <- function(fasta_input,
     args <- c(args, "--sizeout", "")
   }
 
+  # Add additional arguments is specified
+  if (!is.null(vsearch_options)) {
+    args <- c(args, vsearch_options)
+  }
+
   # Run vsearch
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
@@ -175,10 +187,10 @@ vs_cluster_size <- function(fasta_input,
 
 #' Parse clustering statistics from string to tibble
 #'
-#' @description This function transforms the output from \code{vsearch} when
+#' @description This function transforms the output from \code{VSEARCH} when
 #' running \code{vs_cluster_size()} into a tibble.
 #'
-#' @param output A string of output from clustering sequences with \code{vsearch}.
+#' @param output A string of output from clustering sequences with \code{VSEARCH}.
 #' @param input_file The name of the file/object with sequences used in the clustering
 #'
 #' @return A tibble with clustering metrics, including the number of nucleotides,

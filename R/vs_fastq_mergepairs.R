@@ -1,11 +1,14 @@
 #' Merge paired-end sequence reads
 #'
-#' @description Merges paired-end sequence reads with overlapping regions into one sequence.
+#' @description Merges paired-end sequence reads with overlapping regions into
+#' one sequence.
 #'
-#' @param fastq_input A FASTQ file path or object containing (forward) reads. See Details.
-#' @param reverse A FASTQ file path or object containing (reverse) reads See Details.
-#' @param minovlen The minimum overlap between the merged reads. Must be at least 5.
-#' Defaults to \code{10}.
+#' @param fastq_input A FASTQ file path or object containing (forward) reads.
+#' See Details.
+#' @param reverse A FASTQ file path or object containing (reverse) reads.
+#' See Details.
+#' @param minovlen The minimum overlap between the merged reads.
+#' Must be at least 5. Defaults to \code{10}.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"}
 #' or \code{"fastq"} (default).
 #' @param fastaout Name of the FASTA output file with the merged reads.
@@ -13,16 +16,19 @@
 #' @param fastqout Name of the FASTQ output file with the merged reads.
 #' If \code{NULL} (default) no output will be written to file. See Details.
 #' @param fasta_width Number of characters per line in the output FASTA file.
-#' Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
+#' Only applies if the output file is in FASTA format. Defaults to \code{0}.
+#' See Details.
 #' @param minlen The minimum number of bases a sequence must have to be retained.
 #' Defaults to \code{0}. See Details.
-#' @param log_file Name of the log file to capture messages from \code{vsearch}.
+#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL}, no log file is created. Defaults to \code{NULL}.
-#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
+#' @param vsearch_options A character string of additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
 #' @details The read-pairs in the input FASTQ-files (\code{fastq_input} and
-#' \code{reverse}) are merged if they have sufficient overlap, using \code{vsearch}.
+#' \code{reverse}) are merged if they have sufficient overlap, using \code{VSEARCH}.
 #'
 #' \code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ
 #' objects. FASTQ objects are tibbles that contain the columns \code{Header},
@@ -36,7 +42,7 @@
 #' object, and no output is written to file. \code{output_format} has to match
 #' the desired output files/objects.
 #'
-#' FASTA files produced by \code{vsearch} are wrapped (sequences are written on
+#' FASTA files produced by \code{VSEARCH} are wrapped (sequences are written on
 #' lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
 #'
@@ -46,9 +52,16 @@
 #' However, using the default value may allow empty sequences to remain in
 #' the results.
 #'
-#' If \code{log_file} is specified, the messages and merging statistics are output to this file.
-#' If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is specified,
-#' then \code{log_file} needs to be specified in order to get the merging statistics from \code{vsearch}.
+#' If \code{log_file} is specified, the messages and merging statistics are
+#' output to this file.
+#' If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is
+#' specified,
+#' then \code{log_file} needs to be specified in order to get the merging
+#' statistics from \code{VSEARCH}.
+#'
+#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+#' additional arguments, and how to use them.
 #'
 #' @return A tibble or \code{NULL}.
 #'
@@ -96,7 +109,8 @@ vs_fastq_mergepairs <- function(fastq_input,
                                 fasta_width = 0,
                                 minlen = 0,
                                 log_file = NULL,
-                                threads = 1){
+                                threads = 1,
+                                vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -224,6 +238,11 @@ vs_fastq_mergepairs <- function(fastq_input,
     args <- c(args, "--log", log_file)
   }
 
+  # Add additional arguments is specified
+  if (!is.null(vsearch_options)) {
+    args <- c(args, vsearch_options)
+  }
+
   # Run vsearch
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
@@ -259,13 +278,13 @@ vs_fastq_mergepairs <- function(fastq_input,
 
 #' Parse merging statistics from string to tibble
 #'
-#' @description This function transforms the output from \code{vsearch} when
+#' @description This function transforms the output from \code{VSEARCH} when
 #' running \code{vs_fastq_mergepairs()} into a tibble.
 #' The most important statistics are included in the tibble such as number of
 #' read pairs, merged reads, reasons that reads were not merged, and mean and
 #' standard deviation of read lengths.
 #'
-#' @param output A string of output from merging reads with \code{vsearch}.
+#' @param output A string of output from merging reads with \code{VSEARCH}.
 #' @param fastq_input The name of the file/object with forward (R1) reads that was used in the merging.
 #' @param reverse The name of the file/object with reverse (R2) reads that was used in the merging.
 #'

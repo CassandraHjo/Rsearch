@@ -27,44 +27,47 @@ vs_fastx_trim_filt(
   fastqout_rev = NULL,
   fasta_width = 0,
   log_file = NULL,
-  threads = 1
+  threads = 1,
+  vsearch_options = NULL
 )
 }
 \arguments{
-\item{fastx_input}{A FASTA/FASTQ file path or object containing (forward) reads. See Details.}
+\item{fastx_input}{A FASTA/FASTQ file path or object containing (forward) reads.
+See Details.}
 
-\item{reverse}{An optional FASTA/FASTQ file path or object, if the input consists of
-paired sequences, containing reverse reads. If provided, it will be processed alongside
-\code{fastx_input}. Defaults to \code{NULL}. See Details.}
+\item{reverse}{An optional FASTA/FASTQ file path or object, if the input
+consists of paired sequences, containing reverse reads. If provided, it will
+be processed alongside \code{fastx_input}. Defaults to \code{NULL}. See Details.}
 
-\item{output_format}{The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).}
+\item{output_format}{The desired output format for file/tibble: \code{"fasta"}
+or \code{"fastq"} (default).}
 
-\item{maxee_rate}{Threshold for average expected error. Numeric value ranging form
-\code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.}
+\item{maxee_rate}{Threshold for average expected error. Numeric value ranging
+form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See Details.}
 
 \item{minlen}{The minimum number of bases a sequence must have to be retained.
 Defaults to \code{1}. See Details.}
 
-\item{maxlen}{The maximum number of bases for a given sequence. Sequences with more
-bases than the specified number are discarded. Defaults to \code{NULL}.}
+\item{maxlen}{The maximum number of bases for a given sequence. Sequences
+with more bases than the specified number are discarded. Defaults to \code{NULL}.}
 
-\item{maxns}{The maximum number of N's for a given sequence. Sequences with more N's
-than the specified number are discarded. Defaults to \code{0}.}
+\item{maxns}{The maximum number of N's for a given sequence. Sequences with
+more N's than the specified number are discarded. Defaults to \code{0}.}
 
-\item{maxsize}{The maximum abundance for a given sequence. Sequences with abundance
-higher than the specified value are discarded. Defaults to \code{NULL}.}
+\item{maxsize}{The maximum abundance for a given sequence. Sequences with
+abundance higher than the specified value are discarded. Defaults to \code{NULL}.}
 
 \item{minsize}{The minimum abundance for a given sequence. Sequences with abundance
 lower than the specified value are discarded. Defaults to \code{NULL}.}
 
-\item{trunclen}{The sequences are truncated to the specified length. Shorter sequences
-are discarded. Defaults to \code{NULL}.}
+\item{trunclen}{The sequences are truncated to the specified length. Shorter
+sequences are discarded. Defaults to \code{NULL}.}
 
-\item{truncqual}{The sequences are truncated starting from the first base with the
-specified base quality score value or lower. Defaults to \code{20}.}
+\item{truncqual}{The sequences are truncated starting from the first base with
+the specified base quality score value or lower. Defaults to \code{20}.}
 
-\item{truncee}{The sequences are truncated so that their total expected error is
-not higher than the specified value. Defaults to \code{NULL}.}
+\item{truncee}{The sequences are truncated so that their total expected error
+is not higher than the specified value. Defaults to \code{NULL}.}
 
 \item{stripright}{The number of bases stripped from the right end of the reads.
 Defaults to \code{0}.}
@@ -72,84 +75,105 @@ Defaults to \code{0}.}
 \item{stripleft}{The number of bases stripped from the left end of the reads.
 Defaults to \code{0}.}
 
-\item{fastaout}{Name of the FASTA output file for the sequences given in \code{fastx_input}.
-If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastaout}{Name of the FASTA output file for the sequences given in
+\code{fastx_input}. If \code{NULL} no FASTA sequences will be written to file.
+Defaults to \code{NULL}. See Details.}
 
-\item{fastqout}{Name of the FASTQ output file for the sequences given in \code{fastx_input}.
-If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastqout}{Name of the FASTQ output file for the sequences given in
+\code{fastx_input}. If \code{NULL} no FASTQ sequences will be written to file.
+Defaults to \code{NULL}. See Details.}
 
-\item{fastaout_rev}{Name of the FASTA output file for the sequences given in \code{reverse}.
-If \code{NULL} no FASTA sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastaout_rev}{Name of the FASTA output file for the sequences given in
+\code{reverse}. If \code{NULL} no FASTA sequences will be written to file.
+Defaults to \code{NULL}. See Details.}
 
-\item{fastqout_rev}{Name of the FASTQ output file for the sequences given in \code{reverse}.
-If \code{NULL} no FASTQ sequences will be written to file. Defaults to \code{NULL}. See Details.}
+\item{fastqout_rev}{Name of the FASTQ output file for the sequences given in
+\code{reverse}. If \code{NULL} no FASTQ sequences will be written to file.
+Defaults to \code{NULL}. See Details.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.}
+Only applies if the output file is in FASTA format. Defaults to \code{0}.
+See Details.}
 
-\item{log_file}{Name of the log file to capture messages from \code{vsearch}.
+\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.}
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
+Defaults to \code{1}.}
+
+\item{vsearch_options}{A character string of additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
 }
 \value{
 A tibble or \code{NULL}.
 
-If output files are not specified, a tibble containing the filtered reads from \code{fastx_input}
-in the format specified by \code{output_format} is returned. If output files are specified,
-results are written to file and nothing is returned.
+If output files are not specified, a tibble containing the filtered reads
+from \code{fastx_input} in the format specified by \code{output_format} is
+returned. If output files are specified, results are written to file and
+nothing is returned.
 
-If \code{reverse} is specified, the resulting tibble containing the trimmed and/or filtered reverse reads
-in the format specified by \code{output_format} is an attribute, called \code{"reverse"}, to the primary table.
+If \code{reverse} is specified, the resulting tibble containing the trimmed
+and/or filtered reverse reads in the format specified by \code{output_format}
+is an attribute, called \code{"reverse"}, to the primary table.
 
-When a FASTA/FASTQ object is returned, the statistics from the filtering, \code{statistics},
-is an attribute, called \code{"statistics"}, to the primary filtering tibble.
-This tibble contains statistics, including number of kept and discarded sequences,
-and the names of the FASTA/FASTQ files or objects that were used as input.
+When a FASTA/FASTQ object is returned, the statistics from the filtering,
+\code{statistics}, is an attribute, called \code{"statistics"}, to the
+primary filtering tibble. This tibble contains statistics, including number
+of kept and discarded sequences, and the names of the FASTA/FASTQ files or
+objects that were used as input.
 }
 \description{
-Trim and/or filters biological sequences (DNA) in the FASTA/FASTQ format.
+Trim and/or filters biological sequences (DNA) in the FASTA/FASTQ
+format.
 }
 \details{
 The function trims and/or filters sequences from the input FASTA/FASTQ
-file or object based on the specified options, using \code{vsearch}.
+file or object based on the specified options, using \code{VSEARCH}.
 If a \code{reverse} input is provided, these reads are processed in the same way.
 The the format of the output is determined by \code{output_format}.
 
 \code{fastx_input} and \code{reverse} can either be FASTA/FASTQ files or objects.
 FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
-FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence},
-and \code{Quality}.
+FASTQ objects are tibbles that contain the columns \code{Header},
+\code{Sequence}, and \code{Quality}.
 \code{reverse} is an optional argument to the function. If provided, it will be
 processed alongside \code{fastx_input}, meaning the same specified options will
 be used for both inputs.
 
-Note that if you want to trim/filter the forward and reverse reads differently, you must
-pass them separately to this function, get two result files/objects,  and then
-use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
+Note that if you want to trim/filter the forward and reverse reads differently,
+you must pass them separately to this function, get two result files/objects,
+and then use \code{\link{fastx_synchronize}} to synchronize the read pairs again.
 
 Note that certain options are not compatible with both file formats. For instance,
 options that trim or filter sequences based on quality scores are unavailable when
 the input is of type \code{"fasta"}.
-Visit the \code{VSEARCH} \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
+Visit the \code{VSEARCH}
+\href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
 for more details.
 
-If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and \code{fastqout_rev}
-are specified, the remaining sequences after trimming and/or filtering are output
-to these files in either FASTA or FASTQ format.
-If unspecified (\code{NULL}), results are returned as a tibble, and no output is
-written to file. \code{output_format} has to match the desired output files/objects.
+If \code{fastaout} and \code{fastaout_rev} or \code{fastqout} and
+\code{fastqout_rev} are specified, the remaining sequences after trimming
+and/or filtering are output to these files in either FASTA or FASTQ format.
+If unspecified (\code{NULL}), results are returned as a tibble, and no output
+is written to file. \code{output_format} has to match the desired output files/objects.
 
-Sequences with an average expected error greater than the specified \code{maxee_rate} are discarded.
-For a given sequence, the average expected error is the sum of error probabilities
-for all the positions in the sequence, divided by the length of the sequence.
+Sequences with an average expected error greater than the specified
+\code{maxee_rate} are discarded. For a given sequence, the average expected
+error is the sum of error probabilities for all the positions in the sequence,
+divided by the length of the sequence.
 
-Any input sequence with fewer bases than the value set in \code{minlen} will be discarded.
-By default, \code{minlen} is set to 0, which means that no sequences are removed.
-However, using the default value may allow empty sequences to remain in the results.
+Any input sequence with fewer bases than the value set in \code{minlen} will
+be discarded. By default, \code{minlen} is set to 0, which means that no
+sequences are removed. However, using the default value may allow empty
+sequences to remain in the results.
 
-FASTA files produced by \code{vsearch} are wrapped (sequences are written on lines of integer nucleotides).
-\code{fasta_width} is by default set to zero to eliminate the wrapping.
+FASTA files produced by \code{VSEARCH} are wrapped (sequences are written on
+lines of integer nucleotides). \code{fasta_width} is by default set to zero
+to eliminate the wrapping.
+
+\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+additional arguments, and how to use them.
 }
 \examples{
 \dontrun{

@@ -4,11 +4,13 @@
 #' extracting sequences based on number or precentage.
 #'
 #' @param fastx_input A FASTQ/FASTA file path or object. See Details.
-#' @param fastx_output Name of the output file for dereplicated reads from \code{fastx_input}.
+#' @param fastx_output Name of the output file for dereplicated reads from
+#' \code{fastx_input}.
 #' File can be in either FASTA or FASTQ format, depending on \code{output_format}.
 #' If \code{NULL} (default) no sequences will be written to file. See Details.
-#' @param output_format The desired output format for file/tibble: \code{"fasta"} or \code{"fastq"} (default).
-#' If \code{fastx_input} is a FASTA file path or object, \code{output_format} can not be \code{"fastq"}.
+#' @param output_format The desired output format for file/tibble: \code{"fasta"}
+#' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or object,
+#' \code{output_format} can not be \code{"fastq"}.
 #' @param sample_pct The given percentage of the input sequences to be subsampled.
 #' Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.
 #' @param sample_size The given number of sequences to extract.
@@ -24,28 +26,36 @@
 #' @param relabel Relabel sequences using the given prefix and a ticker to
 #' construct new headers. Defaults to \code{NULL}.
 #' @param fasta_width Number of characters per line in the output FASTA file.
-#' Only applies if the output file is in FASTA format. Defaults to \code{0}. See Details.
-#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' Only applies if the output file is in FASTA format. Defaults to \code{0}.
+#' See Details.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
+#' @param vsearch_options A character string of additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
 #' @details The reads in the input file/object (\code{fastx_input}) are subsampled
 #' by randomly extracting a certain number or a certain percentage of the sequences
-#' in the input, using \code{vsearch}.
+#' in the input, using \code{VSEARCH}.
 #' The extraction is performed as a random sampling with a uniform distribution
 #' among the input sequences and is performed without replacement.
 #'
 #' \code{fastx_input} can either be a FASTA/FASTQ file or object with reads.
 #' FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
-#' FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#' FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence},
+#' and \code{Quality}.
 #'
 #' If \code{fastx_output} is specified, the sampled sequences are output to this
 #' file in format given by \code{output_format}.
 #' If unspecified (\code{NULL}) the result is returned as a FASTA/FASTQ object,
 #' depending on \code{output_format}.
 #'
-#' FASTA files produced by\code{vsearch} are wrapped
+#' FASTA files produced by\code{VSEARCH} are wrapped
 #' (sequences are written on lines of integer nucleotides).
 #' \code{fasta_width} is by default set to zero to eliminate the wrapping.
+#'
+#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+#' additional arguments, and how to use them.
 #'
 #' @return A tibble or \code{NULL}.
 #'
@@ -83,7 +93,8 @@ vs_fastx_subsample <- function(fastx_input,
                                relabel_sha1 = FALSE,
                                relabel = NULL,
                                fasta_width = 0,
-                               threads = 1){
+                               threads = 1,
+                               vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -218,6 +229,11 @@ vs_fastx_subsample <- function(fastx_input,
 
   if (!is.null(relabel)) {
     args <- c(args, "--relabel", relabel)
+  }
+
+  # Add additional arguments is specified
+  if (!is.null(vsearch_options)) {
+    args <- c(args, vsearch_options)
   }
 
   # Run vsearch

@@ -11,10 +11,12 @@
 #' @param blast6out Name of the output file for the search results in a blast-like
 #' tab-separated format of twelve fields, with one line per query-target matching.
 #' @param id The pairwise identity threshold. Defaults to \code{0.8}. See Details.
-#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param strand \code{"plus"} (default) or \code{"both"}.
 #' When comparing sequences only check the plus strand or both strands.
+#' @param vsearch_options A character string of additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
 #' @details
 #'
@@ -26,6 +28,9 @@
 #' The pairwise identity \code{id} is defined as
 #' the number of (matching columns) / (alignment length - terminal gaps)
 #'
+#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
+#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
+#' additional arguments, and how to use them.
 #'
 #' @returns
 #' \code{NULL} (Output is written to file specified by \code{blast6out}).
@@ -38,7 +43,8 @@ vs_usearch_global <- function(fastx_input,
                               # userout,
                               id = 0.8,
                               threads = 1,
-                              strand = "plus"){
+                              strand = "plus",
+                              vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -128,7 +134,6 @@ vs_usearch_global <- function(fastx_input,
       microseq::writeFasta(db, temp_file_db)
 
       db_file <- temp_file_db
-      print(paste("db_file:", db_file))
 
     }
   } else {
@@ -153,6 +158,11 @@ vs_usearch_global <- function(fastx_input,
             # "--userfields", "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
             "--threads", threads,
             "--strand", strand)
+
+  # Add additional arguments is specified
+  if (!is.null(vsearch_options)) {
+    args <- c(args, vsearch_options)
+  }
 
   # Run vsearch
   vsearch_output <- system2(command = vsearch_executable,
