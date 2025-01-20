@@ -14,13 +14,14 @@ fastx_combine_files(
 )
 }
 \arguments{
-\item{files_dir}{A path to a directory with files to combine.}
+\item{files_dir}{A path to a directory with files to combine.
+Files can not be in a zipped format.}
 
 \item{output_file}{Name of the output file or \code{NULL}. If not specified,
 a FASTA/FASTQ object depending on \code{file_format} is returned.}
 
 \item{file_ext}{The file extension of the files that are to be combined.
-Must be written with a "." in front of the extension. Defaults to \code{".fq"}.}
+Defaults to \code{".fq"}.}
 
 \item{file_format}{Format of files that are to be combined, and desired output
 format of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.}
