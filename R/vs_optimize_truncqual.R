@@ -7,14 +7,20 @@
 #'
 #' @param fastq_input A FASTQ file path or object containing (forward) reads.
 #' @param reverse A FASTQ file path or object containing (reverse) reads See Details.
-#' @param minovlen The minimum overlap between the merged reads. Must be at least 5. Defaults to \code{10}.
+#' @param minovlen The minimum overlap between the merged reads. Must be at least 5.
+#' Defaults to \code{10}.
 #' @param truncqual_range The truncqual values to be tested. The sequences are
 #' truncated starting from the first base with the specified base quality score
-#' value or lower. Defaults to \code{1} to \code{20}. Must be given as a vector with numbers.
-#' @param maxee_rate Threshold for average expected error. Numeric value ranging form
-#' \code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.
-#' @param minlen The minimum number of bases a sequence must have to be retained. Defaults to \code{1}. See Details.
-#' @param threads Number of computational threads to be used by \code{vsearch}. Defaults to \code{1}.
+#' value or lower. Defaults to \code{1} to \code{20}. Must be given as a vector
+#' with numbers.
+#' @param min_size The minimum copy number (size) for å given read to be included
+#' in the results. Defaults to \code{1}.
+#' @param maxee_rate Threshold for average expected error. Numeric value ranging
+#' form \code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.
+#' @param minlen The minimum number of bases a sequence must have to be retained.
+#' Defaults to \code{1}. See Details.
+#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' Defaults to \code{1}.
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
@@ -28,7 +34,8 @@
 #' @return A data frame with the following columns:
 #' \itemize{
 #'   \item \code{truncqual_value}: The truncqual value used in the trimming.
-#'   \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences with copynumber above 1.
+#'   \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences
+#'   with copynumber above the number specified by \code{min_size}.
 #'   \item \code{R1}: The name of the R1 table/file.
 #'   \item \code{R2}: The name of the R2 table/file.
 #' }
@@ -42,6 +49,7 @@ vs_optimize_truncqual <- function(fastq_input,
                                   reverse,
                                   minovlen = 10,
                                   truncqual_range = paste(1:20),
+                                  min_size = 1,
                                   maxee_rate = 0.01,
                                   minlen = 1,
                                   threads = 1){
@@ -102,7 +110,7 @@ vs_optimize_truncqual <- function(fastq_input,
     tbl <- derep.df |>
       dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
       dplyr::mutate(size = as.numeric(size)) |>
-      dplyr::filter(size > 1)
+      dplyr::filter(size > min_size)
 
     # Add results to table
     new_row <- data.frame(
