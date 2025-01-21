@@ -232,3 +232,20 @@ test_that("dereplicate fastq file, and return fastq file with fastq_qout_max", {
   expect_equal(microseq::readFastq(fastx_output),
                microseq::readFastq(test_path("testdata", "output", "derep_R1_sample1_fastq_qout_max.fq")))
 })
+
+test_that("dereplicate fastq file, and return fastq tibble with vsearch_options", {
+
+  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  fastx_output <- NULL
+  output_format <- "fastq"
+  vsearch_options <- c("--relabel", "OTU")
+
+  derep_sample1_R1 <- vs_fastx_uniques(fastx_input = fastx_input,
+                                       fastx_output = fastx_output,
+                                       output_format = output_format,
+                                       vsearch_options = vsearch_options)
+
+  expect_equal(derep_sample1_R1,
+               readRDS(test_path("testdata", "output", "derep_sample1_R1_fastq_vsearch_options.rds")))
+
+})
