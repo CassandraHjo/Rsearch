@@ -64,9 +64,24 @@ specified, results are written to file and nothing is returned.
 
 When a FASTA/FASTQ object is returned, the statistics from the merging,
 \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
-This tibble contains merging statistics, including number of pairs, number
-of merged pairs, and length metrics. The statistics can be accessed by
-running \code{attributes(merged_seqs)$statistics} or
+The statistics tibble has the following columns:
+\itemize{
+  \item \code{Tot_num_pairs}: The total number of read pairs before merging.
+  \item \code{Merged}: The number of read pairs that merged.
+  \item \code{Mean_Read_Length_before_merging}: The mean read length before
+  merging (R1 and R2).
+  \item \code{Mean_Read_Length_after_merging}: The mean read length after
+  merging.
+  \item \code{StdDev_Read_Length}: The standard deviation of read length
+  after merging.
+  \item \code{R1}: The name of the file/object with forward (R1) reads that
+  was used in the merging.
+  \item \code{R2}: The name of the file/object with reverse (R2) reads that
+  was used in the merging.
+}
+
+The statistics can be accessed by running
+\code{attributes(merged_seqs)$statistics} or
 \code{attr(merged_seqs, "statistics")}.
 }
 \description{
@@ -102,13 +117,12 @@ the results.
 If \code{log_file} is specified, the messages and merging statistics are
 output to this file.
 If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is
-specified,
-then \code{log_file} needs to be specified in order to get the merging
-statistics from \code{VSEARCH}.
+specified, then \code{log_file} needs to be specified in order to get the
+merging statistics from \code{VSEARCH}.
 
-\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-additional arguments, and how to use them.
+\code{vsearch_options} can be used to pass additional arguments to
+\code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
+\code{VSEARCH} manual for additional arguments, and how to use them.
 }
 \examples{
 \dontrun{

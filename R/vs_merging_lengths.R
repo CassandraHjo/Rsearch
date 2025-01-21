@@ -113,7 +113,7 @@ vs_merging_lengths <- function(fastq_input,
     dplyr::mutate(length_overlap = length_1 + length_2 - length_merged) |>
     dplyr::relocate(read_id = tag, length_1, length_2, length_merged, length_overlap)
 
-  # attr(res.tbl, "statistics") <- attr(merged.tbl, "statistics")
+  attr(res.tbl, "statistics") <- attr(merged.tbl, "statistics")
 
   # Plotting
   plot1 <- res.tbl |>

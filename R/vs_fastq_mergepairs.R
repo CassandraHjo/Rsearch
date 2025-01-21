@@ -55,13 +55,12 @@
 #' If \code{log_file} is specified, the messages and merging statistics are
 #' output to this file.
 #' If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is
-#' specified,
-#' then \code{log_file} needs to be specified in order to get the merging
-#' statistics from \code{VSEARCH}.
+#' specified, then \code{log_file} needs to be specified in order to get the
+#' merging statistics from \code{VSEARCH}.
 #'
-#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-#' additional arguments, and how to use them.
+#' \code{vsearch_options} can be used to pass additional arguments to
+#' \code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
+#' \code{VSEARCH} manual for additional arguments, and how to use them.
 #'
 #' @return A tibble or \code{NULL}.
 #'
@@ -71,9 +70,24 @@
 #'
 #' When a FASTA/FASTQ object is returned, the statistics from the merging,
 #' \code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
-#' This tibble contains merging statistics, including number of pairs, number
-#' of merged pairs, and length metrics. The statistics can be accessed by
-#' running \code{attributes(merged_seqs)$statistics} or
+#' The statistics tibble has the following columns:
+#' \itemize{
+#'   \item \code{Tot_num_pairs}: The total number of read pairs before merging.
+#'   \item \code{Merged}: The number of read pairs that merged.
+#'   \item \code{Mean_Read_Length_before_merging}: The mean read length before
+#'   merging (R1 and R2).
+#'   \item \code{Mean_Read_Length_after_merging}: The mean read length after
+#'   merging.
+#'   \item \code{StdDev_Read_Length}: The standard deviation of read length
+#'   after merging.
+#'   \item \code{R1}: The name of the file/object with forward (R1) reads that
+#'   was used in the merging.
+#'   \item \code{R2}: The name of the file/object with reverse (R2) reads that
+#'   was used in the merging.
+#' }
+#'
+#' The statistics can be accessed by running
+#' \code{attributes(merged_seqs)$statistics} or
 #' \code{attr(merged_seqs, "statistics")}.
 #'
 #' @examples
@@ -224,7 +238,7 @@ vs_fastq_mergepairs <- function(fastq_input,
             "--fastq_minovlen", minovlen,
             "--threads", threads,
             "--fastq_minlen", minlen
-            )
+  )
 
   # Add output files based on output_format
   if (output_format == "fastq") {
@@ -253,9 +267,6 @@ vs_fastq_mergepairs <- function(fastq_input,
   if ((output_format == "fasta" && is.null(fastaout)) ||
       (output_format == "fastq" && is.null(fastqout))) {
 
-    # Extract statistics
-    # statistics <- parse_merge_statistics(vsearch_output, fastq_input_name, reverse_name)
-
     # Create results tibble
     if (output_format == "fastq") {
       merged_seqs <- microseq::readFastq(outfile_fastq)
@@ -263,8 +274,15 @@ vs_fastq_mergepairs <- function(fastq_input,
       merged_seqs <- microseq::readFasta(outfile_fasta)
     }
 
+    # Calculate statistics
+    statistics <- calculate_merge_statistics(fastq_file,
+                                             reverse_file,
+                                             merged_seqs,
+                                             fastq_input_name,
+                                             reverse_name)
+
     # Add statistics as attribute to merging table
-    # attr(merged_seqs, "statistics") <- statistics
+    attr(merged_seqs, "statistics") <- statistics
   }
 
   # Return results
@@ -276,52 +294,69 @@ vs_fastq_mergepairs <- function(fastq_input,
   }
 }
 
-#' Parse merging statistics from string to tibble
+#' Calculate merging statistics
 #'
-#' @description This function transforms the output from \code{VSEARCH} when
-#' running \code{vs_fastq_mergepairs()} into a tibble.
-#' The most important statistics are included in the tibble such as number of
-#' read pairs, merged reads, reasons that reads were not merged, and mean and
-#' standard deviation of read lengths.
+#' @description Calculates important merging statistics after running
+#' \code{vs_fastq_mergepairs()},like number of read pairs, merged reads, and
+#' mean and standard deviation of read lengths.
 #'
-#' @param output A string of output from merging reads with \code{VSEARCH}.
-#' @param fastq_input The name of the file/object with forward (R1) reads that was used in the merging.
-#' @param reverse The name of the file/object with reverse (R2) reads that was used in the merging.
+#' @param fastq_file The FASTQ file containing the forward reads (R1), that was
+#' used as input for the merging.
+#' @param reverse_file The FASTQ file containing the reverse reads (R2), that
+#' was used as input for the merging.
+#' @param merged_seqs The output tibble from the merging.
+#' @param fastq_file_name The name of the file/object with forward (R1) reads
+#' that was used in the merging.
+#' @param reverse_file_name The name of the file/object with reverse (R2) reads
+#' that was used in the merging.
 #'
-#' @return A tibble with merging metrics, including number of read pairs,
-#' merged reads, reasons that reads were not merged, and mean and standard
-#' deviation of read lengths.
+#' @return A tibble with the following columns:
+#' \itemize{
+#'   \item \code{Tot_num_pairs}: The total number of read pairs before merging.
+#'   \item \code{Merged}: The number of read pairs that merged.
+#'   \item \code{Mean_Read_Length_before_merging}: The mean read length before
+#'   merging (R1 and R2).
+#'   \item \code{Mean_Read_Length_after_merging}: The mean read length after
+#'   merging.
+#'   \item \code{StdDev_Read_Length}: The standard deviation of read length
+#'   after merging.
+#'   \item \code{R1}: The name of the file/object with forward (R1) reads that
+#'   was used in the merging.
+#'   \item \code{R2}: The name of the file/object with reverse (R2) reads that
+#'   was used in the merging.
+#' }
+#'
+#' @return A tibble with merging statistics.
 #'
 #' @noRd
 #'
-parse_merge_statistics <- function(output, fastq_input, reverse) {
+calculate_merge_statistics <- function(fastq_file,
+                                       reverse_file,
+                                       merged_seqs,
+                                       fastq_file_name,
+                                       reverse_file_name) {
 
-  # Extract values from output
-  pairs <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Pairs$"), "\\d+"))
-  merged <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Merged"), "\\d+"))
+  # Remove "'" in start and end of fastq_file and reverse_file
+  fastq_file <- stringr::str_replace_all(fastq_file, "^'|'$", "")
+  reverse_file <- stringr::str_replace_all(reverse_file, "^'|'$", "")
 
-  #too_many_diff <- as.numeric(stringr::str_extract(stringr::str_subset(output, "too many differences"), "\\d+"))
-  too_many_diff_txt <- stringr::str_subset(output, "too many differences")
-  if (length(too_many_diff_txt) == 0) {
-    too_many_diff <- 0
-  } else {
-    too_many_diff <- as.numeric(stringr::str_extract(too_many_diff_txt, "\\d+"))
-  }
+  # Calculate statistics
+  pairs <- nrow(microseq::readFastq(fastq_file))
+  merged <- nrow(merged_seqs)
+  mean_length_before <- round(((mean(nchar(microseq::readFastq(fastq_file)$Sequence)) + mean(nchar(microseq::readFastq(reverse_file)$Sequence))) / 2), 2)
+  mean_length_merged_reads <- round(mean(nchar(merged_seqs$Sequence)), 2)
+  sd_read_length_merged_reads <- round(stats::sd(nchar(merged_seqs$Sequence)), 2)
 
-  alignment_low <- as.numeric(stringr::str_extract(stringr::str_subset(output, "alignment score too low"), "\\d+"))
-  mean_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Mean fragment length"), "\\d+\\.\\d+"))
-  stddev_frag_length <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Standard deviation of fragment length"), "\\d+\\.\\d+"))
 
   # Create table
   result_table <- data.frame(
     Tot_num_pairs = pairs,
     Merged = merged,
-    Too_Many_Differences = too_many_diff,
-    Low_Alignment_Score_or_score_drop_too_high = alignment_low,
-    Mean_Fragment_Length = mean_frag_length,
-    StdDev_Fragment_Length = stddev_frag_length,
-    R1 = fastq_input,
-    R2 = reverse
+    Mean_Read_Length_before_merging = mean_length_before,
+    Mean_Read_Length_after_merging = mean_length_merged_reads,
+    StdDev_Read_Length = sd_read_length_merged_reads,
+    R1 = fastq_file_name,
+    R2 = reverse_file_name
   )
 
   return(result_table)
