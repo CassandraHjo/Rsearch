@@ -54,6 +54,8 @@
 #' }
 #' @references \url{https://github.com/torognes/vsearch}
 #'
+#' @aliases merging_lengths
+#'
 #' @export
 #'
 vs_merging_lengths <- function(fastq_input,

@@ -22,28 +22,32 @@ test_that("error when reverse has incorrect columns if input is tibble", {
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
-# test_that("get merging lengths from merging two fastq files", {
-#
-#   fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-#   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
-#
-#   merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
-#                                            reverse = reverse)
-#
-#   expect_equal(merging_lengths_df,
-#                readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_files.rds")))
-#
-# })
+test_that("get merging lengths from merging two fastq files", {
 
-# test_that("get merging lengths from merging two fastq tibbles", {
-#
-#   fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-#   reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
-#
-#   merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
-#                                            reverse = reverse)
-#
-#   expect_equal(merging_lengths_df,
-#                readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_tibbles.rds")))
-#
-# })
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+
+  merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
+                                           reverse = reverse)
+
+  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_files.rds"))
+
+  # Remove 'plot' attribute before comparison due to errors with ggplot
+  attr(merging_lengths_df, "plot") <- NULL
+  attr(expected_df, "plot") <- NULL
+
+  expect_equal(merging_lengths_df, expected_df)
+})
+
+test_that("get merging lengths from merging two fastq tibbles", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+
+  merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
+                                           reverse = reverse)
+
+  expect_equal(merging_lengths_df,
+               readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_tibbles.rds")))
+
+})

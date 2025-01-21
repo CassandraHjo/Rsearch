@@ -2,6 +2,7 @@
 % Please edit documentation in R/vs_merging_lengths.R
 \name{vs_merging_lengths}
 \alias{vs_merging_lengths}
+\alias{merging_lengths}
 \title{Length statistics after merging}
 \usage{
 vs_merging_lengths(
