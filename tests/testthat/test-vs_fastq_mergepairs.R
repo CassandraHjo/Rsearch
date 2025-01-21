@@ -98,17 +98,11 @@ test_that("fastq_input and reverse can be merged when files, and results written
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
   fastqout <- withr::local_tempfile()
   output_format <- "fastq"
-  minlen <- 0
-  log_file <- NULL
-  threads <- 1
 
   return_value <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                       reverse = reverse,
                                       fastqout = fastqout,
-                                      output_format = output_format,
-                                      minlen = minlen,
-                                      log_file = log_file,
-                                      threads = threads)
+                                      output_format = output_format)
 
   expect_null(return_value)
 
@@ -122,17 +116,11 @@ test_that("fastq_input and reverse can be merged when files, and results written
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
   fastaout <- withr::local_tempfile()
   output_format <- "fasta"
-  minlen <- 0
-  log_file <- NULL
-  threads <- 1
 
   return_value <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                       reverse = reverse,
                                       fastaout = fastaout,
-                                      output_format = output_format,
-                                      minlen = minlen,
-                                      log_file = log_file,
-                                      threads = threads)
+                                      output_format = output_format)
 
   expect_null(return_value)
 
@@ -140,51 +128,37 @@ test_that("fastq_input and reverse can be merged when files, and results written
                microseq::readFasta(test_path("testdata", "output", "merged_sample1.fa")))
 })
 
-# test_that("fastq_input and reverse can be merged when files, and results given as fastq tibble", {
-#
-#   fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-#   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
-#   fastqout <- NULL
-#   output_format <- "fastq"
-#   minlen <- 0
-#   log_file <- NULL
-#   threads <- 1
-#
-#   merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-#                                       reverse = reverse,
-#                                       fastqout = fastqout,
-#                                       output_format = output_format,
-#                                       minlen = minlen,
-#                                       log_file = log_file,
-#                                       threads = threads)
-#
-#   expect_equal(merged_sample1,
-#                readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds")))
-#
-# })
+test_that("fastq_input and reverse can be merged when files, and results given as fastq tibble", {
 
-# test_that("fastq_input and reverse can be merged when files, and results given as fasta tibble", {
-#
-#   fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-#   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
-#   fastaout <- NULL
-#   output_format <- "fasta"
-#   minlen <- 0
-#   log_file <- NULL
-#   threads <- 1
-#
-#   merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-#                                         reverse = reverse,
-#                                         fastaout = fastaout,
-#                                         output_format = output_format,
-#                                         minlen = minlen,
-#                                         log_file = log_file,
-#                                         threads = threads)
-#
-#   expect_equal(merged_sample1,
-#                readRDS(test_path("testdata", "output", "merged_sample1_fasta_files.rds")))
-#
-# })
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  output_format <- "fastq"
+
+  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                      reverse = reverse,
+                                      output_format = output_format)
+
+  expect_equal(merged_sample1,
+               readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds")))
+
+})
+
+test_that("fastq_input and reverse can be merged when files, and results given as fasta tibble", {
+
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastaout <- NULL
+  output_format <- "fasta"
+
+  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                        reverse = reverse,
+                                        fastaout = fastaout,
+                                        output_format = output_format)
+
+  expect_equal(merged_sample1,
+               readRDS(test_path("testdata", "output", "merged_sample1_fasta_files.rds")))
+
+})
 
 test_that("fastq_input and reverse can be merged when tibbles, and results written to fastq file", {
 
@@ -192,17 +166,11 @@ test_that("fastq_input and reverse can be merged when tibbles, and results writt
   reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
   fastqout <- withr::local_tempfile()
   output_format <- "fastq"
-  minlen <- 0
-  log_file <- NULL
-  threads <- 1
 
   return_value <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                       reverse = reverse,
                                       fastqout = fastqout,
-                                      output_format = output_format,
-                                      minlen = minlen,
-                                      log_file = log_file,
-                                      threads = threads)
+                                      output_format = output_format)
 
   expect_null(return_value)
 
@@ -210,27 +178,19 @@ test_that("fastq_input and reverse can be merged when tibbles, and results writt
                microseq::readFastq(test_path("testdata", "output", "merged_sample1.fq")))
 })
 
-# test_that("fastq_input and reverse can be merged when tibbles, and results given as tibble", {
-#
-#   fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-#   reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
-#   fastqout <- NULL
-#   output_format <- "fastq"
-#   minlen <- 0
-#   log_file <- NULL
-#   threads <- 1
-#
-#   merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-#                                         reverse = reverse,
-#                                         fastqout = fastqout,
-#                                         output_format = output_format,
-#                                         minlen = minlen,
-#                                         log_file = log_file,
-#                                         threads = threads)
-#
-#   expect_equal(merged_sample1,
-#                readRDS(test_path("testdata", "output", "merged_sample1_fastq_tibbles.rds")))
-# })
+test_that("fastq_input and reverse can be merged when tibbles, and results given as tibble", {
+
+  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  output_format <- "fastq"
+
+  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                        reverse = reverse,
+                                        output_format = output_format)
+
+  expect_equal(merged_sample1,
+               readRDS(test_path("testdata", "output", "merged_sample1_fastq_tibbles.rds")))
+})
 
 test_that("log file exists when specified", {
 
@@ -238,17 +198,13 @@ test_that("log file exists when specified", {
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
   fastqout <- withr::local_tempfile()
   output_format <- "fastq"
-  minlen <- 0
   log_file <- withr::local_tempfile()
-  threads <- 1
 
   return_value <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                       reverse = reverse,
                                       fastqout = fastqout,
                                       output_format = output_format,
-                                      minlen = minlen,
-                                      log_file = log_file,
-                                      threads = threads)
+                                      log_file = log_file)
   expect_null(return_value)
 
   expect_true(file.exists(log_file))
