@@ -259,3 +259,25 @@ test_that("subsample fasta tibble with size, and return fasta tibble", {
                readRDS(test_path("testdata", "output", "subsample_sample1_R1_fasta_tibble.rds")))
 
 })
+
+test_that("subsample fastq file with size, and return fastq tibble with vsearch_options", {
+
+  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  fastx_output <- NULL
+  output_format <- "fastq"
+  sample_size <- 100
+  randseed <- 1
+  vsearch_options <- c("--relabel", "OTU")
+
+  subsample_sample1_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
+                                             fastx_output = fastx_output,
+                                             output_format = output_format,
+                                             sample_size = sample_size,
+                                             randseed = randseed,
+                                             vsearch_options = vsearch_options
+  )
+
+  expect_equal(subsample_sample1_R1,
+               readRDS(test_path("testdata", "output", "subsample_sample1_R1_fastq_vsearch_options.rds")))
+
+})

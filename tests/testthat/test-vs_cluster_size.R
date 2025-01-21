@@ -57,3 +57,17 @@ test_that("cluster sequences from fasta tibble, and return fasta tibble", {
   expect_equal(cluster_sample1_R1,
                readRDS(test_path("testdata", "output", "cluster_R1_sample1_tibble.rds")))
 })
+
+test_that("cluster sequences from fasta file, and return fasta tibble with vsearch_options", {
+
+  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  centroids <- NULL
+  vsearch_options <- c("")
+
+  cluster_sample1_R1 <- vs_cluster_size(fasta_input = fasta_input,
+                                        centroids = centroids,
+                                        vsearch_options = vsearch_options)
+
+  expect_equal(cluster_sample1_R1,
+               readRDS(test_path("testdata", "output", "cluster_R1_sample1_file.rds")))
+})

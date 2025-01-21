@@ -210,3 +210,20 @@ test_that("log file exists when specified", {
   expect_true(file.exists(log_file))
 
 })
+
+test_that("fastq_input and reverse can be merged when files, and results given as fastq tibble with vsearch_options", {
+
+  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  output_format <- "fastq"
+  vsearch_options <- c("--relabel", "OTU")
+
+  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                        reverse = reverse,
+                                        output_format = output_format,
+                                        vsearch_options = vsearch_options)
+
+  expect_equal(merged_sample1,
+               readRDS(test_path("testdata", "output", "merged_sample1_fastq_files_vsearch_options.rds")))
+
+})
