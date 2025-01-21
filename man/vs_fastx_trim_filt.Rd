@@ -17,7 +17,7 @@ vs_fastx_trim_filt(
   maxsize = NULL,
   minsize = NULL,
   trunclen = NULL,
-  truncqual = 20,
+  truncqual = 1,
   truncee = NULL,
   stripright = 0,
   stripleft = 0,
