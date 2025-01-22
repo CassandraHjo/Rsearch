@@ -10,13 +10,17 @@
 #' in FASTQ/FASTA format.
 #' @param blast6out Name of the output file for the search results in a blast-like
 #' tab-separated format of twelve fields, with one line per query-target matching.
-#' @param id The pairwise identity threshold. Defaults to \code{0.8}. See Details.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
+#' @param id The pairwise identity threshold. Defaults to \code{0.7}. See Details.
 #' @param strand \code{"plus"} (default) or \code{"both"}.
 #' When comparing sequences only check the plus strand or both strands.
+#' @param gapopen A string to set other penalties than \code{VSEARCH}'s default
+#' for gap opening. See Details.
+#' @param gapext A string to set other penalties than \code{VSEARCH}'s default
+#' for gap extension. See Details.
 #' @param vsearch_options A character string of additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
+#' Defaults to \code{1}.
 #'
 #' @details
 #'
@@ -28,6 +32,11 @@
 #' The pairwise identity \code{id} is defined as
 #' the number of (matching columns) / (alignment length - terminal gaps)
 #'
+#' \code{gapopen} and \code{gapext} can be defined in multiple ways.
+#' Visit the \code{VSEARCH}
+#' \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
+#' for more details.
+#'
 #' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
 #' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
 #' additional arguments, and how to use them.
@@ -35,15 +44,19 @@
 #' @returns
 #' \code{NULL} (Output is written to file specified by \code{blast6out}).
 #'
+#' @references \url{https://github.com/torognes/vsearch}
+#'
 #' @export
 #'
 vs_usearch_global <- function(fastx_input,
                               db,
                               blast6out,
                               # userout,
-                              id = 0.8,
+                              id = 0.7,
                               threads = 1,
                               strand = "plus",
+                              gapopen = NULL,
+                              gapext = NULL,
                               vsearch_options = NULL){
 
   # Check if vsearch is available
@@ -159,7 +172,16 @@ vs_usearch_global <- function(fastx_input,
             "--threads", threads,
             "--strand", strand)
 
-  # Add additional arguments is specified
+  # Add gap penalties arguments if specified
+  if (!is.null(gapopen)) {
+    args <- c(args, "--gapopen", gapopen)
+  }
+
+  if (!is.null(gapext)) {
+    args <- c(args, "--gapext", gapext)
+  }
+
+  # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
   }

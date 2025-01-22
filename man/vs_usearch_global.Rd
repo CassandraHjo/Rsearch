@@ -8,9 +8,11 @@ vs_usearch_global(
   fastx_input,
   db,
   blast6out,
-  id = 0.8,
+  id = 0.7,
   threads = 1,
   strand = "plus",
+  gapopen = NULL,
+  gapext = NULL,
   vsearch_options = NULL
 )
 }
@@ -24,13 +26,19 @@ in FASTQ/FASTA format.}
 \item{blast6out}{Name of the output file for the search results in a blast-like
 tab-separated format of twelve fields, with one line per query-target matching.}
 
-\item{id}{The pairwise identity threshold. Defaults to \code{0.8}. See Details.}
+\item{id}{The pairwise identity threshold. Defaults to \code{0.7}. See Details.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
 \item{strand}{\code{"plus"} (default) or \code{"both"}.
 When comparing sequences only check the plus strand or both strands.}
+
+\item{gapopen}{A string to set other penalties than \code{VSEARCH}'s default
+for gap opening. See Details.}
+
+\item{gapext}{A string to set other penalties than \code{VSEARCH}'s default
+for gap extension. See Details.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See Details.}
@@ -51,7 +59,15 @@ FASTQ objects are tibbles that contain the columns \code{Header},
 The pairwise identity \code{id} is defined as
 the number of (matching columns) / (alignment length - terminal gaps)
 
+\code{gapopen} and \code{gapext} can be defined in multiple ways.
+Visit the \code{VSEARCH}
+\href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
+for more details.
+
 \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
 that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
 additional arguments, and how to use them.
+}
+\references{
+\url{https://github.com/torognes/vsearch}
 }
