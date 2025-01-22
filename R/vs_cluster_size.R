@@ -15,7 +15,9 @@
 #' @param sizeout Decides if abundance annotations should be added to
 #' FASTA headers. Defaults to \code{TRUE}.
 #' @param relabel Relabel sequences using the given prefix and a ticker to construct
-#' new headers. Defaults to \code{"OTU"}.
+#' new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 Relabel sequences using the SHA1 message digest algorithm.
+#' Defaults to \code{FALSE}.
 #' @param threads The number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param fasta_width The number of characters in the width of sequences in the
@@ -84,7 +86,8 @@ vs_cluster_size <- function(fasta_input,
                             strand = "plus",
                             sizein = TRUE,
                             sizeout = TRUE,
-                            relabel = "OTU",
+                            relabel = NULL,
+                            relabel_sha1 = FALSE,
                             threads = 1,
                             fasta_width = 0,
                             vsearch_options = NULL){
@@ -140,7 +143,6 @@ vs_cluster_size <- function(fasta_input,
             "--threads", 1,
             "--strand", strand,
             "--fasta_width", fasta_width,
-            "--relabel", relabel,
             "--centroids", outfile)
 
   if (sizein) {
@@ -151,7 +153,16 @@ vs_cluster_size <- function(fasta_input,
     args <- c(args, "--sizeout", "")
   }
 
-  # Add additional arguments is specified
+  # Add relabeling arguments if specified
+  if (!is.null(relabel)){
+    args <- c(args, "--relabel", relabel)
+  }
+
+  if (relabel_sha1){
+    args <- c(args, "--relabel_sha1", "")
+  }
+
+  # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
   }
