@@ -11,7 +11,8 @@ vs_cluster_size(
   strand = "plus",
   sizein = TRUE,
   sizeout = TRUE,
-  relabel = "OTU",
+  relabel = NULL,
+  relabel_sha1 = FALSE,
   threads = 1,
   fasta_width = 0,
   vsearch_options = NULL
@@ -37,7 +38,10 @@ be taken into account. Defaults to \code{TRUE}.}
 FASTA headers. Defaults to \code{TRUE}.}
 
 \item{relabel}{Relabel sequences using the given prefix and a ticker to construct
-new headers. Defaults to \code{"OTU"}.}
+new headers. Defaults to \code{NULL}.}
+
+\item{relabel_sha1}{Relabel sequences using the SHA1 message digest algorithm.
+Defaults to \code{FALSE}.}
 
 \item{threads}{The number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}

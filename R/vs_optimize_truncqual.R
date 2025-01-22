@@ -82,7 +82,7 @@ vs_optimize_truncqual <- function(fastq_input,
 
     # Update counting variable and progress bar
     stepi <- stepi + 1
-    utils::setTxtProgressBar(pb,stepi)
+    utils::setTxtProgressBar(pb, stepi)
 
     # Trim R1 and R2 reads together
     trim_R1.df <- vs_fastx_trim_filt(fastx_input = fastq_input,
