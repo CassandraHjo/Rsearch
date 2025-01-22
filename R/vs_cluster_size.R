@@ -126,8 +126,7 @@ vs_cluster_size <- function(fasta_input,
   if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
 
   # Normalize file paths
-  fasta_file <- normalizePath(fasta_file) |>
-    shQuote()
+  fasta_file <- normalizePath(fasta_file)
 
   # Determine centroids file
   if (is.null(centroids)) {
@@ -138,7 +137,7 @@ vs_cluster_size <- function(fasta_input,
   }
 
   # Build argument string for command line
-  args <- c("--cluster_size", fasta_file,
+  args <- c("--cluster_size", shQuote(fasta_file),
             "--id", id,
             "--threads", 1,
             "--strand", strand,

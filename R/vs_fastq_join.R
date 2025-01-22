@@ -172,10 +172,8 @@ vs_fastq_join <- function(fastq_input,
   if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
 
   # Normalize file paths
-  fastq_file <- normalizePath(fastq_file) |>
-    shQuote()
-  reverse_file <- normalizePath(reverse_file) |>
-    shQuote()
+  fastq_file <- normalizePath(fastq_file)
+  reverse_file <- normalizePath(reverse_file)
 
   # Determine output file
   if (output_format == "fasta") {
@@ -198,8 +196,8 @@ vs_fastq_join <- function(fastq_input,
   }
 
   # Build argument string for command line
-  args <- c("--fastq_join", fastq_file,
-            "--reverse", reverse_file,
+  args <- c("--fastq_join", shQuote(fastq_file),
+            "--reverse", shQuote(reverse_file),
             "--join_padgap", join_padgap,
             "--join_padgapq", join_padgapq,
             "--threads", threads)
