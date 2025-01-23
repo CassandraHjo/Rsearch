@@ -22,6 +22,8 @@
 #' Defaults to \code{1}.
 #' @param fasta_width The number of characters in the width of sequences in the
 #' output FASTA file. Defaults to \code{0}. See Details.
+#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
+#' If \code{NULL}, no log file is created. Defaults to \code{NULL}.
 #' @param vsearch_options A character string of additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
@@ -90,6 +92,7 @@ vs_cluster_size <- function(fasta_input,
                             relabel_sha1 = FALSE,
                             threads = 1,
                             fasta_width = 0,
+                            log_file = NULL,
                             vsearch_options = NULL){
 
   # Check if vsearch is available
@@ -165,6 +168,11 @@ vs_cluster_size <- function(fasta_input,
   # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
+  }
+
+  # Add log file if specified
+  if (!is.null(log_file)){
+    args <- c(args, "--log", log_file)
   }
 
   # Run vsearch

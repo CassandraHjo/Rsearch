@@ -11,9 +11,11 @@ vs_cluster_size(
   strand = "plus",
   sizein = TRUE,
   sizeout = TRUE,
-  relabel = "OTU",
+  relabel = NULL,
+  relabel_sha1 = FALSE,
   threads = 1,
   fasta_width = 0,
+  log_file = NULL,
   vsearch_options = NULL
 )
 }
@@ -37,13 +39,19 @@ be taken into account. Defaults to \code{TRUE}.}
 FASTA headers. Defaults to \code{TRUE}.}
 
 \item{relabel}{Relabel sequences using the given prefix and a ticker to construct
-new headers. Defaults to \code{"OTU"}.}
+new headers. Defaults to \code{NULL}.}
+
+\item{relabel_sha1}{Relabel sequences using the SHA1 message digest algorithm.
+Defaults to \code{FALSE}.}
 
 \item{threads}{The number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
 \item{fasta_width}{The number of characters in the width of sequences in the
 output FASTA file. Defaults to \code{0}. See Details.}
+
+\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
+If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See Details.}
