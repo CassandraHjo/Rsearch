@@ -11,8 +11,8 @@ vs_usearch_global(
   id = 0.7,
   threads = 1,
   strand = "plus",
-  gapopen = NULL,
-  gapext = NULL,
+  gapopen = "20I/2E",
+  gapext = "2I/1E",
   vsearch_options = NULL
 )
 }
@@ -34,11 +34,11 @@ Defaults to \code{1}.}
 \item{strand}{\code{"plus"} (default) or \code{"both"}.
 When comparing sequences only check the plus strand or both strands.}
 
-\item{gapopen}{A string to set other penalties than \code{VSEARCH}'s default
-for gap opening. See Details.}
+\item{gapopen}{A string to set penalties for gap opening. Defaults to
+\code{"20I/2E"}. See Details.}
 
-\item{gapext}{A string to set other penalties than \code{VSEARCH}'s default
-for gap extension. See Details.}
+\item{gapext}{A string to set penalties for gap extension. Defaults to
+\code{"2I/1E"}. See Details.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See Details.}
@@ -59,10 +59,9 @@ FASTQ objects are tibbles that contain the columns \code{Header},
 The pairwise identity \code{id} is defined as
 the number of (matching columns) / (alignment length - terminal gaps)
 
-\code{gapopen} and \code{gapext} can be defined in multiple ways.
 Visit the \code{VSEARCH}
 \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
-for more details.
+for information about defining \code{gapopen} and \code{gapext}.
 
 \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
 that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for

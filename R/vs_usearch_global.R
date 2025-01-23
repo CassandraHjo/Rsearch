@@ -13,10 +13,10 @@
 #' @param id The pairwise identity threshold. Defaults to \code{0.7}. See Details.
 #' @param strand \code{"plus"} (default) or \code{"both"}.
 #' When comparing sequences only check the plus strand or both strands.
-#' @param gapopen A string to set other penalties than \code{VSEARCH}'s default
-#' for gap opening. See Details.
-#' @param gapext A string to set other penalties than \code{VSEARCH}'s default
-#' for gap extension. See Details.
+#' @param gapopen A string to set penalties for gap opening. Defaults to
+#' \code{"20I/2E"}. See Details.
+#' @param gapext A string to set penalties for gap extension. Defaults to
+#' \code{"2I/1E"}. See Details.
 #' @param vsearch_options A character string of additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
@@ -32,10 +32,9 @@
 #' The pairwise identity \code{id} is defined as
 #' the number of (matching columns) / (alignment length - terminal gaps)
 #'
-#' \code{gapopen} and \code{gapext} can be defined in multiple ways.
 #' Visit the \code{VSEARCH}
 #' \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
-#' for more details.
+#' for information about defining \code{gapopen} and \code{gapext}.
 #'
 #' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
 #' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
@@ -55,8 +54,8 @@ vs_usearch_global <- function(fastx_input,
                               id = 0.7,
                               threads = 1,
                               strand = "plus",
-                              gapopen = NULL,
-                              gapext = NULL,
+                              gapopen = "20I/2E",
+                              gapext = "2I/1E",
                               vsearch_options = NULL){
 
   # Check if vsearch is available
@@ -167,16 +166,9 @@ vs_usearch_global <- function(fastx_input,
             # "--userout", userout,
             # "--userfields", "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
             "--threads", threads,
-            "--strand", strand)
-
-  # Add gap penalties arguments if specified
-  if (!is.null(gapopen)) {
-    args <- c(args, "--gapopen", gapopen)
-  }
-
-  if (!is.null(gapext)) {
-    args <- c(args, "--gapext", gapext)
-  }
+            "--strand", strand,
+            "--gapopen", gapopen,
+            "--gapext", gapext)
 
   # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
