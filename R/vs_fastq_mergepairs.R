@@ -206,10 +206,8 @@ vs_fastq_mergepairs <- function(fastq_input,
   if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
 
   # Normalize file paths
-  fastq_file <- normalizePath(fastq_file) |>
-    shQuote()
-  reverse_file <- normalizePath(reverse_file) |>
-    shQuote()
+  fastq_file <- normalizePath(fastq_file)
+  reverse_file <- normalizePath(reverse_file)
 
   # Determine output file
   if (output_format == "fasta") {
@@ -233,8 +231,8 @@ vs_fastq_mergepairs <- function(fastq_input,
 
 
   # Build argument string for command line
-  args <- c("--fastq_mergepairs", fastq_file,
-            "--reverse", reverse_file,
+  args <- c("--fastq_mergepairs", shQuote(fastq_file),
+            "--reverse", shQuote(reverse_file),
             "--fastq_minovlen", minovlen,
             "--threads", threads,
             "--fastq_minlen", minlen
@@ -341,9 +339,11 @@ calculate_merge_statistics <- function(fastq_file,
   reverse_file <- stringr::str_replace_all(reverse_file, "^'|'$", "")
 
   # Calculate statistics
-  pairs <- nrow(microseq::readFastq(fastq_file))
+  r1 <- microseq::readFastq(fastq_file)
+  r2 <- microseq::readFastq(reverse_file)
+  pairs <- nrow(r1)
   merged <- nrow(merged_seqs)
-  mean_length_before <- round(((mean(nchar(microseq::readFastq(fastq_file)$Sequence)) + mean(nchar(microseq::readFastq(reverse_file)$Sequence))) / 2), 2)
+  mean_length_before <- round(((mean(nchar(r1$Sequence)) + mean(nchar(r2$Sequence))) / 2), 2)
   mean_length_merged_reads <- round(mean(nchar(merged_seqs$Sequence)), 2)
   sd_read_length_merged_reads <- round(stats::sd(nchar(merged_seqs$Sequence)), 2)
 

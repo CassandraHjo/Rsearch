@@ -186,11 +186,10 @@ vs_fastx_subsample <- function(fastx_input,
   if (!file.exists(input_file)) stop("Cannot find input file: ", input_file)
 
   # Normalize file paths
-  input_file <- normalizePath(input_file) |>
-    shQuote()
+  input_file <- normalizePath(input_file)
 
   # Build argument string for command line
-  args <- c("--fastx_subsample", input_file,
+  args <- c("--fastx_subsample", shQuote(input_file),
             "--threads", threads)
 
   if (output_format == "fasta") {

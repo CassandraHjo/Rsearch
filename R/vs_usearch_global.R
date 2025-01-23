@@ -156,15 +156,12 @@ vs_usearch_global <- function(fastx_input,
   }
 
   # Normalize file paths
-  fastx_file <- normalizePath(fastx_file) |>
-    shQuote()
-
-  db_file <- normalizePath(db_file) |>
-    shQuote()
+  fastx_file <- normalizePath(fastx_file)
+  db_file <- normalizePath(db_file)
 
   # Build argument string for command line
-  args <- c("--usearch_global", fastx_file,
-            "--db", db_file,
+  args <- c("--usearch_global", shQuote(fastx_file),
+            "--db", shQuote(db_file),
             "--id", id,
             "--blast6out", blast6out,
             # "--userout", userout,

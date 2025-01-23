@@ -369,21 +369,19 @@ vs_fastx_trim_filt <- function(fastx_input,
   }
 
   # Normalize file paths
-  fastx_file <- normalizePath(fastx_file) |>
-    shQuote()
+  fastx_file <- normalizePath(fastx_file)
   if (!is.null(reverse)) {
-    reverse_file <- normalizePath(reverse_file) |>
-      shQuote()
+    reverse_file <- normalizePath(reverse_file)
   }
 
   # Build argument string for command line
-  args <- c("--fastx_filter", fastx_file,
+  args <- c("--fastx_filter", shQuote(fastx_file),
             "--fastq_minlen", minlen,
             "--threads", threads)
 
   # Add reverse to arguments if provided
   if (!is.null(reverse)) {
-    args <- c(args, "--reverse", reverse_file)
+    args <- c(args, "--reverse", shQuote(reverse_file))
   }
 
   # Add trimming and filtering arguments if provided
