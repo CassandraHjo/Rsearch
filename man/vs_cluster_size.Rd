@@ -64,9 +64,24 @@ sequences is returned. If \code{centroids} is specified, results are written
 to file, and nothing is returned.
 
 When a FASTA object is returned, the statistics from the clustering,
-\code{statistics}, is an attribute, called \code{"statistics"} of the centroids
-tibble. This tibble contains clustering statistics, including statistics
-about input sequences, number of clusters and their sizes.
+\code{statistics}, is an attribute of the centroids tibble.
+The statistics tibble has the following columns:
+\itemize{
+  \item \code{num_nucleotides}: The total number of nucleotides used as input
+  for clustering.
+  \item \code{min_length_input_seq}: The length of the shortest sequence used
+  as input for clustering.
+  \item \code{max_length_input_seq}: The length of the longest sequence used
+  as input for clustering.
+  \item \code{avg_length_input_seq}: The average length of the sequences used
+  as input for clustering.
+  \item \code{num_clusters}: The number of clusters generated.
+  \item \code{min_size_cluster}: The size of the smallest cluster.
+  \item \code{max_size_cluster}: The size of the largest cluster.
+  \item \code{avg_size_cluster}: The average size of the clusters.
+  \item \code{num_singletons}: The number of singletons after clustering.
+  \item \code{input}: The name of the input file/object for the clustering.
+}
 }
 \description{
 Cluster FASTA sequences in the given file or object.

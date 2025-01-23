@@ -60,9 +60,24 @@
 #' to file, and nothing is returned.
 #'
 #' When a FASTA object is returned, the statistics from the clustering,
-#' \code{statistics}, is an attribute, called \code{"statistics"} of the centroids
-#' tibble. This tibble contains clustering statistics, including statistics
-#' about input sequences, number of clusters and their sizes.
+#' \code{statistics}, is an attribute of the centroids tibble.
+#' The statistics tibble has the following columns:
+#' \itemize{
+#'   \item \code{num_nucleotides}: The total number of nucleotides used as input
+#'   for clustering.
+#'   \item \code{min_length_input_seq}: The length of the shortest sequence used
+#'   as input for clustering.
+#'   \item \code{max_length_input_seq}: The length of the longest sequence used
+#'   as input for clustering.
+#'   \item \code{avg_length_input_seq}: The average length of the sequences used
+#'   as input for clustering.
+#'   \item \code{num_clusters}: The number of clusters generated.
+#'   \item \code{min_size_cluster}: The size of the smallest cluster.
+#'   \item \code{max_size_cluster}: The size of the largest cluster.
+#'   \item \code{avg_size_cluster}: The average size of the clusters.
+#'   \item \code{num_singletons}: The number of singletons after clustering.
+#'   \item \code{input}: The name of the input file/object for the clustering.
+#' }
 #'
 #' @examples
 #' \dontrun{
@@ -188,8 +203,10 @@ vs_cluster_size <- function(fasta_input,
       dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
       dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
 
-    # Output statistics in table
-    statistics <- parse_cluster_statistics(vsearch_output, fasta_input_name)
+    # Create statistics tibble
+    statistics <- calculate_cluster_statistics(centroids_fasta,
+                                               fasta_file,
+                                               fasta_input_name)
 
     # Add additional tables as attributes to the primary table
     attr(centroids_fasta, "statistics") <- statistics
@@ -203,48 +220,72 @@ vs_cluster_size <- function(fasta_input,
   }
 }
 
-#' Parse clustering statistics from string to tibble
+#' Calculate clustering statistics
 #'
-#' @description This function transforms the output from \code{VSEARCH} when
-#' running \code{vs_cluster_size()} into a tibble.
+#' @description Calculates important clustering statistics after running
+#' \code{vs_cluster_size()}, including the number of clusters, sequences, and
+#' nucleotides, and the lengths and sizes of the sequences and clusters.
 #'
-#' @param output A string of output from clustering sequences with \code{VSEARCH}.
-#' @param input_file The name of the file/object with sequences used in the clustering
+#' @param centroids_fasta The output tibble from clustering with the centroids.
+#' Contains the columns: Header, Sequence, and centroid_size.
+#' @param fasta_file The FASTA file containing the input sequences to the
+#' clustering.
+#' @param fasta_input_name The name of the file/object with the input sequences
+#' that was used in the clustering.
+#' The output tibble from the merging.
 #'
-#' @return A tibble with clustering metrics, including the number of nucleotides,
-#' sequences, clusters, and the lengths and sizes of the sequences and clusters.
+#' @return A tibble with the following columns:
+#' \itemize{
+#'   \item \code{num_nucleotides}: The total number of nucleotides used as input
+#'   for clustering.
+#'   \item \code{min_length_input_seq}: The length of the shortest sequence used
+#'   as input for clustering.
+#'   \item \code{max_length_input_seq}: The length of the longest sequence used
+#'   as input for clustering.
+#'   \item \code{avg_length_input_seq}: The average length of the sequences used
+#'   as input for clustering.
+#'   \item \code{num_clusters}: The number of clusters generated.
+#'   \item \code{min_size_cluster}: The size of the smallest cluster.
+#'   \item \code{max_size_cluster}: The size of the largest cluster.
+#'   \item \code{avg_size_cluster}: The average size of the clusters.
+#'   \item \code{num_singletons}: The number of singletons after clustering.
+#'   \item \code{input}: The name of the input file/object for the clustering.
+#' }
+#'
+#' @return A tibble with clustering statistics.
 #'
 #' @noRd
 #'
-parse_cluster_statistics <- function(output, input_file) {
+calculate_cluster_statistics <- function(centroids_fasta,
+                                         fasta_file,
+                                         fasta_input_name) {
 
-  # Extract values from output
-  nucleotides <- as.numeric(stringr::str_extract(stringr::str_subset(output, " nt in"), "\\d+(?= nt )"))
-  sequences <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=nt in )\\d+"))
-  min_len_seq <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=min )\\d+"))
-  max_len_seq <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=max )\\d+"))
-  avg_len_seq <- as.numeric(stringr::str_extract(stringr::str_subset(output, "nt in"), "(?<=avg )\\d+"))
+  # Make tibble from input sequences to the clustering
+  input.df <- microseq::readFasta(fasta_file)
 
-  num_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=Clusters: )\\d+"))
-  min_size_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=min )\\d+"))
-  max_size_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=max )\\d+"))
-  avg_size_clusters <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Clusters: "), "(?<=avg )\\d+\\.?\\d*"))
-
-  num_singletons <- as.numeric(stringr::str_extract(stringr::str_subset(output, "Singletons: "), "(?<=Singletons: )\\d+"))
+  # Calculate statistics
+  num_nucleotides <- sum(nchar(input.df$Sequence))
+  min_length_input_seq <- min(nchar(input.df$Sequence))
+  max_length_input_seq <- max(nchar(input.df$Sequence))
+  avg_length_input_seq <- mean(nchar(input.df$Sequence))
+  num_clusters <- nrow(centroids_fasta)
+  min_size_cluster <- min(centroids_fasta$centroid_size)
+  max_size_cluster <- max(centroids_fasta$centroid_size)
+  avg_size_cluster <- round(mean(centroids_fasta$centroid_size), 1)
+  num_singletons <- sum(centroids_fasta$centroid_size == 1)
 
   # Create table
   result_table <- data.frame(
-    Tot_nucleotides = nucleotides,
-    Num_sequences = sequences,
-    Min_sequence_length = min_len_seq,
-    Max_sequence_length = max_len_seq,
-    Avg_sequence_length = avg_len_seq,
-    Num_clusters = num_clusters,
-    Min_size_clusters = min_size_clusters,
-    Max_size_clusters = max_size_clusters,
-    Avg_size_clusters = avg_size_clusters,
-    Num_singletons = num_singletons,
-    Input_file = basename(input_file)
+    num_nucleotides = num_nucleotides,
+    min_length_input_seq = min_length_input_seq,
+    max_length_input_seq = max_length_input_seq,
+    avg_length_input_seq = avg_length_input_seq,
+    num_clusters = num_clusters,
+    min_size_cluster = min_size_cluster,
+    max_size_cluster = max_size_cluster,
+    avg_size_cluster = avg_size_cluster,
+    num_singletons = num_singletons,
+    input = fasta_input_name
   )
 
   return(result_table)
