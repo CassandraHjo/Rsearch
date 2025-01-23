@@ -216,7 +216,7 @@ vs_fastq_join <- function(fastq_input,
     args <- c(args, "--log", log_file)
   }
 
-  # Add additional arguments is specified
+  # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
   }

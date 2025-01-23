@@ -231,7 +231,7 @@ vs_fastx_subsample <- function(fastx_input,
     args <- c(args, "--relabel", relabel)
   }
 
-  # Add additional arguments is specified
+  # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
   }
