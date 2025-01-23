@@ -159,14 +159,10 @@ test_that("allignment with default values with fasta file and tibble as input", 
   db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds")) |>
     dplyr::select(-Quality)
   blast6out <- withr::local_tempfile()
-  gapopen <- "20I/2E"
-  gapext <- "2I/1E"
 
   return_value <- vs_usearch_global(fastx_input = fastx_input,
                                     db = db,
-                                    blast6out = blast6out,
-                                    gapopen = gapopen,
-                                    gapext = gapext)
+                                    blast6out = blast6out)
 
   actual <- read.delim(blast6out,
                        sep = "\t",
