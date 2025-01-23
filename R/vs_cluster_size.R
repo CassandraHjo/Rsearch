@@ -1,6 +1,6 @@
 #' Cluster FASTA sequences
 #'
-#' @description Cluster FASTA sequences in the given file or object.
+#' @description Clusters FASTA sequences in the given file or object.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads to cluster.
 #' See Details.
@@ -27,7 +27,7 @@
 #' @param vsearch_options A character string of additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
-#' @details Sequences in the input file are clustered,
+#' @details FASTA sequences in the input file are clustered,
 #' using \code{VSEARCH}´s \code{cluster_size}.The function will automatically
 #' sort by decreasing sequence abundance beforehand.
 #'

@@ -47,10 +47,13 @@ When comparing sequences only check the plus strand or both strands.}
 \code{NULL} (Output is written to file specified by \code{blast6out}).
 }
 \description{
-Compare target sequences to the query sequences in FASTA or FASTQ format,
-using global pairwise alignment.
+Compares target sequences to the query sequences in FASTA or
+FASTQ format, using global pairwise alignment.
 }
 \details{
+Compares target sequences to the query sequences in FASTA or
+FASTQ format, with global pairwise alignment, using \code{VSEARCH}.
+
 \code{fastx_input} can either be FASTA/FASTQ files or objects. FASTA objects
 are tibbles that contain the columns \code{Header} and \code{Sequence}.
 FASTQ objects are tibbles that contain the columns \code{Header},

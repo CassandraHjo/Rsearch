@@ -1,8 +1,7 @@
 #' Global pairwise alignment
 #'
-#' @description
-#' Compare target sequences to the query sequences in FASTA or FASTQ format,
-#' using global pairwise alignment.
+#' @description Compares target sequences to the query sequences in FASTA or
+#' FASTQ format, using global pairwise alignment.
 #'
 #' @param fastx_input A FASTA/FASTQ file path or object containing the query
 #' sequences. See details.
@@ -22,7 +21,8 @@
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #'
-#' @details
+#' @details Compares target sequences to the query sequences in FASTA or
+#' FASTQ format, with global pairwise alignment, using \code{VSEARCH}.
 #'
 #' \code{fastx_input} can either be FASTA/FASTQ files or objects. FASTA objects
 #' are tibbles that contain the columns \code{Header} and \code{Sequence}.

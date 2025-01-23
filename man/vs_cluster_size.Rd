@@ -84,10 +84,10 @@ The statistics tibble has the following columns:
 }
 }
 \description{
-Cluster FASTA sequences in the given file or object.
+Clusters FASTA sequences in the given file or object.
 }
 \details{
-Sequences in the input file are clustered,
+FASTA sequences in the input file are clustered,
 using \code{VSEARCH}´s \code{cluster_size}.The function will automatically
 sort by decreasing sequence abundance beforehand.
 
