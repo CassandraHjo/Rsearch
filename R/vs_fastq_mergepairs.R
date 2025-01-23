@@ -334,10 +334,6 @@ calculate_merge_statistics <- function(fastq_file,
                                        fastq_file_name,
                                        reverse_file_name) {
 
-  # Remove "'" in start and end of fastq_file and reverse_file
-  fastq_file <- stringr::str_replace_all(fastq_file, "^'|'$", "")
-  reverse_file <- stringr::str_replace_all(reverse_file, "^'|'$", "")
-
   # Calculate statistics
   r1 <- microseq::readFastq(fastq_file)
   r2 <- microseq::readFastq(reverse_file)
