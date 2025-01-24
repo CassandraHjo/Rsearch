@@ -28,7 +28,7 @@ truncated starting from the first base with the specified base quality score
 value or lower. Defaults to \code{1} to \code{20}. Must be given as a vector
 with numbers.}
 
-\item{min_size}{The minimum copy number (size) for å given read to be included
+\item{min_size}{The minimum copy number (size) for a given read to be included
 in the results. Defaults to \code{1}.}
 
 \item{maxee_rate}{Threshold for average expected error. Numeric value ranging
@@ -46,8 +46,8 @@ A data frame with the following columns:
   \item \code{truncqual_value}: The truncqual value used in the trimming.
   \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences
   with copynumber above the number specified by \code{min_size}.
-  \item \code{R1}: The name of the R1 table/file.
-  \item \code{R2}: The name of the R2 table/file.
+  \item \code{R1_length}: The average length of R1-reads.
+  \item \code{R2_length}: The average length of R2-reads.
 }
 }
 \description{

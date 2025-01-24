@@ -13,7 +13,7 @@
 #' truncated starting from the first base with the specified base quality score
 #' value or lower. Defaults to \code{1} to \code{20}. Must be given as a vector
 #' with numbers.
-#' @param min_size The minimum copy number (size) for å given read to be included
+#' @param min_size The minimum copy number (size) for a given read to be included
 #' in the results. Defaults to \code{1}.
 #' @param maxee_rate Threshold for average expected error. Numeric value ranging
 #' form \code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.
@@ -36,8 +36,8 @@
 #'   \item \code{truncqual_value}: The truncqual value used in the trimming.
 #'   \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences
 #'   with copynumber above the number specified by \code{min_size}.
-#'   \item \code{R1}: The name of the R1 table/file.
-#'   \item \code{R2}: The name of the R2 table/file.
+#'   \item \code{R1_length}: The average length of R1-reads.
+#'   \item \code{R2_length}: The average length of R2-reads.
 #' }
 #'
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
@@ -110,8 +110,8 @@ vs_optimize_truncqual <- function(fastq_input,
 
     # Add results to table
     res.df$sum_size = sum(tbl$size)
-    res.df$R1_length = mean(nchar(trim_R1.df$Sequence))
-    res.df$R2_length = mean(nchar(trim_R2.df$Sequence))
+    res.df$R1_length = round(mean(nchar(trim_R1.df$Sequence)), 2)
+    res.df$R2_length = round(mean(nchar(trim_R2.df$Sequence)), 2)
 
   }
   # Close progress bar
