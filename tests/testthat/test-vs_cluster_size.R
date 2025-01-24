@@ -1,3 +1,15 @@
+test_that("error when wrong strand", {
+
+  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  centroids <- withr::local_tempfile()
+  strand <- "wrong_input"
+
+  expect_error(vs_cluster_size(fasta_input = fasta_input,
+                               centroids = centroids,
+                               strand = strand),
+               "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
+})
+
 test_that("error when input fasta_input does not exist", {
 
   fasta_input <- test_path("testdata", "some_file.fa")

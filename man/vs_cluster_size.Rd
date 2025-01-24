@@ -23,29 +23,30 @@ vs_cluster_size(
 \item{fasta_input}{A FASTA file path or a FASTA object with reads to cluster.
 See Details.}
 
-\item{centroids}{Name of the FASTA output file for the cluster centroid sequences.
-If \code{NULL} (default) no output will be written to file. See Details.}
+\item{centroids}{Name of the FASTA output file for the cluster centroid
+sequences. If \code{NULL} (default) no output will be written to file.
+See Details.}
 
-\item{id}{The pairwise identity threshold for sequence to be added to cluster.
-Defaults to \code{0.97}. See Details.}
+\item{id}{The pairwise identity threshold for sequence to be added to
+cluster. Defaults to \code{0.97}. See Details.}
 
 \item{strand}{\code{"plus"} (default) or \code{"both"}. When comparing
 sequences only check the \code{plus} strand or \code{both} strands.}
 
-\item{sizein}{Decides if abundance annotations present in sequence headers should
-be taken into account. Defaults to \code{TRUE}.}
+\item{sizein}{Decides if abundance annotations present in sequence headers
+should be taken into account. Defaults to \code{TRUE}.}
 
 \item{sizeout}{Decides if abundance annotations should be added to
 FASTA headers. Defaults to \code{TRUE}.}
 
-\item{relabel}{Relabel sequences using the given prefix and a ticker to construct
-new headers. Defaults to \code{NULL}.}
+\item{relabel}{Relabel sequences using the given prefix and a ticker to
+construct new headers. Defaults to \code{NULL}.}
 
-\item{relabel_sha1}{Relabel sequences using the SHA1 message digest algorithm.
-Defaults to \code{FALSE}.}
+\item{relabel_sha1}{Relabel sequences using the SHA1 message digest
+algorithm. Defaults to \code{FALSE}.}
 
-\item{threads}{The number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{The number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
 \item{fasta_width}{The number of characters in the width of sequences in the
 output FASTA file. Defaults to \code{0}. See Details.}
@@ -59,7 +60,7 @@ If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
 \value{
 A tibble or \code{NULL}.
 
-If \code{centroids} is not specified, a FASTA object containing the centroid
+If \code{centroids} is unspecified, a FASTA object containing the centroid
 sequences is returned. If \code{centroids} is specified, results are written
 to file, and nothing is returned.
 
@@ -96,7 +97,7 @@ tibbles that contain the columns \code{Header} and \code{Sequence}.
 
 The centroids in \code{centroids} are the sequences that seeded the clusters
 (i.e. the first sequence of the cluster). If \code{centroids} is specified,
-the remaining sequences after quality filtering are output to this file in FASTA format.
+the centroid sequences are output to this file in FASTA format.
 If unspecified (\code{NULL}) the result is returned as a FASTA-object.
 
 \code{id} is a value between 0 and 1, and describes the the minimum pairwise
@@ -109,14 +110,15 @@ FASTA files produced by \code{VSEARCH} are wrapped
 (sequences are written on lines of integer nucleotides).\code{fasta_width} is
 by default set to zero to eliminate the wrapping.
 
-\code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-additional arguments, and how to use them.
+\code{vsearch_options} can be used to pass additional arguments to
+\code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
+\code{VSEARCH} manual for additional arguments, and how to use them.
 }
 \examples{
 \dontrun{
 # Define arguments
-fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fa")
+fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                                   "R1_sample1_small.fa")
 centroids <- NULL
 
 # Cluster sequences, and return fasta tibble

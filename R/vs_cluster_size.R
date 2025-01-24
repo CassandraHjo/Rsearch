@@ -4,22 +4,23 @@
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads to cluster.
 #' See Details.
-#' @param centroids Name of the FASTA output file for the cluster centroid sequences.
-#' If \code{NULL} (default) no output will be written to file. See Details.
-#' @param id The pairwise identity threshold for sequence to be added to cluster.
-#' Defaults to \code{0.97}. See Details.
+#' @param centroids Name of the FASTA output file for the cluster centroid
+#' sequences. If \code{NULL} (default) no output will be written to file.
+#' See Details.
+#' @param id The pairwise identity threshold for sequence to be added to
+#' cluster. Defaults to \code{0.97}. See Details.
 #' @param strand \code{"plus"} (default) or \code{"both"}. When comparing
 #' sequences only check the \code{plus} strand or \code{both} strands.
-#' @param sizein Decides if abundance annotations present in sequence headers should
-#' be taken into account. Defaults to \code{TRUE}.
+#' @param sizein Decides if abundance annotations present in sequence headers
+#' should be taken into account. Defaults to \code{TRUE}.
 #' @param sizeout Decides if abundance annotations should be added to
 #' FASTA headers. Defaults to \code{TRUE}.
-#' @param relabel Relabel sequences using the given prefix and a ticker to construct
-#' new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 Relabel sequences using the SHA1 message digest algorithm.
-#' Defaults to \code{FALSE}.
-#' @param threads The number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
+#' @param relabel Relabel sequences using the given prefix and a ticker to
+#' construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 Relabel sequences using the SHA1 message digest
+#' algorithm. Defaults to \code{FALSE}.
+#' @param threads The number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
 #' @param fasta_width The number of characters in the width of sequences in the
 #' output FASTA file. Defaults to \code{0}. See Details.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
@@ -36,7 +37,7 @@
 #'
 #' The centroids in \code{centroids} are the sequences that seeded the clusters
 #' (i.e. the first sequence of the cluster). If \code{centroids} is specified,
-#' the remaining sequences after quality filtering are output to this file in FASTA format.
+#' the centroid sequences are output to this file in FASTA format.
 #' If unspecified (\code{NULL}) the result is returned as a FASTA-object.
 #'
 #' \code{id} is a value between 0 and 1, and describes the the minimum pairwise
@@ -49,13 +50,13 @@
 #' (sequences are written on lines of integer nucleotides).\code{fasta_width} is
 #' by default set to zero to eliminate the wrapping.
 #'
-#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-#' additional arguments, and how to use them.
+#' \code{vsearch_options} can be used to pass additional arguments to
+#' \code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
+#' \code{VSEARCH} manual for additional arguments, and how to use them.
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If \code{centroids} is not specified, a FASTA object containing the centroid
+#' If \code{centroids} is unspecified, a FASTA object containing the centroid
 #' sequences is returned. If \code{centroids} is specified, results are written
 #' to file, and nothing is returned.
 #'
@@ -82,7 +83,8 @@
 #' @examples
 #' \dontrun{
 #' # Define arguments
-#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fa")
+#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                                    "R1_sample1_small.fa")
 #' centroids <- NULL
 #'
 #' # Cluster sequences, and return fasta tibble
@@ -114,13 +116,21 @@ vs_cluster_size <- function(fasta_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
+  # Validate strand
+  if (!strand %in% c("plus", "both")) {
+    stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")
+  }
+
   # Create empty vector for collecting temporary files
-  temp_files <- c()
+  temp_files <- character()
 
   # Set up cleanup of temporary files
   on.exit({
-    if (length(temp_files) > 0) {
-      file.remove(temp_files)
+    if (length(temp_files) > 0 && is.character(temp_files)) {
+      existing_files <- temp_files[file.exists(temp_files)]
+      if (length(existing_files) > 0) {
+        file.remove(existing_files)
+      }
     }
   }, add = TRUE)
 
@@ -232,7 +242,6 @@ vs_cluster_size <- function(fasta_input,
 #' clustering.
 #' @param fasta_input_name The name of the file/object with the input sequences
 #' that was used in the clustering.
-#' The output tibble from the merging.
 #'
 #' @return A tibble with the following columns:
 #' \itemize{
