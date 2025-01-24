@@ -48,7 +48,7 @@
 vs_optimize_truncqual <- function(fastq_input,
                                   reverse,
                                   minovlen = 10,
-                                  truncqual_range = paste(1:20),
+                                  truncqual_range = 1:20,
                                   min_size = 1,
                                   maxee_rate = 0.01,
                                   minlen = 1,
@@ -59,12 +59,12 @@ vs_optimize_truncqual <- function(fastq_input,
   vsearch_available(vsearch_executable)
 
 
-  # Create empty data frame for storing results
+  # Create data frame for storing results
   res.df <- data.frame(
-    truncqual_value = numeric(0),
-    sum_size = numeric(0),
-    R1 = character(),
-    R2 = character()
+    truncqual_value = truncqual_range,
+    sum_size = 0,
+    R1_length = 0,
+    R2_length = 0
   )
 
   # Setting up progress bar
@@ -73,29 +73,25 @@ vs_optimize_truncqual <- function(fastq_input,
                              initial = 0,
                              style = 3)
 
-  # Create counting variable
-  stepi <- 0
-
   # Looping through truncqual values
+  for (i in 1:length(truncqual_range)) {
 
-  for (val in truncqual_range) {
-
-    # Update counting variable and progress bar
-    stepi <- stepi + 1
-    utils::setTxtProgressBar(pb, stepi)
+    # Update progress bar
+    utils::setTxtProgressBar(pb, i)
 
     # Trim R1 and R2 reads together
     trim_R1.df <- vs_fastx_trim_filt(fastx_input = fastq_input,
                                      reverse = reverse,
                                      maxee_rate = maxee_rate,
                                      minlen = minlen,
-                                     truncqual = val,
+                                     truncqual = truncqual_range[i],
                                      stripright = 0,
                                      threads = threads)
+    trim_R2.df <- attr(trim_R1.df, "reverse")
 
     # Merge R1 and R2 reads
     merge.df <- vs_fastq_mergepairs(fastq_input = trim_R1.df,
-                                    reverse = attr(trim_R1.df, "reverse"),
+                                    reverse = trim_R2.df,
                                     minovlen = minovlen,
                                     output_format = "fasta",
                                     minlen = minlen,
@@ -106,21 +102,16 @@ vs_optimize_truncqual <- function(fastq_input,
                                  output_format = "fasta",
                                  relabel_sha1 = TRUE)
 
-    # Find number of reads with size > 1
+    # Find number of reads with size > min_size
     tbl <- derep.df |>
       dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
       dplyr::mutate(size = as.numeric(size)) |>
       dplyr::filter(size > min_size)
 
     # Add results to table
-    new_row <- data.frame(
-      truncqual_value = val,
-      sum_size = sum(tbl$size),
-      R1 = as.character(substitute(fastq_input)),
-      R2 = as.character(substitute(reverse))
-    )
-
-    res.df <- rbind(new_row, res.df)
+    res.df$sum_size = sum(tbl$size)
+    res.df$R1_length = mean(nchar(trim_R1.df$Sequence))
+    res.df$R2_length = mean(nchar(trim_R2.df$Sequence))
 
   }
   # Close progress bar

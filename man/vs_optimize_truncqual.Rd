@@ -8,7 +8,7 @@ vs_optimize_truncqual(
   fastq_input,
   reverse,
   minovlen = 10,
-  truncqual_range = paste(1:20),
+  truncqual_range = 1:20,
   min_size = 1,
   maxee_rate = 0.01,
   minlen = 1,
