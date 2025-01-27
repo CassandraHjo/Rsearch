@@ -4,6 +4,9 @@
 \alias{vs_fastx_subsample}
 \alias{vs_fastq_subsample}
 \alias{vs_fasta_subsample}
+\alias{vs_subsample}
+\alias{fastx_subsample}
+\alias{subsample}
 \title{Subsample sequences}
 \usage{
 vs_fastx_subsample(

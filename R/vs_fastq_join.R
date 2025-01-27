@@ -86,7 +86,7 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_fastq_join vs_fasta_join vs_fastx_join
+#' @aliases vs_fastq_join vs_fasta_join vs_fastx_join fastq_join join
 #'
 #' @export
 #'

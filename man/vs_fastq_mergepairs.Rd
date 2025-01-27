@@ -4,6 +4,9 @@
 \alias{vs_fastq_mergepairs}
 \alias{vs_fastx_mergepairs}
 \alias{vs_fasta_mergepairs}
+\alias{vs_mergepairs}
+\alias{fastq_mergepairs}
+\alias{mergepairs}
 \title{Merge paired-end sequence reads}
 \usage{
 vs_fastq_mergepairs(

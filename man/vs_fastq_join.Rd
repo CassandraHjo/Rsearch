@@ -4,6 +4,8 @@
 \alias{vs_fastq_join}
 \alias{vs_fasta_join}
 \alias{vs_fastx_join}
+\alias{fastq_join}
+\alias{join}
 \title{Join paired-end sequence reads}
 \usage{
 vs_fastq_join(

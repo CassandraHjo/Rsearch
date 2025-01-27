@@ -42,6 +42,8 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
+#' @aliases vs_sintax sintax classify
+#'
 #' @export
 #'
 vs_sintax <- function(fasta_input,
@@ -176,8 +178,6 @@ vs_sintax <- function(fasta_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-
-
   if (is.null(tabbedout)) {
 
     outfile_colnames <- c("query", "predicted_taxonomy", "strand")
@@ -198,6 +198,4 @@ vs_sintax <- function(fasta_input,
   } else {
     return(invisible(NULL)) # No return when output file is written
   }
-
-
 }

@@ -97,6 +97,8 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
+#' @aliases vs_cluster_size vs_cluster cluster_size cluster
+#'
 #' @export
 #'
 vs_cluster_size <- function(fasta_input,

@@ -54,7 +54,7 @@
 #' }
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases merging_lengths
+#' @aliases vs_merging_lengths merging_lengths
 #'
 #' @export
 #'

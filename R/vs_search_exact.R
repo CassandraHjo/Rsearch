@@ -31,12 +31,36 @@
 #' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
 #' additional arguments, and how to use them.
 #'
-#' @returns
+#' @return
 #' \code{NULL} (Output is written to file specified by \code{blast6out}).
 #'
 #' @seealso \code{\link{vs_usearch_global}}
 #'
+#' @examples
+#' \dontrun{
+#' # Define arguments
+#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' db <- microseq::readFastq(fastx_input)[1:80, ]
+#' blast6out <- "blast6out.txt"
+#'
+#' # Search for exact full-length matches with default parameters, with file as output
+#' vs_search_exact(fastx_input = fastx_input,
+#'                 db = db,
+#'                 blast6out = blast6out)
+#'
+#' # Read results, and give column names
+#' outfile_search <- read.delim(blast6out,
+#'                              sep = "\t",
+#'                              header = FALSE)
+#'
+#' colnames(outfile_alignment) <- c("query", "target", "id", "alnlen",
+#'                                  "mism", "opens", "qlo", "qhi",
+#'                                  "tlo", "thi", "evalue", "bits")
+#' }
+#'
 #' @references \url{https://github.com/torognes/vsearch}
+#'
+#' @aliases vs_search_exact search_exact
 #'
 #' @export
 #'

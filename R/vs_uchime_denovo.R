@@ -81,6 +81,34 @@
 #'   detection.
 #' }
 #'
+#' @examples
+#' \dontrun{
+#' # Define arguments
+#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fa")
+#' nonchimeras <- "nonchimeras.fa"
+#' chimeras <- "chimeras.fa"
+#'
+#' # Detect chimeras with default parameters, with files as output
+#' vs_uchime_denovo(fasta_input = fasta_input,
+#'                  nonchimeras = nonchimeras,
+#'                  chimeras = chimeras)
+#'
+#' # Detect chimeras with default parameters, with tibbles as output
+#' nonchimeras.tbl <- vs_uchime_denovo(fasta_input = fasta_input,
+#'                                     nonchimeras = NULL,
+#'                                     chimeras = NULL)
+#'
+#' # Get chimeras tibble
+#' chimeras.tbl <- attr(nonchimeras.tbl, "chimeras")
+#'
+#' # Get statistics tibble
+#' statistics.tbl <- attr(nonchimeras.tbl, "statistics")
+#' }
+#'
+#' @references \url{https://github.com/torognes/vsearch}
+#'
+#' @aliases vs_uchime_denovo uchime_denovo chimera
+#'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
@@ -142,7 +170,7 @@ vs_uchime_denovo <- function(fasta_input,
     nonchimeras_file <- tempfile(pattern = "nonchimeras", fileext = ".fa")
     temp_files <- c(temp_files, nonchimeras_file)
   } else {
-    nonchimeras_file <- normalizePath(nonchimeras)
+    nonchimeras_file <- nonchimeras
   }
 
   # Determine chimeras file
@@ -150,7 +178,7 @@ vs_uchime_denovo <- function(fasta_input,
     chimeras_file <- tempfile(pattern = "chimeras", fileext = ".fa")
     temp_files <- c(temp_files, chimeras_file)
   } else {
-    chimeras_file <- normalizePath(chimeras)
+    chimeras_file <- chimeras
   }
 
   # Normalize file path

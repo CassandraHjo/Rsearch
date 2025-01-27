@@ -111,6 +111,7 @@
 #' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @aliases vs_fastq_mergepairs vs_fastx_mergepairs vs_fasta_mergepairs
+#' vs_mergepairs fastq_mergepairs mergepairs
 #'
 #' @export
 #'

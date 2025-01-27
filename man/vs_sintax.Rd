@@ -2,6 +2,8 @@
 % Please edit documentation in R/vs_sintax.R
 \name{vs_sintax}
 \alias{vs_sintax}
+\alias{sintax}
+\alias{classify}
 \title{Taxonomic classification}
 \usage{
 vs_sintax(

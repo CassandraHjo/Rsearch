@@ -2,6 +2,8 @@
 % Please edit documentation in R/vs_usearch_global.R
 \name{vs_usearch_global}
 \alias{vs_usearch_global}
+\alias{usearch_global}
+\alias{global_alignment}
 \title{Global pairwise alignment}
 \usage{
 vs_usearch_global(
@@ -69,6 +71,20 @@ for information about defining \code{gapopen} and \code{gapext}.
 \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
 that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
 additional arguments, and how to use them.
+}
+\examples{
+\dontrun{
+# Define arguments
+fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+db <- file.path(file.path(path.package("Rsearch"), "extdata"), "merged_sample1_small.fq")
+blast6out <- "blast6out.txt"
+
+# Run global pairwise alignement with default parameters, with file as output
+vs_usearch_global(fastx_input = fastx_input,
+                  db = db,
+                  blast6out = blast6out)
+}
+
 }
 \references{
 \url{https://github.com/torognes/vsearch}

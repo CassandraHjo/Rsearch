@@ -43,6 +43,8 @@
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
 #'
+#' @aliases vs_optimize_truncqual optimize_truncqual
+#'
 #' @export
 #'
 vs_optimize_truncqual <- function(fastq_input,

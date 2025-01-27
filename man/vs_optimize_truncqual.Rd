@@ -2,6 +2,7 @@
 % Please edit documentation in R/vs_optimize_truncqual.R
 \name{vs_optimize_truncqual}
 \alias{vs_optimize_truncqual}
+\alias{optimize_truncqual}
 \title{Optimize trimming for best possible merging}
 \usage{
 vs_optimize_truncqual(

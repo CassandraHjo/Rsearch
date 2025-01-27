@@ -4,6 +4,8 @@
 \alias{vs_fastx_trim_filt}
 \alias{vs_fastq_trim_filt}
 \alias{vs_fasta_trim_filt}
+\alias{fastx_trim_filt}
+\alias{trim_filt}
 \title{Trim and/or filter sequences in FASTA/FASTQ format}
 \usage{
 vs_fastx_trim_filt(

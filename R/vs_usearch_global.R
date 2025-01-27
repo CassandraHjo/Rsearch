@@ -40,10 +40,25 @@
 #' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
 #' additional arguments, and how to use them.
 #'
-#' @returns
+#' @return
 #' \code{NULL} (Output is written to file specified by \code{blast6out}).
 #'
+#' @examples
+#' \dontrun{
+#' # Define arguments
+#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' db <- file.path(file.path(path.package("Rsearch"), "extdata"), "merged_sample1_small.fq")
+#' blast6out <- "blast6out.txt"
+#'
+#' # Run global pairwise alignement with default parameters, with file as output
+#' vs_usearch_global(fastx_input = fastx_input,
+#'                   db = db,
+#'                   blast6out = blast6out)
+#' }
+#'
 #' @references \url{https://github.com/torognes/vsearch}
+#'
+#' @aliases vs_usearch_global usearch_global global_alignment
 #'
 #' @export
 #'

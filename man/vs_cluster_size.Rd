@@ -2,6 +2,9 @@
 % Please edit documentation in R/vs_cluster_size.R
 \name{vs_cluster_size}
 \alias{vs_cluster_size}
+\alias{vs_cluster}
+\alias{cluster_size}
+\alias{cluster}
 \title{Cluster FASTA sequences}
 \usage{
 vs_cluster_size(

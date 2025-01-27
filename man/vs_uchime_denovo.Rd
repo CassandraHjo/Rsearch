@@ -2,6 +2,8 @@
 % Please edit documentation in R/vs_uchime_denovo.R
 \name{vs_uchime_denovo}
 \alias{vs_uchime_denovo}
+\alias{uchime_denovo}
+\alias{chimera}
 \title{Detect chimeras}
 \usage{
 vs_uchime_denovo(
@@ -111,6 +113,33 @@ by default set to zero to eliminate the wrapping.
 that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
 additional arguments, and how to use them.
 }
+\examples{
+\dontrun{
+# Define arguments
+fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fa")
+nonchimeras <- "nonchimeras.fa"
+chimeras <- "chimeras.fa"
+
+# Detect chimeras with default parameters, with files as output
+vs_uchime_denovo(fasta_input = fasta_input,
+                 nonchimeras = nonchimeras,
+                 chimeras = chimeras)
+
+# Detect chimeras with default parameters, with tibbles as output
+nonchimeras.tbl <- vs_uchime_denovo(fasta_input = fasta_input,
+                                    nonchimeras = NULL,
+                                    chimeras = NULL)
+
+# Get chimeras tibble
+chimeras.tbl <- attr(nonchimeras.tbl, "chimeras")
+
+# Get statistics tibble
+statistics.tbl <- attr(nonchimeras.tbl, "statistics")
+}
+
+}
 \references{
+\url{https://github.com/torognes/vsearch}
+
 \url{https://github.com/torognes/vsearch}
 }
