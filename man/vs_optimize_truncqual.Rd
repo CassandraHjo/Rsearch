@@ -19,24 +19,25 @@ vs_optimize_truncqual(
 \arguments{
 \item{fastq_input}{A FASTQ file path or object containing (forward) reads.}
 
-\item{reverse}{A FASTQ file path or object containing (reverse) reads See Details.}
+\item{reverse}{A FASTQ file path or object containing (reverse) reads. See
+Details.}
 
-\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5.
-Defaults to \code{10}.}
+\item{minovlen}{The minimum overlap between the merged reads. Must be at
+least 5. Defaults to \code{10}.}
 
 \item{truncqual_range}{The truncqual values to be tested. The sequences are
 truncated starting from the first base with the specified base quality score
 value or lower. Defaults to \code{1} to \code{20}. Must be given as a vector
 with numbers.}
 
-\item{min_size}{The minimum copy number (size) for a given read to be included
-in the results. Defaults to \code{1}.}
+\item{min_size}{The minimum copy number (size) for a given read to be
+included in the results. Defaults to \code{1}.}
 
 \item{maxee_rate}{Threshold for average expected error. Numeric value ranging
 form \code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained.
-Defaults to \code{1}. See Details.}
+\item{minlen}{The minimum number of bases a sequence must have to be
+retained. Defaults to \code{1}. See Details.}
 
 \item{threads}{Number of computational threads to be used by \code{vsearch}.
 Defaults to \code{1}.}
@@ -45,22 +46,32 @@ Defaults to \code{1}.}
 A data frame with the following columns:
 \itemize{
   \item \code{truncqual_value}: The truncqual value used in the trimming.
-  \item \code{sum_size}: Sum of the copy numbers for the dereplicated sequences
-  with copynumber above the number specified by \code{min_size}.
+  \item \code{sum_size}: Sum of the copy numbers for the dereplicated
+  sequences with copynumber above the number specified by \code{min_size}.
   \item \code{R1_length}: The average length of R1-reads.
   \item \code{R2_length}: The average length of R2-reads.
 }
+
+The data frame has an attribute \code{"sum_size_plot"} containing a
+\code{\link{ggplot2}} object based on the returned data frame. In the plot
+the \code{truncqual} values are plotted against the \code{sum_size} values,
+with the optimal \code{truncqual} marked in red.
+
+The data frame also has an attribute \code{"read_lengths_plot"} containing a
+\code{\link{ggplot2}} object based on the returned data frame. In the plot
+the \code{truncqual} values are plotted against the mean read lengths
+(\code{R1_length} and \code{R2_length}).
 }
 \description{
-Optimizes truncation based on base quality score (\code{--truncqual}
-in \code{VSEARCH}) to get the best possible merging results. The function
-searches for the best parameters by looping through different parameter values
-for the \code{--truncqual} option.
+Optimizes truncation, based on base quality score
+(\code{--truncqual} in \code{VSEARCH}) to get the best possible merging
+results. The function searches for the best parameters by looping through
+different parameter values for the \code{--truncqual} option.
 }
 \details{
-The function uses \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
-and \code{\link{vs_fastx_uniques}} where the arguments to this functions
-are described in detail.
+The function uses \code{\link{vs_fastq_mergepairs}},
+\code{\link{vs_fastx_trim_filt}}, and \code{\link{vs_fastx_uniques}} where
+the arguments to this functions are described in detail.
 
 The best possible merging option is measured by the sum of copy numbers after
 dereplication of the merged reads bigger than 1
