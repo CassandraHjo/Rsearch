@@ -66,6 +66,24 @@ The best possible merging option is measured by the sum of copy numbers after
 dereplication of the merged reads bigger than 1
 (singletons are removed when summing).
 }
+\examples{
+\dontrun{
+# Read example FASTQ files
+R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+
+# Run optimizing function
+optimize.tbl <- vs_optimize_truncqual(fastq_input = R1.file,
+                                      reverse = R2.file)
+
+# Display plots
+
+}
+
+}
+\references{
+\url{https://github.com/torognes/vsearch}
+}
 \seealso{
 \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 \code{\link{vs_fastx_uniques}}

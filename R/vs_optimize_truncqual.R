@@ -43,6 +43,22 @@
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
 #'
+#' @examples
+#' \dontrun{
+#' # Read example FASTQ files
+#' R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+#'
+#' # Run optimizing function
+#' optimize.tbl <- vs_optimize_truncqual(fastq_input = R1.file,
+#'                                       reverse = R2.file)
+#'
+#' # Display plots
+#'
+#' }
+#'
+#' @references \url{https://github.com/torognes/vsearch}
+#'
 #' @aliases vs_optimize_truncqual optimize_truncqual
 #'
 #' @export
@@ -111,17 +127,13 @@ vs_optimize_truncqual <- function(fastq_input,
       dplyr::filter(size > min_size)
 
     # Add results to table
-    res.df$sum_size = sum(tbl$size)
-    res.df$R1_length = round(mean(nchar(trim_R1.df$Sequence)), 2)
-    res.df$R2_length = round(mean(nchar(trim_R2.df$Sequence)), 2)
+    res.df$sum_size[i] = sum(tbl$size)
+    res.df$R1_length[i] = round(mean(nchar(trim_R1.df$Sequence)), 2)
+    res.df$R2_length[i] = round(mean(nchar(trim_R2.df$Sequence)), 2)
 
   }
   # Close progress bar
   close(pb)
-
-  # Sort results table
-  res.df <- res.df |>
-    dplyr::arrange(truncqual_value)
 
   return(res.df)
 }
