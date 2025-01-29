@@ -9,10 +9,8 @@ test_that("optimizing truncqual with default values", {
   expected_df <- readRDS(test_path("testdata", "output", "optimize_truncqual.rds"))
 
   # Remove 'plot' attribute before comparison due to errors with ggplot
-  attr(optimize.tbl, "sum_size_plot") <- NULL
-  attr(optimize.tbl, "read_lengths_plot") <- NULL
-  attr(expected_df, "sum_size_plot") <- NULL
-  attr(expected_df, "read_lengths_plot") <- NULL
+  attr(optimize.tbl, "plot") <- NULL
+  attr(expected_df, "plot") <- NULL
 
 
   expect_equal(optimize.tbl, expected_df)

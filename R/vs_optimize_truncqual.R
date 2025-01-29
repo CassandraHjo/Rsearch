@@ -1,9 +1,9 @@
-#' Optimize trimming for best possible merging
+#' Optimize truncation for best possible merging
 #'
 #' @description Optimizes truncation, based on base quality score
-#' (\code{--truncqual} in \code{VSEARCH}) to get the best possible merging
-#' results. The function searches for the best parameters by looping through
-#' different parameter values for the \code{--truncqual} option.
+#' (\code{--truncqual} in \code{VSEARCH}), to get the best possible merging
+#' results. The function searches for the best \code{truncqual} value by looping
+#' through different parameter values.
 #'
 #' @param fastq_input A FASTQ file path or object containing (forward) reads.
 #' @param reverse A FASTQ file path or object containing (reverse) reads. See
@@ -22,34 +22,50 @@
 #' retained. Defaults to \code{1}. See Details.
 #' @param threads Number of computational threads to be used by \code{vsearch}.
 #' Defaults to \code{1}.
+#' @param plot_title Title of the resulting output plot. Defaults to
+#' \code{"Optimization of Read Merging Based on Truncqual Value"}.
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}},
 #' \code{\link{vs_fastx_trim_filt}}, and \code{\link{vs_fastx_uniques}} where
 #' the arguments to this functions are described in detail.
 #'
-#' The best possible merging option is measured by the sum of copy numbers after
-#' dereplication of the merged reads bigger than 1
-#' (singletons are removed when summing).
+#' The best possible truncation option (\code{truncqual}) for merging is
+#' measured by the proportion of merged sequences with a copy number above the
+#' number specified by \code{min_size} after dereplication.
+#'
+#' \code{proportion_merged_high_quality_read_pairs} represents the proportion
+#' of merged high-quality read-pairs relative to the highest observed value
+#' across all tested \code{truncqual} values. This normalization allows
+#' comparisons across different \code{truncqual} values. A value close to 1.0
+#' indicates that the merging efficiency is near its maximum, while a lower
+#' value suggests suboptimal merging conditions.
+#'
+#'
+#' Changing \code{min_size} will affect the results. A low \code{min_size} will
+#' include merged sequences with a lower copy number after dereplication, and a
+#' higher \code{min_size} will filter out more reads and only count
+#' high-frequency merged sequences.
 #'
 #' @return A data frame with the following columns:
 #' \itemize{
-#'   \item \code{truncqual_value}: The truncqual value used in the trimming.
-#'   \item \code{sum_size}: Sum of the copy numbers for the dereplicated
-#'   sequences with copynumber above the number specified by \code{min_size}.
-#'   \item \code{R1_length}: The average length of R1-reads.
-#'   \item \code{R2_length}: The average length of R2-reads.
+#'   \item \code{truncqual_value}: The tested truncqual value.
+#'   \item \code{merged_high_quality_read_pairs}: Absoulute count of
+#'   successfully merged sequence pairs with a copy number above \code{min_size}
+#'   after dereplication.
+#'   \item \code{proportion_merged_high_quality_read_pairs}: A relative metric,
+#'   calculated as the number of merged high-quality read-pairs divided
+#'   by the maximum observed merged read count.
+#'   \item \code{R1_length}: The average length of R1-reads after trimming.
+#'   \item \code{R2_length}: The average length of R2-reads after trimming.
 #' }
 #'
-#' The data frame has an attribute \code{"sum_size_plot"} containing a
+#' The data frame has an attribute \code{"plot"} containing a
 #' \code{\link{ggplot2}} object based on the returned data frame. In the plot
-#' the \code{truncqual} values are plotted against the \code{sum_size} values,
-#' with the optimal \code{truncqual} marked in red.
-#'
-#' The data frame also has an attribute \code{"read_lengths_plot"} containing a
-#' \code{\link{ggplot2}} object based on the returned data frame. In the plot
-#' the \code{truncqual} values are plotted against the mean read lengths
-#' (\code{R1_length} and \code{R2_length}).
+#' the \code{truncqual} values are plotted against the
+#' \code{proportion_merged_high_quality_read_pairs} values and the mean read
+#' lengths (\code{R1_length} and \code{R2_length}). The optimal \code{truncqual}
+#' value is marked by a red dashed line.
 #'
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
@@ -64,7 +80,8 @@
 #' optimize.tbl <- vs_optimize_truncqual(fastq_input = R1.file,
 #'                                       reverse = R2.file)
 #'
-#' # Display plots
+#' # Display plot
+#' print(attr(optimize.tbl, "plot"))
 #'
 #' }
 #'
@@ -81,7 +98,8 @@ vs_optimize_truncqual <- function(fastq_input,
                                   min_size = 1,
                                   maxee_rate = 0.01,
                                   minlen = 1,
-                                  threads = 1){
+                                  threads = 1,
+                                  plot_title = "Optimization of Read Merging Based on Truncqual Value"){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -91,7 +109,8 @@ vs_optimize_truncqual <- function(fastq_input,
   # Create data frame for storing results
   res.df <- data.frame(
     truncqual_value = truncqual_range,
-    sum_size = 0,
+    merged_high_quality_read_pairs = 0,
+    proportion_merged_high_quality_read_pairs = 0,
     R1_length = 0,
     R2_length = 0
   )
@@ -129,16 +148,16 @@ vs_optimize_truncqual <- function(fastq_input,
     # Dereplicate merged reads
     derep.df <- vs_fastx_uniques(fastx_input = merge.df,
                                  output_format = "fasta",
-                                 relabel_sha1 = TRUE)
+                                 relabel_sha1 = TRUE) |>
+      dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
+      dplyr::mutate(size = as.numeric(size))
 
     # Find number of reads with size > min_size
     tbl <- derep.df |>
-      dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
-      dplyr::mutate(size = as.numeric(size)) |>
       dplyr::filter(size > min_size)
 
     # Add results to table
-    res.df$sum_size[i] = sum(tbl$size)
+    res.df$merged_high_quality_read_pairs[i] = sum(tbl$size)
     res.df$R1_length[i] = round(mean(nchar(trim_R1.df$Sequence)), 2)
     res.df$R2_length[i] = round(mean(nchar(trim_R2.df$Sequence)), 2)
 
@@ -146,35 +165,49 @@ vs_optimize_truncqual <- function(fastq_input,
   # Close progress bar
   close(pb)
 
-  # Make plots
+  # Calculate the max merged_high_quality_read_pairs for normalization
+  max_merged_high_quality_read_pairs <- max(res.df$merged_high_quality_read_pairs)
 
-  # Plot truncqual value vs sum size. Optimal truncqual value is marked with red
-  optimal_truncqual <- res.df$truncqual_value[which.max(res.df$sum_size)]
+  # Calculate relative merged_high_quality_read_pairs
+  res.df <- res.df |>
+    dplyr::mutate(proportion_merged_high_quality_read_pairs = round(merged_high_quality_read_pairs / max_merged_high_quality_read_pairs, 4))
 
-  p1 <- ggplot2::ggplot(res.df, ggplot2::aes(x = truncqual_value, y = sum_size)) +
-    ggplot2::geom_line() +
-    ggplot2::geom_point() +
-    ggplot2::geom_point(data = subset(res.df, truncqual_value == optimal_truncqual),
-                        ggplot2::aes(x = truncqual_value, y = sum_size),
-                        color = "red", size = 3, shape = 18) +
-    ggplot2::labs(title = "Sum size vs. Trunqqual value",
+  # Find optimal truncqual value from res.df
+  optimal_truncqual <- res.df$truncqual_value[which.max(res.df$proportion_merged_high_quality_read_pairs)]
+
+  long.df <- res.df |>
+    tidyr::pivot_longer(cols = c(proportion_merged_high_quality_read_pairs, R1_length, R2_length),
+                        names_to = "metric",
+                        values_to = "value") |>
+    dplyr::mutate(facet = dplyr::case_when(
+      metric == "proportion_merged_high_quality_read_pairs" ~ "Merged High-quality read-pairs",
+      metric %in% c("R1_length", "R2_length") ~ "Read Lengths",
+    ))
+
+  # Define "pretty" labels
+  label_mapping <- c(
+    proportion_merged_high_quality_read_pairs = "Proportion Merged",
+    R1_length = "Average R1 Length",
+    R2_length = "Average R2 Length"
+  )
+
+  # Make plot
+  p <- ggplot2::ggplot(long.df, ggplot2::aes(x = truncqual_value, y = value)) +
+    ggplot2::geom_line(ggplot2::aes(color = metric)) +
+    ggplot2::geom_point(ggplot2::aes(color = metric)) +
+    ggplot2::facet_wrap(~ facet, scales = "free_y", ncol = 1) +
+    ggplot2::geom_vline(xintercept = optimal_truncqual, color = "red", linetype = "dashed") +
+    ggplot2::labs(title = plot_title,
                   x = "Truncqual value",
-                  y = "Sum size")
+                  y = "Value",
+                  color = "Measurement") +
+    ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = "#6A5ACD",
+                                           "R1_length" = "#008080",
+                                           "R2_length" = "#FF7F50"),
+                                labels = label_mapping)
 
-  # Plot truncqual values vs read lengths
-  p2 <- ggplot2::ggplot(res.df, ggplot2::aes(x = truncqual_value)) +
-    ggplot2::geom_line(ggplot2::aes(y = R1_length, color = "R1")) +
-    ggplot2::geom_point(ggplot2::aes(y = R1_length, color = "R1")) +
-    ggplot2::geom_line(ggplot2::aes(y = R2_length, color = "R2")) +
-    ggplot2::geom_point(ggplot2::aes(y = R2_length, color = "R2")) +
-    ggplot2::labs(title = "R1 and R2 length vs. Truncqual value",
-         x = "Truncqual value",
-         y = "Mean read length",
-         color = "Read")
-
-  # Add plots as attributes
-  attr(res.df, "sum_size_plot") <- p1
-  attr(res.df, "read_lengths_plot") <- p2
+  # Add plot as attribute
+  attr(res.df, "plot") <- p
 
   return(res.df)
 }
