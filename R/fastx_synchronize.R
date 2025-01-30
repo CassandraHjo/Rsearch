@@ -1,51 +1,72 @@
-#' Synchronize FASTQ and FASTA files/objects
+#' Synchronize FASTQ and FASTA files or objects
 #'
-#' @description Synchronize sequences in two FASTA/FASTQ files or objects, by retaining the common sequences.
+#' @description \code{fastx_synchronize} synchronizes sequences between two
+#' FASTA/FASTQ files or objects by retaining only the common sequences present
+#' in both.
 #'
-#' @param file1 A FASTQ/FASTA file path or object. See Details.
-#' @param file2 A FASTQ/FASTA file path or object. See Details.
-#' @param file_format Format of input files \code{file1} and \code{file2},
-#' and desired output format: \code{"fasta"} or \code{"fastq"} (default).
-#' Determines the format for both outputs.
-#' @param file1_out Name of the output file for synchronized reads from \code{file1}.
-#' File can be in either FASTA or FASTQ format, depending on \code{file_format}. I
-#' f \code{NULL} (default) no sequences will be written to file. See Details.
-#' @param file2_out Name of the output file for synchronized reads from \code{file2}.
-#' File can be in either FASTA or FASTQ format, depending on \code{file_format}.
-#' If \code{NULL} (default) no sequences will be written to file. See Details.
+#' @param file1 A FASTQ/FASTA file path or a FASTQ/FASTA tibble object. See
+#' Details.
+#' @param file2 A FASTQ/FASTA file path or a FASTQ/FASTA tibble object. See
+#' Details.
+#' @param file_format Format of the input (\code{file1} and \code{file2})
+#' and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
+#' This determines the format for both outputs.
+#' @param file1_out Name of the output file for synchronized reads from
+#' \code{file1}. The file will be in either FASTA or FASTQ format, depending on
+#' \code{file_format}. If \code{NULL} (default), no sequences are written to a
+#' file. See Details.
+#' @param file2_out Name of the output file for synchronized reads from
+#' \code{file2}. The file will be in either FASTA or FASTQ format, depending on
+#' \code{file_format}. If \code{NULL} (default), no sequences are written to a
+#' file. See Details.
 #'
 #' @details
-#' \code{file1} and \code{file2} can either be FASTQ/FASTA files or objects.
-#' FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
-#' FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
-#' In order for the synchronizing to work, it is necessary that the sequence IDs
-#' in the \code{Header}s are identical for each read pair in the two files.
+#' \code{file1} and \code{file2} can either be paths to FASTQ/FASTA files or
+#' tibble objects containing the sequences.
+#' FASTA objects are tibbles that contain the columns \code{Header} and
+#' \code{Sequence}.
+#' FASTQ objects are tibbles that contain the columns \code{Header},
+#' \code{Sequence}, and \code{Quality}.
 #'
-#' If \code{file1_out} or \code{file2_out} are specified, the remaining sequences
-#' after synchronizing are output to these files in either FASTA or FASTQ format
-#' depending on \code{file_format}.
-#' If unspecified (\code{NULL}) no output is written to file,
-#' and the synchronized reads are returned as a FASTQ/FASTA object.
-#' \code{file1_out} or \code{file2_out} must either both be \code{NULL} or both \code{charachter}.
+#' Sequence IDs in the \code{Header} fields must be identical for each read pair
+#' in both \code{file1} and \code{file2} for synchronization to work correctly.
+#'
+#' If \code{file1_out} and \code{file2_out} are specified, the synchronized
+#' sequences are written to these files in the format specified by
+#' \code{file_format}.
+#'
+#' If \code{file1_out} and \code{file2_out} are \code{NULL}, the function
+#' returns a FASTQ/FASTA object containing synchronized reads from \code{file1}.
+#' The synchronized reads from \code{file2} are included as an attribute named
+#' \code{"reverse"} in the returned tibble.
+#'
+#' Both \code{file1_out} and \code{file2_out} must either be \code{NULL} or both
+#' must be character strings specifying the file paths.
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If output files are not specified, a tibble containing the synchronized reads
-#' from \code{file1} is returned. The tibble containing the synchronized
-#' reads from \code{file2} is an attribute, called \code{"reverse"}, to the primary tibble.
-#' If output files, \code{file1_out} or \code{file2_out} are specified, results are written to
-#' file and nothing is returned.
+#' If both \code{file1_out} and \code{file2_out} are \code{NULL}, a tibble
+#' containing the synchronized reads from \code{file1} is returned. The
+#' synchronized reads from \code{file2} are accessible via the \code{"reverse"}
+#' attribute of the returned tibble.
+#'
+#' If both \code{file1_out} and \code{file2_out} are specified, the synchronized
+#' sequences are written to the specified output files, and no tibble is
+#' returned.
+#'
 #'
 #' @examples
 #' \dontrun{
 #' # Define arguments
-#' file1 <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-#' file2 <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+#' file1 <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                    "R1_sample1_small.fq")
+#' file2 <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                    "R2_sample1_small.fq")
 #' file_format <- "fastq"
 #' file1_out <- NULL
 #' file2_out <- NULL
 #'
-#' # Synchronize files
+#' # Synchronize files and return as a tibble
 #' sync_seqs <- fastx_synchronize(file1 = file1,
 #'                                file2 = file2,
 #'                                file_format = file_format,
@@ -55,6 +76,13 @@
 #' # Extract tibbles with synchronized sequences
 #' R1_sync <- sync_seqs
 #' R2_sync <- attr(sync_seqs, "reverse")
+#'
+#' # Synchronize files and write to output files
+#' fastx_synchronize(file1 = file1,
+#'                   file2 = file2,
+#'                   file_format = file_format,
+#'                   file1_out = "synchronized_R1.fastq",
+#'                   file2_out = "synchronized_R2.fastq")
 #' }
 #'
 #' @aliases fastx_synchronize fastq_synchronize fasta_synchronize

@@ -23,99 +23,107 @@ vs_cluster_size(
 )
 }
 \arguments{
-\item{fasta_input}{A FASTA file path or a FASTA object with reads to cluster.
-See Details.}
+\item{fasta_input}{A FASTA file path or a FASTA object containing reads to
+cluster. See Details.}
 
-\item{centroids}{Name of the FASTA output file for the cluster centroid
-sequences. If \code{NULL} (default) no output will be written to file.
-See Details.}
+\item{centroids}{A character string specifying the name of the FASTA output
+file for the cluster centroid sequences. If \code{NULL} (default), no output
+is written to a file and the centroid sequences are returned as a FASTA
+object. See Details.}
 
-\item{id}{The pairwise identity threshold for sequence to be added to
+\item{id}{The pairwise identity threshold for sequence to be added to a
 cluster. Defaults to \code{0.97}. See Details.}
 
-\item{strand}{\code{"plus"} (default) or \code{"both"}. When comparing
-sequences only check the \code{plus} strand or \code{both} strands.}
+\item{strand}{Specifies which strand to consider when comparing sequences.
+Can be either \code{"plus"} (default) or \code{"both"}.}
 
-\item{sizein}{Decides if abundance annotations present in sequence headers
-should be taken into account. Defaults to \code{TRUE}.}
+\item{sizein}{If \code{TRUE} (default), abundance annotations present in
+sequence headers are taken into account.}
 
-\item{sizeout}{Decides if abundance annotations should be added to
-FASTA headers. Defaults to \code{TRUE}.}
+\item{sizeout}{If \code{TRUE} (default), abundance annotations are added to
+FASTA headers.}
 
 \item{relabel}{Relabel sequences using the given prefix and a ticker to
 construct new headers. Defaults to \code{NULL}.}
 
-\item{relabel_sha1}{Relabel sequences using the SHA1 message digest
-algorithm. Defaults to \code{FALSE}.}
+\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
+SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{threads}{The number of computational threads to be used by
-\code{VSEARCH}. Defaults to \code{1}.}
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
+Defaults to \code{1}.}
 
-\item{fasta_width}{The number of characters in the width of sequences in the
-output FASTA file. Defaults to \code{0}. See Details.}
+\item{fasta_width}{Number of characters per line in the output FASTA
+file. Defaults to \code{0}, which eliminates wrapping.}
 
 \item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
+If \code{NULL} (default), no log file is created.}
 
-\item{vsearch_options}{A character string of additional arguments to pass to
-\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
+\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
+Defaults to \code{NULL}. See Details.}
 }
 \value{
 A tibble or \code{NULL}.
 
-If \code{centroids} is unspecified, a FASTA object containing the centroid
-sequences is returned. If \code{centroids} is specified, results are written
-to file, and nothing is returned.
+If \code{centroids} is \code{NULL} a FASTA object containing the centroid
+sequences is returned. The clustering statistics are included as an attribute
+named \code{"statistics"}.
 
-When a FASTA object is returned, the statistics from the clustering,
-\code{statistics}, is an attribute of the centroids tibble.
-The statistics tibble has the following columns:
+If \code{centroids} is specified the centroid sequences are written to the
+specified file, and no tibble is returned.
+
+The \code{"statistics"} attribute of the returned tibble (when
+\code{centroids} is \code{NULL}) is a tibble with the following columns:
 \itemize{
-  \item \code{num_nucleotides}: The total number of nucleotides used as input
-  for clustering.
-  \item \code{min_length_input_seq}: The length of the shortest sequence used
-  as input for clustering.
-  \item \code{max_length_input_seq}: The length of the longest sequence used
-  as input for clustering.
-  \item \code{avg_length_input_seq}: The average length of the sequences used
-  as input for clustering.
-  \item \code{num_clusters}: The number of clusters generated.
-  \item \code{min_size_cluster}: The size of the smallest cluster.
-  \item \code{max_size_cluster}: The size of the largest cluster.
-  \item \code{avg_size_cluster}: The average size of the clusters.
-  \item \code{num_singletons}: The number of singletons after clustering.
-  \item \code{input}: The name of the input file/object for the clustering.
+  \item \code{num_nucleotides}: Total number of nucleotides used as input for
+  clustering.
+  \item \code{min_length_input_seq}: Length of the shortest sequence used as
+  input for clustering.
+  \item \code{max_length_input_seq}: Length of the longest sequence used as
+  input for clustering.
+  \item \code{avg_length_input_seq}: Average length of the sequences used as
+  input for clustering.
+  \item \code{num_clusters}: Number of clusters generated.
+  \item \code{min_size_cluster}: Size of the smallest cluster.
+  \item \code{max_size_cluster}: Size of the largest cluster.
+  \item \code{avg_size_cluster}: Average size of the clusters.
+  \item \code{num_singletons}: Number of singletons after clustering.
+  \item \code{input}: Name of the input file/object for the clustering.
 }
 }
 \description{
-Clusters FASTA sequences in the given file or object.
+\code{vs_cluster_size} clusters FASTA sequences from a given
+file or object using \code{VSEARCH}´s \code{cluster_size} method. The
+function automatically sorts sequences by decreasing abundance before
+clustering.
 }
 \details{
-FASTA sequences in the input file are clustered,
-using \code{VSEARCH}´s \code{cluster_size}.The function will automatically
-sort by decreasing sequence abundance beforehand.
+\code{fasta_input} can either be a file path to a FASTA file or a FASTA
+object. FASTA objects are tibbles that contain the columns \code{Header} and
+\code{Sequence}.
 
-\code{fasta_input} can either be a FASTA file or object. FASTA objects are
-tibbles that contain the columns \code{Header} and \code{Sequence}.
+Sequences are clustered based on the pairwise identity threshold specified by
+\code{id}. Sequences are sorted by decreasing abundance before clustering.
+The centroid of each cluster is the first sequence added to the cluster.
 
-The centroids in \code{centroids} are the sequences that seeded the clusters
-(i.e. the first sequence of the cluster). If \code{centroids} is specified,
-the centroid sequences are output to this file in FASTA format.
-If unspecified (\code{NULL}) the result is returned as a FASTA-object.
+\code{id} is a value between 0 and 1 that defines the minimum pairwise
+identity required for a sequence to be added to a cluster. A sequence is not
+added to a cluster if its pairwise identity with the centroid is bellow the
+\code{id} threshold.
+Pairwise identity is calculated as the number of matching columns divided by
+the alignment length minus terminal gaps.
 
-\code{id} is a value between 0 and 1, and describes the the minimum pairwise
-identity with the centroid for sequence to be added to cluster.
-The sequence is not added if pairwise identity is bellow \code{id}.
-The pairwise identity is defined as the number of
-(matching columns) / (alignment length - terminal gaps).
+If \code{centroids} is specified, centroid sequences are written to the
+specified file in FASTA format.
 
-FASTA files produced by \code{VSEARCH} are wrapped
-(sequences are written on lines of integer nucleotides).\code{fasta_width} is
-by default set to zero to eliminate the wrapping.
+If \code{centroids} is \code{NULL}, the centroids are returned as a FASTA
+object.
 
-\code{vsearch_options} can be used to pass additional arguments to
-\code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
-\code{VSEARCH} manual for additional arguments, and how to use them.
+If \code{log_file} is \code{NULL} and \code{centroids} is specified,
+clustering statistics from \code{VSEARCH} will not be captured.
+
+\code{vsearch_options} allows users to pass additional command-line arguments
+to \code{VSEARCH} that are not directly supported by this function. Refer to
+the \code{VSEARCH} manual for more details.
 }
 \examples{
 \dontrun{
@@ -124,12 +132,16 @@ fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
                                    "R1_sample1_small.fa")
 centroids <- NULL
 
-# Cluster sequences, and return fasta tibble
+# Cluster sequences and return a FASTA tibble
 cluster_seqs <- vs_cluster_size(fasta_input = fasta_input,
                                 centroids = centroids)
 
 # Extract clustering statistics
 statistics <- attr(cluster_seqs, "statistics")
+
+# Cluster sequences and write centroids to a file
+vs_cluster_size(fasta_input = fasta_input,
+                              centroids = "centroids_sequences.fa")
 }
 
 }

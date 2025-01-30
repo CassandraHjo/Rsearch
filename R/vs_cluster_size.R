@@ -1,83 +1,92 @@
 #' Cluster FASTA sequences
 #'
-#' @description Clusters FASTA sequences in the given file or object.
+#' @description \code{vs_cluster_size} clusters FASTA sequences from a given
+#' file or object using \code{VSEARCH}´s \code{cluster_size} method. The
+#' function automatically sorts sequences by decreasing abundance before
+#' clustering.
 #'
-#' @param fasta_input A FASTA file path or a FASTA object with reads to cluster.
-#' See Details.
-#' @param centroids Name of the FASTA output file for the cluster centroid
-#' sequences. If \code{NULL} (default) no output will be written to file.
-#' See Details.
-#' @param id The pairwise identity threshold for sequence to be added to
+#' @param fasta_input A FASTA file path or a FASTA object containing reads to
+#' cluster. See Details.
+#' @param centroids A character string specifying the name of the FASTA output
+#' file for the cluster centroid sequences. If \code{NULL} (default), no output
+#' is written to a file and the centroid sequences are returned as a FASTA
+#' object. See Details.
+#' @param id The pairwise identity threshold for sequence to be added to a
 #' cluster. Defaults to \code{0.97}. See Details.
-#' @param strand \code{"plus"} (default) or \code{"both"}. When comparing
-#' sequences only check the \code{plus} strand or \code{both} strands.
-#' @param sizein Decides if abundance annotations present in sequence headers
-#' should be taken into account. Defaults to \code{TRUE}.
-#' @param sizeout Decides if abundance annotations should be added to
-#' FASTA headers. Defaults to \code{TRUE}.
+#' @param strand Specifies which strand to consider when comparing sequences.
+#' Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param sizein If \code{TRUE} (default), abundance annotations present in
+#' sequence headers are taken into account.
+#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
+#' FASTA headers.
 #' @param relabel Relabel sequences using the given prefix and a ticker to
 #' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 Relabel sequences using the SHA1 message digest
-#' algorithm. Defaults to \code{FALSE}.
-#' @param threads The number of computational threads to be used by
-#' \code{VSEARCH}. Defaults to \code{1}.
-#' @param fasta_width The number of characters in the width of sequences in the
-#' output FASTA file. Defaults to \code{0}. See Details.
+#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
+#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
+#' Defaults to \code{1}.
+#' @param fasta_width Number of characters per line in the output FASTA
+#' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL}, no log file is created. Defaults to \code{NULL}.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' If \code{NULL} (default), no log file is created.
+#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
+#' Defaults to \code{NULL}. See Details.
 #'
-#' @details FASTA sequences in the input file are clustered,
-#' using \code{VSEARCH}´s \code{cluster_size}.The function will automatically
-#' sort by decreasing sequence abundance beforehand.
+#' @details
+#' \code{fasta_input} can either be a file path to a FASTA file or a FASTA
+#' object. FASTA objects are tibbles that contain the columns \code{Header} and
+#' \code{Sequence}.
 #'
-#' \code{fasta_input} can either be a FASTA file or object. FASTA objects are
-#' tibbles that contain the columns \code{Header} and \code{Sequence}.
+#' Sequences are clustered based on the pairwise identity threshold specified by
+#' \code{id}. Sequences are sorted by decreasing abundance before clustering.
+#' The centroid of each cluster is the first sequence added to the cluster.
 #'
-#' The centroids in \code{centroids} are the sequences that seeded the clusters
-#' (i.e. the first sequence of the cluster). If \code{centroids} is specified,
-#' the centroid sequences are output to this file in FASTA format.
-#' If unspecified (\code{NULL}) the result is returned as a FASTA-object.
+#' \code{id} is a value between 0 and 1 that defines the minimum pairwise
+#' identity required for a sequence to be added to a cluster. A sequence is not
+#' added to a cluster if its pairwise identity with the centroid is bellow the
+#' \code{id} threshold.
+#' Pairwise identity is calculated as the number of matching columns divided by
+#' the alignment length minus terminal gaps.
 #'
-#' \code{id} is a value between 0 and 1, and describes the the minimum pairwise
-#' identity with the centroid for sequence to be added to cluster.
-#' The sequence is not added if pairwise identity is bellow \code{id}.
-#' The pairwise identity is defined as the number of
-#' (matching columns) / (alignment length - terminal gaps).
+#' If \code{centroids} is specified, centroid sequences are written to the
+#' specified file in FASTA format.
 #'
-#' FASTA files produced by \code{VSEARCH} are wrapped
-#' (sequences are written on lines of integer nucleotides).\code{fasta_width} is
-#' by default set to zero to eliminate the wrapping.
+#' If \code{centroids} is \code{NULL}, the centroids are returned as a FASTA
+#' object.
 #'
-#' \code{vsearch_options} can be used to pass additional arguments to
-#' \code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
-#' \code{VSEARCH} manual for additional arguments, and how to use them.
+#' If \code{log_file} is \code{NULL} and \code{centroids} is specified,
+#' clustering statistics from \code{VSEARCH} will not be captured.
+#'
+#' \code{vsearch_options} allows users to pass additional command-line arguments
+#' to \code{VSEARCH} that are not directly supported by this function. Refer to
+#' the \code{VSEARCH} manual for more details.
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If \code{centroids} is unspecified, a FASTA object containing the centroid
-#' sequences is returned. If \code{centroids} is specified, results are written
-#' to file, and nothing is returned.
+#' If \code{centroids} is \code{NULL} a FASTA object containing the centroid
+#' sequences is returned. The clustering statistics are included as an attribute
+#' named \code{"statistics"}.
 #'
-#' When a FASTA object is returned, the statistics from the clustering,
-#' \code{statistics}, is an attribute of the centroids tibble.
-#' The statistics tibble has the following columns:
+#' If \code{centroids} is specified the centroid sequences are written to the
+#' specified file, and no tibble is returned.
+#'
+#' The \code{"statistics"} attribute of the returned tibble (when
+#' \code{centroids} is \code{NULL}) is a tibble with the following columns:
 #' \itemize{
-#'   \item \code{num_nucleotides}: The total number of nucleotides used as input
-#'   for clustering.
-#'   \item \code{min_length_input_seq}: The length of the shortest sequence used
-#'   as input for clustering.
-#'   \item \code{max_length_input_seq}: The length of the longest sequence used
-#'   as input for clustering.
-#'   \item \code{avg_length_input_seq}: The average length of the sequences used
-#'   as input for clustering.
-#'   \item \code{num_clusters}: The number of clusters generated.
-#'   \item \code{min_size_cluster}: The size of the smallest cluster.
-#'   \item \code{max_size_cluster}: The size of the largest cluster.
-#'   \item \code{avg_size_cluster}: The average size of the clusters.
-#'   \item \code{num_singletons}: The number of singletons after clustering.
-#'   \item \code{input}: The name of the input file/object for the clustering.
+#'   \item \code{num_nucleotides}: Total number of nucleotides used as input for
+#'   clustering.
+#'   \item \code{min_length_input_seq}: Length of the shortest sequence used as
+#'   input for clustering.
+#'   \item \code{max_length_input_seq}: Length of the longest sequence used as
+#'   input for clustering.
+#'   \item \code{avg_length_input_seq}: Average length of the sequences used as
+#'   input for clustering.
+#'   \item \code{num_clusters}: Number of clusters generated.
+#'   \item \code{min_size_cluster}: Size of the smallest cluster.
+#'   \item \code{max_size_cluster}: Size of the largest cluster.
+#'   \item \code{avg_size_cluster}: Average size of the clusters.
+#'   \item \code{num_singletons}: Number of singletons after clustering.
+#'   \item \code{input}: Name of the input file/object for the clustering.
 #' }
 #'
 #' @examples
@@ -87,12 +96,16 @@
 #'                                    "R1_sample1_small.fa")
 #' centroids <- NULL
 #'
-#' # Cluster sequences, and return fasta tibble
+#' # Cluster sequences and return a FASTA tibble
 #' cluster_seqs <- vs_cluster_size(fasta_input = fasta_input,
 #'                                 centroids = centroids)
 #'
 #' # Extract clustering statistics
 #' statistics <- attr(cluster_seqs, "statistics")
+#'
+#' # Cluster sequences and write centroids to a file
+#' vs_cluster_size(fasta_input = fasta_input,
+#'                               centroids = "centroids_sequences.fa")
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
@@ -234,33 +247,34 @@ vs_cluster_size <- function(fasta_input,
 
 #' Calculate clustering statistics
 #'
-#' @description Calculates important clustering statistics after running
-#' \code{vs_cluster_size()}, including the number of clusters, sequences, and
-#' nucleotides, and the lengths and sizes of the sequences and clusters.
+#' @description \code{calculate_cluster_statistics} calculates important
+#' clustering statistics after running \code{vs_cluster_size}, including the
+#' number of clusters, sequences, and nucleotides, as well as the lengths and
+#' sizes of the sequences and clusters.
 #'
-#' @param centroids_fasta The output tibble from clustering with the centroids.
+#' @param centroids_fasta Output tibble from clustering with centroids.
 #' Contains the columns: Header, Sequence, and centroid_size.
-#' @param fasta_file The FASTA file containing the input sequences to the
+#' @param fasta_file File path to FASTA containing the input sequences to the
 #' clustering.
-#' @param fasta_input_name The name of the file/object with the input sequences
+#' @param fasta_input_name Name of the file/object with the input sequences
 #' that was used in the clustering.
 #'
-#' @return A tibble with the following columns:
+#' @return A tibble with clustering statistics, including:
 #' \itemize{
-#'   \item \code{num_nucleotides}: The total number of nucleotides used as input
-#'   for clustering.
-#'   \item \code{min_length_input_seq}: The length of the shortest sequence used
-#'   as input for clustering.
-#'   \item \code{max_length_input_seq}: The length of the longest sequence used
-#'   as input for clustering.
-#'   \item \code{avg_length_input_seq}: The average length of the sequences used
-#'   as input for clustering.
-#'   \item \code{num_clusters}: The number of clusters generated.
-#'   \item \code{min_size_cluster}: The size of the smallest cluster.
-#'   \item \code{max_size_cluster}: The size of the largest cluster.
-#'   \item \code{avg_size_cluster}: The average size of the clusters.
-#'   \item \code{num_singletons}: The number of singletons after clustering.
-#'   \item \code{input}: The name of the input file/object for the clustering.
+#'   \item \code{num_nucleotides}: Total number of nucleotides used as input for
+#'   clustering.
+#'   \item \code{min_length_input_seq}: Length of the shortest sequence used as
+#'   input for clustering.
+#'   \item \code{max_length_input_seq}: Length of the longest sequence used as
+#'   input for clustering.
+#'   \item \code{avg_length_input_seq}: Average length of the sequences used as
+#'   input for clustering.
+#'   \item \code{num_clusters}: Number of clusters generated.
+#'   \item \code{min_size_cluster}: Size of the smallest cluster.
+#'   \item \code{max_size_cluster}: Size of the largest cluster.
+#'   \item \code{avg_size_cluster}: Average size of the clusters.
+#'   \item \code{num_singletons}: Number of singletons after clustering.
+#'   \item \code{input}: Name of the input file/object for the clustering.
 #' }
 #'
 #' @return A tibble with clustering statistics.

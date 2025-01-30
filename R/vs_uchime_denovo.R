@@ -1,99 +1,101 @@
 #' Detect chimeras
 #'
-#' @description Detects chimeras present in the FASTA sequences in the given
-#' file or object.
+#' @description \code{vs_uchime_denovo} detects chimeras present in the FASTA
+#' sequences in using \code{VSEARCH}'s \code{uchime_denovo} algorithm.
+#' Automatically sorts sequences by decreasing abundance to enhance chimera
+#' detection accuracy.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads. See
 #' Details.
 #' @param nonchimeras Name of the FASTA output file for the non-chimeric
-#' sequences. If \code{NULL} (default) no output will be written to file.
+#' sequences. If \code{NULL} (default), no output is written to file.
 #' @param chimeras Name of the FASTA output file for the chimeric sequences.
-#' If \code{NULL} (default) no output will be written to file.
-#' @param sizein Decides if abundance annotations present in sequence headers
-#' should be taken into account. Defaults to \code{TRUE}.
-#' @param sizeout Decides if abundance annotations should be added to
-#' FASTA headers. Defaults to \code{TRUE}.
+#' If \code{NULL} (default), no output is written to file.
+#' @param sizein If \code{TRUE} (default), abundance annotations present in
+#' sequence headers are taken into account.
+#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
+#' FASTA headers.
 #' @param relabel Relabel sequences using the given prefix and a ticker to
 #' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 Relabel sequences using the SHA1 message digest
-#' algorithm. Defaults to \code{FALSE}.
-#' @param fasta_width The number of characters in the width of sequences in the
-#' output FASTA file. Defaults to \code{0}. See Details.
+#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
+#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param fasta_width Number of characters per line in the output FASTA
+#' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL}, no log file is created. Defaults to \code{NULL}.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' If \code{NULL} (default), no log file is created.
+#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
+#' Defaults to \code{NULL}. See Details.
 #'
-#' @details Detects chimeras present in the FASTA-formated input, without
-#' external references (i.e. de novo). Automatically sort the sequences in the
-#' input by decreasing abundance beforehand.
-#'
+#' @details
 #' Chimeras in the input FASTA sequences are detected using \code{VSEARCH}´s
 #' \code{uchime_denovo}. In de novo mode, input FASTA file/object must present
 #' abundance annotations (i.e. a pattern [;]size=integer[;] in the header).
 #' Input order matters for chimera detection, so it is recommended to sort
 #' sequences by decreasing abundance.
 #'
-#' \code{fasta_input} can either be a FASTA file or object. FASTA objects are
-#' tibbles that contain the columns \code{Header} and \code{Sequence}.
+#' \code{fasta_input} can either be a FASTA file or a FASTA object. FASTA objects
+#' are tibbles that contain the columns \code{Header} and \code{Sequence}.
 #'
-#' If \code{nonchimeras} and \code{chimeras} are specified, the resulting
-#' sequences after chimera detection are output to these files in FASTA format.
-#' If unspecified (\code{NULL}) the results are returned as a FASTA-objects.
-#' \code{nonchimeras} and \code{chimeras} must either both be specified, or both
-#' unspecified.
+#' If \code{nonchimeras} and \code{chimeras} are specified, resulting
+#' non-chimeric and chimeric sequences are written to these files in FASTA
+#' format.
 #'
-#' FASTA files produced by \code{VSEARCH} are wrapped
-#' (sequences are written on lines of integer nucleotides).\code{fasta_width} is
-#' by default set to zero to eliminate the wrapping.
+#' If \code{nonchimeras} and \code{chimeras} are \code{NULL}, results are
+#' returned as a FASTA-objects.
 #'
-#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-#' additional arguments, and how to use them.
+#' \code{nonchimeras} and \code{chimeras} must either both be specified or both
+#' be \code{NULL}.
+#'
+#' \code{vsearch_options} allows users to pass additional command-line arguments
+#' to \code{VSEARCH} that are not directly supported by this function. Refer to
+#' the \code{VSEARCH} manual for more details.
 #'
 #' @return A tibble or \code{NULL}.
 #'
 #' If \code{nonchimeras} and \code{chimeras} are specified, the resulting
-#' sequences after chimera detection are output to these files in FASTA format,
-#' and nothing is returned.
-#' If unspecified (\code{NULL}) the results are returned as a FASTA-objects.
-#' The tibble containing chimeric sequences is an attribute, called
-#' \code{"chimera"}, to the primary table with non-chimeric sequences. If no
-#' chimeric sequences are found, the attribute is empty (\code{NULL}).
+#' sequences after chimera detection written directly to the specified files in
+#' FASTA format, and no tibbles are returned.
 #'
-#' When a FASTA object is returned, the statistics from the chimera detection,
-#' \code{statistics}, is an attribute of the non-chimeras tibble.
+#' If \code{nonchimeras} and \code{chimeras} are \code{NULL}, A FASTA object
+#' containing non-chimeric sequences with an attribute \code{"chimeras"}
+#' containing a tibble of chimeric sequences is returned. If no chimeras are
+#' found, the \code{"chimeras"} attribute is \code{NULL}.
+#'
+#' Additionally, the returned tibble (when applicable) has an attribute
+#' \code{"statistics"} containing a tibble with chimera detection statistics.
+#'
 #' The statistics tibble has the following columns:
 #' \itemize{
-#'   \item \code{num_nucleotides}: The total number of nucleotides used as input
+#'   \item \code{num_nucleotides}: Total number of nucleotides used as input
 #'   for chimera detection.
-#'   \item \code{num_sequences}: The total number of sequences used as input for
+#'   \item \code{num_sequences}: Total number of sequences used as input for
 #'   chimera detection.
-#'   \item \code{min_length_input_seq}: The length of the shortest sequence used
+#'   \item \code{min_length_input_seq}: Length of the shortest sequence used
 #'   as input for chimera detection.
-#'   \item \code{max_length_input_seq}: The length of the longest sequence used
-#'   as input for chimera detection.
-#'   \item \code{avg_length_input_seq}: The average length of the sequences used
-#'   as input for chimera detection.
-#'   \item \code{num_non_chimeras}: The number of non-chimeric sequences.
-#'   \item \code{num_chimeras}: The number of chimeric sequences.
-#'   \item \code{input}: The name of the input file/object for the chimera
+#'   \item \code{max_length_input_seq}: Length of the longest sequence used as
+#'   input for chimera detection.
+#'   \item \code{avg_length_input_seq}: Average length of the sequences used as
+#'   input for chimera detection.
+#'   \item \code{num_non_chimeras}: Number of non-chimeric sequences.
+#'   \item \code{num_chimeras}: Number of chimeric sequences.
+#'   \item \code{input}: Name of the input file/object for the chimera
 #'   detection.
 #' }
 #'
 #' @examples
 #' \dontrun{
 #' # Define arguments
-#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fa")
+#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                          "R1_sample1_small.fa")
 #' nonchimeras <- "nonchimeras.fa"
 #' chimeras <- "chimeras.fa"
 #'
-#' # Detect chimeras with default parameters, with files as output
+#' # Detect chimeras with default parameters and return FASTA files
 #' vs_uchime_denovo(fasta_input = fasta_input,
 #'                  nonchimeras = nonchimeras,
 #'                  chimeras = chimeras)
 #'
-#' # Detect chimeras with default parameters, with tibbles as output
+#' # Detect chimeras with default parameters and return a FASTA tibble
 #' nonchimeras.tbl <- vs_uchime_denovo(fasta_input = fasta_input,
 #'                                     nonchimeras = NULL,
 #'                                     chimeras = NULL)

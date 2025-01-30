@@ -4,7 +4,7 @@
 \alias{fastx_combine_files}
 \alias{fastq_combine_files}
 \alias{fasta_combine_files}
-\title{Combine files}
+\title{Combine FASTA/FASTQ files in a directory into a single file or object}
 \usage{
 fastx_combine_files(
   files_dir,
@@ -14,34 +14,55 @@ fastx_combine_files(
 )
 }
 \arguments{
-\item{files_dir}{A path to a directory with files to combine.
-Files can not be in a zipped format.}
+\item{files_dir}{A character string specifying the path to the directory
+containing the files to be combined. Files must be uncompressed.}
 
-\item{output_file}{Name of the output file or \code{NULL}. If not specified,
-a FASTA/FASTQ object depending on \code{file_format} is returned.}
+\item{output_file}{A character string specifying the name of the output file.
+If \code{NULL} (default), the combined data is returned as a FASTA/FASTQ
+object depending on \code{file_format} instead of being written to a file.}
 
-\item{file_ext}{The file extension of the files that are to be combined.
-Defaults to \code{".fq"}.}
+\item{file_ext}{File extension of the files to be combined. Defaults to
+\code{".fq"}.}
 
-\item{file_format}{Format of files that are to be combined, and desired output
-format of file/tibble: \code{"fasta"} or \code{"fastq"} (default). See Details.}
+\item{file_format}{Format of files to be combined and the desired output
+format: either \code{"fasta"} or \code{"fastq"} (default). See Details.}
 }
 \value{
 A tibble or \code{NULL}.
 
-If \code{output_file} is specified, a tibble containing the combined reads
-in the format specified in \code{file_format} is returned.
-If \code{output_file} is specified, the results are written to file and
-nothing is returned.
+If \code{output_file} is specified, the combined sequences are written to the
+specified file.
+
+If \code{output_file} is \code{NULL}, the combined sequences are returned as
+a tibble in the format specified by \code{file_format}.
+
+If \code{output_file} is unspecified (\code{NULL}), a tibble containing the
+combined data in the format specified by \code{file_format} is returned.
+If \code{output_file} is specified, the combined data is written to the
+specified path.
 }
 \description{
-Combine all files of given type in given directory into one
-file/object.
+\code{fastx_combine_files} combines all FASTA or FASTQ files
+within a specified directory into a single output file or a tibble object.
 }
 \details{
-A FASTA object is a tibble containing the columns \code{Header} and \code{Sequence}.
-A FASTQ object is a tibble containing the columns \code{Header}, \code{Sequence},
-and \code{Quality}.
+\code{files_dir} must contain uncompressed FASTA or FASTQ files matching the
+specified \code{file_ext}.
+
+All files with the specified \code{file_ext} in \code{files_dir} are
+concatenated into a single output file or tibble.
+
+A FASTA object is a tibble containing the columns \code{Header} and
+\code{Sequence}.
+A FASTQ object is a tibble containing the columns \code{Header},
+\code{Sequence}, and \code{Quality}.
+
+If \code{output_file} is specified, the combined sequences are written to
+this file in the format specified by \code{file_format}.
+
+If \code{output_file} is \code{NULL}, the combined sequences are returned as
+a tibble in the format specified by \code{file_format}, and no file is
+written.
 }
 \examples{
 \dontrun{
@@ -51,11 +72,17 @@ output_file <- NULL
 file_ext <- ".fq"
 file_format <- "fastq"
 
-# Combine files, with tibble as output
+# Combine files and return tibble object
 combined_files <- fastx_combine_files(files_dir = files_dir,
                                       output_file = output_file,
                                       file_ext = file_ext,
                                       file_format = file_format)
+
+# Combine files and write to an output file
+fastx_combine_files(files_dir = files_dir,
+                    output_file = "combined.fastq",
+                    file_ext = file_ext,
+                    file_format = file_format)
 }
 
 }

@@ -1,29 +1,29 @@
-#' Optimize truncation for best possible merging
+#' Optimize truncation for optimal read merging
 #'
-#' @description Optimizes truncation, based on base quality score
-#' (\code{--truncqual} in \code{VSEARCH}), to get the best possible merging
-#' results. The function searches for the best \code{truncqual} value by looping
-#' through different parameter values.
+#' @description \code{vs_optimize_truncqual} optimizes the truncation parameter
+#' to achieve the best possible merging results. The function iterates through a
+#' specified range of \code{truncqual} values to identify the optimal value that
+#' maximizes the proportion of high-quality merged read pairs.
 #'
-#' @param fastq_input A FASTQ file path or object containing (forward) reads.
-#' @param reverse A FASTQ file path or object containing (reverse) reads. See
-#' Details.
-#' @param minovlen The minimum overlap between the merged reads. Must be at
-#' least 5. Defaults to \code{10}.
-#' @param truncqual_range The truncqual values to be tested. The sequences are
-#' truncated starting from the first base with the specified base quality score
-#' value or lower. Defaults to \code{1} to \code{20}. Must be given as a vector
-#' with numbers.
-#' @param min_size The minimum copy number (size) for a given read to be
+#' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
+#' reads. See Details.
+#' @param reverse A FASTQ file path or FASTQ object containing (reverse) reads.
+#' See Details.
+#' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
+#' Defaults to \code{10}.
+#' @param truncqual_range A numeric vector of \code{truncqual} values to test.
+#' Sequences are truncated starting from the first base with the specified base
+#' quality score or lower. Defaults to \code{1:20}. Provide as a numeric vector.
+#' @param min_size Minimum copy number (size) for a merged read to be
 #' included in the results. Defaults to \code{1}.
-#' @param maxee_rate Threshold for average expected error. Numeric value ranging
-#' form \code{0.0} to \code{1.0}. Defaults to \code{1}. See Details.
-#' @param minlen The minimum number of bases a sequence must have to be
-#' retained. Defaults to \code{1}. See Details.
-#' @param threads Number of computational threads to be used by \code{vsearch}.
+#' @param maxee_rate Threshold for average expected error. Must range from
+#' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.
+#' @param minlen Minimum number of bases a sequence must have to be retained.
+#' Defaults to \code{0}. See Details.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
-#' @param plot_title Title of the resulting output plot. Defaults to
-#' \code{"Optimization of Read Merging Based on Truncqual Value"}.
+#' @param plot_title A string specifying the title of the output plot. Defaults
+#' to \code{"Optimization of Read Merging Based on Truncqual Value"}.
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}},
@@ -41,7 +41,6 @@
 #' indicates that the merging efficiency is near its maximum, while a lower
 #' value suggests suboptimal merging conditions.
 #'
-#'
 #' Changing \code{min_size} will affect the results. A low \code{min_size} will
 #' include merged sequences with a lower copy number after dereplication, and a
 #' higher \code{min_size} will filter out more reads and only count
@@ -49,32 +48,34 @@
 #'
 #' @return A data frame with the following columns:
 #' \itemize{
-#'   \item \code{truncqual_value}: The tested truncqual value.
-#'   \item \code{merged_high_quality_read_pairs}: Absoulute count of
+#'   \item \code{truncqual_value}: Tested \code{truncqual} value.
+#'   \item \code{merged_high_quality_read_pairs}: Absolute count of
 #'   successfully merged sequence pairs with a copy number above \code{min_size}
 #'   after dereplication.
 #'   \item \code{proportion_merged_high_quality_read_pairs}: A relative metric,
 #'   calculated as the number of merged high-quality read-pairs divided
 #'   by the maximum observed merged read count.
-#'   \item \code{R1_length}: The average length of R1-reads after trimming.
-#'   \item \code{R2_length}: The average length of R2-reads after trimming.
+#'   \item \code{R1_length}: Average length of R1-reads after trimming.
+#'   \item \code{R2_length}: Average length of R2-reads after trimming.
 #' }
 #'
-#' The data frame has an attribute \code{"plot"} containing a
-#' \code{\link{ggplot2}} object based on the returned data frame. In the plot
-#' the \code{truncqual} values are plotted against the
-#' \code{proportion_merged_high_quality_read_pairs} values and the mean read
-#' lengths (\code{R1_length} and \code{R2_length}). The optimal \code{truncqual}
-#' value is marked by a red dashed line.
+#' The returned data frame has an attribute named \code{"plot"} containing a
+#' \code{\link{ggplot2}} object based on the returned data frame. The plot
+#' visualizes \code{truncqual} values against
+#' \code{proportion_merged_high_quality_read_pairs}, \code{R1_length}, and
+#' \code{R2_length}, with the optimal \code{truncqual} value marked by a red
+#' dashed line.
 #'
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
 #'
 #' @examples
 #' \dontrun{
-#' # Read example FASTQ files
-#' R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-#' R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+#' # Define arguments
+#' R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                      "R1_sample1_small.fq")
+#' R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                      "R2_sample1_small.fq")
 #'
 #' # Run optimizing function
 #' optimize.tbl <- vs_optimize_truncqual(fastq_input = R1.file,

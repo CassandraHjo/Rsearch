@@ -1,66 +1,71 @@
 #' Subsample sequences
 #'
-#' @description Subsample sequences in FASTA/FASTQ file or object by randomly
-#' extracting sequences based on number or precentage.
+#' @description \code{vs_fastx_subsample} subsamples sequences in FASTA/FASTQ
+#' file or object by randomly extracting sequences based on number or percentage
+#' using \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTQ/FASTA file path or object. See Details.
-#' @param fastx_output Name of the output file for dereplicated reads from
-#' \code{fastx_input}.
-#' File can be in either FASTA or FASTQ format, depending on \code{output_format}.
-#' If \code{NULL} (default) no sequences will be written to file. See Details.
-#' @param output_format The desired output format for file/tibble: \code{"fasta"}
-#' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or object,
-#' \code{output_format} can not be \code{"fastq"}.
-#' @param sample_pct The given percentage of the input sequences to be subsampled.
+#' @param fastx_input A FASTQ/FASTA file path or FASTA/FASTQ object. See
+#' Details.
+#' @param fastx_output Name of the output file for subsampled reads from
+#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
+#' \code{output_format}. If \code{NULL} (default), no sequences are written to
+#' file. See Details.
+#' @param output_format Desired output format of file or tibble: \code{"fasta"}
+#' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
+#' FASTA object, \code{output_format} cannot be \code{"fastq"}.
+#' @param sample_pct Percentage of the input sequences to be subsampled.
 #' Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.
 #' @param sample_size The given number of sequences to extract.
 #' Must be a positive integer if specified. Defaults to \code{NULL}.
 #' @param randseed Random seed. Must be a positive integer. A given seed always
-#' produces the same output, which is useful for replicability. Defaults to \code{NULL}.
-#' @param sizein Decides if abundance annotations present in sequence headers
-#' in \code{fastx_input} should be taken into account. Defaults to \code{TRUE}.
-#' @param sizeout Decides if abundance annotations should be added to headers in
-#' output table or output file (\code{fastx_output}). Defaults to \code{TRUE}.
-#' @param relabel_sha1 Relabel sequences using the SHA1 message digest algorithm.
-#' Defaults to \code{FALSE}.
+#' produces the same output, which is useful for replicability. Defaults to
+#' \code{NULL}.
+#' @param sizein If \code{TRUE} (default), abundance annotations present in
+#' sequence headers are taken into account.
+#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
+#' FASTA headers.
+#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
+#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
 #' @param relabel Relabel sequences using the given prefix and a ticker to
 #' construct new headers. Defaults to \code{NULL}.
-#' @param fasta_width Number of characters per line in the output FASTA file.
-#' Only applies if the output file is in FASTA format. Defaults to \code{0}.
-#' See Details.
+#' @param fasta_width Number of characters per line in the output FASTA
+#' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
+#' Defaults to \code{NULL}. See Details.
 #'
-#' @details The reads in the input file/object (\code{fastx_input}) are subsampled
-#' by randomly extracting a certain number or a certain percentage of the sequences
-#' in the input, using \code{VSEARCH}.
-#' The extraction is performed as a random sampling with a uniform distribution
-#' among the input sequences and is performed without replacement.
+#' @details
+#' \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
+#' FASTA objects are tibbles that contain the columns \code{Header} and
+#' \code{Sequence}.FASTQ objects are tibbles that contain the columns
+#' \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
-#' \code{fastx_input} can either be a FASTA/FASTQ file or object with reads.
-#' FASTA objects are tibbles that contain the columns \code{Header} and \code{Sequence}.
-#' FASTQ objects are tibbles that contain the columns \code{Header}, \code{Sequence},
-#' and \code{Quality}.
+#' Sequences in the input file/object (\code{fastx_input}) are subsampled by
+#' randomly extracting a specified number or percentage of sequences. Extraction
+#' is performed as random sampling with a uniform distribution among the input
+#' sequences and without replacement.
+#'
+#' Specify either \code{sample_size} or \code{sample_pct} to determine the
+#' number or percentage of sequences to subsample. Only one of these parameters
+#' can be specified at a time. If neither is specified, an error is thrown.
 #'
 #' If \code{fastx_output} is specified, the sampled sequences are output to this
 #' file in format given by \code{output_format}.
-#' If unspecified (\code{NULL}) the result is returned as a FASTA/FASTQ object,
-#' depending on \code{output_format}.
+#' If \code{fastx_output} is \code{NULL}, the sample sequences are returned as a
+#' FASTA or FASTQ object, depending on \code{output_format}.
 #'
-#' FASTA files produced by\code{VSEARCH} are wrapped
-#' (sequences are written on lines of integer nucleotides).
-#' \code{fasta_width} is by default set to zero to eliminate the wrapping.
-#'
-#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-#' additional arguments, and how to use them.
+#' \code{vsearch_options} allows users to pass additional command-line arguments
+#' to \code{VSEARCH} that are not directly supported by this function. Refer to
+#' the \code{VSEARCH} manual for more details.
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If \code{fastx_output} is not specified, a tibble containing the dereplicated
-#' reads is returned. If \code{fastx_output} is specified nothing is returned.
+#' If \code{fastx_output} \code{NULL}, a tibble containing the subsampled reads
+#' in the format specified by \code{output_format} is returned.
+#'
+#' If \code{fastx_output} is specified, the subsampled sequences are written to
+#' the specified output file, and no tibble is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -68,13 +73,19 @@
 #' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
 #' fastx_output <- NULL
 #' output_format <- "fastq"
-#' sample_size <- 1
+#' sample_size <- 10
 #'
-#' # Subsample sequences, with tibble as output
+#' # Subsample sequences and return a FASTQ tibble
 #' subsample_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
 #'                                    fastx_output = fastx_output,
 #'                                    output_format = output_format,
 #'                                    sample_size = sample_size)
+#'
+#' # Subsample sequences and write subsampled sequences to a file
+#' vs_fastx_subsample(fastx_input = fastx_input,
+#'                    fastx_output = "subsample.fq",
+#'                    output_format = output_format,
+#'                    sample_size = sample_size)
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}

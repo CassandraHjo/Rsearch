@@ -14,17 +14,18 @@ vs_merging_lengths(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or object containing (forward) reads.}
+\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
+reads. See Details.}
 
-\item{reverse}{A FASTQ file path or object containing (reverse) reads.}
+\item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.}
 
-\item{minovlen}{The minimum overlap between the merged reads. Must be at least 5.
+\item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
 Defaults to \code{10}.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained.
-Defaults to \code{1}.}
+\item{minlen}{Minimum number of bases a sequence must have to be retained.
+Defaults to \code{0}. See Details.}
 
-\item{threads}{Number of computational threads to be used by \code{vsearch}.
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 }
 \value{
@@ -33,24 +34,28 @@ A tibble with the following columns:
   \item \code{length_1}: The length of the forward reads.
   \item \code{length_2}: The length of the reverse reads.
   \item \code{length_merged}: The length of the merged reads.
-  \item \code{length_overlap}: The length of the overlap between the forward and reverse reads.
+  \item \code{length_overlap}: The length of the overlap between the forward
+  and reverse reads.
 }
 
 In case of missing values for the latter two columns, it means that the
 corresponding reads were not merged.
 
-The data frame has an attribute \code{plot} containing a \code{\link{ggplot2}}
-object based on the returned data frame.
-
-The data frame also has an attribute \code{statistics} containing the same
-attribute returned from \code{\link{vs_fastq_mergepairs}}.
+The tibble includes additional attributes:
+\describe{
+  \item{\code{plot}}{A \code{\link{ggplot2}} object visualizing the returned
+  data frame.}
+  \item{\code{statistics}}{Additional statistics returned from
+  \code{\link{vs_fastq_mergepairs}}.}
+}
 }
 \description{
-Statistics of read lengths before and after merging.
+\code{vs_merging_lengths} computes length statistics for forward
+reads, reverse reads, merged reads, and their overlaps before and after
+merging.
 }
 \details{
-This function calculates the length of the forward reads, reverse reads,
-the merged reads, and the overlap lengths. It uses \code{\link{vs_fastq_mergepairs}} where
+The function uses \code{\link{vs_fastq_mergepairs}} where
 the arguments to this function are described in detail.
 
 These length statistics are most typically used in order to tune the filter
@@ -58,11 +63,13 @@ and trimming of reads such that the merged reads are of high quality.
 }
 \examples{
 \dontrun{
-# Read example FASTQ files
-R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
+# Define arguments
+R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "R1_sample1_small.fq")
+R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "R2_sample1_small.fq")
 
-# Execute merging
+# Run function
 merging.tbl <- vs_merging_lengths(fastq_input = R1.file,
                                   reverse = R2.file)
 

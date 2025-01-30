@@ -1,45 +1,66 @@
 #' Search for exact full-length matches
 #'
-#' @description Searches for exact full-length matches to the query sequences in
-#' the database of target sequences.
-#'
-#' @param fastx_input A FASTA/FASTQ file path or object containing the query
-#' sequences. See details.
-#' @param db A FASTA/FASTQ file path or object containing the target sequences
-#' in FASTQ/FASTA format.
-#' @param blast6out Name of the output file for the search results in a blast-like
-#' tab-separated format of twelve fields, with one line per query-target matching.
-#' @param strand \code{"plus"} (default) or \code{"both"}.
-#' When comparing sequences only check the plus strand or both strands.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#'
-#' @details Searches for exact full-length matches to the query sequences in
-#' the database of target sequences, using \code{VSEARCH}. Only 100% exact
-#' matches are reported. This command is much faster than
+#' @description \code{vs_search_exact} searches for exact full-length matches to
+#' the query sequences in the database of target sequences using \code{VSEARCH}.
+#' Only 100% exact matches are reported, making this command much faster than
 #' \code{\link{vs_usearch_global}}.
 #'
-#' \code{fastx_input} can either be FASTA/FASTQ files or objects. FASTA objects
-#' are tibbles that contain the columns \code{Header} and \code{Sequence}.
-#' FASTQ objects are tibbles that contain the columns \code{Header},
-#' \code{Sequence}, and \code{Quality}.
+#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ tibble object
+#' containing the query sequences. See Details.
+#' @param db A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
+#' target sequences.
+#' @param blast6out Name of the output file for the search results in a
+#' blast-like tab-separated format of twelve fields, with one line per
+#' query-target matching.
+#' @param strand Specifies which strand to consider when comparing sequences.
+#' Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
+#' Defaults to \code{1}.
+#' @param vsearch_options A character string of additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
 #'
+#' @details
+#' Identifies exact full-length matches between query and target sequences
+#' using \code{VSEARCH}. Only 100% identical matches are reported, ensuring high
+#' specificity.
 #'
-#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-#' additional arguments, and how to use them.
+#' \code{fastx_input} and \code{db} can either be file paths to a FASTA/FASTQ
+#' files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
+#' columns \code{Header} and \code{Sequence}.FASTQ objects are tibbles that
+#' contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#'
+#' Results are written to the file specified by \code{blast6out} in a blast-like
+#' tab-separated format containing twelve fields:
+#' \itemize{
+#'   \item \code{Query ID}
+#'   \item \code{Target ID}
+#'   \item \code{Percent Identity}
+#'   \item \code{Alignment Length}
+#'   \item \code{Number of Mismatches}
+#'   \item \code{Number of Gap Openings}
+#'   \item \code{Query Start}
+#'   \item \code{Query End}
+#'   \item \code{Target Start}
+#'   \item \code{Target End}
+#'   \item \code{E-value}
+#'   \item \code{Bit Score}
+#' }
+#'
+#' \code{vsearch_options} allows users to pass additional command-line arguments
+#' to \code{VSEARCH} that are not directly supported by this function. Refer to
+#' the \code{VSEARCH} manual for more details.
 #'
 #' @return
-#' \code{NULL} (Output is written to file specified by \code{blast6out}).
+#' \code{NULL}. Results are written directly to the file specified by
+#' \code{blast6out}).
 #'
 #' @seealso \code{\link{vs_usearch_global}}
 #'
 #' @examples
 #' \dontrun{
 #' # Define arguments
-#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                          "R1_sample1_small.fq")
 #' db <- microseq::readFastq(fastx_input)[1:80, ]
 #' blast6out <- "blast6out.txt"
 #'

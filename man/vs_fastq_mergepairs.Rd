@@ -24,125 +24,125 @@ vs_fastq_mergepairs(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or object containing (forward) reads.
+\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
+reads. See Details.}
+
+\item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.
 See Details.}
 
-\item{reverse}{A FASTQ file path or object containing (reverse) reads.
-See Details.}
-
-\item{minovlen}{The minimum overlap between the merged reads.
-Must be at least 5. Defaults to \code{10}.}
+\item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
+Defaults to \code{10}.}
 
 \item{output_format}{Desired output format of file or tibble: \code{"fasta"}
 or \code{"fastq"} (default).}
 
-\item{fastaout}{Name of the FASTA output file with the merged reads.
-If \code{NULL} (default) no output will be written to file. See Details.}
+\item{fastaout}{Name of the FASTA output file with the merged reads. If
+\code{NULL} (default), no output is written to file. See Details.}
 
-\item{fastqout}{Name of the FASTQ output file with the merged reads.
-If \code{NULL} (default) no output will be written to file. See Details.}
+\item{fastqout}{Name of the FASTQ output file with the merged reads. If
+\code{NULL} (default) no output is written to file. See Details.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to \code{0}.
-See Details.}
+Only applies if the output file is in FASTA format. Defaults to \code{0},
+which eliminates wrapping.}
 
-\item{minlen}{The minimum number of bases a sequence must have to be retained.
+\item{minlen}{Minimum number of bases a sequence must have to be retained.
 Defaults to \code{0}. See Details.}
 
 \item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL}, no log file is created. Defaults to \code{NULL}.}
+If \code{NULL} (default), no log file is created.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
-\item{vsearch_options}{A character string of additional arguments to pass to
-\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
+\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
+Defaults to \code{NULL}. See Details.}
 }
 \value{
 A tibble or \code{NULL}.
 
-If output files are not specified, a tibble containing the merged reads in the
-format specified by \code{output_format} is returned. If an output file is
-specified, results are written to file and nothing is returned.
+If \code{fastaout} or \code{fastqout} is \code{NULL}, a tibble containing the
+merged reads in the format specified by \code{output_format} is returned.
 
-When a FASTA/FASTQ object is returned, the statistics from the merging,
-\code{statistics}, is an attribute of the merging tibble (\code{merged_seqs}).
-The statistics tibble has the following columns:
+If \code{fastaout} or \code{fastqout} is specified , the merged sequences are
+written to the specified output file, and no tibble is returned.
+
+The \code{"statistics"} attribute of the returned tibble (when
+\code{fastaout} or \code{fastqout} is \code{NULL}) is a tibble with the
+following columns:
 \itemize{
-  \item \code{Tot_num_pairs}: The total number of read pairs before merging.
-  \item \code{Merged}: The number of read pairs that merged.
-  \item \code{Mean_Read_Length_before_merging}: The mean read length before
+  \item \code{Tot_num_pairs}: Total number of read pairs before merging.
+  \item \code{Merged}: Number of read pairs that merged.
+  \item \code{Mean_Read_Length_before_merging}: Mean read length before
   merging (R1 and R2).
-  \item \code{Mean_Read_Length_after_merging}: The mean read length after
+  \item \code{Mean_Read_Length_after_merging}: Mean read length after
   merging.
-  \item \code{StdDev_Read_Length}: The standard deviation of read length
+  \item \code{StdDev_Read_Length}: Standard deviation of read length
   after merging.
-  \item \code{R1}: The name of the file/object with forward (R1) reads that
-  was used in the merging.
-  \item \code{R2}: The name of the file/object with reverse (R2) reads that
-  was used in the merging.
+  \item \code{R1}: Name of the file/object with forward (R1) reads used in
+  the merging.
+  \item \code{R2}: Name of the file/object with reverse (R2) reads used in
+  the merging.
 }
-
-The statistics can be accessed by running
-\code{attributes(merged_seqs)$statistics} or
-\code{attr(merged_seqs, "statistics")}.
 }
 \description{
-Merges paired-end sequence reads with overlapping regions into
-one sequence.
+\code{vs_fastq_mergepairs} merges paired-end sequence reads with
+overlapping regions into one sequence using \code{VSEARCH}.
 }
 \details{
-The read-pairs in the input FASTQ-files (\code{fastq_input} and
-\code{reverse}) are merged if they have sufficient overlap, using \code{VSEARCH}.
+\code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
+or FASTQ objects. FASTQ objects are tibbles that contain the columns
+\code{Header}, \code{Sequence}, and \code{Quality}.
+Forward and reverse reads must appear in the same order and have the same
+total number of reads in both files.
 
-\code{fastq_input} and \code{reverse} can either be FASTQ files or FASTQ
-objects. FASTQ objects are tibbles that contain the columns \code{Header},
-\code{Sequence}, and \code{Quality}.
-Forward and reverse reads must appear in the same order and total number in
-both files.
+Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
+are merged into a single sequence by overlapping regions. The resulting
+sequences consist of the merged forward and reverse reads with the specified
+minimum overlap.
 
 If \code{fastaout} or \code{fastqout} is specified, the merged reads are
-output to this file in either FASTA or FASTQ format.
-If unspecified (\code{NULL}) the results are returned as a FASTA or FASTQ
-object, and no output is written to file. \code{output_format} has to match
-the desired output files/objects.
+written to the respective file in either FASTA or FASTQ format.
 
-FASTA files produced by \code{VSEARCH} are wrapped (sequences are written on
-lines of integer nucleotides).
-\code{fasta_width} is by default set to zero to eliminate the wrapping.
+If both \code{fastaout} or \code{fastqout} are \code{NULL}, the results are
+returned as a FASTA or FASTQ object, and no file is written.
+
+\code{output_format} has to match the desired output files/objects.
 
 Any input sequence with fewer bases than the value set in \code{minlen} will
-be discarded. By default, \code{minlen} is set to 0, which means that no
-sequences are removed.
+be discarded. Default \code{minlen} is 0, meaning no sequences are removed.
 However, using the default value may allow empty sequences to remain in
 the results.
 
-If \code{log_file} is specified, the messages and merging statistics are
-output to this file.
-If unspecified (\code{NULL}) no log file is written. If \code{fastqout} is
-specified, then \code{log_file} needs to be specified in order to get the
-merging statistics from \code{VSEARCH}.
+If \code{log_file} is \code{NULL} and \code{fastqout} or \code{fastaout} is
+specified, merging statistics from \code{VSEARCH} will not be captured.
 
-\code{vsearch_options} can be used to pass additional arguments to
-\code{VSEARCH}, that are not implemented in \code{Rsearch}. See the
-\code{VSEARCH} manual for additional arguments, and how to use them.
+\code{vsearch_options} allows users to pass additional command-line arguments
+to \code{VSEARCH} that are not directly supported by this function. Refer to
+the \code{VSEARCH} manual for more details.
 }
 \examples{
 \dontrun{
-# Read example FASTQ files
-fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-reverse <- file.path(file.path(path.package("Rsearch"), "extdata"), "R2_sample1_small.fq")
-
-# Define other arguments
+# Define arguments
+fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                         "R1_sample1_small.fq")
+reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "R2_sample1_small.fq")
 output_format <- "fastq"
 
-# Execute merging, with tibble as output
+# Merge sequences and return a FASTQ tibble
 merge_seqs <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                   reverse = reverse,
                                   output_format = output_format)
 
 # Extract merging statistics
 statistics <- attr(merge_seqs, "statistics")
+
+# Merge sequences and write sequences to a FASTQ file
+s_fastq_mergepairs(fastq_input = fastq_input,
+                   reverse = reverse,
+                   output_format = output_format,
+                   fastqout = "merged_sequences.fq")
 }
 
 }
