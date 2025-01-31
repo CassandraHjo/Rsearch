@@ -11,9 +11,9 @@ vs_sintax(
   db,
   tabbedout = NULL,
   cutoff = NULL,
+  strand = "plus",
   randseed = NULL,
   threads = 1,
-  strand = "plus",
   vsearch_options = NULL
 )
 }
@@ -31,14 +31,14 @@ with taxonomy.}
 \item{cutoff}{minimum level of bootstrap support for the taxonomic ranks that
 is included in column 4 of the output file. Defaults to \code{NULL}.}
 
+\item{strand}{Specifies which strand to consider when comparing sequences.
+Can be either \code{"plus"} (default) or \code{"both"}.}
+
 \item{randseed}{Seed for the random number generator used in the Sintax
 algorithm. Defaults to \code{NULL}.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
-
-\item{strand}{Specifies which strand to consider when comparing sequences.
-Can be either \code{"plus"} (default) or \code{"both"}.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}

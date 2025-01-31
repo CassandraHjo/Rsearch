@@ -13,16 +13,16 @@
 \usage{
 vs_fastx_uniques(
   fastx_input,
-  fastx_output = NULL,
   output_format = "fastq",
+  fastx_output = NULL,
   minuniquesize = 1,
   strand = "plus",
   sizein = TRUE,
   sizeout = TRUE,
-  relabel_sha1 = FALSE,
   relabel = NULL,
-  fasta_width = 0,
+  relabel_sha1 = FALSE,
   fastq_qout_max = FALSE,
+  fasta_width = 0,
   vsearch_options = NULL
 )
 }
@@ -30,14 +30,14 @@ vs_fastx_uniques(
 \item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object. See
 \emph{Details}.}
 
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
+or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
+FASTA object, \code{output_format} cannot be \code{"fastq"}.}
+
 \item{fastx_output}{Name of the output file for dereplicated reads from
 \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
 \code{output_format}. If \code{NULL} (default), no sequences are written to
 file. See \emph{Details}.}
-
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
-or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
-FASTA object, \code{output_format} cannot be \code{"fastq"}.}
 
 \item{minuniquesize}{Minimum abundance value post-dereplication for a
 sequence not to be discarded. Defaults to \code{1}.}
@@ -51,18 +51,18 @@ sequence headers are taken into account.}
 \item{sizeout}{If \code{TRUE} (default), abundance annotations are added to
 FASTA headers.}
 
-\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to \code{FALSE}.}
-
 \item{relabel}{Relabel sequences using the given prefix and a ticker to
 construct new headers. Defaults to \code{NULL}.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA
-file. Defaults to \code{0}, which eliminates wrapping.}
+\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
+SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
 \item{fastq_qout_max}{If \code{TRUE}, the quality score will be the
 highest (best) quality score observed in each position. Defaults to
 \code{FALSE}.}
+
+\item{fasta_width}{Number of characters per line in the output FASTA
+file. Defaults to \code{0}, which eliminates wrapping.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}

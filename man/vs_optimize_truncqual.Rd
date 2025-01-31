@@ -10,9 +10,9 @@ vs_optimize_truncqual(
   reverse,
   minovlen = 10,
   truncqual_range = 1:20,
+  minlen = 1,
   min_size = 1,
   maxee_rate = 0.01,
-  minlen = 1,
   threads = 1,
   plot_title = "Optimization of Read Merging Based on Truncqual Value"
 )
@@ -31,14 +31,14 @@ Defaults to \code{10}.}
 Sequences are truncated starting from the first base with the specified base
 quality score or lower. Defaults to \code{1:20}. Provide as a numeric vector.}
 
+\item{minlen}{Minimum number of bases a sequence must have to be retained.
+Defaults to \code{0}. See \emph{Details}.}
+
 \item{min_size}{Minimum copy number (size) for a merged read to be
 included in the results. Defaults to \code{1}.}
 
 \item{maxee_rate}{Threshold for average expected error. Must range from
 \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.}
-
-\item{minlen}{Minimum number of bases a sequence must have to be retained.
-Defaults to \code{0}. See \emph{Details}.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}

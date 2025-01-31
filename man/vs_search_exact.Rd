@@ -9,8 +9,8 @@ vs_search_exact(
   fastx_input,
   db,
   blast6out,
-  threads = 1,
   strand = "plus",
+  threads = 1,
   vsearch_options = NULL
 )
 }
@@ -25,11 +25,11 @@ target sequences.}
 blast-like tab-separated format of twelve fields, with one line per
 query-target matching.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
-
 \item{strand}{Specifies which strand to consider when comparing sequences.
 Can be either \code{"plus"} (default) or \code{"both"}.}
+
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
+Defaults to \code{1}.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}

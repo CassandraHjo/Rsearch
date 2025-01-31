@@ -11,15 +11,15 @@
 \usage{
 vs_fastx_subsample(
   fastx_input,
-  fastx_output = NULL,
   output_format = "fastq",
+  fastx_output = NULL,
   sample_pct = NULL,
   sample_size = NULL,
-  randseed = NULL,
   sizein = TRUE,
   sizeout = TRUE,
-  relabel_sha1 = FALSE,
   relabel = NULL,
+  relabel_sha1 = FALSE,
+  randseed = NULL,
   fasta_width = 0,
   threads = 1,
   vsearch_options = NULL
@@ -29,14 +29,14 @@ vs_fastx_subsample(
 \item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object. See
 \emph{Details}.}
 
+\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
+or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
+FASTA object, \code{output_format} cannot be \code{"fastq"}.}
+
 \item{fastx_output}{Name of the output file for subsampled reads from
 \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
 \code{output_format}. If \code{NULL} (default), no sequences are written to
 file. See \emph{Details}.}
-
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
-or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
-FASTA object, \code{output_format} cannot be \code{"fastq"}.}
 
 \item{sample_pct}{Percentage of the input sequences to be subsampled.
 Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.}
@@ -44,21 +44,21 @@ Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.}
 \item{sample_size}{The given number of sequences to extract.
 Must be a positive integer if specified. Defaults to \code{NULL}.}
 
-\item{randseed}{Random seed. Must be a positive integer. A given seed always
-produces the same output, which is useful for replicability. Defaults to
-\code{NULL}.}
-
 \item{sizein}{If \code{TRUE} (default), abundance annotations present in
 sequence headers are taken into account.}
 
 \item{sizeout}{If \code{TRUE} (default), abundance annotations are added to
 FASTA headers.}
 
+\item{relabel}{Relabel sequences using the given prefix and a ticker to
+construct new headers. Defaults to \code{NULL}.}
+
 \item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
 SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{relabel}{Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to \code{NULL}.}
+\item{randseed}{Random seed. Must be a positive integer. A given seed always
+produces the same output, which is useful for replicability. Defaults to
+\code{NULL}.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}

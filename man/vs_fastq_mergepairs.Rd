@@ -12,12 +12,12 @@
 vs_fastq_mergepairs(
   fastq_input,
   reverse,
-  minovlen = 10,
   output_format = "fastq",
   fastaout = NULL,
   fastqout = NULL,
-  fasta_width = 0,
+  minovlen = 10,
   minlen = 0,
+  fasta_width = 0,
   log_file = NULL,
   threads = 1,
   vsearch_options = NULL
@@ -30,9 +30,6 @@ reads. See \emph{Details}.}
 \item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.
 See \emph{Details}.}
 
-\item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
-Defaults to \code{10}.}
-
 \item{output_format}{Desired output format of file or tibble: \code{"fasta"}
 or \code{"fastq"} (default).}
 
@@ -42,12 +39,15 @@ or \code{"fastq"} (default).}
 \item{fastqout}{Name of the FASTQ output file with the merged reads. If
 \code{NULL} (default) no output is written to file. See \emph{Details}.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to \code{0},
-which eliminates wrapping.}
+\item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
+Defaults to \code{10}.}
 
 \item{minlen}{Minimum number of bases a sequence must have to be retained.
 Defaults to \code{0}. See \emph{Details}.}
+
+\item{fasta_width}{Number of characters per line in the output FASTA file.
+Only applies if the output file is in FASTA format. Defaults to \code{0},
+which eliminates wrapping.}
 
 \item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL} (default), no log file is created.}

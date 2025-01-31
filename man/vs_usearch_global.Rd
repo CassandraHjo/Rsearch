@@ -10,11 +10,11 @@ vs_usearch_global(
   fastx_input,
   db,
   blast6out,
-  id = 0.7,
-  threads = 1,
-  strand = "plus",
   gapopen = "20I/2E",
   gapext = "2I/1E",
+  id = 0.7,
+  strand = "plus",
+  threads = 1,
   vsearch_options = NULL
 )
 }
@@ -29,20 +29,20 @@ target sequences.}
 blast-like tab-separated format of twelve fields, with one line per
 query-target matching.}
 
-\item{id}{Pairwise identity threshold. Defines the minimum identity required
-for matches. Defaults to \code{0.7}.}
-
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
-
-\item{strand}{Specifies which strand to consider when comparing sequences.
-Can be either \code{"plus"} (default) or \code{"both"}.}
-
 \item{gapopen}{Penalties for gap opening. Defaults to \code{"20I/2E"}. See
 \emph{Details}.}
 
 \item{gapext}{Penalties for gap extension. Defaults to \code{"2I/1E"}. See
 \emph{Details}.}
+
+\item{id}{Pairwise identity threshold. Defines the minimum identity required
+for matches. Defaults to \code{0.7}.}
+
+\item{strand}{Specifies which strand to consider when comparing sequences.
+Can be either \code{"plus"} (default) or \code{"both"}.}
+
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
+Defaults to \code{1}.}
 
 \item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
 Defaults to \code{NULL}. See \emph{Details}.}
