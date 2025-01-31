@@ -4,47 +4,47 @@
 #' file or object by randomly extracting sequences based on number or percentage
 #' using \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTQ/FASTA file path or FASTA/FASTQ object. See
-#' Details.
-#' @param fastx_output Name of the output file for subsampled reads from
-#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
-#' \code{output_format}. If \code{NULL} (default), no sequences are written to
-#' file. See Details.
+#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
+#' \emph{Details}.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"}
 #' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
 #' FASTA object, \code{output_format} cannot be \code{"fastq"}.
+#' @param fastx_output Name of the output file for subsampled reads from
+#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
+#' \code{output_format}. If \code{NULL} (default), no sequences are written to
+#' file. See \emph{Details}.
 #' @param sample_pct Percentage of the input sequences to be subsampled.
 #' Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.
 #' @param sample_size The given number of sequences to extract.
 #' Must be a positive integer if specified. Defaults to \code{NULL}.
-#' @param randseed Random seed. Must be a positive integer. A given seed always
-#' produces the same output, which is useful for replicability. Defaults to
-#' \code{NULL}.
 #' @param sizein If \code{TRUE} (default), abundance annotations present in
 #' sequence headers are taken into account.
 #' @param sizeout If \code{TRUE} (default), abundance annotations are added to
 #' FASTA headers.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
 #' @param relabel Relabel sequences using the given prefix and a ticker to
 #' construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
+#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param randseed Random seed. Must be a positive integer. A given seed always
+#' produces the same output, which is useful for replicability. Defaults to
+#' \code{NULL}.
 #' @param fasta_width Number of characters per line in the output FASTA
 #' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See Details.
+#' Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
-#' \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
-#' FASTA objects are tibbles that contain the columns \code{Header} and
-#' \code{Sequence}.FASTQ objects are tibbles that contain the columns
-#' \code{Header}, \code{Sequence}, and \code{Quality}.
-#'
 #' Sequences in the input file/object (\code{fastx_input}) are subsampled by
 #' randomly extracting a specified number or percentage of sequences. Extraction
 #' is performed as random sampling with a uniform distribution among the input
 #' sequences and without replacement.
+#'
+#' \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
+#' FASTA objects are tibbles that contain the columns \code{Header} and
+#' \code{Sequence}.FASTQ objects are tibbles that contain the columns
+#' \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
 #' Specify either \code{sample_size} or \code{sample_pct} to determine the
 #' number or percentage of sequences to subsample. Only one of these parameters
@@ -61,11 +61,11 @@
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If \code{fastx_output} \code{NULL}, a tibble containing the subsampled reads
-#' in the format specified by \code{output_format} is returned.
-#'
 #' If \code{fastx_output} is specified, the subsampled sequences are written to
 #' the specified output file, and no tibble is returned.
+#'
+#' If \code{fastx_output} \code{NULL}, a tibble containing the subsampled reads
+#' in the format specified by \code{output_format} is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -95,15 +95,15 @@
 #' @export
 #'
 vs_fastx_subsample <- function(fastx_input,
-                               fastx_output = NULL,
                                output_format = "fastq",
+                               fastx_output = NULL,
                                sample_pct = NULL,
                                sample_size = NULL,
-                               randseed = NULL,
                                sizein = TRUE,
                                sizeout = TRUE,
-                               relabel_sha1 = FALSE,
                                relabel = NULL,
+                               relabel_sha1 = FALSE,
+                               randseed = NULL,
                                fasta_width = 0,
                                threads = 1,
                                vsearch_options = NULL){

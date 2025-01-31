@@ -2,12 +2,13 @@
 % Please edit documentation in R/vsearch.R
 \name{vsearch}
 \alias{vsearch}
-\title{Test if VSEARCH can be executed}
+\title{Test if \code{VSEARCH} can be executed}
 \usage{
 vsearch()
 }
 \description{
-Tests if the VSEARCH executable is a valid command.
+\code{vsearch} tests if the VSEARCH executable is a valid
+command.
 }
 \details{
 Use this function to test the command used to invoke the external

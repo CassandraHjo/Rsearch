@@ -19,10 +19,10 @@ vs_optimize_truncqual(
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
-reads. See Details.}
+reads. See \emph{Details}.}
 
 \item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.
-See Details.}
+See \emph{Details}.}
 
 \item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
 Defaults to \code{10}.}
@@ -38,7 +38,7 @@ included in the results. Defaults to \code{1}.}
 \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.}
 
 \item{minlen}{Minimum number of bases a sequence must have to be retained.
-Defaults to \code{0}. See Details.}
+Defaults to \code{0}. See \emph{Details}.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}

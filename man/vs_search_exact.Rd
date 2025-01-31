@@ -16,7 +16,7 @@ vs_search_exact(
 }
 \arguments{
 \item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object
-containing the query sequences. See Details.}
+containing the query sequences. See \emph{Details}.}
 
 \item{db}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
 target sequences.}
@@ -32,7 +32,7 @@ Defaults to \code{1}.}
 Can be either \code{"plus"} (default) or \code{"both"}.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
-\code{VSEARCH}. Defaults to \code{NULL}. See Details.}
+\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 \code{NULL}. Results are written directly to the file specified by

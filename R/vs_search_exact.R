@@ -6,7 +6,7 @@
 #' \code{\link{vs_usearch_global}}.
 #'
 #' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ tibble object
-#' containing the query sequences. See Details.
+#' containing the query sequences. See \emph{Details}.
 #' @param db A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
 #' target sequences.
 #' @param blast6out Name of the output file for the search results in a
@@ -17,7 +17,7 @@
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Identifies exact full-length matches between query and target sequences
@@ -88,8 +88,8 @@
 vs_search_exact <- function(fastx_input,
                             db,
                             blast6out,
-                            threads = 1,
                             strand = "plus",
+                            threads = 1,
                             vsearch_options = NULL){
 
   # Check if vsearch is available

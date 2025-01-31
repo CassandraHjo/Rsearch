@@ -4,15 +4,15 @@
 #' FASTA/FASTQ file or object by merging identical sequences using
 #' \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTQ/FASTA file path or FASTQ/FASTA object. See
-#' Details.
-#' @param fastx_output Name of the output file for dereplicated reads from
-#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
-#' \code{output_format}. If \code{NULL} (default), no sequences are written to
-#' file. See Details.
+#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
+#' \emph{Details}.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"}
 #' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
 #' FASTA object, \code{output_format} cannot be \code{"fastq"}.
+#' @param fastx_output Name of the output file for dereplicated reads from
+#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
+#' \code{output_format}. If \code{NULL} (default), no sequences are written to
+#' file. See \emph{Details}.
 #' @param minuniquesize Minimum abundance value post-dereplication for a
 #' sequence not to be discarded. Defaults to \code{1}.
 #' @param strand Specifies which strand to consider when comparing sequences.
@@ -25,24 +25,24 @@
 #' construct new headers. Defaults to \code{NULL}.
 #' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
 #' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param fastq_qout_max If \code{TRUE}, the quality score will be the
 #' highest (best) quality score observed in each position. Defaults to
 #' \code{FALSE}.
+#' @param fasta_width Number of characters per line in the output FASTA
+#' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
-#' \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
-#' FASTA objects are tibbles that contain the columns \code{Header} and
-#' \code{Sequence}.FASTQ objects are tibbles that contain the columns
-#' \code{Header}, \code{Sequence}, and \code{Quality}.
-#'
 #' Sequences in the input file/object (\code{fastx_input}) are dereplicated by
 #' merging identical sequences. Identical sequences are defined as sequences
 #' with the same length and the same string of nucleotides (case insensitive, T
 #' and U are considered the same).
+#'
+#' \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
+#' FASTA objects are tibbles that contain the columns \code{Header} and
+#' \code{Sequence}.FASTQ objects are tibbles that contain the columns
+#' \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
 #' By default, the quality scores in FASTQ output files will correspond to the
 #' average error probability of the nucleotides in the each position.
@@ -60,11 +60,11 @@
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If \code{fastx_output} \code{NULL}, a tibble containing the dereplicated
-#' reads in the format specified by \code{output_format} is returned.
-#'
 #' If \code{fastx_output} is specified, the dereplicated sequences are written
 #' to the specified output file, and no tibble is returned.
+#'
+#' If \code{fastx_output} \code{NULL}, a tibble containing the dereplicated
+#' reads in the format specified by \code{output_format} is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -92,16 +92,16 @@
 #' @export
 #'
 vs_fastx_uniques <- function(fastx_input,
-                             fastx_output = NULL,
                              output_format = "fastq",
+                             fastx_output = NULL,
                              minuniquesize = 1,
                              strand = "plus",
                              sizein = TRUE,
                              sizeout = TRUE,
-                             relabel_sha1 = FALSE,
                              relabel = NULL,
-                             fasta_width = 0,
+                             relabel_sha1 = FALSE,
                              fastq_qout_max = FALSE,
+                             fasta_width = 0,
                              vsearch_options = NULL){
 
   # Check if vsearch is available

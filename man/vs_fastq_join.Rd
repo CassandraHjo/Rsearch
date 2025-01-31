@@ -24,19 +24,19 @@ vs_fastq_join(
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or a FASTQ object containing (forward)
-reads. See Details.}
+reads. See \emph{Details}.}
 
 \item{reverse}{A FASTQ file path or a FASTQ object containing (reverse) reads.
-See Details.}
+See \emph{Details}.}
 
 \item{output_format}{Desired output format of the file or tibble:
 \code{"fasta"} or \code{"fastq"} (default).}
 
 \item{fastaout}{Name of the FASTA output file with the joined reads.
-If \code{NULL} (default), no output is written to a file. See Details.}
+If \code{NULL} (default), no output is written to a file. See \emph{Details}.}
 
 \item{fastqout}{Name of the FASTQ output file with the joined reads.
-If \code{NULL} (default), no output is written to a file. See Details.}
+If \code{NULL} (default), no output is written to a file. See \emph{Details}.}
 
 \item{join_padgap}{Padding sequence to use in the gap between the sequences.
 Defaults to \code{"NNNNNNNN"}.}
@@ -56,32 +56,32 @@ If \code{NULL} (default), no log file is created.}
 Defaults to \code{1}.}
 
 \item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See Details.}
+Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.
 
-If \code{fastaout} or \code{fastqout} is \code{NULL}, a tibble containing the
-joined reads in the format specified by \code{output_format} is returned.
-
 If \code{fastaout} or \code{fastqout} is specified, the joined sequences are
 written to the specified output file, and no tibble is returned.
+
+If \code{fastaout} or \code{fastqout} is \code{NULL}, a tibble containing the
+joined reads in the format specified by \code{output_format} is returned.
 }
 \description{
 \code{vs_fastq_join} joins paired-end sequence reads into a
 single sequence with a specified gap between them unsing \code{VSEARCH}.
 }
 \details{
+Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
+are joined into a single sequence by adding a gap with a specified padding
+sequence. The resulting sequences consist of the forward read, the padding
+sequence, and the reverse complement of the reverse read.
+
 \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
 \code{Header}, \code{Sequence}, and \code{Quality}.
 Forward and reverse reads must appear in the same order and have the same
 total number of reads in both files.
-
-Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
-are joined into a single sequence by adding a gap with a specified padding
-sequence. The resulting sequences consist of the forward read, the padding
-sequence, and the reverse complement of the reverse read.
 
 If \code{fastaout} or \code{fastqout} is specified, the joined reads are
 written to the respective file in either FASTA or FASTQ format.
@@ -90,8 +90,8 @@ If both \code{fastaout} or \code{fastqout} are \code{NULL}, the results are
 returned as a FASTA or FASTQ object, and no file is written.
 \code{output_format} must match the desired output files/objects.
 
-Any input sequence with fewer bases than the value set in \code{minlen} will
-be discarded. By default, \code{minlen} is set to 0, which means that no
+Any input sequence with fewer bases than the value set in \code{minlen} is
+discarded. By default, \code{minlen} is set to 0, which means that no
 sequences are removed. However, using the default value may allow empty
 sequences to remain in the results.
 

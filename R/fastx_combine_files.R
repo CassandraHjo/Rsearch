@@ -11,7 +11,7 @@
 #' @param file_ext File extension of the files to be combined. Defaults to
 #' \code{".fq"}.
 #' @param file_format Format of files to be combined and the desired output
-#' format: either \code{"fasta"} or \code{"fastq"} (default). See Details.
+#' format: either \code{"fasta"} or \code{"fastq"} (default). See \emph{Details}.
 #'
 #' @details
 #' \code{files_dir} must contain uncompressed FASTA or FASTQ files matching the
@@ -39,11 +39,6 @@
 #'
 #' If \code{output_file} is \code{NULL}, the combined sequences are returned as
 #' a tibble in the format specified by \code{file_format}.
-#'
-#' If \code{output_file} is unspecified (\code{NULL}), a tibble containing the
-#' combined data in the format specified by \code{file_format} is returned.
-#' If \code{output_file} is specified, the combined data is written to the
-#' specified path.
 #'
 #' @examples
 #' \dontrun{

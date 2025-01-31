@@ -1,56 +1,84 @@
 #' Global pairwise alignment
 #'
-#' @description Compares target sequences to the query sequences in FASTA or
-#' FASTQ format, using global pairwise alignment.
+#' @description \code{vs_usearch_global} compares target sequences to the query
+#' sequences in FASTA or FASTQ format using global pairwise alignment via
+#' \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or object containing the query
-#' sequences. See details.
-#' @param db A FASTA/FASTQ file path or object containing the target sequences
-#' in FASTQ/FASTA format.
-#' @param blast6out Name of the output file for the search results in a blast-like
-#' tab-separated format of twelve fields, with one line per query-target matching.
-#' @param id The pairwise identity threshold. Defaults to \code{0.7}. See Details.
-#' @param strand \code{"plus"} (default) or \code{"both"}.
-#' When comparing sequences only check the plus strand or both strands.
-#' @param gapopen A string to set penalties for gap opening. Defaults to
-#' \code{"20I/2E"}. See Details.
-#' @param gapext A string to set penalties for gap extension. Defaults to
-#' \code{"2I/1E"}. See Details.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
+#' \emph{Details}.
+#' @param db A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
+#' target sequences.
+#' @param blast6out Name of the output file for the search results in a
+#' blast-like tab-separated format of twelve fields, with one line per
+#' query-target matching.
+#' @param gapopen Penalties for gap opening. Defaults to \code{"20I/2E"}. See
+#' \emph{Details}.
+#' @param gapext Penalties for gap extension. Defaults to \code{"2I/1E"}. See
+#' \emph{Details}.
+#' @param id Pairwise identity threshold. Defines the minimum identity required
+#' for matches. Defaults to \code{0.7}.
+#' @param strand Specifies which strand to consider when comparing sequences.
+#' Can be either \code{"plus"} (default) or \code{"both"}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
+#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
+#' Defaults to \code{NULL}. See \emph{Details}.
 #'
-#' @details Compares target sequences to the query sequences in FASTA or
-#' FASTQ format, with global pairwise alignment, using \code{VSEARCH}.
 #'
-#' \code{fastx_input} can either be FASTA/FASTQ files or objects. FASTA objects
-#' are tibbles that contain the columns \code{Header} and \code{Sequence}.
-#' FASTQ objects are tibbles that contain the columns \code{Header},
-#' \code{Sequence}, and \code{Quality}.
+#' @details
+#' Performs global pairwise alignment between query and target sequences using
+#' \code{VSEARCH}, and reports matches based on the specified pairwise identity
+#' threshold (\code{id}). Only alignments that meet or exceed the identity
+#' threshold are included in the output.
 #'
-#' The pairwise identity \code{id} is defined as
-#' the number of (matching columns) / (alignment length - terminal gaps)
+#' \code{fastx_input} and \code{db} can either be file paths to a FASTA/FASTQ
+#' files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
+#' columns \code{Header} and \code{Sequence}.FASTQ objects are tibbles that
+#' contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+#'
+#' Results are written to the file specified by \code{blast6out} in a blast-like
+#' tab-separated format containing twelve fields:
+#' \itemize{
+#'   \item \code{Query ID}
+#'   \item \code{Target ID}
+#'   \item \code{Percent Identity}
+#'   \item \code{Alignment Length}
+#'   \item \code{Number of Mismatches}
+#'   \item \code{Number of Gap Openings}
+#'   \item \code{Query Start}
+#'   \item \code{Query End}
+#'   \item \code{Target Start}
+#'   \item \code{Target End}
+#'   \item \code{E-value}
+#'   \item \code{Bit Score}
+#' }
+#'
+#' Pairwise identity (\code{id})is calculated as the number of matching columns
+#' divided by the alignment length minus terminal gaps.
+#'
+#' \code{vsearch_options} allows users to pass additional command-line arguments
+#' to \code{VSEARCH} that are not directly supported by this function. Refer to
+#' the \code{VSEARCH} manual for more details.
 #'
 #' Visit the \code{VSEARCH}
 #' \href{https://github.com/torognes/vsearch?tab=readme-ov-file#getting-help}{documentation}
 #' for information about defining \code{gapopen} and \code{gapext}.
 #'
-#' \code{vsearch_options} can be used to pass additional arguments to \code{VSEARCH},
-#' that are not implemented in \code{Rsearch}. See the \code{VSEARCH} manual for
-#' additional arguments, and how to use them.
 #'
 #' @return
-#' \code{NULL} (Output is written to file specified by \code{blast6out}).
+#' \code{NULL}. Results are written directly to the file specified by
+#' \code{blast6out}.
 #'
 #' @examples
 #' \dontrun{
 #' # Define arguments
-#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
-#' db <- file.path(file.path(path.package("Rsearch"), "extdata"), "merged_sample1_small.fq")
+#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                          "R1_sample1_small.fq")
+#' db <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                           "merged_sample1_small.fq")
 #' blast6out <- "blast6out.txt"
 #'
-#' # Run global pairwise alignement with default parameters, with file as output
+#' # Run global pairwise alignement with default parameters and write results to file
 #' vs_usearch_global(fastx_input = fastx_input,
 #'                   db = db,
 #'                   blast6out = blast6out)
@@ -66,11 +94,11 @@ vs_usearch_global <- function(fastx_input,
                               db,
                               blast6out,
                               # userout,
-                              id = 0.7,
-                              threads = 1,
-                              strand = "plus",
                               gapopen = "20I/2E",
                               gapext = "2I/1E",
+                              id = 0.7,
+                              strand = "plus",
+                              threads = 1,
                               vsearch_options = NULL){
 
   # Check if vsearch is available

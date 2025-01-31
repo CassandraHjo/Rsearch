@@ -16,23 +16,23 @@ vs_cluster_size(
   sizeout = TRUE,
   relabel = NULL,
   relabel_sha1 = FALSE,
-  threads = 1,
   fasta_width = 0,
   log_file = NULL,
+  threads = 1,
   vsearch_options = NULL
 )
 }
 \arguments{
 \item{fasta_input}{A FASTA file path or a FASTA object containing reads to
-cluster. See Details.}
+cluster. See \emph{Details}.}
 
 \item{centroids}{A character string specifying the name of the FASTA output
 file for the cluster centroid sequences. If \code{NULL} (default), no output
 is written to a file and the centroid sequences are returned as a FASTA
-object. See Details.}
+object. See \emph{Details}.}
 
-\item{id}{The pairwise identity threshold for sequence to be added to a
-cluster. Defaults to \code{0.97}. See Details.}
+\item{id}{Pairwise identity threshold for sequence to be added to a
+cluster. Defaults to \code{0.97}. See \emph{Details}.}
 
 \item{strand}{Specifies which strand to consider when comparing sequences.
 Can be either \code{"plus"} (default) or \code{"both"}.}
@@ -49,27 +49,27 @@ construct new headers. Defaults to \code{NULL}.}
 \item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
 SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
-
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}
 
 \item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL} (default), no log file is created.}
 
+\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
+Defaults to \code{1}.}
+
 \item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See Details.}
+Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.
 
+If \code{centroids} is specified the centroid sequences are written to the
+specified file, and no tibble is returned.
+
 If \code{centroids} is \code{NULL} a FASTA object containing the centroid
 sequences is returned. The clustering statistics are included as an attribute
 named \code{"statistics"}.
-
-If \code{centroids} is specified the centroid sequences are written to the
-specified file, and no tibble is returned.
 
 The \code{"statistics"} attribute of the returned tibble (when
 \code{centroids} is \code{NULL}) is a tibble with the following columns:
@@ -97,13 +97,13 @@ function automatically sorts sequences by decreasing abundance before
 clustering.
 }
 \details{
-\code{fasta_input} can either be a file path to a FASTA file or a FASTA
-object. FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}.
-
 Sequences are clustered based on the pairwise identity threshold specified by
 \code{id}. Sequences are sorted by decreasing abundance before clustering.
 The centroid of each cluster is the first sequence added to the cluster.
+
+\code{fasta_input} can either be a file path to a FASTA file or a FASTA
+object. FASTA objects are tibbles that contain the columns \code{Header} and
+\code{Sequence}.
 
 \code{id} is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is not

@@ -4,40 +4,40 @@
 #' overlapping regions into one sequence using \code{VSEARCH}.
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
-#' reads. See Details.
+#' reads. See \emph{Details}.
 #' @param reverse A FASTQ file path or FASTQ object containing (reverse) reads.
-#' See Details.
-#' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
-#' Defaults to \code{10}.
+#' See \emph{Details}.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"}
 #' or \code{"fastq"} (default).
 #' @param fastaout Name of the FASTA output file with the merged reads. If
-#' \code{NULL} (default), no output is written to file. See Details.
+#' \code{NULL} (default), no output is written to file. See \emph{Details}.
 #' @param fastqout Name of the FASTQ output file with the merged reads. If
-#' \code{NULL} (default) no output is written to file. See Details.
+#' \code{NULL} (default) no output is written to file. See \emph{Details}.
+#' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
+#' Defaults to \code{10}.
+#' @param minlen Minimum number of bases a sequence must have to be retained.
+#' Defaults to \code{0}. See \emph{Details}.
 #' @param fasta_width Number of characters per line in the output FASTA file.
 #' Only applies if the output file is in FASTA format. Defaults to \code{0},
 #' which eliminates wrapping.
-#' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See Details.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See Details.
+#' Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
+#' Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
+#' are merged into a single sequence by overlapping regions. The resulting
+#' sequences consist of the merged forward and reverse reads with the specified
+#' minimum overlap.
+#'
 #' \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 #' or FASTQ objects. FASTQ objects are tibbles that contain the columns
 #' \code{Header}, \code{Sequence}, and \code{Quality}.
 #' Forward and reverse reads must appear in the same order and have the same
 #' total number of reads in both files.
-#'
-#' Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
-#' are merged into a single sequence by overlapping regions. The resulting
-#' sequences consist of the merged forward and reverse reads with the specified
-#' minimum overlap.
 #'
 #' If \code{fastaout} or \code{fastqout} is specified, the merged reads are
 #' written to the respective file in either FASTA or FASTQ format.
@@ -61,11 +61,11 @@
 #'
 #' @return A tibble or \code{NULL}.
 #'
-#' If \code{fastaout} or \code{fastqout} is \code{NULL}, a tibble containing the
-#' merged reads in the format specified by \code{output_format} is returned.
-#'
 #' If \code{fastaout} or \code{fastqout} is specified , the merged sequences are
 #' written to the specified output file, and no tibble is returned.
+#'
+#' If \code{fastaout} or \code{fastqout} is \code{NULL}, a tibble containing the
+#' merged reads in the format specified by \code{output_format} is returned.
 #'
 #' The \code{"statistics"} attribute of the returned tibble (when
 #' \code{fastaout} or \code{fastqout} is \code{NULL}) is a tibble with the
@@ -118,12 +118,12 @@
 #'
 vs_fastq_mergepairs <- function(fastq_input,
                                 reverse,
-                                minovlen = 10,
                                 output_format = "fastq",
                                 fastaout = NULL,
                                 fastqout = NULL,
-                                fasta_width = 0,
+                                minovlen = 10,
                                 minlen = 0,
+                                fasta_width = 0,
                                 log_file = NULL,
                                 threads = 1,
                                 vsearch_options = NULL){

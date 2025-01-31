@@ -25,7 +25,7 @@ object depending on \code{file_format} instead of being written to a file.}
 \code{".fq"}.}
 
 \item{file_format}{Format of files to be combined and the desired output
-format: either \code{"fasta"} or \code{"fastq"} (default). See Details.}
+format: either \code{"fasta"} or \code{"fastq"} (default). See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.
@@ -35,11 +35,6 @@ specified file.
 
 If \code{output_file} is \code{NULL}, the combined sequences are returned as
 a tibble in the format specified by \code{file_format}.
-
-If \code{output_file} is unspecified (\code{NULL}), a tibble containing the
-combined data in the format specified by \code{file_format} is returned.
-If \code{output_file} is specified, the combined data is written to the
-specified path.
 }
 \description{
 \code{fastx_combine_files} combines all FASTA or FASTQ files

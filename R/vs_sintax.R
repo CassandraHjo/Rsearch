@@ -4,22 +4,22 @@
 #' implemented in \code{VSEARCH}.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads to
-#' classify. See Details.
+#' classify. See \emph{Details}.
 #' @param db A FASTA/FASTQ file path or a FASTA/FASTQ object containing the
-#' reference database in FASTQ/FASTA format. The sequences need to be annotated
+#' reference database in FASTA/FASTQ format. The sequences need to be annotated
 #' with taxonomy.
 #' @param tabbedout Name of the tab-separated output file. If \code{NULL}
-#' (default), results are returned as a tibble. See Details.
+#' (default), results are returned as a tibble. See \emph{Details}.
 #' @param cutoff minimum level of bootstrap support for the taxonomic ranks that
-#' will be included in column 4 of the output file. Defaults to \code{NULL}.
-#' @param randseed Seed for the random number generator used in the Sintax
-#' algorithm. Defaults to \code{NULL}.
+#' is included in column 4 of the output file. Defaults to \code{NULL}.
 #' @param strand Specifies which strand to consider when comparing sequences.
 #' Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param randseed Seed for the random number generator used in the Sintax
+#' algorithm. Defaults to \code{NULL}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See Details.
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details The sequences in the input file are classified according to the
 #' Sintax algorithm, using \code{VSEARCH}.
@@ -75,9 +75,9 @@ vs_sintax <- function(fasta_input,
                       db,
                       tabbedout = NULL,
                       cutoff = NULL,
+                      strand = "plus",
                       randseed = NULL,
                       threads = 1,
-                      strand = "plus",
                       vsearch_options = NULL){
 
   # Check if vsearch is available

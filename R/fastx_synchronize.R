@@ -1,27 +1,27 @@
-#' Synchronize FASTQ and FASTA files or objects
+#' Synchronize FASTA and FASTQ files or objects
 #'
 #' @description \code{fastx_synchronize} synchronizes sequences between two
 #' FASTA/FASTQ files or objects by retaining only the common sequences present
 #' in both.
 #'
-#' @param file1 A FASTQ/FASTA file path or a FASTQ/FASTA tibble object. See
-#' Details.
-#' @param file2 A FASTQ/FASTA file path or a FASTQ/FASTA tibble object. See
-#' Details.
+#' @param file1 A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
+#' \emph{Details}.
+#' @param file2 A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
+#' \emph{Details}.
 #' @param file_format Format of the input (\code{file1} and \code{file2})
 #' and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
 #' This determines the format for both outputs.
 #' @param file1_out Name of the output file for synchronized reads from
-#' \code{file1}. The file will be in either FASTA or FASTQ format, depending on
+#' \code{file1}. The file is in either FASTA or FASTQ format, depending on
 #' \code{file_format}. If \code{NULL} (default), no sequences are written to a
-#' file. See Details.
+#' file. See \emph{Details}.
 #' @param file2_out Name of the output file for synchronized reads from
-#' \code{file2}. The file will be in either FASTA or FASTQ format, depending on
+#' \code{file2}. The file is in either FASTA or FASTQ format, depending on
 #' \code{file_format}. If \code{NULL} (default), no sequences are written to a
-#' file. See Details.
+#' file. See \emph{Details}.
 #'
 #' @details
-#' \code{file1} and \code{file2} can either be paths to FASTQ/FASTA files or
+#' \code{file1} and \code{file2} can either be paths to FASTA/FASTQ files or
 #' tibble objects containing the sequences.
 #' FASTA objects are tibbles that contain the columns \code{Header} and
 #' \code{Sequence}.
@@ -36,7 +36,7 @@
 #' \code{file_format}.
 #'
 #' If \code{file1_out} and \code{file2_out} are \code{NULL}, the function
-#' returns a FASTQ/FASTA object containing synchronized reads from \code{file1}.
+#' returns a FASTA/FASTQ object containing synchronized reads from \code{file1}.
 #' The synchronized reads from \code{file2} are included as an attribute named
 #' \code{"reverse"} in the returned tibble.
 #'

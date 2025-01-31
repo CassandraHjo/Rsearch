@@ -21,7 +21,7 @@ vs_uchime_denovo(
 }
 \arguments{
 \item{fasta_input}{A FASTA file path or a FASTA object with reads. See
-Details.}
+\emph{Details}.}
 
 \item{nonchimeras}{Name of the FASTA output file for the non-chimeric
 sequences. If \code{NULL} (default), no output is written to file.}
@@ -48,7 +48,7 @@ file. Defaults to \code{0}, which eliminates wrapping.}
 If \code{NULL} (default), no log file is created.}
 
 \item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See Details.}
+Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

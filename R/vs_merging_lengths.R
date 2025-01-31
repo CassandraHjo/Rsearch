@@ -4,12 +4,12 @@
 #' reads, reverse reads, merged reads, and their overlaps before and after
 #' merging.
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
-#' reads. See Details.
+#' reads. See \emph{Details}.
 #' @param reverse A FASTQ file path or FASTQ object containing (reverse) reads.
 #' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
 #' Defaults to \code{10}.
 #' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See Details.
+#' Defaults to \code{0}. See \emph{Details}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #'

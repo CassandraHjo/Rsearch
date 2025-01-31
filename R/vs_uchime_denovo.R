@@ -6,7 +6,7 @@
 #' detection accuracy.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads. See
-#' Details.
+#' \emph{Details}.
 #' @param nonchimeras Name of the FASTA output file for the non-chimeric
 #' sequences. If \code{NULL} (default), no output is written to file.
 #' @param chimeras Name of the FASTA output file for the chimeric sequences.
@@ -24,7 +24,7 @@
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See Details.
+#' Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Chimeras in the input FASTA sequences are detected using \code{VSEARCH}´s

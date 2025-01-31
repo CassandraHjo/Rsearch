@@ -6,20 +6,20 @@
 #' maximizes the proportion of high-quality merged read pairs.
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
-#' reads. See Details.
+#' reads. See \emph{Details}.
 #' @param reverse A FASTQ file path or FASTQ object containing (reverse) reads.
-#' See Details.
+#' See \emph{Details}.
 #' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
 #' Defaults to \code{10}.
 #' @param truncqual_range A numeric vector of \code{truncqual} values to test.
 #' Sequences are truncated starting from the first base with the specified base
 #' quality score or lower. Defaults to \code{1:20}. Provide as a numeric vector.
+#' @param minlen Minimum number of bases a sequence must have to be retained.
+#' Defaults to \code{0}. See \emph{Details}.
 #' @param min_size Minimum copy number (size) for a merged read to be
 #' included in the results. Defaults to \code{1}.
 #' @param maxee_rate Threshold for average expected error. Must range from
 #' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.
-#' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See Details.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param plot_title A string specifying the title of the output plot. Defaults
@@ -96,9 +96,9 @@ vs_optimize_truncqual <- function(fastq_input,
                                   reverse,
                                   minovlen = 10,
                                   truncqual_range = 1:20,
+                                  minlen = 1,
                                   min_size = 1,
                                   maxee_rate = 0.01,
-                                  minlen = 1,
                                   threads = 1,
                                   plot_title = "Optimization of Read Merging Based on Truncqual Value"){
 

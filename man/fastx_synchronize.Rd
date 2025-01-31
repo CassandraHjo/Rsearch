@@ -4,7 +4,7 @@
 \alias{fastx_synchronize}
 \alias{fastq_synchronize}
 \alias{fasta_synchronize}
-\title{Synchronize FASTQ and FASTA files or objects}
+\title{Synchronize FASTA and FASTQ files or objects}
 \usage{
 fastx_synchronize(
   file1,
@@ -15,25 +15,25 @@ fastx_synchronize(
 )
 }
 \arguments{
-\item{file1}{A FASTQ/FASTA file path or a FASTQ/FASTA tibble object. See
-Details.}
+\item{file1}{A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
+\emph{Details}.}
 
-\item{file2}{A FASTQ/FASTA file path or a FASTQ/FASTA tibble object. See
-Details.}
+\item{file2}{A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
+\emph{Details}.}
 
 \item{file_format}{Format of the input (\code{file1} and \code{file2})
 and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
 This determines the format for both outputs.}
 
 \item{file1_out}{Name of the output file for synchronized reads from
-\code{file1}. The file will be in either FASTA or FASTQ format, depending on
+\code{file1}. The file is in either FASTA or FASTQ format, depending on
 \code{file_format}. If \code{NULL} (default), no sequences are written to a
-file. See Details.}
+file. See \emph{Details}.}
 
 \item{file2_out}{Name of the output file for synchronized reads from
-\code{file2}. The file will be in either FASTA or FASTQ format, depending on
+\code{file2}. The file is in either FASTA or FASTQ format, depending on
 \code{file_format}. If \code{NULL} (default), no sequences are written to a
-file. See Details.}
+file. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.
@@ -53,7 +53,7 @@ FASTA/FASTQ files or objects by retaining only the common sequences present
 in both.
 }
 \details{
-\code{file1} and \code{file2} can either be paths to FASTQ/FASTA files or
+\code{file1} and \code{file2} can either be paths to FASTA/FASTQ files or
 tibble objects containing the sequences.
 FASTA objects are tibbles that contain the columns \code{Header} and
 \code{Sequence}.
@@ -68,7 +68,7 @@ sequences are written to these files in the format specified by
 \code{file_format}.
 
 If \code{file1_out} and \code{file2_out} are \code{NULL}, the function
-returns a FASTQ/FASTA object containing synchronized reads from \code{file1}.
+returns a FASTA/FASTQ object containing synchronized reads from \code{file1}.
 The synchronized reads from \code{file2} are included as an attribute named
 \code{"reverse"} in the returned tibble.
 
