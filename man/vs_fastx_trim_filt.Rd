@@ -12,21 +12,21 @@ vs_fastx_trim_filt(
   fastx_input,
   reverse = NULL,
   output_format = "fastq",
-  maxee_rate = 0.01,
-  minlen = 0,
-  maxlen = NULL,
-  maxns = 0,
-  maxsize = NULL,
-  minsize = NULL,
+  fastaout = NULL,
+  fastqout = NULL,
+  fastaout_rev = NULL,
+  fastqout_rev = NULL,
   trunclen = NULL,
   truncqual = 1,
   truncee = NULL,
   stripright = 0,
   stripleft = 0,
-  fastaout = NULL,
-  fastqout = NULL,
-  fastaout_rev = NULL,
-  fastqout_rev = NULL,
+  maxee_rate = 0.01,
+  minlen = 0,
+  maxlen = NULL,
+  maxns = 0,
+  minsize = NULL,
+  maxsize = NULL,
   fasta_width = 0,
   log_file = NULL,
   threads = 1,
@@ -45,25 +45,21 @@ containing reverse reads. If provided, it is processed alongside
 or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
 FASTA object, \code{output_format} cannot be \code{"fastq"}.}
 
-\item{maxee_rate}{Threshold for average expected error. Numeric value ranging
-form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See \emph{Details}.}
+\item{fastaout}{Name of the FASTA output file for the sequences given in
+\code{fastx_input}. If \code{NULL} (default), no FASTA sequences are written
+to file. See \emph{Details}.}
 
-\item{minlen}{Minimum number of bases a sequence must have to be retained.
-Defaults to \code{0}. See \emph{Details}.}
+\item{fastqout}{Name of the FASTQ output file for the sequences given in
+\code{fastx_input}. If \code{NULL} (default), no FASTQ sequences are written
+to file. See \emph{Details}.}
 
-\item{maxlen}{Maximum number of bases a sequences can have to be retained. If
-\code{NULL} (default), the filter is not applied.}
+\item{fastaout_rev}{Name of the FASTA output file for the reverse sequences.
+If \code{NULL} (default), no FASTA sequences are written to file. See
+\emph{Details}.}
 
-\item{maxns}{Maximum number of N's for a given sequence. Sequences with more
-N's than the specified number are discarded. Defaults to \code{0}.}
-
-\item{maxsize}{Maximum abundance for a given sequence. Sequences with
-higher abundance are discarded. If \code{NULL} (default), the filter is not
-applied.}
-
-\item{minsize}{Minimum abundance for a given sequence. Sequences with lower
-abundance are discarded. If \code{NULL} (default), the filter is not
-applied.}
+\item{fastqout_rev}{Name of the FASTQ output file for the reverse sequences.
+If \code{NULL} (default), no FASTQ sequences are written to file. See
+\emph{Details}.}
 
 \item{trunclen}{Truncate sequences to the specified length. Shorter sequences
 are discarded. If \code{NULL} (default), the trimming is not applied.}
@@ -81,21 +77,25 @@ Defaults to \code{0}.}
 \item{stripleft}{Number of bases stripped from the left end of the reads.
 Defaults to \code{0}.}
 
-\item{fastaout}{Name of the FASTA output file for the sequences given in
-\code{fastx_input}. If \code{NULL} (default), no FASTA sequences are written
-to file. See \emph{Details}.}
+\item{maxee_rate}{Threshold for average expected error. Numeric value ranging
+form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See \emph{Details}.}
 
-\item{fastqout}{Name of the FASTQ output file for the sequences given in
-\code{fastx_input}. If \code{NULL} (default), no FASTQ sequences are written
-to file. See \emph{Details}.}
+\item{minlen}{Minimum number of bases a sequence must have to be retained.
+Defaults to \code{0}. See \emph{Details}.}
 
-\item{fastaout_rev}{Name of the FASTA output file for the reverse sequences.
-If \code{NULL} (default), no FASTA sequences are written to file. See
-\emph{Details}.}
+\item{maxlen}{Maximum number of bases a sequences can have to be retained. If
+\code{NULL} (default), the filter is not applied.}
 
-\item{fastqout_rev}{Name of the FASTQ output file for the reverse sequences.
-If \code{NULL} (default), no FASTQ sequences are written to file. See
-\emph{Details}.}
+\item{maxns}{Maximum number of N's for a given sequence. Sequences with more
+N's than the specified number are discarded. Defaults to \code{0}.}
+
+\item{minsize}{Minimum abundance for a given sequence. Sequences with lower
+abundance are discarded. If \code{NULL} (default), the filter is not
+applied.}
+
+\item{maxsize}{Maximum abundance for a given sequence. Sequences with
+higher abundance are discarded. If \code{NULL} (default), the filter is not
+applied.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}
