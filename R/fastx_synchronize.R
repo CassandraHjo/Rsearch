@@ -97,7 +97,7 @@ fastx_synchronize <- function(file1,
 
   # Validate file_format
   if (!file_format %in% c("fasta", "fastq")) {
-    stop("Invalid file_format. Choose from fasta or fastq.")
+    stop("Invalid file_format. The files must be a fasta or fastq.")
   }
 
   # Validate output files

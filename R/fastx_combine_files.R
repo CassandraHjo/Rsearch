@@ -76,7 +76,7 @@ fastx_combine_files <- function(files_dir,
 
   # Validate file_format
   if (!file_format %in% c("fasta", "fastq")) {
-    stop("Invalid file_format. Choose from fasta or fastq.")
+    stop("Invalid file_format. The files must be a fasta or fastq.")
   }
 
   # Create empty vector for collecting temporary files
