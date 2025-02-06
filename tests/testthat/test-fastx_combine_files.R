@@ -7,7 +7,7 @@ test_that("error when wrong file_format", {
                                    output_file = NULL,
                                    file_ext = ".fa",
                                    file_format = file_format),
-               "Invalid file_format. Choose from fasta or fastq.")
+               "Invalid file_format. The files must be a fasta or fastq.")
 })
 
 test_that("error when directory does not exist", {

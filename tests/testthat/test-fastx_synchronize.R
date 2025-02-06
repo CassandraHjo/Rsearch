@@ -7,7 +7,7 @@ test_that("error when wrong file_format", {
   expect_error(fastx_synchronize(file1 = file1,
                         file2 = file2,
                         file_format = file_format),
-               "Invalid file_format. Choose from fasta or fastq.")
+               "Invalid file_format. The files must be a fasta or fastq.")
 })
 
 test_that("error if outputfiles are incorrectly specified", {
