@@ -13,6 +13,7 @@ vs_sintax(
   cutoff = NULL,
   strand = "plus",
   randseed = NULL,
+  log_file = NULL,
   threads = 1,
   vsearch_options = NULL
 )
@@ -36,6 +37,9 @@ Can be either \code{"plus"} (default) or \code{"both"}.}
 
 \item{randseed}{Seed for the random number generator used in the Sintax
 algorithm. Defaults to \code{NULL}.}
+
+\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
+If \code{NULL} (default), no log file is created.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}

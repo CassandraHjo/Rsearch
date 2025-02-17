@@ -16,6 +16,8 @@
 #' Can be either \code{"plus"} (default) or \code{"both"}.
 #' @param randseed Seed for the random number generator used in the Sintax
 #' algorithm. Defaults to \code{NULL}.
+#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
+#' If \code{NULL} (default), no log file is created.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options A character string of additional arguments to pass to
@@ -77,6 +79,7 @@ vs_sintax <- function(fasta_input,
                       cutoff = NULL,
                       strand = "plus",
                       randseed = NULL,
+                      log_file = NULL,
                       threads = 1,
                       vsearch_options = NULL){
 
