@@ -7,7 +7,7 @@
 #'
 #' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object containing
 #' (forward) reads. See \emph{Details}.
-#' @param reverse An optional FASTA/FASTQ file path or FASTA/FASTQ tibble object
+#' @param reverse An optional FASTA/FASTQ file path or FASTA/FASTQ object
 #' containing reverse reads. If provided, it is processed alongside
 #' \code{fastx_input}. Defaults to \code{NULL}. See \emph{Details}.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"}
@@ -60,8 +60,8 @@
 #' Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
-#' Reads from the input files (\code{fastx_input} and \code{reverse})
-#' are trimmed and/or filtered based on the specified criterias using
+#' Reads from the input files/objects (\code{fastx_input} and \code{reverse})
+#' are trimmed and/or filtered based on the specified criteria using
 #' \code{VSEARCH}.
 #'
 #' \code{fastx_input} and \code{reverse} can either be file paths to FASTA/FASTQ

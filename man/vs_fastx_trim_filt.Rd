@@ -37,7 +37,7 @@ vs_fastx_trim_filt(
 \item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object containing
 (forward) reads. See \emph{Details}.}
 
-\item{reverse}{An optional FASTA/FASTQ file path or FASTA/FASTQ tibble object
+\item{reverse}{An optional FASTA/FASTQ file path or FASTA/FASTQ object
 containing reverse reads. If provided, it is processed alongside
 \code{fastx_input}. Defaults to \code{NULL}. See \emph{Details}.}
 
@@ -143,8 +143,8 @@ reverse reads (if provided) and allows for various filtering criteria based
 on sequence quality, length, abundance, and more.
 }
 \details{
-Reads from the input files (\code{fastx_input} and \code{reverse})
-are trimmed and/or filtered based on the specified criterias using
+Reads from the input files/objects (\code{fastx_input} and \code{reverse})
+are trimmed and/or filtered based on the specified criteria using
 \code{VSEARCH}.
 
 \code{fastx_input} and \code{reverse} can either be file paths to FASTA/FASTQ
