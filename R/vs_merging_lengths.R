@@ -124,13 +124,22 @@ vs_merging_lengths <- function(fastq_input,
   attr(res.tbl, "statistics") <- attr(merged.tbl, "statistics")
 
   # Plotting
+
+  # Define color palette
+  pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
+
   plot1 <- res.tbl |>
     tidyr::pivot_longer(-read_id, names_to = "type", values_to = "length") |>
-    ggplot2::ggplot() +
-    ggplot2::geom_histogram(ggplot2::aes(x = length)) +
+    ggplot2::ggplot(ggplot2::aes(x = length)) +
+    ggplot2::geom_histogram(fill = pal[3], color = pal[4]) +
     ggplot2::facet_wrap(dplyr::vars(type), scales = "free") +
-    ggplot2::labs(title = paste0("Merged ", sum(!is.na(res.tbl$length_merged)), " read pairs out of ",
-                  nrow(res.tbl), " (", round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)"))
+    ggplot2::labs(title = paste0("Merged ",
+                                 sum(!is.na(res.tbl$length_merged)),
+                                 " read pairs out of ",
+                                 nrow(res.tbl),
+                                 " (",
+                                 round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)")) +
+    ggplot2::theme_minimal()
 
   attr(res.tbl, "plot") <- plot1
 

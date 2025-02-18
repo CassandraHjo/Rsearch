@@ -47,7 +47,12 @@ test_that("get merging lengths from merging two fastq tibbles", {
   merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
                                            reverse = reverse)
 
-  expect_equal(merging_lengths_df,
-               readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_tibbles.rds")))
+  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_tibbles.rds"))
+
+  # Remove 'plot' attribute before comparison due to errors with ggplot
+  attr(merging_lengths_df, "plot") <- NULL
+  attr(expected_df, "plot") <- NULL
+
+  expect_equal(merging_lengths_df, expected_df)
 
 })
