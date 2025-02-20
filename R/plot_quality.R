@@ -1,4 +1,4 @@
-#' Plot average quality scores per each position for FASTQ reads
+#' Plot average quality scores per position for FASTQ reads
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
 #' reads. See \emph{Details}.

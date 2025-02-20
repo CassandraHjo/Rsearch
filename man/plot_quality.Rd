@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_quality.R
 \name{plot_quality}
 \alias{plot_quality}
-\title{Plot average quality scores per each position for FASTQ reads}
+\title{Plot average quality scores per position for FASTQ reads}
 \usage{
 plot_quality(fastq_input, reverse = NULL)
 }
@@ -19,7 +19,7 @@ the reverse plot is attached as an attribute (\code{"reverse"}) to the
 returned object.
 }
 \description{
-Plot average quality scores per each position for FASTQ reads
+Plot average quality scores per position for FASTQ reads
 }
 \details{
 Average quality scores for each position in the reads in the input files

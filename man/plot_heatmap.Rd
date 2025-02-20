@@ -24,8 +24,8 @@ the number of reads with different lengths.
 object. FASTQ objects are tibbles that contain the columns \code{Header},
 \code{Sequence}, and \code{Quality}.
 
-Note that this function is only useful if you have reads of different lengths,
-like Nanopore reads.
+Note that this function is most useful if you have reads of different
+lengths, like Nanopore reads.
 }
 \examples{
 \dontrun{
