@@ -208,7 +208,8 @@ vs_optimize_truncqual <- function(fastq_input,
     ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = pal[2],
                                            "R1_length" = pal[3],
                                            "R2_length" = pal[4]),
-                                labels = label_mapping)
+                                labels = label_mapping) +
+    ggplot2::theme_minimal()
 
   # Add plot as attribute
   attr(res.df, "plot") <- p
