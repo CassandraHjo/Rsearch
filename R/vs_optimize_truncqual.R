@@ -185,6 +185,9 @@ vs_optimize_truncqual <- function(fastq_input,
       metric %in% c("R1_length", "R2_length") ~ "Read Lengths",
     ))
 
+  # Define color palette
+  pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
+
   # Define "pretty" labels
   label_mapping <- c(
     proportion_merged_high_quality_read_pairs = "Proportion Merged",
@@ -202,9 +205,9 @@ vs_optimize_truncqual <- function(fastq_input,
                   x = "Truncqual value",
                   y = "Value",
                   color = "Measurement") +
-    ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = "#6A5ACD",
-                                           "R1_length" = "#008080",
-                                           "R2_length" = "#FF7F50"),
+    ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = pal[2],
+                                           "R1_length" = pal[3],
+                                           "R2_length" = pal[4]),
                                 labels = label_mapping)
 
   # Add plot as attribute
