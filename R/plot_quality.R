@@ -14,9 +14,8 @@
 #' or FASTQ objects. FASTQ objects are tibbles that contain the columns
 #' \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
-#' If \code{reverse} is provided, it is plotted in it own plot. This plot is
-#' attached as an attribute named \code{reverse} to the plot of
-#' \code{fastq_input}. Note that the x-axis in this plot is reversed.
+#' If \code{reverse} is provided, it is plotted together with the first plot in
+#' its own panel. Note that the x-axis in this plot is reversed.
 #'
 #' Note that this function assumes that all FASTQ reads are of equal length. Quality
 #' scores are combined into a matrix where each row is a read and each column is
@@ -88,25 +87,25 @@ plot_quality <- function(fastq_input,
   fastq_qual_matrix <- do.call(rbind, fastq.tbl$Q_scores)
 
   # Calculate statistics
-  mean_quality <- colMeans(fastq_qual_matrix)
-  sd_quality <- apply(fastq_qual_matrix, 2, stats::sd)
+  mean_quality_R1 <- colMeans(fastq_qual_matrix)
+  sd_quality_R1 <- apply(fastq_qual_matrix, 2, stats::sd)
 
   # Make plotting data frame
-  df_plot <- data.frame(
+  df_R1 <- data.frame(
     Position = 1:ncol(fastq_qual_matrix),
-    MeanQuality = mean_quality,
-    Lower = mean_quality - sd_quality,
-    Upper = mean_quality + sd_quality)
+    MeanQuality = mean_quality_R1,
+    Lower = mean_quality_R1 - sd_quality_R1,
+    Upper = mean_quality_R1 + sd_quality_R1)
 
   # Define color palette
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
-  R1.plot <- ggplot2::ggplot(df_plot, ggplot2::aes(x = Position, y = MeanQuality)) +
+  R1.plot <- ggplot2::ggplot(df_R1, ggplot2::aes(x = Position, y = MeanQuality)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                            width = 0.2, color = pal[2]) +
     ggplot2::geom_line(color = pal[4]) +
     ggplot2::geom_point(color = pal[3]) +
-    ggplot2::labs(title = "Average quality in each position",
+    ggplot2::labs(title = "Average quality score in each position",
                   x = "Base position",
                   y = "Quality score") +
     ggplot2::theme_minimal()
@@ -124,37 +123,44 @@ plot_quality <- function(fastq_input,
     reverse_qual_matrix <- do.call(rbind, reverse.tbl$Q_scores)
 
     # Calculate statistics
-    mean_quality <- colMeans(reverse_qual_matrix)
-    sd_quality <- apply(reverse_qual_matrix, 2, sd)
+    mean_quality_R2 <- colMeans(reverse_qual_matrix)
+    sd_quality_R2 <- apply(reverse_qual_matrix, 2, sd)
 
     # Make plotting data frame
-    df_plot <- data.frame(
+    df_R2 <- data.frame(
       Position = 1:ncol(reverse_qual_matrix),
-      MeanQuality = mean_quality,
-      Lower = mean_quality - sd_quality,
-      Upper = mean_quality + sd_quality)
+      MeanQuality = mean_quality_R2,
+      Lower = mean_quality_R2 - sd_quality_R2,
+      Upper = mean_quality_R2 + sd_quality_R2)
 
     # Define color palette
     pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
-    R2.plot <- ggplot2::ggplot(df_plot,
+    R2.plot <- ggplot2::ggplot(df_R2,
                                ggplot2::aes(x = Position, y = MeanQuality)) +
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                              width = 0.2, color = pal[2]) +
       ggplot2::geom_line(color = pal[4]) +
       ggplot2::geom_point(color = pal[3]) +
       ggplot2::scale_x_reverse() +
-      ggplot2::labs(title = "Average quality in each position (R2 reads)",
+      ggplot2::labs(title = "R2 reads",
                     x = "Base position",
                     y = "Quality score") +
       ggplot2::theme_minimal()
 
     # Add new title to R1 plot
     R1.plot <- R1.plot +
-      ggplot2::ggtitle("Average quality in each position (R1 reads)")
+      ggplot2::ggtitle("R1 reads")
 
-    # Add reverse plot as attribute
-    attr(R1.plot, "reverse") <- R2.plot
+    combined_plot <- gridExtra::grid.arrange(R1.plot,
+                                             R2.plot,
+                                             ncol = 2,
+                                             top = grid::textGrob("Average quality score in each position",
+                                                                  x = grid::unit(0, "npc"),
+                                                                  just = "left",
+                                                                  gp = grid::gpar(fontsize = 18))
+    )
+    return(invisible(combined_plot))
   }
 
   return(R1.plot)

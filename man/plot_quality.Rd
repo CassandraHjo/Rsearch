@@ -30,9 +30,8 @@ average quality scores with error bars indicating ± one standard deviation.
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
 \code{Header}, \code{Sequence}, and \code{Quality}.
 
-If \code{reverse} is provided, it is plotted in it own plot. This plot is
-attached as an attribute named \code{reverse} to the plot of
-\code{fastq_input}. Note that the x-axis in this plot is reversed.
+If \code{reverse} is provided, it is plotted together with the first plot in
+its own panel. Note that the x-axis in this plot is reversed.
 
 Note that this function assumes that all FASTQ reads are of equal length. Quality
 scores are combined into a matrix where each row is a read and each column is
