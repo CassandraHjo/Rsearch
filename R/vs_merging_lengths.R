@@ -129,11 +129,22 @@ vs_merging_lengths <- function(fastq_input,
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
   plot1 <- res.tbl |>
+    dplyr::rename("Length R1" = length_1) |>
+    dplyr::rename("Length R2" = length_2) |>
+    dplyr::rename("Length of merged reads" = length_merged) |>
+    dplyr::rename("Length of overlap" = length_overlap) |>
     tidyr::pivot_longer(-read_id, names_to = "type", values_to = "length") |>
+    dplyr::mutate(type = factor(type,
+                                levels = c("Length R1",
+                                           "Length R2",
+                                           "Length of merged reads",
+                                           "Length of overlap"))) |>
     ggplot2::ggplot(ggplot2::aes(x = length)) +
     ggplot2::geom_histogram(fill = pal[3], color = pal[4]) +
     ggplot2::facet_wrap(dplyr::vars(type), scales = "free") +
-    ggplot2::labs(title = paste0("Merged ",
+    ggplot2::labs(x = "Length (bases)",
+                  y = "Number of reads",
+                  title = paste0("Merged ",
                                  sum(!is.na(res.tbl$length_merged)),
                                  " read pairs out of ",
                                  nrow(res.tbl),
