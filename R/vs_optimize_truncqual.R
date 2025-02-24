@@ -188,31 +188,54 @@ vs_optimize_truncqual <- function(fastq_input,
   # Define color palette
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
-  # Define "pretty" labels
-  label_mapping <- c(
-    proportion_merged_high_quality_read_pairs = "Proportion Merged",
-    R1_length = "Average R1 Length",
-    R2_length = "Average R2 Length"
-  )
-
-  # Make plot
-  p <- ggplot2::ggplot(long.df, ggplot2::aes(x = truncqual_value, y = value)) +
-    ggplot2::geom_line(ggplot2::aes(color = metric)) +
-    ggplot2::geom_point(ggplot2::aes(color = metric)) +
-    ggplot2::facet_wrap(~ facet, scales = "free_y", ncol = 1) +
+  # Make plot for merging proportion
+  p1 <- ggplot2::ggplot(long.df[long.df$facet == "Merged High-quality read-pairs", ],
+                        ggplot2::aes(x = truncqual_value, y = value, color = metric)) +
+    ggplot2::geom_line() +
+    ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = optimal_truncqual, color = "red", linetype = "dashed") +
-    ggplot2::labs(title = plot_title,
+    ggplot2::labs(title = "Merged High-quality read-pairs",
                   x = "Truncqual value",
-                  y = "Value",
-                  color = "Measurement") +
-    ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = pal[2],
-                                           "R1_length" = pal[3],
+                  y = "Proportion of reads",
+                  color = "") +
+    ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = pal[2]),
+                                labels = c(
+                                  proportion_merged_high_quality_read_pairs = "Proportion Merged")) +
+    ggplot2::theme_minimal() +
+    # Remove x-axis because this is common with p2
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank(),
+                   axis.ticks.x = ggplot2::element_blank())
+
+  # Make plot for read lengths
+  p2 <- ggplot2::ggplot(long.df[long.df$facet == "Read Lengths", ],
+                        ggplot2::aes(x = truncqual_value, y = value, color = metric)) +
+    ggplot2::geom_line() +
+    ggplot2::geom_point() +
+    ggplot2::geom_vline(xintercept = optimal_truncqual, color = "red", linetype = "dashed") +
+    ggplot2::labs(title = "Read Lengths",
+                  x = "Truncqual value",
+                  y = "Length (bases)",
+                  color = "") +
+    ggplot2::scale_color_manual(values = c("R1_length" = pal[3],
                                            "R2_length" = pal[4]),
-                                labels = label_mapping) +
+                                labels = c(R1_length = "Average R1 Length",
+                                           R2_length = "Average R2 Length"
+                                )) +
     ggplot2::theme_minimal()
 
+  # Combine the two plots
+  combined_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+
+  # Create a common title
+  common_title <- cowplot::ggdraw() +
+    cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
+
+  # Combine title and plot
+  final_plot <- cowplot::plot_grid(common_title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))
+
   # Add plot as attribute
-  attr(res.df, "plot") <- p
+  attr(res.df, "plot") <- final_plot
 
   return(res.df)
 }
