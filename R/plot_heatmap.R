@@ -63,9 +63,9 @@ plot_heatmap <- function(fastq_input) {
     ggplot2::scale_fill_gradient(low = pal[2],
                                  high = pal[5],
                                  name = "Number of reads") +
-    ggplot2::labs(title = "Read length vs average read quality",
-                  x = "Read length",
-                  y = "Average quality score") +
+    ggplot2::labs(title = "Read length vs average quality score of read",
+                  x = "Read length (bases)",
+                  y = "Average quality score of read") +
     ggplot2::theme_minimal()
 
   return(heatmap)
