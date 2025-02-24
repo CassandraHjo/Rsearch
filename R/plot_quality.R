@@ -21,9 +21,7 @@
 #' scores are combined into a matrix where each row is a read and each column is
 #' a base position.
 #'
-#' @return A ggplot object for the forward reads. If reverse reads are provided,
-#' the reverse plot is attached as an attribute (\code{"reverse"}) to the
-#' returned object.
+#' @return A ggplot object with the quality plot(s).
 #'
 #' @examples
 #' \dontrun{
@@ -37,14 +35,14 @@
 #' qual_plots <- plot_quality(fastq_input = fastq_input,
 #'                            reverse = reverse)
 #'
-#' # Extract plots
-#' R1_plot <- qual_plots
-#' R2_plot <- attr(qual_plots, "reverse")
+#' # Print plot
+#' qual_plots
 #' }
 #'
 #' @export
 #'
 #' @importFrom stats sd
+#' @import patchwork
 #'
 plot_quality <- function(fastq_input,
                          reverse = NULL) {
@@ -152,15 +150,21 @@ plot_quality <- function(fastq_input,
     R1.plot <- R1.plot +
       ggplot2::ggtitle("R1 reads")
 
-    combined_plot <- gridExtra::grid.arrange(R1.plot,
-                                             R2.plot,
-                                             ncol = 2,
-                                             top = grid::textGrob("Average quality score in each position",
-                                                                  x = grid::unit(0, "npc"),
-                                                                  just = "left",
-                                                                  gp = grid::gpar(fontsize = 18))
-    )
-    return(invisible(combined_plot))
+    # Combine using patchwork
+    combined_plot <- R1.plot + R2.plot +
+      patchwork::plot_annotation(title = "Average quality score in each position")
+
+    return(combined_plot)
+
+    # combined_plot <- gridExtra::grid.arrange(R1.plot,
+    #                                          R2.plot,
+    #                                          ncol = 2,
+    #                                          top = grid::textGrob("Average quality score in each position",
+    #                                                               x = grid::unit(0, "npc"),
+    #                                                               just = "left",
+    #                                                               gp = grid::gpar(fontsize = 18))
+    # )
+    # return(invisible(combined_plot))
   }
 
   return(R1.plot)

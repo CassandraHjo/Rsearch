@@ -14,9 +14,7 @@ reads. See \emph{Details}.}
 reads. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
-A ggplot object for the forward reads. If reverse reads are provided,
-the reverse plot is attached as an attribute (\code{"reverse"}) to the
-returned object.
+A ggplot object with the quality plot(s).
 }
 \description{
 Plot average quality scores per position for FASTQ reads
@@ -49,9 +47,8 @@ reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
 qual_plots <- plot_quality(fastq_input = fastq_input,
                            reverse = reverse)
 
-# Extract plots
-R1_plot <- qual_plots
-R2_plot <- attr(qual_plots, "reverse")
+# Print plot
+qual_plots
 }
 
 }
