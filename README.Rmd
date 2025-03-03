@@ -31,7 +31,7 @@ More information about attributes in R can be found [here](https://www.r-blogger
 
 ### Prerequisites
 
-For the `Rsearch` package to function properly on your computer, `VSEARCH` must be installed as well (see below). Please ensure that you are using `VSEARCH` version 2.29.1 or newer.
+For the `Rsearch` package to function properly on your computer, `VSEARCH` must be installed as well (see below). Please ensure that you are using `VSEARCH` version 2.30.0 or newer.
 
 Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site for learning more about `VSEARCH`.
 

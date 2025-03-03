@@ -46,7 +46,7 @@ More information about attributes in R can be found
 
 For the `Rsearch` package to function properly on your computer,
 `VSEARCH` must be installed as well (see below). Please ensure that you
-are using `VSEARCH` version 2.29.1 or newer.
+are using `VSEARCH` version 2.30.0 or newer.
 
 Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site
 for learning more about `VSEARCH`.
@@ -168,7 +168,7 @@ filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
 
 # Extract tibbles with filtered sequences
 R1_filt <- filt_seqs
-R2_filt <- attr(filt_seqs, "reverse")
+R2_filt <- attr(filt_seqs, "filt_reverse")
 
 # Extract filtering statistics
 statistics <- attr(filt_seqs, "statistics")
