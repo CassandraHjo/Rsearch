@@ -85,7 +85,7 @@ plot_heatmap <- function(fastq_input,
   heatmap <- suppressWarnings({ggplot2::ggplot(fastq.tbl,
                              ggplot2::aes(x = Length, y = .data[[y_var]])) +
     ggplot2::geom_bin_2d(binwidth = c(10, 1)) +
-    ggplot2::geom_point(color = NA) +
+    ggplot2::geom_point(color = NA) + # Used to make the marginal histograms with ggExtra
     ggplot2::scale_fill_gradient(low = pal[2],
                                  high = pal[5],
                                  name = "Number of reads") +
