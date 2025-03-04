@@ -128,31 +128,78 @@ vs_merging_lengths <- function(fastq_input,
   # Define color palette
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
-  plot1 <- res.tbl |>
-    dplyr::rename("Length R1" = length_1) |>
-    dplyr::rename("Length R2" = length_2) |>
-    dplyr::rename("Length of merged reads" = length_merged) |>
-    dplyr::rename("Length of overlap" = length_overlap) |>
-    tidyr::pivot_longer(-read_id, names_to = "type", values_to = "length") |>
-    dplyr::mutate(type = factor(type,
-                                levels = c("Length R1",
-                                           "Length R2",
-                                           "Length of merged reads",
-                                           "Length of overlap"))) |>
-    ggplot2::ggplot(ggplot2::aes(x = length)) +
-    ggplot2::geom_histogram(fill = pal[3], color = pal[4]) +
-    ggplot2::facet_wrap(dplyr::vars(type), scales = "free") +
-    ggplot2::labs(x = "Length (bases)",
-                  y = "Number of reads",
-                  title = paste0("Merged ",
-                                 sum(!is.na(res.tbl$length_merged)),
-                                 " read pairs out of ",
-                                 nrow(res.tbl),
-                                 " (",
-                                 round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)")) +
+  # Check if Length R1 or R2 has only one unique value
+  unique_length_1 <- unique(res.tbl$length_1)
+  unique_length_2 <- unique(res.tbl$length_2)
+
+  plot_r1 <- if(length(unique_length_1) == 1) {
+    ggplot2::ggplot(res.tbl, ggplot2::aes(x = as.factor(length_1))) +
+      ggplot2::geom_bar(fill = pal[3], color = pal[4], width = 0.2) +
+      ggplot2::labs(title = "Length R1", x = "", y = "") +
+      ggplot2::theme_minimal()
+  } else {
+    ggplot2::ggplot(res.tbl, ggplot2::aes(x = length_1)) +
+      ggplot2::geom_histogram(binwidth = 1, fill = pal[3], color = pal[4]) +
+      ggplot2::scale_x_continuous(limits = c(min(res.tbl$length_1) - 5, max(res.tbl$length_1) + 5)) +
+      ggplot2::labs(title = "Length R1", x = "", y = "") +
+      ggplot2::theme_minimal()
+  }
+
+  plot_r2 <- if(length(unique_length_2) == 1) {
+    ggplot2::ggplot(res.tbl, ggplot2::aes(x = as.factor(length_2))) +
+      ggplot2::geom_bar(fill = pal[3], color = pal[4], width = 0.2) +
+      ggplot2::labs(title = "Length R2", x = "", y = "") +
+      ggplot2::theme_minimal()
+  } else {
+    ggplot2::ggplot(res.tbl, ggplot2::aes(x = length_2)) +
+      ggplot2::geom_histogram(binwidth = 1, fill = pal[3], color = pal[4]) +
+      ggplot2::scale_x_continuous(limits = c(min(res.tbl$length_2) - 5, max(res.tbl$length_2) + 5)) +
+      ggplot2::labs(title = "Length R2", x = "", y = "") +
+      ggplot2::theme_minimal()
+  }
+
+  # Create separate plots for merged reads and overlap
+  p3 <-  ggplot2::ggplot(res.tbl,  ggplot2::aes(x = length_merged)) +
+    ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4]) +
+    ggplot2::labs(title = "Length of merged reads", x = "", y = "") +
     ggplot2::theme_minimal()
 
-  attr(res.tbl, "plot") <- plot1
+  p4 <-  ggplot2::ggplot(res.tbl,  ggplot2::aes(x = length_overlap)) +
+    ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4]) +
+    ggplot2::labs(title = "Length of overlap", x = "", y = "") +
+    ggplot2::theme_minimal()
+
+  # Combine the plots
+  combined_plot <- cowplot::plot_grid(plot_r1, plot_r2, p3, p4, ncol = 2)
+
+  # Arrange plots in a grid
+  plot_title <- paste0("Merged ",
+                       sum(!is.na(res.tbl$length_merged)),
+                       " read pairs out of ",
+                       nrow(res.tbl),
+                       " (",
+                       round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)")
+
+  # Create a common title
+  common_title <- cowplot::ggdraw() +
+    cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
+
+  # Create common x-axis label
+  common_x <- cowplot::ggdraw() +
+    cowplot::draw_label("Length (bases)", size = 14, x = 0.5, hjust = 0.5)
+
+  # Create common y-axis label
+  common_y <- cowplot::ggdraw() +
+    cowplot::draw_label("Number of reads", size = 14, angle = 90, y = 0.5, vjust = 0.5)
+
+  # Combine title, main plot and common x-axis label
+  final_plot_no_y <- cowplot::plot_grid(common_title, combined_plot, common_x,
+                                        ncol = 1, rel_heights = c(0.1, 1, 0.1))
+
+  # Add y-axis title
+  final_plot <- cowplot::plot_grid(common_y, final_plot_no_y, ncol = 2, rel_widths = c(0.1, 1))
+
+  attr(res.tbl, "plot") <- final_plot
 
   return(res.tbl)
 }
