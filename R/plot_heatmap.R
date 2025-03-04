@@ -20,7 +20,11 @@
 #' Phred scores. A lower EE rate indicates higher sequence quality, while a
 #' higher EE rate suggests lower confidence in the read.
 #'
-#' @return A ggplot object displaying a heatmap of read length vs. quality.
+#' Marginal histograms are added to the heatmap, displaying the distribution of
+#' read lengths (top) and quality scores or EE rates (right).
+#'
+#' @return A ggplot object displaying a heatmap of read length vs. quality, with
+#' marginal histograms.
 #'
 #' @examples
 #' \dontrun{
@@ -78,17 +82,26 @@ plot_heatmap <- function(fastq_input,
                     "Average quality score of read")
 
   # Create heatmap
-  heatmap <- ggplot2::ggplot(fastq.tbl,
+  heatmap <- suppressWarnings({ggplot2::ggplot(fastq.tbl,
                              ggplot2::aes(x = Length, y = .data[[y_var]])) +
     ggplot2::geom_bin_2d(binwidth = c(10, 1)) +
+    ggplot2::geom_point(color = NA) +
     ggplot2::scale_fill_gradient(low = pal[2],
                                  high = pal[5],
                                  name = "Number of reads") +
     ggplot2::labs(title = paste("Read length vs", y_label),
                   x = "Read length (bases)",
                   y = y_label) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::guides(fill = ggplot2::guide_colorbar(direction = "horizontal",
+                                                   title.position = "top")) +
+    ggplot2::theme(legend.position = "bottom")})
 
-  return(heatmap)
+  heatmap_with_marginal_plots <- suppressWarnings({ggExtra::ggMarginal(heatmap,
+                                                     type = "histogram",
+                                                     fill = pal[3],
+                                                     col = pal[4])})
+
+  return(heatmap_with_marginal_plots)
 
 }

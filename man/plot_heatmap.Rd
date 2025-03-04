@@ -15,7 +15,8 @@ the expected error rate (EE) on the y-axis instead of the mean quality score.
 Defaults to \code{TRUE}.}
 }
 \value{
-A ggplot object displaying a heatmap of read length vs. quality.
+A ggplot object displaying a heatmap of read length vs. quality, with
+marginal histograms.
 }
 \description{
 Plot read length vs. read quality in a heatmap
@@ -33,6 +34,9 @@ The EE rate is calculated as the sum of error probabilities per read, where
 the error probability for each base is computed as \eqn{10^{(-Q/10)}} from
 Phred scores. A lower EE rate indicates higher sequence quality, while a
 higher EE rate suggests lower confidence in the read.
+
+Marginal histograms are added to the heatmap, displaying the distribution of
+read lengths (top) and quality scores or EE rates (right).
 }
 \examples{
 \dontrun{
