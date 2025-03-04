@@ -2,9 +2,14 @@
 % Please edit documentation in R/plot_quality.R
 \name{plot_quality}
 \alias{plot_quality}
-\title{Plot average quality scores per position for FASTQ reads}
+\title{Plot median quality scores per position for FASTQ reads}
 \usage{
-plot_quality(fastq_input, reverse = NULL)
+plot_quality(
+  fastq_input,
+  reverse = NULL,
+  quantile_lower = 0.25,
+  quantile_upper = 0.75
+)
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
@@ -12,17 +17,24 @@ reads. See \emph{Details}.}
 
 \item{reverse}{An optional FASTQ file path or FASTQ tibble containing reverse
 reads. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{quantile_lower}{The lower quantile threshold for the error bars in the
+plot. Defaults to \code{0.25}.}
+
+\item{quantile_upper}{The upper quantile threshold for the error bars in the
+plot. Defaults to \code{0.75}.}
 }
 \value{
 A ggplot object with the quality plot(s).
 }
 \description{
-Plot average quality scores per position for FASTQ reads
+Plot median quality scores per position for FASTQ reads
 }
 \details{
-Average quality scores for each position in the reads in the input files
+Median quality scores for each position in the reads in the input files
 (\code{fastq_input} and \code{reverse}) are plotted with ggplot2, displaying
-average quality scores with error bars indicating ± one standard deviation.
+the median quality score along with error bars indicating the selected
+quantile range.
 
 \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
@@ -31,9 +43,9 @@ or FASTQ objects. FASTQ objects are tibbles that contain the columns
 If \code{reverse} is provided, it is plotted together with the first plot in
 its own panel. Note that the x-axis in this plot is reversed.
 
-Note that this function assumes that all FASTQ reads are of equal length. Quality
-scores are combined into a matrix where each row is a read and each column is
-a base position.
+The default error bars represent the interquartile range (25%-75%). Custom
+quantile ranges can be specified via \code{quantile_lower} and
+\code{quantile_upper}.
 }
 \examples{
 \dontrun{
