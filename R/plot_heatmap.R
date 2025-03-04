@@ -1,20 +1,26 @@
-#' Plot read length vs. read quality in heatmap
+#' Plot read length vs. read quality in a heatmap
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing reads. See
 #' \emph{Details}.
+#' @param use_ee_rate If \code{TRUE}, the heatmap will display
+#' the expected error rate (EE) on the y-axis instead of the mean quality score.
+#' Defaults to \code{TRUE}.
 #'
 #' @details
-#' A histogram with read lengths is plotted with ggplot2, displaying
-#' the number of reads with different lengths.
+#' A heatmap is plotted with ggplot2, visualizing the relationship between
+#' read length and read quality. The user can choose to plot either the
+#' mean quality score per read or the expected error (EE) rate.
 #'
 #' \code{fastq_input} can either be a file path to a FASTQ file or a FASTQ
 #' object. FASTQ objects are tibbles that contain the columns \code{Header},
 #' \code{Sequence}, and \code{Quality}.
 #'
-#' Note that this function is most useful if you have reads of different
-#' lengths, like Nanopore reads.
+#' The EE rate is calculated as the sum of error probabilities per read, where
+#' the error probability for each base is computed as \eqn{10^{(-Q/10)}} from
+#' Phred scores. A lower EE rate indicates higher sequence quality, while a
+#' higher EE rate suggests lower confidence in the read.
 #'
-#' @return A ggplot object displaying a histogram of read lengths.
+#' @return A ggplot object displaying a heatmap of read length vs. quality.
 #'
 #' @examples
 #' \dontrun{
@@ -28,7 +34,8 @@
 #'
 #' @export
 #'
-plot_heatmap <- function(fastq_input) {
+plot_heatmap <- function(fastq_input,
+                         use_ee_rate = TRUE) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -48,24 +55,38 @@ plot_heatmap <- function(fastq_input) {
                                    charToRaw() |>
                                    strtoi(16L) - 33
                                })
+
   # Calculate mean quality score for each read
   fastq.tbl$Mean_Q_score <- sapply(fastq.tbl$Q_scores, mean)
 
+  # Calculate expected error (EE) rate for each read
+  fastq.tbl$EE_rate <- sapply(fastq.tbl$Q_scores,
+                              function(Q) {
+                                sum(10^(-Q/10))})
+
+  # Add read length column
   fastq.tbl <- fastq.tbl |>
     dplyr::mutate(Length = nchar(Sequence))
 
   # Define color palette
   pal <- RColorBrewer::brewer.pal(5, "YlGnBu")
 
+  # Choose y-axis variable based on user selection
+  y_var <- ifelse(use_ee_rate, "EE_rate", "Mean_Q_score")
+  y_label <- ifelse(use_ee_rate,
+                    "Expected error rate (EE) of read",
+                    "Average quality score of read")
+
+  # Create heatmap
   heatmap <- ggplot2::ggplot(fastq.tbl,
-                             ggplot2::aes(x = Length, y = Mean_Q_score)) +
+                             ggplot2::aes(x = Length, y = .data[[y_var]])) +
     ggplot2::geom_bin_2d(binwidth = c(10, 1)) +
     ggplot2::scale_fill_gradient(low = pal[2],
                                  high = pal[5],
                                  name = "Number of reads") +
-    ggplot2::labs(title = "Read length vs average quality score of read",
+    ggplot2::labs(title = paste("Read length vs", y_label),
                   x = "Read length (bases)",
-                  y = "Average quality score of read") +
+                  y = y_label) +
     ggplot2::theme_minimal()
 
   return(heatmap)

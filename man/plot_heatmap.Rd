@@ -2,30 +2,37 @@
 % Please edit documentation in R/plot_heatmap.R
 \name{plot_heatmap}
 \alias{plot_heatmap}
-\title{Plot read length vs. read quality in heatmap}
+\title{Plot read length vs. read quality in a heatmap}
 \usage{
-plot_heatmap(fastq_input)
+plot_heatmap(fastq_input, use_ee_rate = TRUE)
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or FASTQ object containing reads. See
 \emph{Details}.}
+
+\item{use_ee_rate}{If \code{TRUE}, the heatmap will display
+the expected error rate (EE) on the y-axis instead of the mean quality score.
+Defaults to \code{TRUE}.}
 }
 \value{
-A ggplot object displaying a histogram of read lengths.
+A ggplot object displaying a heatmap of read length vs. quality.
 }
 \description{
-Plot read length vs. read quality in heatmap
+Plot read length vs. read quality in a heatmap
 }
 \details{
-A histogram with read lengths is plotted with ggplot2, displaying
-the number of reads with different lengths.
+A heatmap is plotted with ggplot2, visualizing the relationship between
+read length and read quality. The user can choose to plot either the
+mean quality score per read or the expected error (EE) rate.
 
 \code{fastq_input} can either be a file path to a FASTQ file or a FASTQ
 object. FASTQ objects are tibbles that contain the columns \code{Header},
 \code{Sequence}, and \code{Quality}.
 
-Note that this function is most useful if you have reads of different
-lengths, like Nanopore reads.
+The EE rate is calculated as the sum of error probabilities per read, where
+the error probability for each base is computed as \eqn{10^{(-Q/10)}} from
+Phred scores. A lower EE rate indicates higher sequence quality, while a
+higher EE rate suggests lower confidence in the read.
 }
 \examples{
 \dontrun{
