@@ -25,10 +25,13 @@ plot. Defaults to \code{0.25}.}
 plot. Defaults to \code{0.75}.}
 }
 \value{
-A ggplot object with the quality plot(s).
+A ggplot2 object with the quality plot(s).
 }
 \description{
-Plot median quality scores per position for FASTQ reads
+Generates a plot displaying the median quality scores for each position in
+FASTQ reads. The plot includes error bars representing a selected quantile
+range. If reverse reads are provided, they are plotted in a separate panel
+with a reversed x-axis.
 }
 \details{
 Median quality scores for each position in the reads in the input files
@@ -55,12 +58,10 @@ fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
 reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
                      "R2_sample1_small.fq")
 
-# Plot
+# Generate and display quality plot
 qual_plots <- plot_quality(fastq_input = fastq_input,
                            reverse = reverse)
-
-# Print plot
-qual_plots
+print(qual_plots)
 }
 
 }

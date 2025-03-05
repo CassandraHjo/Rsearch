@@ -1,5 +1,11 @@
 #' Plot median quality scores per position for FASTQ reads
 #'
+#' @description
+#' Generates a plot displaying the median quality scores for each position in
+#' FASTQ reads. The plot includes error bars representing a selected quantile
+#' range. If reverse reads are provided, they are plotted in a separate panel
+#' with a reversed x-axis.
+#'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
 #' reads. See \emph{Details}.
 #' @param reverse An optional FASTQ file path or FASTQ tibble containing reverse
@@ -27,7 +33,7 @@
 #' quantile ranges can be specified via \code{quantile_lower} and
 #' \code{quantile_upper}.
 #'
-#' @return A ggplot object with the quality plot(s).
+#' @return A ggplot2 object with the quality plot(s).
 #'
 #' @examples
 #' \dontrun{
@@ -37,12 +43,10 @@
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
 #'                      "R2_sample1_small.fq")
 #'
-#' # Plot
+#' # Generate and display quality plot
 #' qual_plots <- plot_quality(fastq_input = fastq_input,
 #'                            reverse = reverse)
-#'
-#' # Print plot
-#' qual_plots
+#' print(qual_plots)
 #' }
 #'
 #' @export
