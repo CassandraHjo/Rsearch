@@ -12,9 +12,11 @@
 #' See \emph{Details}.
 #' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
 #' Defaults to \code{10}.
-#' @param truncee_rate_range A numeric vector of \code{truncee_rate} values to test.
-#' Sequences are truncated starting from the first base with the specified base
-#' quality score or lower. Defaults to \code{1:20}. Provide as a numeric vector.
+#' @param truncee_rate_range A numeric vector of \code{truncee_rate} values to
+#' test. Sequences are truncated starting from the first base with the specified
+#' base quality score or lower. Defaults to
+#' \code{c(0.0005, 0.001, seq(0.002, 0.014, by = 0.002)}. Provide as a numeric
+#' vector.
 #' @param minlen Minimum number of bases a sequence must have to be retained.
 #' Defaults to \code{0}. See \emph{Details}.
 #' @param min_size Minimum copy number (size) for a merged read to be
@@ -96,7 +98,11 @@
 vs_optimize_truncee_rate <- function(fastq_input,
                                      reverse,
                                      minovlen = 10,
-                                     truncee_rate_range = seq(0.002, 0.014, by = 0.002),
+                                     truncee_rate_range = c(0.0005,
+                                                            0.001,
+                                                            seq(0.002, 0.014,
+                                                                by = 0.002)
+                                     ),
                                      minlen = 1,
                                      min_size = 2,
                                      maxee_rate = 0.01,
