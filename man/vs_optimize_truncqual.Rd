@@ -3,7 +3,7 @@
 \name{vs_optimize_truncqual}
 \alias{vs_optimize_truncqual}
 \alias{optimize_truncqual}
-\title{Optimize truncation for optimal read merging}
+\title{Optimize truncation with truncqual for optimal read merging}
 \usage{
 vs_optimize_truncqual(
   fastq_input,
@@ -11,7 +11,7 @@ vs_optimize_truncqual(
   minovlen = 10,
   truncqual_range = 1:20,
   minlen = 1,
-  min_size = 1,
+  min_size = 2,
   maxee_rate = 0.01,
   threads = 1,
   plot_title = "Optimization of Read Merging Based on Truncqual Value"
@@ -35,7 +35,7 @@ quality score or lower. Defaults to \code{1:20}. Provide as a numeric vector.}
 Defaults to \code{0}. See \emph{Details}.}
 
 \item{min_size}{Minimum copy number (size) for a merged read to be
-included in the results. Defaults to \code{1}.}
+included in the results. Defaults to \code{2}.}
 
 \item{maxee_rate}{Threshold for average expected error. Must range from
 \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.}
@@ -69,9 +69,9 @@ dashed line.
 }
 \description{
 \code{vs_optimize_truncqual} optimizes the truncation parameter
-to achieve the best possible merging results. The function iterates through a
-specified range of \code{truncqual} values to identify the optimal value that
-maximizes the proportion of high-quality merged read pairs.
+\code{truncqual} to achieve the best possible merging results. The function
+iterates through a specified range of \code{truncqual} values to identify the
+optimal value that maximizes the proportion of high-quality merged read pairs.
 }
 \details{
 The function uses \code{\link{vs_fastq_mergepairs}},

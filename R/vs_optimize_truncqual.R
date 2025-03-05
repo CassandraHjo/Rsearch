@@ -1,9 +1,9 @@
-#' Optimize truncation for optimal read merging
+#' Optimize truncation with truncqual for optimal read merging
 #'
 #' @description \code{vs_optimize_truncqual} optimizes the truncation parameter
-#' to achieve the best possible merging results. The function iterates through a
-#' specified range of \code{truncqual} values to identify the optimal value that
-#' maximizes the proportion of high-quality merged read pairs.
+#' \code{truncqual} to achieve the best possible merging results. The function
+#' iterates through a specified range of \code{truncqual} values to identify the
+#' optimal value that maximizes the proportion of high-quality merged read pairs.
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
 #' reads. See \emph{Details}.
@@ -17,7 +17,7 @@
 #' @param minlen Minimum number of bases a sequence must have to be retained.
 #' Defaults to \code{0}. See \emph{Details}.
 #' @param min_size Minimum copy number (size) for a merged read to be
-#' included in the results. Defaults to \code{1}.
+#' included in the results. Defaults to \code{2}.
 #' @param maxee_rate Threshold for average expected error. Must range from
 #' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
@@ -97,7 +97,7 @@ vs_optimize_truncqual <- function(fastq_input,
                                   minovlen = 10,
                                   truncqual_range = 1:20,
                                   minlen = 1,
-                                  min_size = 1,
+                                  min_size = 2,
                                   maxee_rate = 0.01,
                                   threads = 1,
                                   plot_title = "Optimization of Read Merging Based on Truncqual Value"){
@@ -134,7 +134,6 @@ vs_optimize_truncqual <- function(fastq_input,
                                      maxee_rate = maxee_rate,
                                      minlen = minlen,
                                      truncqual = truncqual_range[i],
-                                     stripright = 0,
                                      threads = threads)
     trim_R2.df <- attr(trim_R1.df, "reverse")
 
@@ -153,12 +152,12 @@ vs_optimize_truncqual <- function(fastq_input,
       dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
       dplyr::mutate(size = as.numeric(size))
 
-    # Find number of reads with size > min_size
-    tbl <- derep.df |>
+    # Find number of dereplicated merged reads with size > min_size
+    derep.df_filt <- derep.df |>
       dplyr::filter(size > min_size)
 
     # Add results to table
-    res.df$merged_high_quality_read_pairs[i] = sum(tbl$size)
+    res.df$merged_high_quality_read_pairs[i] = sum(derep.df_filt$size)
     res.df$R1_length[i] = round(mean(nchar(trim_R1.df$Sequence)), 2)
     res.df$R2_length[i] = round(mean(nchar(trim_R2.df$Sequence)), 2)
 
