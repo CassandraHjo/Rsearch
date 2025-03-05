@@ -159,12 +159,14 @@ vs_merging_lengths <- function(fastq_input,
   }
 
   # Create separate plots for merged reads and overlap
-  p3 <-  ggplot2::ggplot(res.tbl,  ggplot2::aes(x = length_merged)) +
+  p3 <- ggplot2::ggplot(dplyr::filter(res.tbl, !is.na(length_merged)),
+                        ggplot2::aes(x = length_merged)) +
     ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4]) +
     ggplot2::labs(title = "Length of merged reads", x = "", y = "") +
     ggplot2::theme_minimal()
 
-  p4 <-  ggplot2::ggplot(res.tbl,  ggplot2::aes(x = length_overlap)) +
+  p4 <-  ggplot2::ggplot(dplyr::filter(res.tbl, !is.na(length_overlap)),
+                         ggplot2::aes(x = length_overlap)) +
     ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4]) +
     ggplot2::labs(title = "Length of overlap", x = "", y = "") +
     ggplot2::theme_minimal()
