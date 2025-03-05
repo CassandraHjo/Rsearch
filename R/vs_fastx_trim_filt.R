@@ -32,6 +32,11 @@
 #' @param truncee Truncate sequences so that their total expected error does not
 #' exceed the specified value. If \code{NULL} (default), the trimming is not
 #' applied.
+#' @param truncee_rate Truncate sequences so that their average expected error
+#' per base is not higher than the specified value. The truncation will happen
+#' at first occurrence. The average expected error per base is calculated as the
+#' total expected number of errors divided by the length of the sequence after
+#' truncation. If \code{NULL} (default), the trimming is not applied.
 #' @param stripright Number of bases stripped from the right end of the reads.
 #' Defaults to \code{0}.
 #' @param stripleft Number of bases stripped from the left end of the reads.
@@ -50,6 +55,9 @@
 #' @param maxsize Maximum abundance for a given sequence. Sequences with
 #' higher abundance are discarded. If \code{NULL} (default), the filter is not
 #' applied.
+#' @param minqual Minimum base quality for a read to be retained. A read is
+#' discarded if it contains bases with a quality score below the given value.
+#' Defaults to \code{0}, meaning no reads are discarded.
 #' @param fasta_width Number of characters per line in the output FASTA
 #' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
@@ -184,6 +192,7 @@ vs_fastx_trim_filt <- function(fastx_input,
                                trunclen = NULL,
                                truncqual = 1,
                                truncee = NULL,
+                               truncee_rate = NULL,
                                stripright = 0,
                                stripleft = 0,
                                maxee_rate = 0.01,
@@ -192,6 +201,7 @@ vs_fastx_trim_filt <- function(fastx_input,
                                maxns = 0,
                                minsize = NULL,
                                maxsize = NULL,
+                               minqual = 0,
                                fasta_width = 0,
                                log_file = NULL,
                                threads = 1,
@@ -440,12 +450,20 @@ vs_fastx_trim_filt <- function(fastx_input,
     args <- c(args, "--fastq_truncee", truncee)
   }
 
+  if (!is.null(truncee_rate)) {
+    args <- c(args, "--fastq_truncee_rate", truncee_rate)
+  }
+
   if (stripright > 0) {
     args <- c(args, "--fastq_stripright", stripright)
   }
 
   if (stripleft > 0) {
     args <- c(args, "--fastq_stripleft", stripleft)
+  }
+
+  if (minqual > 0) {
+    args <- c(args, "--fastq_minqual", minqual)
   }
 
   # Add output files based on output_format

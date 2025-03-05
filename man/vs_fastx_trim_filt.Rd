@@ -19,6 +19,7 @@ vs_fastx_trim_filt(
   trunclen = NULL,
   truncqual = 1,
   truncee = NULL,
+  truncee_rate = NULL,
   stripright = 0,
   stripleft = 0,
   maxee_rate = 0.01,
@@ -27,6 +28,7 @@ vs_fastx_trim_filt(
   maxns = 0,
   minsize = NULL,
   maxsize = NULL,
+  minqual = 0,
   fasta_width = 0,
   log_file = NULL,
   threads = 1,
@@ -71,6 +73,12 @@ quality score of the specified value or lower. Defaults to \code{20}.}
 exceed the specified value. If \code{NULL} (default), the trimming is not
 applied.}
 
+\item{truncee_rate}{Truncate sequences so that their average expected error
+per base is not higher than the specified value. The truncation will happen
+at first occurrence. The average expected error per base is calculated as the
+total expected number of errors divided by the length of the sequence after
+truncation. If \code{NULL} (default), the trimming is not applied.}
+
 \item{stripright}{Number of bases stripped from the right end of the reads.
 Defaults to \code{0}.}
 
@@ -96,6 +104,10 @@ applied.}
 \item{maxsize}{Maximum abundance for a given sequence. Sequences with
 higher abundance are discarded. If \code{NULL} (default), the filter is not
 applied.}
+
+\item{minqual}{Minimum base quality for a read to be retained. A read is
+discarded if it contains bases with a quality score below the given value.
+Defaults to \code{0}, meaning no reads are discarded.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}
