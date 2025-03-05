@@ -35,7 +35,7 @@
 #' \dontrun{
 #' # Define input file
 #' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "derep_R1_sample1.fa")
+#'                          "derep_R1_sample1_small.fa")
 #'
 #' # Generate and display plot without cutoff
 #' size_plot <- plot_size_dist(fastx_input = fastx_input, input_format = "fasta")
