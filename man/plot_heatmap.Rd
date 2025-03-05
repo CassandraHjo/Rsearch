@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_heatmap.R
 \name{plot_heatmap}
 \alias{plot_heatmap}
-\title{Plot read length vs. read quality in a heatmap}
+\title{Plot read length vs. read quality in a heat map}
 \usage{
 plot_heatmap(fastq_input, use_ee_rate = TRUE)
 }
@@ -10,16 +10,16 @@ plot_heatmap(fastq_input, use_ee_rate = TRUE)
 \item{fastq_input}{A FASTQ file path or FASTQ object containing reads. See
 \emph{Details}.}
 
-\item{use_ee_rate}{If \code{TRUE}, the heatmap will display
+\item{use_ee_rate}{If \code{TRUE}, the heat map will display
 the expected error rate (EE) on the y-axis instead of the mean quality score.
 Defaults to \code{TRUE}.}
 }
 \value{
-A ggplot object displaying a heatmap of read length vs. quality, with
+A ggplot2 object displaying a heat map of read length vs. quality, with
 marginal histograms.
 }
 \description{
-Plot read length vs. read quality in a heatmap
+Plot read length vs. read quality in a heat map
 }
 \details{
 A heatmap is plotted with ggplot2, visualizing the relationship between
@@ -35,7 +35,7 @@ the error probability for each base is computed as \eqn{10^{(-Q/10)}} from
 Phred scores. A lower EE rate indicates higher sequence quality, while a
 higher EE rate suggests lower confidence in the read.
 
-Marginal histograms are added to the heatmap, displaying the distribution of
+Marginal histograms are added to the heat map, displaying the distribution of
 read lengths (top) and quality scores or EE rates (right).
 }
 \examples{
