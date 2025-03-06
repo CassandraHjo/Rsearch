@@ -1,4 +1,4 @@
-#' Plot distribution of size values in a bar plot
+#' Plot distribution of size values
 #'
 #' @description
 #' Generates a bar plot representing the distribution of size values from a
@@ -14,6 +14,8 @@
 #' with size greater than this value will be grouped into a single category
 #' labeled \code{"> cutoff"} in the plot. Defaults to \code{NULL} (no cutoff
 #' applied).
+#' @param y_breaks A numeric vector specifying the breakpoints for the y-axis.
+#' Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.
 #'
 #' @details
 #'
@@ -27,7 +29,8 @@
 #' \code{;size=<int>}.
 #'
 #' The y-axis of the plot is log10-transformed to handle variations in read
-#' counts across different size values.
+#' counts across different size values. The breakpoints of the y-axis can be
+#' modified using the \code{y_breaks} parameter.
 #'
 #' @return A ggplot2 object displaying a bar plot of size distribution.
 #'
@@ -38,11 +41,20 @@
 #'                          "derep_R1_sample1_small.fa")
 #'
 #' # Generate and display plot without cutoff
-#' size_plot <- plot_size_dist(fastx_input = fastx_input, input_format = "fasta")
+#' size_plot <- plot_size_dist(fastx_input = fastx_input,
+#'                             input_format = "fasta")
 #' print(size_plot)
 #'
 #' # Generate and display plot with a cutoff at size 100
-#' size_plot <- plot_size_dist(fastx_input = fastx_input, input_format = "fasta", cutoff = 100)
+#' size_plot <- plot_size_dist(fastx_input = fastx_input,
+#'                             input_format = "fasta",
+#'                             cutoff = 100)
+#' print(size_plot)
+#'
+#' # Generate and display plot with custom y-axis breaks
+#' size_plot <- plot_size_dist(fastx_input = fastx_input,
+#'                             input_format = "fasta",
+#'                             y_breaks = c(1, 50, 500, 5000))
 #' print(size_plot)
 #' }
 #'
@@ -50,7 +62,8 @@
 #'
 plot_size_dist <- function(fastx_input,
                            input_format = NULL,
-                           cutoff = NULL) {
+                           cutoff = NULL,
+                           y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000)) {
 
 
   # Handle input if tibble is provided
@@ -117,7 +130,7 @@ plot_size_dist <- function(fastx_input,
     ggplot2::labs(title = "Size distribution",
                   x = "Size",
                   y = "Number of reads") +
-    ggplot2::scale_y_log10(breaks = c(1, 10, 100, 1000, 2000, 3000, 10000)) +
+    ggplot2::scale_y_log10(breaks = y_breaks) +
     ggplot2::theme_minimal()
 
   return(size_plot)
