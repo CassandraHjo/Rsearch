@@ -14,6 +14,9 @@
 #' plot. Defaults to \code{0.25}.
 #' @param quantile_upper The upper quantile threshold for the error bars in the
 #' plot. Defaults to \code{0.75}.
+#' @param plot_title The title of the plot. Defaults to
+#' \code{"Median quality score in each position"}. Set to \code{""} for no
+#' title.
 #'
 #'
 #' @details
@@ -47,17 +50,23 @@
 #' qual_plots <- plot_quality(fastq_input = fastq_input,
 #'                            reverse = reverse)
 #' print(qual_plots)
+#'
+#' # Generate and display quality plot without plot title
+#' qual_plots_wo_title <- plot_quality(fastq_input = fastq_input,
+#'                                     reverse = reverse,
+#'                                     plot_title = "")
+#' print(qual_plots_wo_title)
 #' }
 #'
 #' @export
 #'
 #' @importFrom stats quantile median
-#' @import patchwork
 #'
 plot_quality <- function(fastq_input,
                          reverse = NULL,
                          quantile_lower = 0.25,
-                         quantile_upper = 0.75) {
+                         quantile_upper = 0.75,
+                         plot_title = "Median quality score in each position") {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -137,7 +146,7 @@ plot_quality <- function(fastq_input,
     ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                            width = 0.2, color = pal[2]) +
     ggplot2::geom_line(color = pal[4]) +
-    ggplot2::geom_point(color = pal[3]) +
+    # ggplot2::geom_point(color = pal[3]) +
     ggplot2::labs(title = "Median quality score in each position",
                   x = "Base position",
                   y = "Quality score") +
@@ -188,7 +197,7 @@ plot_quality <- function(fastq_input,
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                              width = 0.2, color = pal[2]) +
       ggplot2::geom_line(color = pal[4]) +
-      ggplot2::geom_point(color = pal[3]) +
+      # ggplot2::geom_point(color = pal[3]) +
       ggplot2::scale_x_reverse() +
       ggplot2::labs(title = "R2 reads",
                     x = "Base position",
@@ -199,9 +208,16 @@ plot_quality <- function(fastq_input,
     R1.plot <- R1.plot +
       ggplot2::ggtitle("R1 reads")
 
-    # Combine using patchwork
-    combined_plot <- R1.plot + R2.plot +
-      patchwork::plot_annotation(title = "Median quality score in each position")
+
+    # Create common title
+    common_title <- cowplot::ggdraw() +
+      cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
+
+    # Combine the two plots
+    combined_plot <- cowplot::plot_grid(R1.plot, R2.plot, ncol = 2)
+
+    # Combine plots and title
+    final_plot <- cowplot::plot_grid(common_title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))
 
     return(combined_plot)
   }

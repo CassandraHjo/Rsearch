@@ -8,7 +8,8 @@ plot_quality(
   fastq_input,
   reverse = NULL,
   quantile_lower = 0.25,
-  quantile_upper = 0.75
+  quantile_upper = 0.75,
+  plot_title = "Median quality score in each position"
 )
 }
 \arguments{
@@ -23,6 +24,10 @@ plot. Defaults to \code{0.25}.}
 
 \item{quantile_upper}{The upper quantile threshold for the error bars in the
 plot. Defaults to \code{0.75}.}
+
+\item{plot_title}{The title of the plot. Defaults to
+\code{"Median quality score in each position"}. Set to \code{""} for no
+title.}
 }
 \value{
 A ggplot2 object with the quality plot(s).
@@ -62,6 +67,12 @@ reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
 qual_plots <- plot_quality(fastq_input = fastq_input,
                            reverse = reverse)
 print(qual_plots)
+
+# Generate and display quality plot without plot title
+qual_plots_wo_title <- plot_quality(fastq_input = fastq_input,
+                                    reverse = reverse,
+                                    plot_title = "")
+print(qual_plots_wo_title)
 }
 
 }

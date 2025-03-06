@@ -25,7 +25,6 @@ Imports:
     ggExtra (>= 0.10.1),
     ggplot2 (>= 3.5.1),
     microseq (>= 2.1.6),
-    patchwork (>= 1.3.0),
     RColorBrewer (>= 1.1.3),
     stats (>= 4.4.2),
     stringr (>= 1.5.1),
