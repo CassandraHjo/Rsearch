@@ -1,0 +1,84 @@
+#' Plot distribution of expected error (EE) rate of reads
+#'
+#' @description
+#' Generates a histogram visualizing the distribution of the expected error (EE)
+#' rate for reads. The EE rate represents the cumulative probability of errors
+#' in a read, calculated from Phred quality scores.
+#'
+#' @param fastq_input A FASTQ file path or FASTQ object containing reads. See
+#' \emph{Details}.
+#' @param bin_width The bin width for the histogram of the expected error rate.
+#' Defaults to \code{1}.
+#'
+#' @details
+#' A histogram is plotted using ggplot2 to visualize the distribution of EE
+#' rates. The user can adjust the bin width to control the granularity of the
+#' histogram.
+#'
+#' \code{fastq_input} can either be a file path to a FASTQ file or a FASTQ
+#' object. FASTQ objects are tibbles that contain the columns \code{Header},
+#' \code{Sequence}, and \code{Quality}.
+#'
+#' The EE rate is calculated as the sum of error probabilities per read, where
+#' the error probability for each base is computed as \eqn{10^{(-Q/10)}} from
+#' Phred scores. A lower EE rate indicates higher sequence quality, while a
+#' higher EE rate suggests lower confidence in the read.
+#'
+#' @return A ggplot2 object displaying the histogram of EE rate distribution.
+#'
+#' @examples
+#' \dontrun{
+#' # Define input file path
+#' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                          "R1_sample1_small.fq")
+#'
+#' # Generate and display histogram
+#' ee_plot <- plot_ee_rate_dist(fastq_input = fastq_input)
+#' print(ee_plot)
+#' }
+#'
+#' @export
+#'
+plot_ee_rate_dist <- function(fastq_input, bin_width = 1) {
+
+  # Handle input: file or tibble
+  if (!is.character(fastq_input)){
+    # Ensure required columns exist
+    required_cols <- c("Header", "Sequence", "Quality")
+    if (!all(required_cols %in% colnames(fastq_input))) {
+      stop("FASTQ object must contain columns: Header, Sequence, Quality")
+    }
+    fastq.tbl <- fastq_input
+  } else {
+    fastq.tbl <- microseq::readFastq(fastq_input)
+  }
+
+  # Convert quality symbols to numeric scores
+  fastq.tbl$Q_scores <- lapply(fastq.tbl$Quality,
+                               function(Q.seq) {Q.seq |>
+                                   charToRaw() |>
+                                   strtoi(16L) - 33
+                               })
+
+  # Calculate expected error (EE) rate for each read
+  fastq.tbl$EE_rate <- sapply(fastq.tbl$Q_scores,
+                              function(Q) {
+                                sum(10^(-Q/10))})
+
+  # Define color palette
+  pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
+
+  # Create histogram
+  ee_plot <- ggplot2::ggplot(fastq.tbl,
+                             ggplot2::aes(x = EE_rate)) +
+    ggplot2::geom_histogram(binwidth = bin_width,
+                            fill = pal[3],
+                            color = pal[4],
+                            boundary = 0) +
+    ggplot2::labs(title = "Distribution of the expected error (EE) rate of reads",
+                  x = "EE-rate",
+                  y = "Number of reads") +
+    ggplot2::theme_minimal()
+
+  return(ee_plot)
+}

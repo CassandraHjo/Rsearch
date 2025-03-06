@@ -2,6 +2,7 @@
 
 export(fastx_combine_files)
 export(fastx_synchronize)
+export(plot_ee_rate_dist)
 export(plot_heatmap)
 export(plot_quality)
 export(plot_size_dist)
