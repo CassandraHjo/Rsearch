@@ -47,14 +47,14 @@
 #'                      "R2_sample1_small.fq")
 #'
 #' # Generate and display quality plot
-#' qual_plots <- plot_quality(fastq_input = fastq_input,
-#'                            reverse = reverse)
+#' qual_plots <- plot_base_quality(fastq_input = fastq_input,
+#'                                 reverse = reverse)
 #' print(qual_plots)
 #'
 #' # Generate and display quality plot without plot title
-#' qual_plots_wo_title <- plot_quality(fastq_input = fastq_input,
-#'                                     reverse = reverse,
-#'                                     plot_title = "")
+#' qual_plots_wo_title <- plot_base_quality(fastq_input = fastq_input,
+#'                                          reverse = reverse,
+#'                                          plot_title = "")
 #' print(qual_plots_wo_title)
 #' }
 #'
@@ -62,11 +62,11 @@
 #'
 #' @importFrom stats quantile median
 #'
-plot_quality <- function(fastq_input,
-                         reverse = NULL,
-                         quantile_lower = 0.25,
-                         quantile_upper = 0.75,
-                         plot_title = "Median quality score in each position") {
+plot_base_quality <- function(fastq_input,
+                              reverse = NULL,
+                              quantile_lower = 0.25,
+                              quantile_upper = 0.75,
+                              plot_title = "Median quality score in each position") {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
