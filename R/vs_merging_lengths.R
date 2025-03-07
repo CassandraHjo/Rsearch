@@ -171,10 +171,10 @@ vs_merging_lengths <- function(fastq_input,
     ggplot2::labs(title = "Length of overlap", x = "", y = "") +
     ggplot2::theme_minimal()
 
-  # Combine the plots
+  # Arrange plots in a grid
   combined_plot <- cowplot::plot_grid(plot_r1, plot_r2, p3, p4, ncol = 2)
 
-  # Arrange plots in a grid
+  # Define plot title
   plot_title <- paste0("Merged ",
                        sum(!is.na(res.tbl$length_merged)),
                        " read pairs out of ",
@@ -182,15 +182,15 @@ vs_merging_lengths <- function(fastq_input,
                        " (",
                        round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)")
 
-  # Create a common title
+  # "Draw" the plot title
   common_title <- cowplot::ggdraw() +
     cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
 
-  # Create common x-axis label
+  # "Draw" common x-axis label
   common_x <- cowplot::ggdraw() +
     cowplot::draw_label("Length (bases)", size = 14, x = 0.5, hjust = 0.5)
 
-  # Create common y-axis label
+  # "Draw" common y-axis label
   common_y <- cowplot::ggdraw() +
     cowplot::draw_label("Number of reads", size = 14, angle = 90, y = 0.5, vjust = 0.5)
 
