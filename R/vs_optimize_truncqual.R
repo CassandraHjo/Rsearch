@@ -22,7 +22,7 @@
 #' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
-#' @param plot_title If \code{TRUE} (default), a summary title wil be displayed
+#' @param plot_title If \code{TRUE} (default), a summary title will be displayed
 #' in the plot. Set to \code{FALSE} for no title.
 #'
 #' @details

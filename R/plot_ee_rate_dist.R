@@ -7,13 +7,16 @@
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing reads. See
 #' \emph{Details}.
-#' @param bin_width The bin width for the histogram of the expected error rate.
-#' Defaults to \code{1}.
+#' @param n_bins Number of bins used in the histogram. Defaults to \code{30},
+#' which is the default value in \code{ggplot2::geom_histogram()}.
+#' @param plot_title The title of the plot. Defaults to
+#' \code{"Distribution of the expected error (EE) rate of reads"}. Set to
+#' \code{""} for no title.
 #'
 #' @details
 #' A histogram is plotted using ggplot2 to visualize the distribution of EE
-#' rates. The user can adjust the bin width to control the granularity of the
-#' histogram.
+#' rates. The user can adjust the number of bins in the histogram using the
+#' \code{n_bins} parameter.
 #'
 #' \code{fastq_input} can either be a file path to a FASTQ file or a FASTQ
 #' object. FASTQ objects are tibbles that contain the columns \code{Header},
@@ -39,7 +42,9 @@
 #'
 #' @export
 #'
-plot_ee_rate_dist <- function(fastq_input, bin_width = 1) {
+plot_ee_rate_dist <- function(fastq_input,
+                              n_bins = 30,
+                              plot_title = "Distribution of the expected error (EE) rate of reads") {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -63,7 +68,7 @@ plot_ee_rate_dist <- function(fastq_input, bin_width = 1) {
   # Calculate expected error (EE) rate for each read
   fastq.tbl$EE_rate <- sapply(fastq.tbl$Q_scores,
                               function(Q) {
-                                sum(10^(-Q/10))})
+                                mean(10^(-Q/10))})
 
   # Define color palette
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
@@ -71,11 +76,11 @@ plot_ee_rate_dist <- function(fastq_input, bin_width = 1) {
   # Create histogram
   ee_plot <- ggplot2::ggplot(fastq.tbl,
                              ggplot2::aes(x = EE_rate)) +
-    ggplot2::geom_histogram(binwidth = bin_width,
+    ggplot2::geom_histogram(bins = n_bins,
                             fill = pal[3],
                             color = pal[4],
                             boundary = 0) +
-    ggplot2::labs(title = "Distribution of the expected error (EE) rate of reads",
+    ggplot2::labs(title = plot_title,
                   x = "EE-rate",
                   y = "Number of reads") +
     ggplot2::theme_minimal()

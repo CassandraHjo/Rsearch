@@ -43,7 +43,7 @@ included in the results. Defaults to \code{2}.}
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
-\item{plot_title}{If \code{TRUE} (default), a summary title wil be displayed
+\item{plot_title}{If \code{TRUE} (default), a summary title will be displayed
 in the plot. Set to \code{FALSE} for no title.}
 }
 \value{
