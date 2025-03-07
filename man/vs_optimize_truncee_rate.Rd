@@ -14,7 +14,7 @@ vs_optimize_truncee_rate(
   min_size = 2,
   maxee_rate = 0.01,
   threads = 1,
-  plot_title = "Optimization of Read Merging Based on value of truncee_rate"
+  plot_title = TRUE
 )
 }
 \arguments{
@@ -55,7 +55,7 @@ A data frame with the following columns:
   \item \code{merged_high_quality_read_pairs}: Absolute count of
   successfully merged sequence pairs with a copy number above \code{min_size}
   after dereplication.
-  \item \code{proportion_merged_high_quality_read_pairs}: A relative metric,
+  \item \code{merged_read_pairs}: A relative metric,
   calculated as the number of merged high-quality read-pairs divided
   by the maximum observed merged read count.
   \item \code{R1_length}: Average length of R1-reads after trimming.
@@ -65,7 +65,7 @@ A data frame with the following columns:
 The returned data frame has an attribute named \code{"plot"} containing a
 \code{\link{ggplot2}} object based on the returned data frame. The plot
 visualizes \code{truncee_rate} values against
-\code{proportion_merged_high_quality_read_pairs}, \code{R1_length}, and
+\code{merged_read_pairs}, \code{R1_length}, and
 \code{R2_length}, with the optimal \code{truncee_rate} value marked by a red
 dashed line.
 }
@@ -85,7 +85,7 @@ The best possible truncation option (\code{truncee_rate}) for merging is
 measured by the proportion of merged sequences with a copy number above the
 number specified by \code{min_size} after dereplication.
 
-\code{proportion_merged_high_quality_read_pairs} represents the proportion
+\code{merged_read_pairs} represents the proportion
 of merged high-quality read-pairs relative to the highest observed value
 across all tested \code{truncee_rate} values. This normalization allows
 comparisons across different \code{truncee_rate} values. A value close to 1.0

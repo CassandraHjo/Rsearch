@@ -1,4 +1,4 @@
-#' Optimize truncation with truncqual for optimal read merging
+#' Optimize truncation of reads with truncqual for optimal read merging
 #'
 #' @description \code{vs_optimize_truncqual} optimizes the truncation parameter
 #' \code{truncqual} to achieve the best possible merging results. The function
@@ -22,8 +22,8 @@
 #' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
-#' @param plot_title A string specifying the title of the output plot. Defaults
-#' to \code{"Optimization of Read Merging Based on Truncqual Value"}.
+#' @param plot_title If \code{TRUE} (default), a summary title wil be displayed
+#' in the plot. Set to \code{FALSE} for no title.
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}},
@@ -31,15 +31,8 @@
 #' the arguments to this functions are described in detail.
 #'
 #' The best possible truncation option (\code{truncqual}) for merging is
-#' measured by the proportion of merged sequences with a copy number above the
+#' measured by the number of merged read-paris with a copy number above the
 #' number specified by \code{min_size} after dereplication.
-#'
-#' \code{proportion_merged_high_quality_read_pairs} represents the proportion
-#' of merged high-quality read-pairs relative to the highest observed value
-#' across all tested \code{truncqual} values. This normalization allows
-#' comparisons across different \code{truncqual} values. A value close to 1.0
-#' indicates that the merging efficiency is near its maximum, while a lower
-#' value suggests suboptimal merging conditions.
 #'
 #' Changing \code{min_size} will affect the results. A low \code{min_size} will
 #' include merged sequences with a lower copy number after dereplication, and a
@@ -49,12 +42,8 @@
 #' @return A data frame with the following columns:
 #' \itemize{
 #'   \item \code{truncqual_value}: Tested \code{truncqual} value.
-#'   \item \code{merged_high_quality_read_pairs}: Absolute count of
-#'   successfully merged sequence pairs with a copy number above \code{min_size}
-#'   after dereplication.
-#'   \item \code{proportion_merged_high_quality_read_pairs}: A relative metric,
-#'   calculated as the number of merged high-quality read-pairs divided
-#'   by the maximum observed merged read count.
+#'   \item \code{merged_read_pairs}: Count of merged read-pairs with a copy
+#'   number above \code{min_size} after dereplication.
 #'   \item \code{R1_length}: Average length of R1-reads after trimming.
 #'   \item \code{R2_length}: Average length of R2-reads after trimming.
 #' }
@@ -62,9 +51,8 @@
 #' The returned data frame has an attribute named \code{"plot"} containing a
 #' \code{\link{ggplot2}} object based on the returned data frame. The plot
 #' visualizes \code{truncqual} values against
-#' \code{proportion_merged_high_quality_read_pairs}, \code{R1_length}, and
-#' \code{R2_length}, with the optimal \code{truncqual} value marked by a red
-#' dashed line.
+#' \code{merged_read_pairs}, \code{R1_length}, and \code{R2_length}, with the
+#' optimal \code{truncqual} value marked by a red dashed line.
 #'
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
@@ -100,7 +88,7 @@ vs_optimize_truncqual <- function(fastq_input,
                                   min_size = 2,
                                   maxee_rate = 0.01,
                                   threads = 1,
-                                  plot_title = "Optimization of Read Merging Based on Truncqual Value"){
+                                  plot_title = TRUE){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -110,11 +98,17 @@ vs_optimize_truncqual <- function(fastq_input,
   # Create data frame for storing results
   res.df <- data.frame(
     truncqual_value = truncqual_range,
-    merged_high_quality_read_pairs = 0,
-    proportion_merged_high_quality_read_pairs = 0,
+    merged_read_pairs = 0,
     R1_length = 0,
     R2_length = 0
   )
+
+  # Get the number of read pairs
+  if (!is.character(fastq_input)) {
+    num_readpairs <- nrow(fastq_input)
+  } else {
+    num_readpairs <- nrow(microseq::readFastq(fastq_input))
+  }
 
   # Setting up progress bar
   pb = utils::txtProgressBar(min = 0,
@@ -157,7 +151,7 @@ vs_optimize_truncqual <- function(fastq_input,
       dplyr::filter(size > min_size)
 
     # Add results to table
-    res.df$merged_high_quality_read_pairs[i] = sum(derep.df_filt$size)
+    res.df$merged_read_pairs[i] = sum(derep.df_filt$size)
     res.df$R1_length[i] = round(mean(nchar(trim_R1.df$Sequence)), 2)
     res.df$R2_length[i] = round(mean(nchar(trim_R2.df$Sequence)), 2)
 
@@ -165,22 +159,15 @@ vs_optimize_truncqual <- function(fastq_input,
   # Close progress bar
   close(pb)
 
-  # Calculate the max merged_high_quality_read_pairs for normalization
-  max_merged_high_quality_read_pairs <- max(res.df$merged_high_quality_read_pairs)
-
-  # Calculate relative merged_high_quality_read_pairs
-  res.df <- res.df |>
-    dplyr::mutate(proportion_merged_high_quality_read_pairs = round(merged_high_quality_read_pairs / max_merged_high_quality_read_pairs, 4))
-
   # Find optimal truncqual value from res.df
-  optimal_truncqual <- res.df$truncqual_value[which.max(res.df$proportion_merged_high_quality_read_pairs)]
+  optimal_truncqual <- res.df$truncqual_value[which.max(res.df$merged_read_pairs)]
 
   long.df <- res.df |>
-    tidyr::pivot_longer(cols = c(proportion_merged_high_quality_read_pairs, R1_length, R2_length),
+    tidyr::pivot_longer(cols = c(merged_read_pairs, R1_length, R2_length),
                         names_to = "metric",
                         values_to = "value") |>
     dplyr::mutate(facet = dplyr::case_when(
-      metric == "proportion_merged_high_quality_read_pairs" ~ "Merged High-quality read-pairs",
+      metric == "merged_read_pairs" ~ "Merged read-pairs",
       metric %in% c("R1_length", "R2_length") ~ "Read Lengths",
     ))
 
@@ -188,18 +175,18 @@ vs_optimize_truncqual <- function(fastq_input,
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
   # Make plot for merging proportion
-  p1 <- ggplot2::ggplot(long.df[long.df$facet == "Merged High-quality read-pairs", ],
+  p1 <- ggplot2::ggplot(long.df[long.df$facet == "Merged read-pairs", ],
                         ggplot2::aes(x = truncqual_value, y = value, color = metric)) +
     ggplot2::geom_line() +
     ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = optimal_truncqual, color = "red", linetype = "dashed") +
-    ggplot2::labs(title = "Merged High-quality read-pairs",
+    ggplot2::labs(title = "Merged read-pairs",
                   x = "Truncqual value",
-                  y = "Proportion of reads",
+                  y = "Number of read-pairs",
                   color = "") +
-    ggplot2::scale_color_manual(values = c("proportion_merged_high_quality_read_pairs" = pal[2]),
+    ggplot2::scale_color_manual(values = c("merged_read_pairs" = pal[2]),
                                 labels = c(
-                                  proportion_merged_high_quality_read_pairs = "Proportion Merged")) +
+                                  merged_read_pairs = "Number of read-pairs merged")) +
     ggplot2::theme_minimal() +
     # Remove x-axis because this is common with p2
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
@@ -213,7 +200,7 @@ vs_optimize_truncqual <- function(fastq_input,
     ggplot2::geom_point() +
     ggplot2::geom_vline(xintercept = optimal_truncqual, color = "red", linetype = "dashed") +
     ggplot2::labs(title = "Read Lengths",
-                  x = "Truncqual value",
+                  x = "truncqual",
                   y = "Length (bases)",
                   color = "") +
     ggplot2::scale_color_manual(values = c("R1_length" = pal[3],
@@ -226,9 +213,24 @@ vs_optimize_truncqual <- function(fastq_input,
   # Combine the two plots
   combined_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
 
-  # Create a common title
+  # Create the main title
+  title <- if (plot_title) {
+    paste(max(res.df$merged_read_pairs),
+          "read-pairs merged with truncqual value:",
+          optimal_truncqual,
+          "(total:",
+          num_readpairs,
+          ", size >",
+          min_size,
+          ")"
+    )
+  } else {
+    ""
+  }
+
+  # "Draw" the main title
   common_title <- cowplot::ggdraw() +
-    cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
+    cowplot::draw_label(title, size = 12, x = 0.01, hjust = 0)
 
   # Combine title and plot
   final_plot <- cowplot::plot_grid(common_title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))

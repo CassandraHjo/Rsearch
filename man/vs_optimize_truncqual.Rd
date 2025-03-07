@@ -3,7 +3,7 @@
 \name{vs_optimize_truncqual}
 \alias{vs_optimize_truncqual}
 \alias{optimize_truncqual}
-\title{Optimize truncation with truncqual for optimal read merging}
+\title{Optimize truncation of reads with truncqual for optimal read merging}
 \usage{
 vs_optimize_truncqual(
   fastq_input,
@@ -14,7 +14,7 @@ vs_optimize_truncqual(
   min_size = 2,
   maxee_rate = 0.01,
   threads = 1,
-  plot_title = "Optimization of Read Merging Based on Truncqual Value"
+  plot_title = TRUE
 )
 }
 \arguments{
@@ -43,19 +43,15 @@ included in the results. Defaults to \code{2}.}
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
 
-\item{plot_title}{A string specifying the title of the output plot. Defaults
-to \code{"Optimization of Read Merging Based on Truncqual Value"}.}
+\item{plot_title}{If \code{TRUE} (default), a summary title wil be displayed
+in the plot. Set to \code{FALSE} for no title.}
 }
 \value{
 A data frame with the following columns:
 \itemize{
   \item \code{truncqual_value}: Tested \code{truncqual} value.
-  \item \code{merged_high_quality_read_pairs}: Absolute count of
-  successfully merged sequence pairs with a copy number above \code{min_size}
-  after dereplication.
-  \item \code{proportion_merged_high_quality_read_pairs}: A relative metric,
-  calculated as the number of merged high-quality read-pairs divided
-  by the maximum observed merged read count.
+  \item \code{merged_read_pairs}: Count of merged read-pairs with a copy
+  number above \code{min_size} after dereplication.
   \item \code{R1_length}: Average length of R1-reads after trimming.
   \item \code{R2_length}: Average length of R2-reads after trimming.
 }
@@ -63,9 +59,8 @@ A data frame with the following columns:
 The returned data frame has an attribute named \code{"plot"} containing a
 \code{\link{ggplot2}} object based on the returned data frame. The plot
 visualizes \code{truncqual} values against
-\code{proportion_merged_high_quality_read_pairs}, \code{R1_length}, and
-\code{R2_length}, with the optimal \code{truncqual} value marked by a red
-dashed line.
+\code{merged_read_pairs}, \code{R1_length}, and \code{R2_length}, with the
+optimal \code{truncqual} value marked by a red dashed line.
 }
 \description{
 \code{vs_optimize_truncqual} optimizes the truncation parameter
@@ -79,15 +74,8 @@ The function uses \code{\link{vs_fastq_mergepairs}},
 the arguments to this functions are described in detail.
 
 The best possible truncation option (\code{truncqual}) for merging is
-measured by the proportion of merged sequences with a copy number above the
+measured by the number of merged read-paris with a copy number above the
 number specified by \code{min_size} after dereplication.
-
-\code{proportion_merged_high_quality_read_pairs} represents the proportion
-of merged high-quality read-pairs relative to the highest observed value
-across all tested \code{truncqual} values. This normalization allows
-comparisons across different \code{truncqual} values. A value close to 1.0
-indicates that the merging efficiency is near its maximum, while a lower
-value suggests suboptimal merging conditions.
 
 Changing \code{min_size} will affect the results. A low \code{min_size} will
 include merged sequences with a lower copy number after dereplication, and a
