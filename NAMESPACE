@@ -2,9 +2,9 @@
 
 export(fastx_combine_files)
 export(fastx_synchronize)
+export(plot_base_quality)
 export(plot_ee_rate_dist)
-export(plot_heatmap)
-export(plot_quality)
+export(plot_read_quality)
 export(plot_size_dist)
 export(set_vsearch_executable)
 export(vs_cluster_size)
