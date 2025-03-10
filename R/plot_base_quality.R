@@ -146,8 +146,7 @@ plot_base_quality <- function(fastq_input,
     ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                            width = 0.2, color = pal[2]) +
     ggplot2::geom_line(color = pal[4]) +
-    # ggplot2::geom_point(color = pal[3]) +
-    ggplot2::labs(title = "Median quality score in each position",
+    ggplot2::labs(title = plot_title,
                   x = "Base position",
                   y = "Quality score") +
     ggplot2::theme_minimal()
@@ -197,7 +196,6 @@ plot_base_quality <- function(fastq_input,
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                              width = 0.2, color = pal[2]) +
       ggplot2::geom_line(color = pal[4]) +
-      # ggplot2::geom_point(color = pal[3]) +
       ggplot2::scale_x_reverse() +
       ggplot2::labs(title = "R2 reads",
                     x = "Base position",
@@ -219,7 +217,7 @@ plot_base_quality <- function(fastq_input,
     # Combine plots and title
     final_plot <- cowplot::plot_grid(common_title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))
 
-    return(combined_plot)
+    return(final_plot)
   }
 
   return(R1.plot)
