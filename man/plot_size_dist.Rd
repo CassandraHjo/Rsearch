@@ -10,7 +10,8 @@ plot_size_dist(
   cutoff = NULL,
   y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000),
   plot_title = "Size distribution",
-  log_scale_y = TRUE
+  log_scale_y = TRUE,
+  n_bins = 30
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.}
 
 \item{log_scale_y}{If \code{TRUE} (default), applies a log10 scale to the
 y-axis. If \code{FALSE}, the y-axis remains linear.}
+
+\item{n_bins}{Number of bins used in the histogram if \code{cutoff} is
+unspecified. Defaults to \code{30}, which is the default value in
+\code{ggplot2::geom_histogram()}.}
 }
 \value{
 A ggplot2 object displaying a plot of size distribution.
