@@ -122,6 +122,13 @@ vs_optimize_truncee_rate <- function(fastq_input,
     R2_length = 0
   )
 
+  # Get the number of read pairs
+  if (!is.character(fastq_input)) {
+    num_readpairs <- nrow(fastq_input)
+  } else {
+    num_readpairs <- nrow(microseq::readFastq(fastq_input))
+  }
+
   # Setting up progress bar
   pb = utils::txtProgressBar(min = 0,
                              max = length(truncee_rate_range),
