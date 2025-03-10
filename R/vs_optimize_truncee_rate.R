@@ -226,18 +226,18 @@ vs_optimize_truncee_rate <- function(fastq_input,
   combined_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
 
   # Create the main title
-  title <- if (plot_title) {
-    paste(max(res.df$merged_read_pairs),
-          "read-pairs merged with truncee rate:",
-          optimal_truncee_rate,
-          "(total:",
-          num_readpairs,
-          ", size >",
-          min_size,
-          ")"
+  if (plot_title) {
+    title <- paste(max(res.df$merged_read_pairs),
+                   "read-pairs merged with truncee rate:",
+                   optimal_truncee_rate,
+                   "(total:",
+                   num_readpairs,
+                   ", size >",
+                   min_size,
+                   ")"
     )
   } else {
-    ""
+    title <- ""
   }
 
   # "Draw" the main title

@@ -10,7 +10,8 @@ vs_merging_lengths(
   reverse,
   minovlen = 10,
   minlen = 0,
-  threads = 1
+  threads = 1,
+  plot_title = TRUE
 )
 }
 \arguments{
@@ -27,6 +28,9 @@ Defaults to \code{0}. See \emph{Details}.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
+
+\item{plot_title}{If \code{TRUE} (default), a summary title will be displayed
+in the plot. Set to \code{FALSE} for no title.}
 }
 \value{
 A tibble with the following columns:

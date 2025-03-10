@@ -4,7 +4,7 @@
 \alias{plot_read_quality}
 \title{Plot read length vs. read quality}
 \usage{
-plot_read_quality(fastq_input, use_ee_rate = FALSE)
+plot_read_quality(fastq_input, use_ee_rate = FALSE, plot_title = TRUE)
 }
 \arguments{
 \item{fastq_input}{A FASTQ file path or FASTQ object containing reads. See
@@ -13,6 +13,11 @@ plot_read_quality(fastq_input, use_ee_rate = FALSE)
 \item{use_ee_rate}{If \code{TRUE}, the plot will display the expected error
 rate (EE) on the y-axis instead of the mean quality score. Defaults to
 \code{FALSE}.}
+
+\item{plot_title}{If \code{TRUE} (default), a title will be displayed
+in the plot. The title will either be "Read length vs Expected error rate
+(EE) of read" or "Read length vs Average quality score of read", depending on
+\code{use_ee_rate}. Set to \code{FALSE} for no title.}
 }
 \value{
 A ggplot2 object displaying the scatter plot with marginal histograms.

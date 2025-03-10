@@ -16,6 +16,8 @@
 #' applied).
 #' @param y_breaks A numeric vector specifying the breakpoints for the y-axis.
 #' Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.
+#' @param plot_title The title of the plot. Defaults to
+#' \code{"Size distribution"}. Set to \code{""} for no title.
 #'
 #' @details
 #'
@@ -63,7 +65,8 @@
 plot_size_dist <- function(fastx_input,
                            input_format = NULL,
                            cutoff = NULL,
-                           y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000)) {
+                           y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000),
+                           plot_title = "Size distribution") {
 
 
   # Handle input if tibble is provided
@@ -127,7 +130,7 @@ plot_size_dist <- function(fastx_input,
   size_plot <- ggplot2::ggplot(size_dist.tbl,
                                ggplot2::aes(x = size, y = num_reads)) +
     ggplot2::geom_bar(stat = "identity", fill = pal[3], color = pal[4]) +
-    ggplot2::labs(title = "Size distribution",
+    ggplot2::labs(title = plot_title,
                   x = "Size",
                   y = "Number of reads") +
     ggplot2::scale_y_log10(breaks = y_breaks) +

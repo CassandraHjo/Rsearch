@@ -11,6 +11,10 @@
 #' @param use_ee_rate If \code{TRUE}, the plot will display the expected error
 #' rate (EE) on the y-axis instead of the mean quality score. Defaults to
 #' \code{FALSE}.
+#' @param plot_title If \code{TRUE} (default), a title will be displayed
+#' in the plot. The title will either be "Read length vs Expected error rate
+#' (EE) of read" or "Read length vs Average quality score of read", depending on
+#' \code{use_ee_rate}. Set to \code{FALSE} for no title.
 #'
 #' @details
 #' This function visualizes the relationship between read length and read
@@ -50,7 +54,8 @@
 #' @export
 #'
 plot_read_quality <- function(fastq_input,
-                              use_ee_rate = FALSE) {
+                              use_ee_rate = FALSE,
+                              plot_title = TRUE) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -92,11 +97,18 @@ plot_read_quality <- function(fastq_input,
                     "Expected error rate (EE) of read",
                     "Average quality score of read")
 
+  # Define plot title
+  if (plot_title) {
+    title <- paste("Read length vs", y_label)
+  } else {
+    title <- ""
+  }
+
   # Plot scatter plot
   p1 <- ggplot2::ggplot(fastq.tbl,
                         ggplot2::aes(x = Length, y = .data[[y_var]])) +
     ggplot2::geom_point(alpha = 0.5, color = pal[2]) +
-    ggplot2::labs(title = paste("Read length vs", y_label),
+    ggplot2::labs(title = title,
                   x = "Read length (bases)",
                   y = y_label) +
     ggplot2::theme_minimal()

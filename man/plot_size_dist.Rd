@@ -8,7 +8,8 @@ plot_size_dist(
   fastx_input,
   input_format = NULL,
   cutoff = NULL,
-  y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000)
+  y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000),
+  plot_title = "Size distribution"
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ applied).}
 
 \item{y_breaks}{A numeric vector specifying the breakpoints for the y-axis.
 Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.}
+
+\item{plot_title}{The title of the plot. Defaults to
+\code{"Size distribution"}. Set to \code{""} for no title.}
 }
 \value{
 A ggplot2 object displaying a bar plot of size distribution.

@@ -12,6 +12,8 @@
 #' Defaults to \code{0}. See \emph{Details}.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
+#' @param plot_title If \code{TRUE} (default), a summary title will be displayed
+#' in the plot. Set to \code{FALSE} for no title.
 #'
 #' @details The function uses \code{\link{vs_fastq_mergepairs}} where
 #' the arguments to this function are described in detail.
@@ -68,7 +70,8 @@ vs_merging_lengths <- function(fastq_input,
                                reverse,
                                minovlen = 10,
                                minlen = 0,
-                               threads = 1){
+                               threads = 1,
+                               plot_title = TRUE){
   # The forward reads
   if (!is.character(fastq_input)){
     # Ensure required columns exist
@@ -175,16 +178,20 @@ vs_merging_lengths <- function(fastq_input,
   combined_plot <- cowplot::plot_grid(plot_r1, plot_r2, p3, p4, ncol = 2)
 
   # Define plot title
-  plot_title <- paste0("Merged ",
-                       sum(!is.na(res.tbl$length_merged)),
-                       " read pairs out of ",
-                       nrow(res.tbl),
-                       " (",
-                       round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)")
+  if (plot_title) {
+    title <- paste0("Merged ",
+                    sum(!is.na(res.tbl$length_merged)),
+                    " read pairs out of ",
+                    nrow(res.tbl),
+                    " (",
+                    round(100 * sum(!is.na(res.tbl$length_merged)) / nrow(res.tbl)), "%)")
+  } else {
+    title <- ""
+  }
 
   # "Draw" the plot title
   common_title <- cowplot::ggdraw() +
-    cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
+    cowplot::draw_label(title, size = 14, x = 0.01, hjust = 0)
 
   # "Draw" common x-axis label
   common_x <- cowplot::ggdraw() +
