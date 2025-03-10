@@ -15,6 +15,8 @@
 #' in the plot. The title will either be "Read length vs Expected error rate
 #' (EE) of read" or "Read length vs Average quality score of read", depending on
 #' \code{use_ee_rate}. Set to \code{FALSE} for no title.
+#' @param alpha The transparency level of the points in the scatter plot.
+#' Defaults to \code{0.5}.
 #'
 #' @details
 #' This function visualizes the relationship between read length and read
@@ -55,7 +57,8 @@
 #'
 plot_read_quality <- function(fastq_input,
                               use_ee_rate = FALSE,
-                              plot_title = TRUE) {
+                              plot_title = TRUE,
+                              alpha = 0.5) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -107,7 +110,7 @@ plot_read_quality <- function(fastq_input,
   # Plot scatter plot
   p1 <- ggplot2::ggplot(fastq.tbl,
                         ggplot2::aes(x = Length, y = .data[[y_var]])) +
-    ggplot2::geom_point(alpha = 0.5, color = pal[2]) +
+    ggplot2::geom_point(alpha = alpha, color = pal[2]) +
     ggplot2::labs(title = title,
                   x = "Read length (bases)",
                   y = y_label) +
