@@ -9,7 +9,8 @@ plot_size_dist(
   input_format = NULL,
   cutoff = NULL,
   y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000),
-  plot_title = "Size distribution"
+  plot_title = "Size distribution",
+  log_scale_y = TRUE
 )
 }
 \arguments{
@@ -30,14 +31,16 @@ Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.}
 
 \item{plot_title}{The title of the plot. Defaults to
 \code{"Size distribution"}. Set to \code{""} for no title.}
+
+\item{log_scale_y}{If \code{TRUE} (default), applies a log10 scale to the
+y-axis. If \code{FALSE}, the y-axis remains linear.}
 }
 \value{
-A ggplot2 object displaying a bar plot of size distribution.
+A ggplot2 object displaying a plot of size distribution.
 }
 \description{
-Generates a bar plot representing the distribution of size values from a
-FASTA or FASTQ file/object. The y-axis is log10-transformed to handle
-variations in read count across different size values.
+Generates a plot representing the distribution of size values from a FASTA or
+FASTQ file/object.
 }
 \details{
 \code{fastx_input} can either be a file path to FASTA/FASTQ file or a
@@ -49,7 +52,7 @@ The \code{Header} column must contain the size values for each read.
 The \code{Header} column must contain size annotations formatted as
 \code{;size=<int>}.
 
-The y-axis of the plot is log10-transformed to handle variations in read
+The y-axis of the plot can be  log10-transformed to handle variations in read
 counts across different size values. The breakpoints of the y-axis can be
 modified using the \code{y_breaks} parameter.
 }
@@ -74,6 +77,12 @@ print(size_plot)
 size_plot <- plot_size_dist(fastx_input = fastx_input,
                             input_format = "fasta",
                             y_breaks = c(1, 50, 500, 5000))
+print(size_plot)
+
+# Generate and display plot with linear y-axis
+size_plot <- plot_size_dist(fastx_input = fastx_input,
+                            input_format = "fasta",
+                            log_scale_y = FALSE)
 print(size_plot)
 }
 

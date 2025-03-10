@@ -1,9 +1,8 @@
 #' Plot distribution of size values
 #'
 #' @description
-#' Generates a bar plot representing the distribution of size values from a
-#' FASTA or FASTQ file/object. The y-axis is log10-transformed to handle
-#' variations in read count across different size values.
+#' Generates a plot representing the distribution of size values from a FASTA or
+#' FASTQ file/object.
 #'
 #' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object containing
 #' reads with size values embedded in the \code{Header} column. See
@@ -18,6 +17,8 @@
 #' Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.
 #' @param plot_title The title of the plot. Defaults to
 #' \code{"Size distribution"}. Set to \code{""} for no title.
+#' @param log_scale_y If \code{TRUE} (default), applies a log10 scale to the
+#' y-axis. If \code{FALSE}, the y-axis remains linear.
 #'
 #' @details
 #'
@@ -30,11 +31,11 @@
 #' The \code{Header} column must contain size annotations formatted as
 #' \code{;size=<int>}.
 #'
-#' The y-axis of the plot is log10-transformed to handle variations in read
+#' The y-axis of the plot can be  log10-transformed to handle variations in read
 #' counts across different size values. The breakpoints of the y-axis can be
 #' modified using the \code{y_breaks} parameter.
 #'
-#' @return A ggplot2 object displaying a bar plot of size distribution.
+#' @return A ggplot2 object displaying a plot of size distribution.
 #'
 #' @examples
 #' \dontrun{
@@ -58,6 +59,12 @@
 #'                             input_format = "fasta",
 #'                             y_breaks = c(1, 50, 500, 5000))
 #' print(size_plot)
+#'
+#' # Generate and display plot with linear y-axis
+#' size_plot <- plot_size_dist(fastx_input = fastx_input,
+#'                             input_format = "fasta",
+#'                             log_scale_y = FALSE)
+#' print(size_plot)
 #' }
 #'
 #' @export
@@ -66,7 +73,8 @@ plot_size_dist <- function(fastx_input,
                            input_format = NULL,
                            cutoff = NULL,
                            y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000),
-                           plot_title = "Size distribution") {
+                           plot_title = "Size distribution",
+                           log_scale_y = TRUE) {
 
 
   # Handle input if tibble is provided
@@ -100,41 +108,60 @@ plot_size_dist <- function(fastx_input,
     dplyr::mutate(size = as.integer(size)) |>
     dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
 
-  # Apply cutoff if specified: values above cutoff become "> cutoff"
-  if (!is.null(cutoff)) {
-    fastx.tbl <- fastx.tbl |>
-      dplyr::mutate(size = ifelse(size > cutoff, paste0("> ", cutoff), as.character(size)))
-  }
-
-  # Group by size and count reads
-  size_dist.tbl <- fastx.tbl |>
-    dplyr::group_by(size) |>
-    dplyr::summarize(num_reads = dplyr::n()) |>
-    dplyr::ungroup()
-
-  # Convert size to a factor for correct ordering in the plot
-  size_dist.tbl <- size_dist.tbl |>
-    dplyr::mutate(size = factor(size,
-                                levels = c(sort(as.numeric(unique(size_dist.tbl$size[size_dist.tbl$size != paste0("> ", cutoff)]))),
-                                           paste0("> ",
-                                                  cutoff
-                                           )
-                                )
-    )
-    )
-
   # Define color palette
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
-  # Create bar plot
-  size_plot <- ggplot2::ggplot(size_dist.tbl,
-                               ggplot2::aes(x = size, y = num_reads)) +
-    ggplot2::geom_bar(stat = "identity", fill = pal[3], color = pal[4]) +
-    ggplot2::labs(title = plot_title,
-                  x = "Size",
-                  y = "Number of reads") +
-    ggplot2::scale_y_log10(breaks = y_breaks) +
-    ggplot2::theme_minimal()
+  # Make plot based on cutoff value
+  if (is.null(cutoff)) {
+
+    # Create histogram
+    size_plot <- ggplot2::ggplot(fastx.tbl,
+                                 ggplot2::aes(x = size)) +
+      ggplot2::geom_histogram(bins = n_bins,
+                              fill = pal[3],
+                              color = pal[4],
+                              boundary = 0) +
+      ggplot2::labs(title = plot_title,
+                    x = "Size",
+                    y = "Number of reads") +
+      ggplot2::theme_minimal() +
+      if (log_scale_y) ggplot2::scale_y_log10(breaks = y_breaks) else NULL
+
+  } else {
+
+    # Apply cutoff: values above cutoff become "> cutoff"
+    fastx.tbl <- fastx.tbl |>
+      dplyr::mutate(size = ifelse(size > cutoff,
+                                  paste0("> ", cutoff),
+                                  as.character(size)))
+
+    # Group by size and count reads
+    size_dist.tbl <- fastx.tbl |>
+      dplyr::group_by(size) |>
+      dplyr::summarize(num_reads = dplyr::n()) |>
+      dplyr::ungroup()
+
+    # Convert size to a factor for correct ordering in the plot
+    size_dist.tbl <- size_dist.tbl |>
+      dplyr::mutate(size = factor(size,
+                                  levels = c(sort(as.numeric(unique(size_dist.tbl$size[size_dist.tbl$size != paste0("> ", cutoff)]))),
+                                             paste0("> ",
+                                                    cutoff
+                                             )
+                                  )
+      )
+      )
+
+    # Create bar plot
+    size_plot <- ggplot2::ggplot(size_dist.tbl,
+                                 ggplot2::aes(x = size, y = num_reads)) +
+      ggplot2::geom_bar(stat = "identity", fill = pal[3], color = pal[4]) +
+      ggplot2::labs(title = plot_title,
+                    x = "Size",
+                    y = "Number of reads") +
+      ggplot2::theme_minimal() +
+      if (log_scale_y) ggplot2::scale_y_log10(breaks = y_breaks) else NULL
+  }
 
   return(size_plot)
 }
