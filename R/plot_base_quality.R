@@ -272,7 +272,8 @@ plot_base_quality <- function(fastq_input,
 
     # Remove legends from R1 and R2 plot
     R1.plot <- R1.plot + ggplot2::theme(legend.position = "none")
-    R2.plot <- R2.plot + ggplot2::theme(legend.position = "none")
+    R2.plot <- R2.plot + ggplot2::theme(legend.position = "none",
+                                        axis.title.y = ggplot2::element_blank())
 
     # Create common title
     common_title <- cowplot::ggdraw() +
@@ -290,7 +291,7 @@ plot_base_quality <- function(fastq_input,
     # Combine plot with legend
     final_plot <- cowplot::plot_grid(plot_with_title,
                                      legend,
-                                     rel_widths = c(1, 0.1))
+                                     rel_widths = c(1, 0.15))
 
     return(final_plot)
   }
