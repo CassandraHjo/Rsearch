@@ -1,10 +1,10 @@
-#' Plot median quality scores per position for FASTQ reads
+#' Plot median and/or mean quality scores per position for FASTQ reads
 #'
 #' @description
-#' Generates a plot displaying the median quality scores for each position in
-#' FASTQ reads. The plot includes error bars representing a selected quantile
-#' range. If reverse reads are provided, they are plotted in a separate panel
-#' with a reversed x-axis.
+#' Generates a plot displaying the median and/or mean quality scores for each
+#' position in FASTQ reads. The plot includes error bars representing a selected
+#' quantile range. If reverse reads are provided, they are plotted in a separate
+#' panel with a reversed x-axis.
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
 #' reads. See \emph{Details}.
@@ -15,9 +15,12 @@
 #' @param quantile_upper The upper quantile threshold for the error bars in the
 #' plot. Defaults to \code{0.75}.
 #' @param plot_title The title of the plot. Defaults to
-#' \code{"Median quality score in each position"}. Set to \code{""} for no
-#' title.
-#'
+#' \code{"Per-position quality scores: median and mean"}. Set to \code{""} for
+#' no title.
+#' @param show_median If \code{TRUE} (default), a line representing the median
+#' quality scores is added to the plot.
+#' @param show_mean If \code{TRUE} (default), a line representing the mean
+#' quality scores is added to the plot.
 #'
 #' @details
 #' Median quality scores for each position in the reads in the input files
@@ -32,30 +35,44 @@
 #' If \code{reverse} is provided, it is plotted together with the first plot in
 #' its own panel. Note that the x-axis in this plot is reversed.
 #'
-#' The default error bars represent the interquartile range (25%-75%). Custom
-#' quantile ranges can be specified via \code{quantile_lower} and
-#' \code{quantile_upper}.
+#' The default error bars represent the interquartile range (25%-75%) in the
+#' quality scores. Custom quantile ranges can be specified via
+#' \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
+#' mean quality lines are plotted by default, but each can be turned off by
+#' setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
 #'
 #' @return A ggplot2 object with the quality plot(s).
 #'
 #' @examples
 #' \dontrun{
-#' # Define arguments
+#' # Define inputs
 #' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
 #'                          "R1_sample1_small.fq")
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
 #'                      "R2_sample1_small.fq")
 #'
-#' # Generate and display quality plot
+#' # Generate and display quality plot with both median and mean lines
 #' qual_plots <- plot_base_quality(fastq_input = fastq_input,
 #'                                 reverse = reverse)
 #' print(qual_plots)
 #'
-#' # Generate and display quality plot without plot title
+#' # Generate and display quality plot without the plot title
 #' qual_plots_wo_title <- plot_base_quality(fastq_input = fastq_input,
 #'                                          reverse = reverse,
 #'                                          plot_title = "")
 #' print(qual_plots_wo_title)
+#'
+#' # Generate a plot showing only the median quality line
+#' qual_plots_median_only <- plot_base_quality(fastq_input = fastq_input,
+#'                                             reverse = reverse,
+#'                                             show_mean = FALSE)
+#' print(qual_plots_median_only)
+#'
+#' # Generate a plot showing only the mean quality line
+#' qual_plots_mean_only <- plot_base_quality(fastq_input = fastq_input,
+#'                                           reverse = reverse,
+#'                                           show_median = FALSE)
+#' print(qual_plots_mean_only)
 #' }
 #'
 #' @export
@@ -66,7 +83,9 @@ plot_base_quality <- function(fastq_input,
                               reverse = NULL,
                               quantile_lower = 0.25,
                               quantile_upper = 0.75,
-                              plot_title = "Median quality score in each position") {
+                              plot_title = "Per-position quality scores: median and mean",
+                              show_median = TRUE,
+                              show_mean = TRUE) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -126,6 +145,7 @@ plot_base_quality <- function(fastq_input,
 
   # Calculate statistics
   median_quality_R1 <- apply(fastq_qual_matrix, 2, median, na.rm = TRUE)
+  mean_quality_R1 <- apply(fastq_qual_matrix, 2, mean, na.rm = TRUE)
   quantiles_quality_R1 <- apply(fastq_qual_matrix,
                                 2,
                                 quantile,
@@ -136,20 +156,42 @@ plot_base_quality <- function(fastq_input,
   df_R1 <- data.frame(
     Position = 1:ncol(fastq_qual_matrix),
     MedianQuality = median_quality_R1,
+    MeanQuality = mean_quality_R1,
     Lower = quantiles_quality_R1[1, ],
     Upper = quantiles_quality_R1[2, ])
 
   # Define color palette
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
-  R1.plot <- ggplot2::ggplot(df_R1, ggplot2::aes(x = Position, y = MedianQuality)) +
+  # Plot error bars and labels
+  R1.plot <- ggplot2::ggplot(df_R1, ggplot2::aes(x = Position)) +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                            width = 0.2, color = pal[2]) +
-    ggplot2::geom_line(color = pal[4]) +
     ggplot2::labs(title = plot_title,
                   x = "Base position",
-                  y = "Quality score") +
+                  y = "Quality score",
+                  color = "Statistic") +
     ggplot2::theme_minimal()
+
+  # Create empty vector for storing color mapping
+  color_mapping <- c()
+
+  # Plot median line if specified
+  if (show_median) {
+    R1.plot <- R1.plot + ggplot2::geom_line(ggplot2::aes(y = MedianQuality, color = "Median"))
+    color_mapping["Median"] <- pal[4]
+  }
+
+  # Plot mean line if specified
+  if (show_mean) {
+    R1.plot <- R1.plot + ggplot2::geom_line(ggplot2::aes(y = MeanQuality, color = "Mean"))
+    color_mapping["Mean"] <- pal[3]
+  }
+
+  # Add correct colors
+  if (length(color_mapping) > 0) {
+    R1.plot <- R1.plot + ggplot2::scale_color_manual(values = color_mapping)
+  }
 
   # Make reverse.tbl plot
   if (!is.null(reverse)){
@@ -175,6 +217,7 @@ plot_base_quality <- function(fastq_input,
 
     # Calculate statistics
     median_quality_R2 <- apply(reverse_qual_matrix, 2, median, na.rm = TRUE)
+    mean_quality_R2 <- apply(reverse_qual_matrix, 2, mean, na.rm = TRUE)
     quantiles_quality_R2 <- apply(reverse_qual_matrix,
                                   2,
                                   quantile,
@@ -185,27 +228,51 @@ plot_base_quality <- function(fastq_input,
     df_R2 <- data.frame(
       Position = 1:ncol(reverse_qual_matrix),
       MedianQuality = median_quality_R2,
+      MeanQuality = mean_quality_R2,
       Lower = quantiles_quality_R2[1, ],
       Upper = quantiles_quality_R2[2, ])
 
-    # Define color palette
-    pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
-
-    R2.plot <- ggplot2::ggplot(df_R2,
-                               ggplot2::aes(x = Position, y = MedianQuality)) +
+    # Plot error bars and labels
+    R2.plot <- ggplot2::ggplot(df_R2, ggplot2::aes(x = Position)) +
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                              width = 0.2, color = pal[2]) +
-      ggplot2::geom_line(color = pal[4]) +
-      ggplot2::scale_x_reverse() +
       ggplot2::labs(title = "R2 reads",
                     x = "Base position",
-                    y = "Quality score") +
+                    y = "Quality score",
+                    color = "Statistic") +
       ggplot2::theme_minimal()
+
+    # Create empty vector for storing color mapping
+    color_mapping <- c()
+
+    # Plot median line if specified
+    if (show_median) {
+      R2.plot <- R2.plot + ggplot2::geom_line(ggplot2::aes(y = MedianQuality, color = "Median"))
+      color_mapping["Median"] <- pal[4]
+    }
+
+    # Plot mean line if specified
+    if (show_mean) {
+      R2.plot <- R2.plot + ggplot2::geom_line(ggplot2::aes(y = MeanQuality, color = "Mean"))
+      color_mapping["Mean"] <- pal[3]
+    }
+
+    # Add correct colors
+    if (length(color_mapping) > 0) {
+      R2.plot <- R2.plot + ggplot2::scale_color_manual(values = color_mapping)
+    }
 
     # Add new title to R1 plot
     R1.plot <- R1.plot +
       ggplot2::ggtitle("R1 reads")
 
+    # Extract legend from R1 plot for grid plotting
+    grobs <- ggplot2::ggplotGrob(R1.plot)$grobs
+    legend <- grobs[[which(sapply(grobs, function(x) x$name) == "guide-box")]]
+
+    # Remove legends from R1 and R2 plot
+    R1.plot <- R1.plot + ggplot2::theme(legend.position = "none")
+    R2.plot <- R2.plot + ggplot2::theme(legend.position = "none")
 
     # Create common title
     common_title <- cowplot::ggdraw() +
@@ -215,10 +282,17 @@ plot_base_quality <- function(fastq_input,
     combined_plot <- cowplot::plot_grid(R1.plot, R2.plot, ncol = 2)
 
     # Combine plots and title
-    final_plot <- cowplot::plot_grid(common_title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))
+    plot_with_title <- cowplot::plot_grid(common_title,
+                                          combined_plot,
+                                          ncol = 1,
+                                          rel_heights = c(0.1, 1))
+
+    # Combine plot with legend
+    final_plot <- cowplot::plot_grid(plot_with_title,
+                                     legend,
+                                     rel_widths = c(1, 0.1))
 
     return(final_plot)
   }
-
   return(R1.plot)
 }

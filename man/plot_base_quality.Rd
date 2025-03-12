@@ -2,14 +2,16 @@
 % Please edit documentation in R/plot_base_quality.R
 \name{plot_base_quality}
 \alias{plot_base_quality}
-\title{Plot median quality scores per position for FASTQ reads}
+\title{Plot median and/or mean quality scores per position for FASTQ reads}
 \usage{
 plot_base_quality(
   fastq_input,
   reverse = NULL,
   quantile_lower = 0.25,
   quantile_upper = 0.75,
-  plot_title = "Median quality score in each position"
+  plot_title = "Per-position quality scores: median and mean",
+  show_median = TRUE,
+  show_mean = TRUE
 )
 }
 \arguments{
@@ -26,17 +28,23 @@ plot. Defaults to \code{0.25}.}
 plot. Defaults to \code{0.75}.}
 
 \item{plot_title}{The title of the plot. Defaults to
-\code{"Median quality score in each position"}. Set to \code{""} for no
-title.}
+\code{"Per-position quality scores: median and mean"}. Set to \code{""} for
+no title.}
+
+\item{show_median}{If \code{TRUE} (default), a line representing the median
+quality scores is added to the plot.}
+
+\item{show_mean}{If \code{TRUE} (default), a line representing the mean
+quality scores is added to the plot.}
 }
 \value{
 A ggplot2 object with the quality plot(s).
 }
 \description{
-Generates a plot displaying the median quality scores for each position in
-FASTQ reads. The plot includes error bars representing a selected quantile
-range. If reverse reads are provided, they are plotted in a separate panel
-with a reversed x-axis.
+Generates a plot displaying the median and/or mean quality scores for each
+position in FASTQ reads. The plot includes error bars representing a selected
+quantile range. If reverse reads are provided, they are plotted in a separate
+panel with a reversed x-axis.
 }
 \details{
 Median quality scores for each position in the reads in the input files
@@ -51,28 +59,42 @@ or FASTQ objects. FASTQ objects are tibbles that contain the columns
 If \code{reverse} is provided, it is plotted together with the first plot in
 its own panel. Note that the x-axis in this plot is reversed.
 
-The default error bars represent the interquartile range (25%-75%). Custom
-quantile ranges can be specified via \code{quantile_lower} and
-\code{quantile_upper}.
+The default error bars represent the interquartile range (25%-75%) in the
+quality scores. Custom quantile ranges can be specified via
+\code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
+mean quality lines are plotted by default, but each can be turned off by
+setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
 }
 \examples{
 \dontrun{
-# Define arguments
+# Define inputs
 fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
                          "R1_sample1_small.fq")
 reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
                      "R2_sample1_small.fq")
 
-# Generate and display quality plot
+# Generate and display quality plot with both median and mean lines
 qual_plots <- plot_base_quality(fastq_input = fastq_input,
                                 reverse = reverse)
 print(qual_plots)
 
-# Generate and display quality plot without plot title
+# Generate and display quality plot without the plot title
 qual_plots_wo_title <- plot_base_quality(fastq_input = fastq_input,
                                          reverse = reverse,
                                          plot_title = "")
 print(qual_plots_wo_title)
+
+# Generate a plot showing only the median quality line
+qual_plots_median_only <- plot_base_quality(fastq_input = fastq_input,
+                                            reverse = reverse,
+                                            show_mean = FALSE)
+print(qual_plots_median_only)
+
+# Generate a plot showing only the mean quality line
+qual_plots_mean_only <- plot_base_quality(fastq_input = fastq_input,
+                                          reverse = reverse,
+                                          show_median = FALSE)
+print(qual_plots_mean_only)
 }
 
 }
