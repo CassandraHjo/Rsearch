@@ -8,7 +8,7 @@ plot_size_dist(
   fastx_input,
   input_format = NULL,
   cutoff = NULL,
-  y_breaks = c(1, 10, 100, 1000, 2000, 3000, 10000),
+  y_breaks = NULL,
   plot_title = "Size distribution",
   log_scale_y = TRUE,
   n_bins = 30
@@ -27,8 +27,9 @@ with size greater than this value will be grouped into a single category
 labeled \code{"> cutoff"} in the plot. Defaults to \code{NULL} (no cutoff
 applied).}
 
-\item{y_breaks}{A numeric vector specifying the breakpoints for the y-axis.
-Defaults to \code{c(1, 10, 100, 1000, 2000, 3000, 10000)}.}
+\item{y_breaks}{A numeric vector specifying the breakpoints for the y-axis
+if log10 scaling is applied (\code{log_scale_y = TRUE}. Defaults to
+\code{NULL}.}
 
 \item{plot_title}{The title of the plot. Defaults to
 \code{"Size distribution"}. Set to \code{""} for no title.}
@@ -57,9 +58,10 @@ The \code{Header} column must contain the size values for each read.
 The \code{Header} column must contain size annotations formatted as
 \code{;size=<int>}.
 
-The y-axis of the plot can be  log10-transformed to handle variations in read
-counts across different size values. The breakpoints of the y-axis can be
-modified using the \code{y_breaks} parameter.
+The y-axis of the plot can be log10-transformed to handle variations in read
+counts across different size values. If \code{y_breaks} is specified, the
+given breakpoints will be used. If \code{y_breaks} is \code{NULL},
+\code{ggplot2} will automatically determine suitable breaks.
 }
 \examples{
 \dontrun{
