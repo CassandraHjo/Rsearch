@@ -238,9 +238,9 @@ vs_usearch_global <- function(fastx_input,
   if (is.null(userout)) {
 
     # Read userout file
-    userout_df <- read.delim(userout_file,
-                             sep = "\t",
-                             header = FALSE)
+    userout_df <- utils::read.delim(userout_file,
+                                    sep = "\t",
+                                    header = FALSE)
 
     # Set column names
     columns <- unlist(strsplit(userfields, "\\+"))
