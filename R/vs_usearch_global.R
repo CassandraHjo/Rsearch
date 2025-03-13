@@ -1,16 +1,21 @@
 #' Global pairwise alignment
 #'
-#' @description \code{vs_usearch_global} compares target sequences to the query
-#' sequences in FASTA or FASTQ format using global pairwise alignment via
-#' \code{VSEARCH}.
+#' @description
+#' \code{vs_usearch_global} performs global pairwise alignment of query
+#' sequences against target sequences using \code{VSEARCH}. It accepts sequences
+#' in FASTA or FASTQ format.
 #'
 #' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
 #' \emph{Details}.
 #' @param db A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
 #' target sequences.
-#' @param blast6out Name of the output file for the search results in a
-#' blast-like tab-separated format of twelve fields, with one line per
-#' query-target matching.
+#' @param userout A character string specifying the name of the output file for
+#' the alignment results. If \code{NULL} (default), no output is written to a
+#' file and the results are returned as a tibble with the columns specified in
+#' \code{userfields}. See \emph{Details}.
+#' @param userfields Fields to include in the output file. Defaults to
+#' \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
+#' \emph{Details}.
 #' @param gapopen Penalties for gap opening. Defaults to \code{"20I/2E"}. See
 #' \emph{Details}.
 #' @param gapext Penalties for gap extension. Defaults to \code{"2I/1E"}. See
@@ -24,7 +29,6 @@
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
 #' Defaults to \code{NULL}. See \emph{Details}.
 #'
-#'
 #' @details
 #' Performs global pairwise alignment between query and target sequences using
 #' \code{VSEARCH}, and reports matches based on the specified pairwise identity
@@ -36,22 +40,18 @@
 #' columns \code{Header} and \code{Sequence}.FASTQ objects are tibbles that
 #' contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 #'
-#' Results are written to the file specified by \code{blast6out} in a blast-like
-#' tab-separated format containing twelve fields:
-#' \itemize{
-#'   \item \code{Query ID}
-#'   \item \code{Target ID}
-#'   \item \code{Percent Identity}
-#'   \item \code{Alignment Length}
-#'   \item \code{Number of Mismatches}
-#'   \item \code{Number of Gap Openings}
-#'   \item \code{Query Start}
-#'   \item \code{Query End}
-#'   \item \code{Target Start}
-#'   \item \code{Target End}
-#'   \item \code{E-value}
-#'   \item \code{Bit Score}
-#' }
+#' \code{userfields} specifies the fields to include in the output file. Fields
+#' must be given as a character string separated by \code{"+"}. The default
+#' value of \code{userfields} equals
+#' \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}, which
+#' gives a blast-like tab-separated format of twelve fields. See the
+#' 'Userfields' section in the \code{VSEARCH} manual for more information.
+#'
+#' If \code{userout} is specified the alignment results are written to the
+#' specified file, and no tibble is returned.
+#'
+#' If \code{userout} is \code{NULL} a tibble containing the alignment results
+#' with the fields specified by \code{userfields} is returned.
 #'
 #' Pairwise identity (\code{id})is calculated as the number of matching columns
 #' divided by the alignment length minus terminal gaps.
@@ -65,9 +65,13 @@
 #' for information about defining \code{gapopen} and \code{gapext}.
 #'
 #'
-#' @return
-#' \code{NULL}. Results are written directly to the file specified by
-#' \code{blast6out}.
+#' @return A tibble or \code{NULL}.
+#'
+#' If \code{userout} is specified the alignment results are written to the
+#' specified file, and no tibble is returned.
+#'
+#' If \code{userout} is \code{NULL} a tibble containing the alignment results
+#' with the fields specified by \code{userfields} is returned.
 #'
 #' @examples
 #' \dontrun{
@@ -76,12 +80,12 @@
 #'                          "R1_sample1_small.fq")
 #' db <- file.path(file.path(path.package("Rsearch"), "extdata"),
 #'                           "merged_sample1_small.fq")
-#' blast6out <- "blast6out.txt"
+#' userout <- "userout.txt"
 #'
 #' # Run global pairwise alignement with default parameters and write results to file
 #' vs_usearch_global(fastx_input = fastx_input,
 #'                   db = db,
-#'                   blast6out = blast6out)
+#'                   userout = userout)
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
@@ -92,8 +96,8 @@
 #'
 vs_usearch_global <- function(fastx_input,
                               db,
-                              blast6out,
-                              # userout,
+                              userout = NULL,
+                              userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
                               gapopen = "20I/2E",
                               gapext = "2I/1E",
                               id = 0.7,
@@ -197,6 +201,14 @@ vs_usearch_global <- function(fastx_input,
     db_file <- db
   }
 
+  # Handle output
+  if (is.null(userout)) {
+    userout_file <- tempfile(pattern = "userout", fileext = ".txt")
+    temp_files <- c(temp_files, userout)
+  } else {
+    userout_file <- userout
+  }
+
   # Normalize file paths
   fastx_file <- normalizePath(fastx_file)
   db_file <- normalizePath(db_file)
@@ -205,9 +217,8 @@ vs_usearch_global <- function(fastx_input,
   args <- c("--usearch_global", shQuote(fastx_file),
             "--db", shQuote(db_file),
             "--id", id,
-            "--blast6out", blast6out,
-            # "--userout", userout,
-            # "--userfields", "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
+            "--userout", userout_file,
+            "--userfields", userfields,
             "--threads", threads,
             "--strand", strand,
             "--gapopen", gapopen,
@@ -224,7 +235,22 @@ vs_usearch_global <- function(fastx_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  # Return results
-  return(invisible(NULL))
+  if (is.null(userout)) {
 
+    # Read userout file
+    userout_df <- read.delim(userout_file,
+                             sep = "\t",
+                             header = FALSE)
+
+    # Set column names
+    columns <- unlist(strsplit(userfields, "\\+"))
+    colnames(userout_df) <- columns
+  }
+
+  # Return results
+  if (is.null(userout)) { # Return tibble
+    return(userout_df)
+  } else {
+    return(invisible(NULL)) # No return when output file is written
+  }
 }

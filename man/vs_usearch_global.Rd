@@ -9,7 +9,8 @@
 vs_usearch_global(
   fastx_input,
   db,
-  blast6out,
+  userout = NULL,
+  userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
   gapopen = "20I/2E",
   gapext = "2I/1E",
   id = 0.7,
@@ -25,9 +26,14 @@ vs_usearch_global(
 \item{db}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
 target sequences.}
 
-\item{blast6out}{Name of the output file for the search results in a
-blast-like tab-separated format of twelve fields, with one line per
-query-target matching.}
+\item{userout}{A character string specifying the name of the output file for
+the alignment results. If \code{NULL} (default), no output is written to a
+file and the results are returned as a tibble with the columns specified in
+\code{userfields}. See \emph{Details}.}
+
+\item{userfields}{Fields to include in the output file. Defaults to
+\code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
+\emph{Details}.}
 
 \item{gapopen}{Penalties for gap opening. Defaults to \code{"20I/2E"}. See
 \emph{Details}.}
@@ -48,13 +54,18 @@ Defaults to \code{1}.}
 Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
-\code{NULL}. Results are written directly to the file specified by
-\code{blast6out}.
+A tibble or \code{NULL}.
+
+If \code{userout} is specified the alignment results are written to the
+specified file, and no tibble is returned.
+
+If \code{userout} is \code{NULL} a tibble containing the alignment results
+with the fields specified by \code{userfields} is returned.
 }
 \description{
-\code{vs_usearch_global} compares target sequences to the query
-sequences in FASTA or FASTQ format using global pairwise alignment via
-\code{VSEARCH}.
+\code{vs_usearch_global} performs global pairwise alignment of query
+sequences against target sequences using \code{VSEARCH}. It accepts sequences
+in FASTA or FASTQ format.
 }
 \details{
 Performs global pairwise alignment between query and target sequences using
@@ -67,22 +78,18 @@ files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
 columns \code{Header} and \code{Sequence}.FASTQ objects are tibbles that
 contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
 
-Results are written to the file specified by \code{blast6out} in a blast-like
-tab-separated format containing twelve fields:
-\itemize{
-  \item \code{Query ID}
-  \item \code{Target ID}
-  \item \code{Percent Identity}
-  \item \code{Alignment Length}
-  \item \code{Number of Mismatches}
-  \item \code{Number of Gap Openings}
-  \item \code{Query Start}
-  \item \code{Query End}
-  \item \code{Target Start}
-  \item \code{Target End}
-  \item \code{E-value}
-  \item \code{Bit Score}
-}
+\code{userfields} specifies the fields to include in the output file. Fields
+must be given as a character string separated by \code{"+"}. The default
+value of \code{userfields} equals
+\code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}, which
+gives a blast-like tab-separated format of twelve fields. See the
+'Userfields' section in the \code{VSEARCH} manual for more information.
+
+If \code{userout} is specified the alignment results are written to the
+specified file, and no tibble is returned.
+
+If \code{userout} is \code{NULL} a tibble containing the alignment results
+with the fields specified by \code{userfields} is returned.
 
 Pairwise identity (\code{id})is calculated as the number of matching columns
 divided by the alignment length minus terminal gaps.
@@ -102,12 +109,12 @@ fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
                          "R1_sample1_small.fq")
 db <- file.path(file.path(path.package("Rsearch"), "extdata"),
                           "merged_sample1_small.fq")
-blast6out <- "blast6out.txt"
+userout <- "userout.txt"
 
 # Run global pairwise alignement with default parameters and write results to file
 vs_usearch_global(fastx_input = fastx_input,
                   db = db,
-                  blast6out = blast6out)
+                  userout = userout)
 }
 
 }
