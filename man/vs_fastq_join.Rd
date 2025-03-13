@@ -69,7 +69,7 @@ joined reads in the format specified by \code{output_format} is returned.
 }
 \description{
 \code{vs_fastq_join} joins paired-end sequence reads into a
-single sequence with a specified gap between them unsing \code{VSEARCH}.
+single sequence with a specified gap between them using \code{VSEARCH}.
 }
 \details{
 Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})

@@ -1,7 +1,7 @@
 #' Join paired-end sequence reads
 #'
 #' @description \code{vs_fastq_join} joins paired-end sequence reads into a
-#' single sequence with a specified gap between them unsing \code{VSEARCH}.
+#' single sequence with a specified gap between them using \code{VSEARCH}.
 #'
 #' @param fastq_input A FASTQ file path or a FASTQ object containing (forward)
 #' reads. See \emph{Details}.
