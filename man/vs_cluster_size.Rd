@@ -10,6 +10,7 @@
 vs_cluster_size(
   fasta_input,
   centroids = NULL,
+  size_column = FALSE,
   id = 0.97,
   strand = "plus",
   sizein = TRUE,
@@ -30,6 +31,9 @@ cluster. See \emph{Details}.}
 file for the cluster centroid sequences. If \code{NULL} (default), no output
 is written to a file and the centroid sequences are returned as a FASTA
 object. See \emph{Details}.}
+
+\item{size_column}{If \code{TRUE}, a column with the size of each centroid is
+added to the output tibble.}
 
 \item{id}{Pairwise identity threshold for sequence to be added to a
 cluster. Defaults to \code{0.97}. See \emph{Details}.}

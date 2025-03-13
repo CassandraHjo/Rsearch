@@ -11,6 +11,8 @@
 #' file for the cluster centroid sequences. If \code{NULL} (default), no output
 #' is written to a file and the centroid sequences are returned as a FASTA
 #' object. See \emph{Details}.
+#' @param size_column If \code{TRUE}, a column with the size of each centroid is
+#' added to the output tibble.
 #' @param id Pairwise identity threshold for sequence to be added to a
 #' cluster. Defaults to \code{0.97}. See \emph{Details}.
 #' @param strand Specifies which strand to consider when comparing sequences.
@@ -116,6 +118,7 @@
 #'
 vs_cluster_size <- function(fasta_input,
                             centroids = NULL,
+                            size_column = FALSE,
                             id = 0.97,
                             strand = "plus",
                             sizein = TRUE,
@@ -223,10 +226,15 @@ vs_cluster_size <- function(fasta_input,
   if (is.null(centroids)) {
 
     # Read output into FASTA object (tbl)
-    centroids_fasta <- microseq::readFasta(outfile) |>
-      dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) |>
-      dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
-      dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
+    centroids_fasta <- microseq::readFasta(outfile)
+
+    # Add size column if specified
+    if (size_column) {
+      centroids_fasta <- centroids_fasta |>
+        dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) |>
+        dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
+        dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
+    }
 
     # Create statistics tibble
     statistics <- calculate_cluster_statistics(centroids_fasta,
@@ -253,7 +261,8 @@ vs_cluster_size <- function(fasta_input,
 #' sizes of the sequences and clusters.
 #'
 #' @param centroids_fasta Output tibble from clustering with centroids.
-#' Contains the columns: Header, Sequence, and centroid_size.
+#' Contains the columns: Header, Sequence, and centroid_size (if
+#' \code{size_column} is specified in \code{vs_cluster_size}).
 #' @param fasta_file File path to FASTA containing the input sequences to the
 #' clustering.
 #' @param fasta_input_name Name of the file/object with the input sequences
@@ -285,6 +294,13 @@ calculate_cluster_statistics <- function(centroids_fasta,
                                          fasta_file,
                                          fasta_input_name) {
 
+  # Process clustering output
+  if (!"centroid_size" %in% colnames(centroids_fasta)) {
+    centroids_fasta <- centroids_fasta |>
+      dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) |>
+      dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
+      dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
+  }
   # Make tibble from input sequences to the clustering
   input.df <- microseq::readFasta(fasta_file)
 
