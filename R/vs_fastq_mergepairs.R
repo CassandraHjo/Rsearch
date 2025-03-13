@@ -174,7 +174,8 @@ vs_fastq_mergepairs <- function(fastq_input,
     fastq_file <- temp_fastq_file
 
     # Capture original name for statistics table later
-    fastq_input_name <- as.character(substitute(fastq_input))
+    fastq_input_name <- deparse(substitute(fastq_input))[1]
+
   } else {
     fastq_file <- fastq_input
 
@@ -195,7 +196,7 @@ vs_fastq_mergepairs <- function(fastq_input,
     temp_files <- c(temp_files, temp_reverse_file)
 
     # Capture original name for statistics table later
-    reverse_name <- as.character(substitute(reverse))
+    reverse_name <- deparse(substitute(reverse))[1]
   } else {
     reverse_file <- reverse
 
@@ -275,14 +276,14 @@ vs_fastq_mergepairs <- function(fastq_input,
     }
 
     # Calculate statistics
-    statistics <- calculate_merge_statistics(fastq_file,
-                                             reverse_file,
-                                             merged_seqs,
-                                             fastq_input_name,
-                                             reverse_name)
+    stats.tbl <- calculate_merge_statistics(fastq_file,
+                                            reverse_file,
+                                            merged_seqs,
+                                            fastq_input_name,
+                                            reverse_name)
 
     # Add statistics as attribute to merging table
-    attr(merged_seqs, "statistics") <- statistics
+    attr(merged_seqs, "statistics") <- stats.tbl
   }
 
   # Return results
