@@ -103,10 +103,10 @@
 #' statistics <- attr(merge_seqs, "statistics")
 #'
 #' # Merge sequences and write sequences to a FASTQ file
-#' s_fastq_mergepairs(fastq_input = fastq_input,
-#'                    reverse = reverse,
-#'                    output_format = output_format,
-#'                    fastqout = "merged_sequences.fq")
+#' vs_fastq_mergepairs(fastq_input = fastq_input,
+#'                     reverse = reverse,
+#'                     output_format = output_format,
+#'                     fastqout = "merged_sequences.fq")
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}

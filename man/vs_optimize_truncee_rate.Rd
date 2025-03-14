@@ -106,7 +106,7 @@ R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
 
 # Run optimizing function
 optimize.tbl <- vs_optimize_truncee_rate(fastq_input = R1.file,
-                                      reverse = R2.file)
+                                         reverse = R2.file)
 
 # Display plot
 print(attr(optimize.tbl, "plot"))

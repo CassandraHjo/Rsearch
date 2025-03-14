@@ -66,7 +66,7 @@
 #' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
 #'                          "R1_sample1_small.fq")
 #' db <- microseq::readFastq(fastx_input)[1:80, ]
-#' blast6out <- "userout.txt"
+#' userout <- "userout.txt"
 #'
 #' # Search for exact full-length matches with default parameters, with file as output
 #' vs_search_exact(fastx_input = fastx_input,
