@@ -1,12 +1,14 @@
-#' Detect chimeras without external references (i.e. de novo)
+#' Detect chimeras by comparing sequences to a reference database
 #'
-#' @description \code{vs_uchime_denovo} detects chimeras present in the FASTA
-#' sequences in using \code{VSEARCH}'s \code{uchime_denovo} algorithm.
+#' @description \code{vs_uchime_ref} detects chimeras present in the FASTA
+#' sequences in using \code{VSEARCH}'s \code{uchime_ref} algorithm.
 #' Automatically sorts sequences by decreasing abundance to enhance chimera
 #' detection accuracy.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads. See
 #' \emph{Details}.
+#' @param db A FASTA file path or FASTA tibble object containing the
+#' reference sequences. These sequences are assumed to be chimera-free.
 #' @param nonchimeras Name of the FASTA output file for the non-chimeric
 #' sequences. If \code{NULL} (default), no output is written to file.
 #' @param chimeras Name of the FASTA output file for the chimeric sequences.
@@ -23,15 +25,14 @@
 #' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
+#' @param threads Number of computational threads to be used by \code{VSEARCH}.
+#' Defaults to \code{1}.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
 #' Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Chimeras in the input FASTA sequences are detected using \code{VSEARCH}´s
-#' \code{uchime_denovo}. In de novo mode, input FASTA file/object must present
-#' abundance annotations (i.e. a pattern [;]size=integer[;] in the header).
-#' Input order matters for chimera detection, so it is recommended to sort
-#' sequences by decreasing abundance.
+#' \code{uchime_ref}.
 #'
 #' \code{fasta_input} can either be a FASTA file or a FASTA object. FASTA objects
 #' are tibbles that contain the columns \code{Header} and \code{Sequence}.
@@ -91,12 +92,12 @@
 #' chimeras <- "chimeras.fa"
 #'
 #' # Detect chimeras with default parameters and return FASTA files
-#' vs_uchime_denovo(fasta_input = fasta_input,
+#' vs_uchime_ref(fasta_input = fasta_input,
 #'                  nonchimeras = nonchimeras,
 #'                  chimeras = chimeras)
 #'
 #' # Detect chimeras with default parameters and return a FASTA tibble
-#' nonchimeras.tbl <- vs_uchime_denovo(fasta_input = fasta_input,
+#' nonchimeras.tbl <- vs_uchime_ref(fasta_input = fasta_input,
 #'                                     nonchimeras = NULL,
 #'                                     chimeras = NULL)
 #'
@@ -109,22 +110,24 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_uchime_denovo uchime_denovo chimera
+#' @aliases vs_uchime_ref uchime_ref
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
 #' @export
 #'
-vs_uchime_denovo <- function(fasta_input,
-                             nonchimeras = NULL,
-                             chimeras = NULL,
-                             sizein = TRUE,
-                             sizeout = TRUE,
-                             relabel = NULL,
-                             relabel_sha1 = FALSE,
-                             fasta_width = 0,
-                             log_file = NULL,
-                             vsearch_options = NULL){
+vs_uchime_ref <- function(fasta_input,
+                          db,
+                          nonchimeras = NULL,
+                          chimeras = NULL,
+                          sizein = TRUE,
+                          sizeout = TRUE,
+                          relabel = NULL,
+                          relabel_sha1 = FALSE,
+                          fasta_width = 0,
+                          log_file = NULL,
+                          threads = 1,
+                          vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -167,6 +170,17 @@ vs_uchime_denovo <- function(fasta_input,
   # Check is input file exists at given path
   if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
 
+  # Check if db is file or tibble
+  if (!is.character(db)){
+    temp_file_db <- tempfile(pattern = "db", fileext = ".fa")
+    temp_files <- c(temp_files, temp_file_db)
+    microseq::writeFasta(db, temp_file_db)
+    db_file <- temp_file_db
+
+  } else {
+    db_file <- db
+  }
+
   # Determine nonchimeras file
   if (is.null(nonchimeras)) {
     nonchimeras_file <- tempfile(pattern = "nonchimeras", fileext = ".fa")
@@ -183,14 +197,17 @@ vs_uchime_denovo <- function(fasta_input,
     chimeras_file <- chimeras
   }
 
-  # Normalize file path
+  # Normalize file paths
   fasta_file <- normalizePath(fasta_file)
+  db_file <- normalizePath(db_file)
 
   # Build argument string for command line
-  args <- c("--uchime_denovo", shQuote(fasta_file),
+  args <- c("--uchime_ref", shQuote(fasta_file),
+            "--db", shQuote(db_file),
             "--fasta_width", fasta_width,
             "--nonchimeras", shQuote(nonchimeras_file),
-            "--chimeras", shQuote(chimeras_file)
+            "--chimeras", shQuote(chimeras_file),
+            "--threads", threads
   )
 
   if (sizein) {
@@ -265,7 +282,7 @@ vs_uchime_denovo <- function(fasta_input,
 #' Calculate chimera detection statistics
 #'
 #' @description Calculates important chimera detection statistics after running
-#' \code{vs_uchime_denovo()}, including the number of chimeric and non-chimeric
+#' \code{vs_uchime_ref()}, including the number of chimeric and non-chimeric
 #' sequences.
 #'
 #' @param fasta_file The FASTA file containing the input sequences to the
