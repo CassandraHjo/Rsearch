@@ -24,6 +24,9 @@
 #' for matches. Defaults to \code{0.7}.
 #' @param strand Specifies which strand to consider when comparing sequences.
 #' Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param maxaccepts Maximum number of matching target sequences to accept
+#' before stopping the search for a given query. Defaults to \code{1}. Only
+#' works when \code{strand} is set to \code{"plus"} (default).
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
@@ -102,6 +105,7 @@ vs_usearch_global <- function(fastx_input,
                               gapext = "2I/1E",
                               id = 0.7,
                               strand = "plus",
+                              maxaccepts = 1,
                               threads = 1,
                               vsearch_options = NULL){
 
@@ -223,6 +227,11 @@ vs_usearch_global <- function(fastx_input,
             "--strand", strand,
             "--gapopen", gapopen,
             "--gapext", gapext)
+
+  # Add maxaccepts if strand is "plus"
+  if (strand == "plus") {
+    args <- c(args, "--maxaccepts", maxaccepts)
+  }
 
   # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
