@@ -124,16 +124,19 @@ fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
                          "R1_sample1_small.fa")
 nonchimeras <- "nonchimeras.fa"
 chimeras <- "chimeras.fa"
+db <- "db.fa"
 
 # Detect chimeras with default parameters and return FASTA files
 vs_uchime_ref(fasta_input = fasta_input,
-                 nonchimeras = nonchimeras,
-                 chimeras = chimeras)
+              db = db,
+              nonchimeras = nonchimeras,
+              chimeras = chimeras)
 
 # Detect chimeras with default parameters and return a FASTA tibble
 nonchimeras.tbl <- vs_uchime_ref(fasta_input = fasta_input,
-                                    nonchimeras = NULL,
-                                    chimeras = NULL)
+                                 db = db,
+                                 nonchimeras = NULL,
+                                 chimeras = NULL)
 
 # Get chimeras tibble
 chimeras.tbl <- attr(nonchimeras.tbl, "chimeras")
