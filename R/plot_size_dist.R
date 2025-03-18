@@ -110,7 +110,7 @@ plot_size_dist <- function(fastx_input,
 
   # Extract size value from Header and clean Header
   fastx.tbl <- fastx.tbl |>
-    dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
+    dplyr::mutate(size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
     dplyr::mutate(size = as.integer(size)) |>
     dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
 

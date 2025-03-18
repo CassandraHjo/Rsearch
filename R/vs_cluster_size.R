@@ -27,6 +27,9 @@
 #' SHA1 message digest algorithm. Defaults to \code{FALSE}.
 #' @param fasta_width Number of characters per line in the output FASTA
 #' file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample Add the given sample identifier string to sequence headers. For
+#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
+#' to the header. If \code{NULL} (default), no identifier is added.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
@@ -126,6 +129,7 @@ vs_cluster_size <- function(fasta_input,
                             relabel = NULL,
                             relabel_sha1 = FALSE,
                             fasta_width = 0,
+                            sample = NULL,
                             log_file = NULL,
                             threads = 1,
                             vsearch_options = NULL){
@@ -212,6 +216,11 @@ vs_cluster_size <- function(fasta_input,
     args <- c(args, vsearch_options)
   }
 
+  # Add sample identifier if specified
+  if (!is.null(sample)) {
+    args <- c(args, "--sample", sample)
+  }
+
   # Add log file if specified
   if (!is.null(log_file)){
     args <- c(args, "--log", log_file)
@@ -231,7 +240,7 @@ vs_cluster_size <- function(fasta_input,
     # Add size column if specified
     if (size_column) {
       centroids_fasta <- centroids_fasta |>
-        dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) |>
+        dplyr::mutate(centroid_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
         dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
         dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
     }
@@ -297,7 +306,7 @@ calculate_cluster_statistics <- function(centroids_fasta,
   # Process clustering output
   if (!"centroid_size" %in% colnames(centroids_fasta)) {
     centroids_fasta <- centroids_fasta |>
-      dplyr::mutate(centroid_size = stringr::str_remove(Header, ".+;size=")) |>
+      dplyr::mutate(centroid_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
       dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
       dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
   }
