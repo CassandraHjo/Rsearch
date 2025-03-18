@@ -159,7 +159,7 @@ vs_optimize_truncee_rate <- function(fastq_input,
     derep.df <- vs_fastx_uniques(fastx_input = merge.df,
                                  output_format = "fasta",
                                  relabel_sha1 = TRUE) |>
-      dplyr::mutate(size = stringr::str_remove(Header, ".+;size=")) |>
+      dplyr::mutate(size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
       dplyr::mutate(size = as.numeric(size))
 
     # Find number of dereplicated merged reads with size > min_size

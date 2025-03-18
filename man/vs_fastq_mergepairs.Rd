@@ -18,6 +18,7 @@ vs_fastq_mergepairs(
   minovlen = 10,
   minlen = 0,
   fasta_width = 0,
+  sample = NULL,
   log_file = NULL,
   threads = 1,
   vsearch_options = NULL
@@ -48,6 +49,10 @@ Defaults to \code{0}. See \emph{Details}.}
 \item{fasta_width}{Number of characters per line in the output FASTA file.
 Only applies if the output file is in FASTA format. Defaults to \code{0},
 which eliminates wrapping.}
+
+\item{sample}{Add the given sample identifier string to sequence headers. For
+instance, if the given string is "ABC", the text ";sample=ABC" will be added
+to the header. If \code{NULL} (default), no identifier is added.}
 
 \item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL} (default), no log file is created.}

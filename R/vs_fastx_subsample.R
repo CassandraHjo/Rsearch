@@ -30,6 +30,9 @@
 #' \code{NULL}.
 #' @param fasta_width Number of characters per line in the output FASTA
 #' file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample Add the given sample identifier string to sequence headers. For
+#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
+#' to the header. If \code{NULL} (default), no identifier is added.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
@@ -105,6 +108,7 @@ vs_fastx_subsample <- function(fastx_input,
                                relabel_sha1 = FALSE,
                                randseed = NULL,
                                fasta_width = 0,
+                               sample = NULL,
                                threads = 1,
                                vsearch_options = NULL){
 
@@ -240,6 +244,11 @@ vs_fastx_subsample <- function(fastx_input,
 
   if (!is.null(relabel)) {
     args <- c(args, "--relabel", relabel)
+  }
+
+  # Add sample identifier if specified
+  if (!is.null(sample)) {
+    args <- c(args, "--sample", sample)
   }
 
   # Add additional arguments if specified

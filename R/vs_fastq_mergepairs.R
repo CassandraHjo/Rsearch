@@ -20,6 +20,9 @@
 #' @param fasta_width Number of characters per line in the output FASTA file.
 #' Only applies if the output file is in FASTA format. Defaults to \code{0},
 #' which eliminates wrapping.
+#' @param sample Add the given sample identifier string to sequence headers. For
+#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
+#' to the header. If \code{NULL} (default), no identifier is added.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
@@ -124,6 +127,7 @@ vs_fastq_mergepairs <- function(fastq_input,
                                 minovlen = 10,
                                 minlen = 0,
                                 fasta_width = 0,
+                                sample = NULL,
                                 log_file = NULL,
                                 threads = 1,
                                 vsearch_options = NULL){
@@ -246,6 +250,11 @@ vs_fastq_mergepairs <- function(fastq_input,
     args <- c(args, "--fastqout", outfile_fastq)
   } else if (output_format == "fasta") {
     args <- c(args, "--fastaout", outfile_fasta, "--fasta_width", fasta_width)
+  }
+
+  # Add sample identifier if specified
+  if (!is.null(sample)) {
+    args <- c(args, "--sample", sample)
   }
 
   # Add log file if specified

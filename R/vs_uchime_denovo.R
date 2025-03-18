@@ -21,6 +21,9 @@
 #' SHA1 message digest algorithm. Defaults to \code{FALSE}.
 #' @param fasta_width Number of characters per line in the output FASTA
 #' file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample Add the given sample identifier string to sequence headers. For
+#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
+#' to the header. If \code{NULL} (default), no identifier is added.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
@@ -123,6 +126,7 @@ vs_uchime_denovo <- function(fasta_input,
                              relabel = NULL,
                              relabel_sha1 = FALSE,
                              fasta_width = 0,
+                             sample = NULL,
                              log_file = NULL,
                              vsearch_options = NULL){
 
@@ -208,6 +212,11 @@ vs_uchime_denovo <- function(fasta_input,
 
   if (relabel_sha1){
     args <- c(args, "--relabel_sha1", "")
+  }
+
+  # Add sample identifier if specified
+  if (!is.null(sample)) {
+    args <- c(args, "--sample", sample)
   }
 
   # Add additional arguments if specified

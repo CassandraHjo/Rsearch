@@ -18,6 +18,9 @@
 #' \emph{Details}.
 #' @param strand Specifies which strand to consider when comparing sequences.
 #' Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param sample Add the given sample identifier string to sequence headers. For
+#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
+#' to the header. If \code{NULL} (default), no identifier is added.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
 #' Defaults to \code{1}.
 #' @param vsearch_options A character string of additional arguments to pass to
@@ -95,6 +98,7 @@ vs_search_exact <- function(fastx_input,
                             userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
                             strand = "plus",
                             threads = 1,
+                            sample = NULL,
                             vsearch_options = NULL){
 
   # Check if vsearch is available
@@ -212,6 +216,11 @@ vs_search_exact <- function(fastx_input,
             "--userfields", userfields,
             "--threads", threads,
             "--strand", strand)
+
+  # Add sample identifier if specified
+  if (!is.null(sample)) {
+    args <- c(args, "--sample", sample)
+  }
 
   # Add additional arguments if specified
   if (!is.null(vsearch_options)) {

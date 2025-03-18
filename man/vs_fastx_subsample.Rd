@@ -21,6 +21,7 @@ vs_fastx_subsample(
   relabel_sha1 = FALSE,
   randseed = NULL,
   fasta_width = 0,
+  sample = NULL,
   threads = 1,
   vsearch_options = NULL
 )
@@ -62,6 +63,10 @@ produces the same output, which is useful for replicability. Defaults to
 
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}
+
+\item{sample}{Add the given sample identifier string to sequence headers. For
+instance, if the given string is "ABC", the text ";sample=ABC" will be added
+to the header. If \code{NULL} (default), no identifier is added.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}

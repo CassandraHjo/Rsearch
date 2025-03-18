@@ -23,6 +23,7 @@ vs_fastx_uniques(
   relabel_sha1 = FALSE,
   fastq_qout_max = FALSE,
   fasta_width = 0,
+  sample = NULL,
   vsearch_options = NULL
 )
 }
@@ -63,6 +64,10 @@ highest (best) quality score observed in each position. Defaults to
 
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}
+
+\item{sample}{Add the given sample identifier string to sequence headers. For
+instance, if the given string is "ABC", the text ";sample=ABC" will be added
+to the header. If \code{NULL} (default), no identifier is added.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
