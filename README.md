@@ -1,6 +1,11 @@
 
 # Rsearch <img src='man/figures/rsearch_logo.png' align="right" height="150" />
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/CassandraHjo/Rsearch/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CassandraHjo/Rsearch/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 `Rsearch` is an R package designed for handling and analyzing targeted
 sequencing data. Many of its functions are based on the command-line
 based tool `VSEARCH`. By integrating `VSEARCH` into an R package,
