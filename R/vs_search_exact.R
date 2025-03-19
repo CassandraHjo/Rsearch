@@ -13,6 +13,9 @@
 #' the alignment results. If \code{NULL} (default), no output is written to a
 #' file and the results are returned as a tibble with the columns specified in
 #' \code{userfields}. See \emph{Details}.
+#' @param otutabout A character string specifying the name of the output file in
+#' an OTU table format. If \code{NULL} (default), no output is written to a file.
+#' If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.
 #' @param userfields Fields to include in the output file. Defaults to
 #' \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
 #' \emph{Details}.
@@ -49,6 +52,18 @@
 #' If \code{userout} is \code{NULL} a tibble containing the alignment results
 #' with the fields specified by \code{userfields} is returned.
 #'
+#' \code{otutabout} gives the option to output the results in an OTU
+#' table format with tab-separated columns. The first line will start with
+#' the string \"#OTU ID\" and is followed by a tab-separated list of all sample
+#' identifiers (\"sample=X\"). The following lines, one for each OTU, start with
+#' the OTU identifier and are followed by a tab-separated list of abundances for
+#' that OTU in each sample. If \code{otutabout} is a character string, the output
+#' is written to the specified file. If \code{otutabout} is \code{TRUE}, the
+#' function returns the OTU table as a tibble.
+#'
+#' If neither \code{userout} nor \code{otutabout} is specified (default), the
+#' function returns the alignment results as a userout tibble.
+#'
 #' \code{vsearch_options} allows users to pass additional command-line arguments
 #' to \code{VSEARCH} that are not directly supported by this function. Refer to
 #' the \code{VSEARCH} manual for more details.
@@ -58,8 +73,12 @@
 #' If \code{userout} is specified the alignment results are written to the
 #' specified file, and no tibble is returned.
 #'
-#' If \code{userout} is \code{NULL} a tibble containing the alignment results
-#' with the fields specified by \code{userfields} is returned.
+#' If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
+#' If \code{otutabout} is a character string, the output is written to the file,
+#' and no tibble is returned.
+#'
+#' If neither \code{userout} nor \code{otutabout} is specified, a tibble
+#' containing the alignment results is returned.
 #'
 #' @seealso \code{\link{vs_usearch_global}}
 #'
@@ -95,6 +114,7 @@
 vs_search_exact <- function(fastx_input,
                             db,
                             userout = NULL,
+                            otutabout = NULL,
                             userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
                             strand = "plus",
                             threads = 1,
@@ -108,6 +128,11 @@ vs_search_exact <- function(fastx_input,
   # Validate strand
   if (!strand %in% c("plus", "both")) {
     stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")
+  }
+
+  # Ensure only one output format is specified
+  if (!is.null(userout) && !is.null(otutabout)) {
+    stop("Only one of 'userout' or 'otutabout' can be specified.")
   }
 
   # Create empty vector for collecting temporary files
@@ -197,12 +222,17 @@ vs_search_exact <- function(fastx_input,
     db_file <- db
   }
 
-  # Handle output
-  if (is.null(userout)) {
-    userout_file <- tempfile(pattern = "userout", fileext = ".txt")
-    temp_files <- c(temp_files, userout)
+  # Determine output file based on user input
+  if (!is.null(userout)) {
+    outfile <- userout
+  } else if (!is.null(otutabout)) {
+    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable", fileext = ".tsv"))
   } else {
-    userout_file <- userout
+    outfile <- tempfile(pattern = "userout", fileext = ".txt")
+  }
+
+  if (is.null(userout) && (is.null(otutabout) || !is.character(otutabout))) {
+    temp_files <- c(temp_files, outfile)
   }
 
   # Normalize file paths
@@ -212,10 +242,16 @@ vs_search_exact <- function(fastx_input,
   # Build argument string for command line
   args <- c("--search_exact", shQuote(fastx_file),
             "--db", shQuote(db_file),
-            "--userout", userout_file,
-            "--userfields", userfields,
             "--threads", threads,
             "--strand", strand)
+
+  if (!is.null(userout)) {
+    args <- c(args, "--userout", outfile, "--userfields", userfields)
+  } else if (!is.null(otutabout)) {
+    args <- c(args, "--otutabout", outfile)
+  } else {
+    args <- c(args, "--userout", outfile, "--userfields", userfields) # Default output
+  }
 
   # Add sample identifier if specified
   if (!is.null(sample)) {
@@ -233,22 +269,19 @@ vs_search_exact <- function(fastx_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  if (is.null(userout)) {
-
-    # Read userout file
-    userout_df <- utils::read.delim(userout_file,
-                                    sep = "\t",
-                                    header = FALSE)
-
-    # Set column names
+  # Determine return output
+  if (!is.null(userout)) {
+    return(invisible(NULL)) # No return if userout is specified
+  } else if (!is.null(otutabout)) {
+    if (is.character(otutabout)) {
+      return(invisible(NULL)) # File output only
+    } else {
+      return(suppressMessages(readr::read_delim(outfile))) # Return as tibble
+    }
+  } else {
+    userout_df <- suppressMessages(readr::read_delim(outfile, col_names = FALSE))
     columns <- unlist(strsplit(userfields, "\\+"))
     colnames(userout_df) <- columns
-  }
-
-  # Return results
-  if (is.null(userout)) { # Return tibble
     return(userout_df)
-  } else {
-    return(invisible(NULL)) # No return when output file is written
   }
 }
