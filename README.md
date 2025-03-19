@@ -198,3 +198,5 @@ e.g. `VSEARCH`, may also be appropriate.
 - Rognes T, Flouri T, Nichols B, Quince C, Mahé F (2016) **VSEARCH: a
   versatile open source tool for metagenomics.** *PeerJ* 4:e2584. doi:
   [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
+- The subplot of the `Rsearch` logo is created in
+  <https://BioRender.com>

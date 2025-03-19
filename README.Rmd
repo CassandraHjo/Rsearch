@@ -156,3 +156,4 @@ Please note that citing any of the underlying algorithms, e.g. `VSEARCH`, may al
 **VSEARCH: a versatile open source tool for metagenomics.**
 *PeerJ* 4:e2584.
 doi: [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
+* The subplot of the `Rsearch` logo is created in  https://BioRender.com
