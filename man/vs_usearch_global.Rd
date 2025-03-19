@@ -10,6 +10,7 @@ vs_usearch_global(
   fastx_input,
   db,
   userout = NULL,
+  otutabout = NULL,
   userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
   gapopen = "20I/2E",
   gapext = "2I/1E",
@@ -31,6 +32,10 @@ target sequences.}
 the alignment results. If \code{NULL} (default), no output is written to a
 file and the results are returned as a tibble with the columns specified in
 \code{userfields}. See \emph{Details}.}
+
+\item{otutabout}{A character string specifying the name of the output file in
+an OTU table format. If \code{NULL} (default), no output is written to a file.
+If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.}
 
 \item{userfields}{Fields to include in the output file. Defaults to
 \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
@@ -64,8 +69,12 @@ A tibble or \code{NULL}.
 If \code{userout} is specified the alignment results are written to the
 specified file, and no tibble is returned.
 
-If \code{userout} is \code{NULL} a tibble containing the alignment results
-with the fields specified by \code{userfields} is returned.
+If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
+If \code{otutabout} is a character string, the output is written to the file,
+and no tibble is returned.
+
+If neither \code{userout} nor \code{otutabout} is specified, a tibble
+containing the alignment results is returned.
 }
 \description{
 \code{vs_usearch_global} performs global pairwise alignment of query
@@ -95,6 +104,18 @@ specified file, and no tibble is returned.
 
 If \code{userout} is \code{NULL} a tibble containing the alignment results
 with the fields specified by \code{userfields} is returned.
+
+\code{otutabout} gives the option to output the results in an OTU
+table format with tab-separated columns. The first line will start with
+the string \"#OTU ID\" and is followed by a tab-separated list of all sample
+identifiers (\"sample=X\"). The following lines, one for each OTU, start with
+the OTU identifier and are followed by a tab-separated list of abundances for
+that OTU in each sample. If \code{otutabout} is a character string, the output
+is written to the specified file. If \code{otutabout} is \code{TRUE}, the
+function returns the OTU table as a tibble.
+
+If neither \code{userout} nor \code{otutabout} is specified (default), the
+function returns the alignment results as a userout tibble.
 
 Pairwise identity (\code{id})is calculated as the number of matching columns
 divided by the alignment length minus terminal gaps.
