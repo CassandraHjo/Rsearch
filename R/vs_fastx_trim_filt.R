@@ -28,7 +28,7 @@
 #' @param trunclen Truncate sequences to the specified length. Shorter sequences
 #' are discarded. If \code{NULL} (default), the trimming is not applied.
 #' @param truncqual Truncate sequences starting from the first base with a
-#' quality score of the specified value or lower. Defaults to \code{20}.
+#' quality score of the specified value or lower. Defaults to \code{1}.
 #' @param truncee Truncate sequences so that their total expected error does not
 #' exceed the specified value. If \code{NULL} (default), the trimming is not
 #' applied.
