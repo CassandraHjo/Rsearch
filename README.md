@@ -1,5 +1,5 @@
 
-# Rsearch
+# Rsearch <img src='man/figures/rsearch_logo.png' align="right" height="150" />
 
 ## Introduction
 
@@ -31,11 +31,9 @@ applies to tables containing statistics from function executions. By
 ensuring that all functions return only one table, navigating and
 managing results become more straightforward.
 
-More information about attributes in R can be found here:
-
-[www.r-bloggers.com](https://www.r-bloggers.com/2020/10/attributes-in-r/)
-
-[www.rdocumentation.org](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes)
+More information about attributes in R can be found
+[here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and
+[here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
 
 ## Installation
 
