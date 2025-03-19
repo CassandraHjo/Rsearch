@@ -10,6 +10,7 @@
 vs_cluster_size(
   fasta_input,
   centroids = NULL,
+  otutabout = NULL,
   size_column = FALSE,
   id = 0.97,
   strand = "plus",
@@ -33,8 +34,12 @@ file for the cluster centroid sequences. If \code{NULL} (default), no output
 is written to a file and the centroid sequences are returned as a FASTA
 object. See \emph{Details}.}
 
+\item{otutabout}{A character string specifying the name of the output file in
+an OTU table format. If \code{NULL} (default), no output is written to a file.
+If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.}
+
 \item{size_column}{If \code{TRUE}, a column with the size of each centroid is
-added to the output tibble.}
+added to the centroid output tibble.}
 
 \item{id}{Pairwise identity threshold for sequence to be added to a
 cluster. Defaults to \code{0.97}. See \emph{Details}.}
@@ -76,9 +81,13 @@ A tibble or \code{NULL}.
 If \code{centroids} is specified the centroid sequences are written to the
 specified file, and no tibble is returned.
 
-If \code{centroids} is \code{NULL} a FASTA object containing the centroid
-sequences is returned. The clustering statistics are included as an attribute
-named \code{"statistics"}.
+If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
+If \code{otutabout} is a character string, the output is written to the file,
+and no tibble is returned.
+
+If neither \code{centroids} nor \code{otutabout} is specified, a FASTA object
+containing the centroid sequences is returned. The clustering statistics are
+included as an attribute named \code{"statistics"}.
 
 The \code{"statistics"} attribute of the returned tibble (when
 \code{centroids} is \code{NULL}) is a tibble with the following columns:
@@ -114,18 +123,29 @@ The centroid of each cluster is the first sequence added to the cluster.
 object. FASTA objects are tibbles that contain the columns \code{Header} and
 \code{Sequence}.
 
+If neither \code{centroids} nor \code{otutabout} is specified (default), the
+function returns the centroid sequences as a FASTA object.
+
+If \code{centroids} is specified, centroid sequences are written to the
+specified file in FASTA format.
+
+\code{otutabout} gives the option to output the clustering results in an OTU
+table format with tab-separated columns. The first line will start with
+the string ’#OTU ID’ and is followed by a tab-separated list of all sample
+identifiers ("sample=X"). The following lines, one for each OTU, starts with
+the OTU identifier and is followed by a tab-separated list of abundances for
+that OTU in each sample, in the order given on the first line. The OTU and
+sample identifiers are extracted from the FASTA headers of the sequences.
+If \code{otutabout} is a character string, the output is written to the
+specified file. If \code{otutabout} is \code{TRUE}, the function returns
+the OTU table as a tibble.
+
 \code{id} is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is not
 added to a cluster if its pairwise identity with the centroid is bellow the
 \code{id} threshold.
 Pairwise identity is calculated as the number of matching columns divided by
 the alignment length minus terminal gaps.
-
-If \code{centroids} is specified, centroid sequences are written to the
-specified file in FASTA format.
-
-If \code{centroids} is \code{NULL}, the centroids are returned as a FASTA
-object.
 
 If \code{log_file} is \code{NULL} and \code{centroids} is specified,
 clustering statistics from \code{VSEARCH} will not be captured.

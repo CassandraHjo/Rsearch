@@ -11,8 +11,11 @@
 #' file for the cluster centroid sequences. If \code{NULL} (default), no output
 #' is written to a file and the centroid sequences are returned as a FASTA
 #' object. See \emph{Details}.
+#' @param otutabout A character string specifying the name of the output file in
+#' an OTU table format. If \code{NULL} (default), no output is written to a file.
+#' If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.
 #' @param size_column If \code{TRUE}, a column with the size of each centroid is
-#' added to the output tibble.
+#' added to the centroid output tibble.
 #' @param id Pairwise identity threshold for sequence to be added to a
 #' cluster. Defaults to \code{0.97}. See \emph{Details}.
 #' @param strand Specifies which strand to consider when comparing sequences.
@@ -46,18 +49,29 @@
 #' object. FASTA objects are tibbles that contain the columns \code{Header} and
 #' \code{Sequence}.
 #'
+#' If neither \code{centroids} nor \code{otutabout} is specified (default), the
+#' function returns the centroid sequences as a FASTA object.
+#'
+#' If \code{centroids} is specified, centroid sequences are written to the
+#' specified file in FASTA format.
+#'
+#' \code{otutabout} gives the option to output the clustering results in an OTU
+#' table format with tab-separated columns. The first line will start with
+#' the string ’#OTU ID’ and is followed by a tab-separated list of all sample
+#' identifiers ("sample=X"). The following lines, one for each OTU, starts with
+#' the OTU identifier and is followed by a tab-separated list of abundances for
+#' that OTU in each sample, in the order given on the first line. The OTU and
+#' sample identifiers are extracted from the FASTA headers of the sequences.
+#' If \code{otutabout} is a character string, the output is written to the
+#' specified file. If \code{otutabout} is \code{TRUE}, the function returns
+#' the OTU table as a tibble.
+#'
 #' \code{id} is a value between 0 and 1 that defines the minimum pairwise
 #' identity required for a sequence to be added to a cluster. A sequence is not
 #' added to a cluster if its pairwise identity with the centroid is bellow the
 #' \code{id} threshold.
 #' Pairwise identity is calculated as the number of matching columns divided by
 #' the alignment length minus terminal gaps.
-#'
-#' If \code{centroids} is specified, centroid sequences are written to the
-#' specified file in FASTA format.
-#'
-#' If \code{centroids} is \code{NULL}, the centroids are returned as a FASTA
-#' object.
 #'
 #' If \code{log_file} is \code{NULL} and \code{centroids} is specified,
 #' clustering statistics from \code{VSEARCH} will not be captured.
@@ -71,9 +85,13 @@
 #' If \code{centroids} is specified the centroid sequences are written to the
 #' specified file, and no tibble is returned.
 #'
-#' If \code{centroids} is \code{NULL} a FASTA object containing the centroid
-#' sequences is returned. The clustering statistics are included as an attribute
-#' named \code{"statistics"}.
+#' If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
+#' If \code{otutabout} is a character string, the output is written to the file,
+#' and no tibble is returned.
+#'
+#' If neither \code{centroids} nor \code{otutabout} is specified, a FASTA object
+#' containing the centroid sequences is returned. The clustering statistics are
+#' included as an attribute named \code{"statistics"}.
 #'
 #' The \code{"statistics"} attribute of the returned tibble (when
 #' \code{centroids} is \code{NULL}) is a tibble with the following columns:
@@ -121,6 +139,7 @@
 #'
 vs_cluster_size <- function(fasta_input,
                             centroids = NULL,
+                            otutabout = NULL,
                             size_column = FALSE,
                             id = 0.97,
                             strand = "plus",
@@ -141,6 +160,11 @@ vs_cluster_size <- function(fasta_input,
   # Validate strand
   if (!strand %in% c("plus", "both")) {
     stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")
+  }
+
+  # Ensure only one output format is specified
+  if (!is.null(centroids) && !is.null(otutabout)) {
+    stop("Only one of 'centroids' or 'otutabout' can be specified.")
   }
 
   # Create empty vector for collecting temporary files
@@ -178,12 +202,18 @@ vs_cluster_size <- function(fasta_input,
   # Normalize file paths
   fasta_file <- normalizePath(fasta_file)
 
-  # Determine centroids file
-  if (is.null(centroids)) {
-    outfile <- tempfile(pattern = "centroids", fileext = ".fa")
-    temp_files <- c(temp_files, outfile)
+  # Determine output file based on user input
+  if (!is.null(centroids)) {
+    outfile <- ifelse(is.character(centroids), centroids, tempfile(pattern = "centroids", fileext = ".fa"))
+  } else if (!is.null(otutabout)) {
+    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable", fileext = ".tsv"))
   } else {
-    outfile <- centroids
+    outfile <- tempfile(pattern = "centroids", fileext = ".fa")
+  }
+
+  # Only add temporary files to temp_files
+  if (is.null(centroids) && (is.null(otutabout) || !is.character(otutabout))) {
+    temp_files <- c(temp_files, outfile)
   }
 
   # Build argument string for command line
@@ -191,8 +221,15 @@ vs_cluster_size <- function(fasta_input,
             "--id", id,
             "--threads", 1,
             "--strand", strand,
-            "--fasta_width", fasta_width,
-            "--centroids", outfile)
+            "--fasta_width", fasta_width)
+
+  if (!is.null(centroids)) {
+    args <- c(args, "--centroids", outfile)
+  } else if (!is.null(otutabout)) {
+    args <- c(args, "--otutabout", outfile)
+  } else {
+    args <- c(args, "--centroids", outfile) # Default output
+  }
 
   if (sizein) {
     args <- c(args, "--sizein", "")
@@ -232,12 +269,18 @@ vs_cluster_size <- function(fasta_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  if (is.null(centroids)) {
-
-    # Read output into FASTA object (tbl)
+  # Determine return output
+  if (!is.null(centroids)) {
+    return(invisible(NULL)) # No return if centroids is specified
+  } else if (!is.null(otutabout)) {
+    if (is.character(otutabout)) {
+      return(invisible(NULL)) # File output only
+    } else {
+      return(readr::read_delim(outfile)) # Return as tibble
+    }
+  } else {
     centroids_fasta <- microseq::readFasta(outfile)
 
-    # Add size column if specified
     if (size_column) {
       centroids_fasta <- centroids_fasta |>
         dplyr::mutate(centroid_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
@@ -245,20 +288,11 @@ vs_cluster_size <- function(fasta_input,
         dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
     }
 
-    # Create statistics tibble
     statistics <- calculate_cluster_statistics(centroids_fasta,
                                                fasta_file,
                                                fasta_input_name)
-
-    # Add additional tables as attributes to the primary table
     attr(centroids_fasta, "statistics") <- statistics
-  }
-
-  # Return results
-  if (is.null(centroids)) { # Return tibble
     return(centroids_fasta)
-  } else {
-    return(invisible(NULL)) # No return when output file is written
   }
 }
 
