@@ -276,7 +276,7 @@ vs_cluster_size <- function(fasta_input,
     if (is.character(otutabout)) {
       return(invisible(NULL)) # File output only
     } else {
-      return(readr::read_delim(outfile)) # Return as tibble
+      return(suppressMessages(readr::read_delim(outfile))) # Return as tibble
     }
   } else {
     centroids_fasta <- microseq::readFasta(outfile)
