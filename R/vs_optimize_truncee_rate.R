@@ -33,15 +33,8 @@
 #' the arguments to this functions are described in detail.
 #'
 #' The best possible truncation option (\code{truncee_rate}) for merging is
-#' measured by the proportion of merged sequences with a copy number above the
+#' measured by the number of merged read-paris with a copy number above the
 #' number specified by \code{min_size} after dereplication.
-#'
-#' \code{merged_read_pairs} represents the proportion
-#' of merged high-quality read-pairs relative to the highest observed value
-#' across all tested \code{truncee_rate} values. This normalization allows
-#' comparisons across different \code{truncee_rate} values. A value close to 1.0
-#' indicates that the merging efficiency is near its maximum, while a lower
-#' value suggests suboptimal merging conditions.
 #'
 #' Changing \code{min_size} will affect the results. A low \code{min_size} will
 #' include merged sequences with a lower copy number after dereplication, and a
@@ -51,12 +44,8 @@
 #' @return A data frame with the following columns:
 #' \itemize{
 #'   \item \code{truncee_rate_value}: Tested \code{truncee_rate} value.
-#'   \item \code{merged_high_quality_read_pairs}: Absolute count of
-#'   successfully merged sequence pairs with a copy number above \code{min_size}
-#'   after dereplication.
-#'   \item \code{merged_read_pairs}: A relative metric,
-#'   calculated as the number of merged high-quality read-pairs divided
-#'   by the maximum observed merged read count.
+#'   \item \code{merged_read_pairs}: Count of merged read-pairs with a copy
+#'   number above \code{min_size} after dereplication.
 #'   \item \code{R1_length}: Average length of R1-reads after trimming.
 #'   \item \code{R2_length}: Average length of R2-reads after trimming.
 #' }
