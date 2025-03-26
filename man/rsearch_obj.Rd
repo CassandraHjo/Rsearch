@@ -4,59 +4,90 @@
 \alias{rsearch_obj}
 \title{Create an Rsearch object}
 \usage{
-rsearch_obj(readcount_data, tax_data, metadata, sample_id_col = "SampleID")
+rsearch_obj(
+  readcount_data,
+  sequence_data,
+  sample_data,
+  sample_id_col = "SampleID"
+)
 }
 \arguments{
-\item{readcount_data}{A file path or a data frame containing OTU count data.
+\item{readcount_data}{A file path or a data frame containing OTU count data,
+typically the output from \code{\link{vs_cluster_size}} or similar.
 The first column must contain OTU identifiers, and subsequent columns must
-contain read count for each sample. This corresponds to output from the
-\code{otutabout} argument in \code{cluster_size}.}
+contain read count for each sample.}
 
-\item{tax_data}{A file path or a data frame containing the taxonomy
-annotations. The first column must contain OTU identifiers. The second column
-the OTU names and the second column must contain taxonomic lineage in sintax
-format. This corresponds to output from the \code{tabbedout} argument in
-\code{vs_sintax}.}
+\item{sequence_data}{A file path or a data frame containing the taxonomy
+for each OTU, typically the output from \code{\link{vs_sintax}} or similar.
+The first column must contain OTU identifiers and the column must contain
+the taxonomic lineage in sintax format.}
 
-\item{metadata}{A file path or a data frame containing metadata for each
+\item{sample_data}{A file path or a data frame containing data about each
 sample. One column must contain sample identifiers that match the column names
 in the read count data.}
 
 \item{sample_id_col}{A character string specifying the name of the column in
-\code{metadata} that contains sample identifiers. Defaults to
-\code{"SampleID"}.}
+\code{sample_data} that contains sample identifiers. Defaults to
+\code{"sample_id"}.}
 }
 \value{
-A named list with three elements:
+A straightforward named list with three elements:
 \itemize{
-  \item \code{readcount.mat}: A matrix of OTU abundances with OTUs as rows
+  \item \code{readcount.mat}: A numeric matrix of OTU abundances with OTUs as rows
   and samples as columns.
-  \item \code{tax.mat}: A matrix of taxonomic classifications with OTUs as
-  rows and ranks (domain to genus) as columns.
-  \item \code{metadata.df}: A data frame containing metadata for the samples.
+  \item \code{sequence.df}: A data.frame with one row for each OTU sequence and
+  \item \code{sampledata.df}: A data frame containing data about the samples.
 }
-
-OTUs and samples not found in both the abundance and taxonomy/metadata tables
-are discarded.
 }
 \description{
-\code{rsearch_obj} prepares read count, taxonomy, and metadata
-tables into a format suitable for generating a \code{phyloseq} object.
+\code{rsearch_obj} creates a list containing the basic
+data structures from the processing of a set of samples.
+}
+\details{
+The processing of a set of samples results in some basic data structures.
+This function collects these into a single list object. We use a basic \code{list}`
+in the R language instead of constructing a special class, making it fully open
+and easy to work with.
+
+First, for any collection of samples we typically have a table of data about
+these samples. The input \code{sample_data} provides this, either as an already
+existing data.frame/tibble in R or as the name of a tab-separated text file.
+It is assumed the samples are in the rows, and one of the columns *must* contain
+a text as a unique identifier for each sample. This column name is specified in
+\code{sample_id_col}.
+
+From clustering (\code{\link{vs_cluster_size}} or denoising (\code{\link{vs_unoise}})
+of the reads we get a table of centroid sequences representing each OTU. The
+input \code{sequence_data} contains these, where the *first* column contains
+the OTU identifiers. The \code{Sequence} column must be among the remaining columns. In addition,
+we typically also do a taxonomic classification of each sequence (see \code{\link{vs_sintax}})
+and columns describing the taxonomy for each sequence may also typically be in here.
+
+Finally, by assigning all reads in each sample to the OTUs (\code{\link{vs_usearch_global}})
+we get a read count table (input \code{readcount_data}) and this must be a
+data.frame/tibble with one row for each sample and one column for each OTU.
+The first column must be the OTU identifiers corresponding to those in the first
+column of \code{sequence_data}. The remaining columns must have names corresponding to the
+sample identifiers in the \code{sample_data}. OTUs and samples not found across
+all data structures are discarded.
+
+To convert this tables into a \code{\link{phyloseq}} object, use
+\code{\link{rsearch2phyloseq}}.
 }
 \examples{
 \dontrun{
 # Define inputs
-readcount_data <- file.path(file.path(path.package("Rsearch"), "extdata"),
+readcount.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                            "SOME_DATA.tsv")
+tax.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                      "SOME_DATA.tsv")
+sample.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
                          "SOME_DATA.tsv")
-tax_data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                     "SOME_DATA.tsv")
-metadata <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                     "SOME_DATA.tsv")
 
 # Create Rsearch object
-obj <- rsearch_obj(readcount_data = readcount_data,
-                   tax_data = tax_data,
-                   metadata = metadata,
+obj <- rsearch_obj(readcount_data = readcount.data,
+                   tax_data = tax.data,
+                   sample_data = sample.data,
                    sample_id_col = "SampleID")
 
 }

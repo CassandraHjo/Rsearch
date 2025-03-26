@@ -8,29 +8,29 @@
 \usage{
 vs_sintax(
   fasta_input,
-  db,
-  tabbedout = NULL,
+  database,
+  outfile = NULL,
   cutoff = NULL,
   strand = "plus",
   randseed = NULL,
-  log_file = NULL,
+  logfile = NULL,
   threads = 1,
   vsearch_options = NULL
 )
 }
 \arguments{
 \item{fasta_input}{A FASTA file path or a FASTA object with reads to
-classify. See \emph{Details}.}
+classify, see \emph{Details}.}
 
-\item{db}{A FASTA/FASTQ file path or a FASTA/FASTQ object containing the
-reference database in FASTA/FASTQ format. The sequences need to be annotated
-with taxonomy.}
+\item{database}{A FASTA file path or a FASTA object containing the
+reference database in FASTA format. The sequences need to be annotated
+with taxonomy, see \emph{Details}.}
 
-\item{tabbedout}{Name of the tab-separated output file. If \code{NULL}
-(default), results are returned as a tibble. See \emph{Details}.}
+\item{outfile}{Name of the output file. If \code{NULL}
+(default), results are returned as a data.frame.}
 
-\item{cutoff}{minimum level of bootstrap support for the taxonomic ranks that
-is included in column 4 of the output file. Defaults to \code{NULL}.}
+\item{cutoff}{minimum level of bootstrap support (0.0-1.0) for the classifications.
+Defaults to \code{0.0}.}
 
 \item{strand}{Specifies which strand to consider when comparing sequences.
 Can be either \code{"plus"} (default) or \code{"both"}.}
@@ -38,7 +38,7 @@ Can be either \code{"plus"} (default) or \code{"both"}.}
 \item{randseed}{Seed for the random number generator used in the Sintax
 algorithm. Defaults to \code{NULL}.}
 
-\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
+\item{logfile}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL} (default), no log file is created.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
@@ -48,23 +48,16 @@ Defaults to \code{1}.}
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
-A tibble or \code{NULL}.
+If \code{outfile} is \code{NULL} a data.frame is returned. If it contains
+a file name (text) the data.frame is written to that file with tab-separated columns.
 
-If \code{tabbedout} is \code{NULL}, a tibble containing the classification
-results with the following columns is returned:
-\itemize{
-    \item \code{query}: The query sequence identifier.
-    \item \code{predicted_taxonomy}: The predicted taxonomy with bootstrap
-    support.
-    \item \code{strand}: The strand where the match was found (\code{"plus"}
-    or \code{"minus"}).
-    \item \code{predicted_taxonomy_cutoff}: (If \code{cutoff} is specified)
-    The predicted taxonomy without bootstrap values, including only ranks
-    meeting the cutoff threshold.
-  }
-
- If \code{tabbedout} is specified, results are written directly to the
- specified file, and no tibble is returned.
+The data.frame contains the classification results for each input sequence.
+Both the \code{Header} and \code{Sequence} columns of \code{input_fasta} are
+copied into this table, and in addition are also the columns for each rank. The ranks
+depend on the database file used, but are typically domain, phylum, class, order,
+family, genus and species. For each classification is also a bootstrap support score.
+These are in separate columns with corresponding names, i.e. domain_score,
+phylum_score, etc.
 }
 \description{
 \code{vs_sintax} classifies sequences using the Sintax algorithm
@@ -72,26 +65,16 @@ implemented in \code{VSEARCH}.
 }
 \details{
 The sequences in the input file are classified according to the
-Sintax algorithm, using \code{VSEARCH}.
+Sintax algorithm, using \code{VSEARCH}, see https://www.biorxiv.org/content/10.1101/074161v1
 
 \code{fasta_input} can either be a file path to a FASTA file or a
-FASTA object. \code{db} can either be a file path to a FASTA/FASTQ file or
-FASTA/FASTQ object. FASTA objects are tibbles that contain the
-columns \code{Header} and \code{Sequence}.FASTQ objects are tibbles that
-contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+FASTA object.
 
-\code{tabbedout} is a tab-separated text format file with the following
-columns:
-\itemize{
-  \item \code{Query label}
-  \item \code{Predicted taxonomy}: The predicted taxonomy in the same format
-  as for the reference data, with bootstrap support indicated in parentheses
-  after each rank.
-  \item \code{Strand}
-  \item \code{Predicted toxonomy without bootstrap values, including only the
-  ranks with support at or above the threshold}: (only applies if
-  \code{cutoff} is specified)
-}
+\code{database} can either be a file path to a FASTA file or a
+FASTA object. FASTA objects are tibbles that contain the
+text columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
+The \code{Header} texts of this file must follow the sintax-pattern, see
+\code{\link{make_sintax_database}}.
 
 \code{vsearch_options} allows users to pass additional command-line arguments
 to \code{VSEARCH} that are not directly supported by this function. Refer to
