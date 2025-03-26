@@ -33,7 +33,7 @@
 #' the arguments to this functions are described in detail.
 #'
 #' The best possible truncation option (\code{truncee_rate}) for merging is
-#' measured by the proportion of merged sequences with a copy number above the
+#' measured by the number of merged read-paris with a copy number above the
 #' number specified by \code{min_size} after dereplication.
 #'
 #' \code{merged_read_pairs} represents the proportion
