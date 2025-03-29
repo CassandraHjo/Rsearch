@@ -2,6 +2,7 @@
 
 export(fastx_combine_files)
 export(fastx_synchronize)
+export(make_sintax_db)
 export(phyloseq2rsearch)
 export(plot_base_quality)
 export(plot_ee_rate_dist)

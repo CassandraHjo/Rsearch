@@ -174,25 +174,25 @@ vs_sintax <- function(fasta_input,
   out.tbl <- utils::read.table(tmp_outfile, sep = "\t", col.names = c("Header", "taxonomy", "plus")) |>
     dplyr::select(-plus) |>
     dplyr::mutate(domain = stringr::str_extract(taxonomy, "d:.+?\\)")) |>
-    dplyr::mutate(domain_score = as.numeric(stringr::str_remove_all(stringr::str_extract(domain, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(domain_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(domain, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(domain = stringr::str_remove_all(domain, "d:|\\(.+")) |>
     dplyr::mutate(phylum = stringr::str_extract(taxonomy, "p:.+?\\)")) |>
-    dplyr::mutate(phylum_score = as.numeric(stringr::str_remove_all(stringr::str_extract(phylum, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(phylum_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(phylum, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(phylum = stringr::str_remove_all(phylum, "p:|\\(.+")) |>
     dplyr::mutate(class = stringr::str_extract(taxonomy, "c:.+?\\)")) |>
-    dplyr::mutate(class_score = as.numeric(stringr::str_remove_all(stringr::str_extract(class, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(class_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(class, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(class = stringr::str_remove_all(class, "c:|\\(.+")) |>
     dplyr::mutate(order = stringr::str_extract(taxonomy, "o:.+?\\)")) |>
-    dplyr::mutate(order_score = as.numeric(stringr::str_remove_all(stringr::str_extract(order, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(order_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(order, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(order = stringr::str_remove_all(order, "o:|\\(.+")) |>
     dplyr::mutate(family = stringr::str_extract(taxonomy, "f:.+?\\)")) |>
-    dplyr::mutate(family_score = as.numeric(stringr::str_remove_all(stringr::str_extract(family, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(family_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(family, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(family = stringr::str_remove_all(family, "f:|\\(.+")) |>
     dplyr::mutate(genus = stringr::str_extract(taxonomy, "g:.+?\\)")) |>
-    dplyr::mutate(genus_score = as.numeric(stringr::str_remove_all(stringr::str_extract(genus, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(genus_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(genus, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(genus = stringr::str_remove_all(genus, "g:|\\(.+")) |>
     dplyr::mutate(species = stringr::str_extract(taxonomy, "s:.+?\\)")) |>
-    dplyr::mutate(species_score = as.numeric(stringr::str_remove_all(stringr::str_extract(species, "\\(.+\\)"), "\\(|\\)"))) |>
+    dplyr::mutate(species_score = suppressWarnings(as.numeric(stringr::str_remove_all(stringr::str_extract(species, "\\(.+\\)"), "\\(|\\)")))) |>
     dplyr::mutate(species = stringr::str_remove_all(species, "s:|\\(.+")) |>
     dplyr::select(-taxonomy) |>
     dplyr::right_join(out.tbl, by = "Header") |>
@@ -213,4 +213,83 @@ vs_sintax <- function(fasta_input,
   } else {
     return(invisible(NULL)) # No return when output file is written
   }
+}
+
+
+#' Make Sintax database
+#'
+#' @description Creates a properly formatted fasta file for the use as a Sintax database.
+#'
+#' @param taxonomy_table A data.frame with sequences and proper information for making
+#' a Sintax database, see \emph{Details}.
+#' @param outfile Name of database file to create (a fasta file).
+#'
+#' @details The Sintax algorithm is used
+#' by \code{VSEARCH} to assign taxonomic information to 16S sequences. It requires a
+#' database, which is nothing but a fasta file of 16S sequences with properly formatted
+#' \code{Header}-lines.
+#'
+#' The \code{taxonomy_table} provided as input here must have the columns:
+#'
+#' \itemize{
+#'  \item \code{Header} - short unique text for each sequence
+#'  \item \code{Sequence} - the sequences
+#'  \item Columns \code{domain}, \code{phylum}, \code{class}, \code{order},
+#'   \code{family}, \code{genus}, \code{species}. Text columns with taxon names.
+#' }
+#'
+#' In some taxonomies the domain rank is named kingdom, but here we use the
+#' word domain. You may very well have empty (NA) entries in the taxonomy columns
+#' of the table.
+#'
+#' @returns No return in R, but a fasta file (\code{outfile}) with properly
+#' formatted \code{Header} lines is created.
+#'
+#' @references \url{https://www.biorxiv.org/content/10.1101/074161v1}
+#'
+#' @aliases sintax
+#'
+#' @export
+#'
+make_sintax_db <- function(taxonomy_table, outfile){
+  if(!exists("Header", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named Header, with a unique text for each sequence")
+  }
+  if(!exists("Sequence", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named Sequence, with the sequences")
+  }
+  if(!exists("domain", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named domain")
+  }
+  if(!exists("phylum", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named phylum")
+  }
+  if(!exists("class", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named class")
+  }
+  if(!exists("order", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named order")
+  }
+  if(!exists("family", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named family")
+  }
+  if(!exists("genus", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named genus")
+  }
+  if(!exists("species", where = taxonomy_table)){
+    stop("The taxonomy_table must have a column named species")
+  }
+
+  sintax.tbl <- taxonomy_table |>
+    dplyr::mutate(Header = stringr::str_c(Header, ";tax=",
+                                          "d:", domain, ",",
+                                          "p:", phylum, ",",
+                                          "c:", class, ",",
+                                          "o:", order, ",",
+                                          "f:", family, ",",
+                                          "g:", genus, ",",
+                                          "s:", species, ";"))
+
+  writeFasta(sintax.tbl, out.file = outfile)
+  return(invisible(NULL))
 }
