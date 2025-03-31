@@ -1,6 +1,6 @@
 #' Denoising FASTA sequences
 #'
-#' @description \code{vs_unoise} performs denoising of FASTA sequences from a
+#' @description \code{vs_cluster_unoise} performs denoising of FASTA sequences from a
 #' given file or object using \code{VSEARCH}´s \code{cluster_unoise} method.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object containing reads to
@@ -58,10 +58,11 @@
 #'
 #' \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 #' object. FASTA objects are tibbles that contain the columns \code{Header} and
-#' \code{Sequence}. The \code{Header} column \strong{must} contain the size
-#' of each sequence in the format ";size=X", where X is the read count for the
-#' given sequence. This can be obtained by dereplicating function
-#' \code{\link{vs_fastx_uniques}} with the \code{sizeout = TRUE} argument.
+#' \code{Sequence}, see \code{\link{readFasta}}. The \code{Header} column
+#' \strong{must} contain the size of each sequence in the format ";size=X",
+#' where X is the read count for the given sequence. This can be obtained by
+#' dereplicating function \code{\link{vs_fastx_uniques}} with the
+#' \code{sizeout = TRUE} argument.
 #'
 #' If neither \code{centroids} nor \code{otutabout} is specified (default), the
 #' function returns the centroid sequences as a FASTA object.
@@ -133,41 +134,41 @@
 #'                                    "R1_sample1_small.fa")
 #' centroids <- NULL
 #'
-#' # Cluster sequences and return a FASTA tibble
-#' cluster_seqs <- vs_cluster_size(fasta_input = fasta_input,
-#'                                 centroids = centroids)
+#' # Denoise sequences and return a FASTA tibble
+#' denoise_seqs <- vs_cluster_unoise(fasta_input = fasta_input,
+#'                                   centroids = centroids)
 #'
 #' # Extract clustering statistics
 #' statistics <- attr(cluster_seqs, "statistics")
 #'
 #' # Cluster sequences and write centroids to a file
-#' vs_cluster_size(fasta_input = fasta_input,
-#'                               centroids = "centroids_sequences.fa")
+#' vs_cluster_unoise(fasta_input = fasta_input,
+#'                   centroids = "centroids_sequences.fa")
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_unoise unoise denoise
+#' @aliases vs_cluster_unoise unoise denoise
 #'
 #' @export
 #'
-vs_unoise <- function(fasta_input,
-                      centroids = NULL,
-                      otutabout = NULL,
-                      size_column = FALSE,
-                      id = 0.97,
-                      minsize = 8,
-                      unoise_alpha = 2,
-                      strand = "plus",
-                      sizein = TRUE,
-                      sizeout = TRUE,
-                      relabel = NULL,
-                      relabel_sha1 = FALSE,
-                      fasta_width = 0,
-                      sample = NULL,
-                      log_file = NULL,
-                      threads = 1,
-                      vsearch_options = NULL){
+vs_cluster_unoise <- function(fasta_input,
+                              centroids = NULL,
+                              otutabout = NULL,
+                              size_column = FALSE,
+                              id = 0.97,
+                              minsize = 8,
+                              unoise_alpha = 2,
+                              strand = "plus",
+                              sizein = TRUE,
+                              sizeout = TRUE,
+                              relabel = NULL,
+                              relabel_sha1 = FALSE,
+                              fasta_width = 0,
+                              sample = NULL,
+                              log_file = NULL,
+                              threads = 1,
+                              vsearch_options = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
