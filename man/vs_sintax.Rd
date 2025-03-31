@@ -29,8 +29,8 @@ with taxonomy, see \emph{Details}.}
 \item{outfile}{Name of the output file. If \code{NULL}
 (default), results are returned as a data.frame.}
 
-\item{cutoff}{minimum level of bootstrap support (0.0-1.0) for the classifications.
-Defaults to \code{0.0}.}
+\item{cutoff}{minimum level of bootstrap support (0.0-1.0) for the
+classifications. Defaults to \code{0.0}.}
 
 \item{strand}{Specifies which strand to consider when comparing sequences.
 Can be either \code{"plus"} (default) or \code{"both"}.}
@@ -48,16 +48,17 @@ Defaults to \code{1}.}
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
-If \code{outfile} is \code{NULL} a data.frame is returned. If it contains
-a file name (text) the data.frame is written to that file with tab-separated columns.
+If \code{outfile} is \code{NULL} a data.frame is returned. If it
+contains a file name (text) the data.frame is written to that file with
+tab-separated columns.
 
 The data.frame contains the classification results for each input sequence.
-Both the \code{Header} and \code{Sequence} columns of \code{input_fasta} are
-copied into this table, and in addition are also the columns for each rank. The ranks
-depend on the database file used, but are typically domain, phylum, class, order,
-family, genus and species. For each classification is also a bootstrap support score.
-These are in separate columns with corresponding names, i.e. domain_score,
-phylum_score, etc.
+Both the \code{Header} and \code{Sequence} columns of \code{fasta_input} are
+copied into this table, and in addition are also the columns for each rank.
+The ranks depend on the database file used, but are typically domain, phylum,
+class, order,family, genus and species. For each classification is also a
+bootstrap support score. These are in separate columns with corresponding
+names, i.e. domain_score, phylum_score, etc.
 }
 \description{
 \code{vs_sintax} classifies sequences using the Sintax algorithm
@@ -65,7 +66,8 @@ implemented in \code{VSEARCH}.
 }
 \details{
 The sequences in the input file are classified according to the
-Sintax algorithm, using \code{VSEARCH}, see https://www.biorxiv.org/content/10.1101/074161v1
+Sintax algorithm, using \code{VSEARCH}, see
+\url{https://www.biorxiv.org/content/10.1101/074161v1}.
 
 \code{fasta_input} can either be a file path to a FASTA file or a
 FASTA object.
@@ -74,7 +76,7 @@ FASTA object.
 FASTA object. FASTA objects are tibbles that contain the
 text columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
 The \code{Header} texts of this file must follow the sintax-pattern, see
-\code{\link{make_sintax_database}}.
+\code{\link{make_sintax_db}}.
 
 \code{vsearch_options} allows users to pass additional command-line arguments
 to \code{VSEARCH} that are not directly supported by this function. Refer to
@@ -82,4 +84,5 @@ the \code{VSEARCH} manual for more details.
 }
 \references{
 \url{https://github.com/torognes/vsearch}
+\url{https://www.biorxiv.org/content/10.1101/074161v1}
 }

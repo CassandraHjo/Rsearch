@@ -2,29 +2,29 @@
 % Please edit documentation in R/vs_sintax.R
 \name{make_sintax_db}
 \alias{make_sintax_db}
-\alias{sintax}
+\alias{sintax_db}
 \title{Make Sintax database}
 \usage{
 make_sintax_db(taxonomy_table, outfile)
 }
 \arguments{
-\item{taxonomy_table}{A data.frame with sequences and proper information for making
-a Sintax database, see \emph{Details}.}
+\item{taxonomy_table}{A data.frame with sequences and proper information for
+making a Sintax database, see \emph{Details}.}
 
-\item{outfile}{Name of database file to create (a fasta file).}
+\item{outfile}{Name of database file to create (a FASTA file).}
 }
 \value{
-No return in R, but a fasta file (\code{outfile}) with properly
+No return in R, but a FASTA file (\code{outfile}) with properly
 formatted \code{Header} lines is created.
 }
 \description{
-Creates a properly formatted fasta file for the use as a Sintax database.
+Creates a properly formatted FASTA file for the use as a Sintax
+database.
 }
 \details{
-The Sintax algorithm is used
-by \code{VSEARCH} to assign taxonomic information to 16S sequences. It requires a
-database, which is nothing but a fasta file of 16S sequences with properly formatted
-\code{Header}-lines.
+The Sintax algorithm is used by \code{VSEARCH} to assign taxonomic
+information to 16S sequences. It requires a database, which is nothing but a
+FASTA file of 16S sequences with properly formatted \code{Header}-lines.
 
 The \code{taxonomy_table} provided as input here must have the columns:
 
@@ -36,8 +36,8 @@ The \code{taxonomy_table} provided as input here must have the columns:
 }
 
 In some taxonomies the domain rank is named kingdom, but here we use the
-word domain. You may very well have empty (NA) entries in the taxonomy columns
-of the table.
+word domain. You may very well have empty (NA) entries in the taxonomy
+columns of the table.
 }
 \references{
 \url{https://www.biorxiv.org/content/10.1101/074161v1}

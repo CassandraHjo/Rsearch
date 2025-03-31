@@ -10,8 +10,8 @@
 #' with taxonomy, see \emph{Details}.
 #' @param outfile Name of the output file. If \code{NULL}
 #' (default), results are returned as a data.frame.
-#' @param cutoff minimum level of bootstrap support (0.0-1.0) for the classifications.
-#' Defaults to \code{0.0}.
+#' @param cutoff minimum level of bootstrap support (0.0-1.0) for the
+#' classifications. Defaults to \code{0.0}.
 #' @param strand Specifies which strand to consider when comparing sequences.
 #' Can be either \code{"plus"} (default) or \code{"both"}.
 #' @param randseed Seed for the random number generator used in the Sintax
@@ -24,7 +24,8 @@
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details The sequences in the input file are classified according to the
-#' Sintax algorithm, using \code{VSEARCH}, see https://www.biorxiv.org/content/10.1101/074161v1
+#' Sintax algorithm, using \code{VSEARCH}, see
+#' \url{https://www.biorxiv.org/content/10.1101/074161v1}.
 #'
 #' \code{fasta_input} can either be a file path to a FASTA file or a
 #' FASTA object.
@@ -33,24 +34,27 @@
 #' FASTA object. FASTA objects are tibbles that contain the
 #' text columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
 #' The \code{Header} texts of this file must follow the sintax-pattern, see
-#' \code{\link{make_sintax_database}}.
+#' \code{\link{make_sintax_db}}.
 #'
 #' \code{vsearch_options} allows users to pass additional command-line arguments
 #' to \code{VSEARCH} that are not directly supported by this function. Refer to
 #' the \code{VSEARCH} manual for more details.
 #'
-#' @returns If \code{outfile} is \code{NULL} a data.frame is returned. If it contains
-#' a file name (text) the data.frame is written to that file with tab-separated columns.
+#' @returns If \code{outfile} is \code{NULL} a data.frame is returned. If it
+#' contains a file name (text) the data.frame is written to that file with
+#' tab-separated columns.
 #'
 #' The data.frame contains the classification results for each input sequence.
-#' Both the \code{Header} and \code{Sequence} columns of \code{input_fasta} are
-#' copied into this table, and in addition are also the columns for each rank. The ranks
-#' depend on the database file used, but are typically domain, phylum, class, order,
-#' family, genus and species. For each classification is also a bootstrap support score.
-#' These are in separate columns with corresponding names, i.e. domain_score,
-#' phylum_score, etc.
+#' Both the \code{Header} and \code{Sequence} columns of \code{fasta_input} are
+#' copied into this table, and in addition are also the columns for each rank.
+#' The ranks depend on the database file used, but are typically domain, phylum,
+#' class, order,family, genus and species. For each classification is also a
+#' bootstrap support score. These are in separate columns with corresponding
+#' names, i.e. domain_score, phylum_score, etc.
 #'
-#' @references \url{https://github.com/torognes/vsearch}
+#' @references
+#' \url{https://github.com/torognes/vsearch}
+#' \url{https://www.biorxiv.org/content/10.1101/074161v1}
 #'
 #' @aliases vs_sintax sintax classify
 #'
@@ -218,16 +222,16 @@ vs_sintax <- function(fasta_input,
 
 #' Make Sintax database
 #'
-#' @description Creates a properly formatted fasta file for the use as a Sintax database.
+#' @description Creates a properly formatted FASTA file for the use as a Sintax
+#' database.
 #'
-#' @param taxonomy_table A data.frame with sequences and proper information for making
-#' a Sintax database, see \emph{Details}.
-#' @param outfile Name of database file to create (a fasta file).
+#' @param taxonomy_table A data.frame with sequences and proper information for
+#' making a Sintax database, see \emph{Details}.
+#' @param outfile Name of database file to create (a FASTA file).
 #'
-#' @details The Sintax algorithm is used
-#' by \code{VSEARCH} to assign taxonomic information to 16S sequences. It requires a
-#' database, which is nothing but a fasta file of 16S sequences with properly formatted
-#' \code{Header}-lines.
+#' @details The Sintax algorithm is used by \code{VSEARCH} to assign taxonomic
+#' information to 16S sequences. It requires a database, which is nothing but a
+#' FASTA file of 16S sequences with properly formatted \code{Header}-lines.
 #'
 #' The \code{taxonomy_table} provided as input here must have the columns:
 #'
@@ -239,15 +243,15 @@ vs_sintax <- function(fasta_input,
 #' }
 #'
 #' In some taxonomies the domain rank is named kingdom, but here we use the
-#' word domain. You may very well have empty (NA) entries in the taxonomy columns
-#' of the table.
+#' word domain. You may very well have empty (NA) entries in the taxonomy
+#' columns of the table.
 #'
-#' @returns No return in R, but a fasta file (\code{outfile}) with properly
+#' @returns No return in R, but a FASTA file (\code{outfile}) with properly
 #' formatted \code{Header} lines is created.
 #'
 #' @references \url{https://www.biorxiv.org/content/10.1101/074161v1}
 #'
-#' @aliases sintax
+#' @aliases sintax_db
 #'
 #' @export
 #'
@@ -290,6 +294,6 @@ make_sintax_db <- function(taxonomy_table, outfile){
                                           "g:", genus, ",",
                                           "s:", species, ";"))
 
-  writeFasta(sintax.tbl, out.file = outfile)
+  microseq::writeFasta(sintax.tbl, out.file = outfile)
   return(invisible(NULL))
 }
