@@ -121,7 +121,7 @@ The centroid of each cluster is the first sequence added to the cluster.
 
 \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}.
+\code{Sequence}, see \code{\link{readFasta}}.
 
 If neither \code{centroids} nor \code{otutabout} is specified (default), the
 function returns the centroid sequences as a FASTA object.
@@ -170,7 +170,7 @@ statistics <- attr(cluster_seqs, "statistics")
 
 # Cluster sequences and write centroids to a file
 vs_cluster_size(fasta_input = fasta_input,
-                              centroids = "centroids_sequences.fa")
+                centroids = "centroids_sequences.fa")
 }
 
 }

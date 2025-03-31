@@ -79,9 +79,9 @@ sequence, and the reverse complement of the reverse read.
 
 \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
-\code{Header}, \code{Sequence}, and \code{Quality}.
-Forward and reverse reads must appear in the same order and have the same
-total number of reads in both files.
+\code{Header}, \code{Sequence}, and \code{Quality}, see
+\code{\link{readFastq}}. Forward and reverse reads must appear in the same
+order and have the same total number of reads in both files.
 
 If \code{fastaout} or \code{fastqout} is specified, the joined reads are
 written to the respective file in either FASTA or FASTQ format.

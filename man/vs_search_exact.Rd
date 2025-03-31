@@ -76,8 +76,9 @@ specificity.
 
 \code{fastx_input} and \code{db} can either be file paths to a FASTA/FASTQ
 files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
-columns \code{Header} and \code{Sequence}.FASTQ objects are tibbles that
-contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
+objects are tibbles that contain the columns \code{Header}, \code{Sequence},
+and \code{Quality}, see \code{\link{readFastq}}.
 
 \code{userfields} specifies the fields to include in the output file. Fields
 must be given as a character string separated by \code{"+"}. The default

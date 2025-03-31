@@ -166,8 +166,9 @@ are trimmed and/or filtered based on the specified criteria using
 
 \code{fastx_input} and \code{reverse} can either be file paths to FASTA/FASTQ
 files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
-columns \code{Header} and \code{Sequence}. FASTQ objects are tibbles that
-contain the columns \code{Header}, \code{Sequence}, and \code{Quality}.
+columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
+objects are tibbles that contain the columns \code{Header}, \code{Sequence},
+and \code{Quality}, see \code{\link{readFastq}}.
 
 If \code{reverse} is provided, it is processed alongside \code{fastx_input}
 using the same trimming/filtering criteria.

@@ -31,13 +31,13 @@
 #' column name is specified in \code{sample_id_col}.
 #'
 #' From clustering (\code{\link{vs_cluster_size}}) or denoising
-#' (\code{\link{vs_unoise}}) of the reads we get a table of centroid sequences
-#' representing each OTU. The input \code{sequence_data} contains these, where
-#' the \emph{first} column contains the OTU identifiers. The \code{Sequence}
-#' column must be among the remaining columns. In addition, we typically also do
-#' a taxonomic classification of each sequence (see \code{\link{vs_sintax}})
-#' and columns describing the taxonomy for each sequence may also typically be
-#' in here.
+#' (\code{\link{vs_cluster_unoise}}) of the reads we get a table of centroid
+#' sequences representing each OTU. The input \code{sequence_data} contains
+#' these, where the \emph{first} column contains the OTU identifiers. The
+#' \code{Sequence} column must be among the remaining columns. In addition, we
+#' typically also do a taxonomic classification of each sequence
+#' (see \code{\link{vs_sintax}}) and columns describing the taxonomy for each
+#' sequence may also typically be in here.
 #'
 #' Finally, by assigning all reads in each sample to the OTUs
 #' (\code{\link{vs_usearch_global}}) we get a read count table

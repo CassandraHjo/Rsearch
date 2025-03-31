@@ -25,7 +25,7 @@
 #'
 #' \code{fastq_input} can either be a file path to a FASTQ file or a FASTQ
 #' object. FASTQ objects are tibbles that contain the columns \code{Header},
-#' \code{Sequence}, and \code{Quality}.
+#' \code{Sequence}, and \code{Quality}, see \code{\link{readFastq}}.
 #'
 #' The EE rate is calculated as the mean of error probabilities per read, where
 #' the error probability for each base is computed as \eqn{10^{(-Q/10)}} from

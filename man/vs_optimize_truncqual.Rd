@@ -74,7 +74,7 @@ The function uses \code{\link{vs_fastq_mergepairs}},
 the arguments to this functions are described in detail.
 
 The best possible truncation option (\code{truncqual}) for merging is
-measured by the number of merged read-paris with a copy number above the
+measured by the number of merged read-pairs with a copy number above the
 number specified by \code{min_size} after dereplication.
 
 Changing \code{min_size} will affect the results. A low \code{min_size} will

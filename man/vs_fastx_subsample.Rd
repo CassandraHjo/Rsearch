@@ -96,8 +96,9 @@ sequences and without replacement.
 
 \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
 FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}.FASTQ objects are tibbles that contain the columns
-\code{Header}, \code{Sequence}, and \code{Quality}.
+\code{Sequence}, see \code{\link{readFasta}}. FASTQ objects are tibbles that
+contain the columns \code{Header}, \code{Sequence}, and \code{Quality}, see
+\code{\link{readFastq}}.
 
 Specify either \code{sample_size} or \code{sample_pct} to determine the
 number or percentage of sequences to subsample. Only one of these parameters

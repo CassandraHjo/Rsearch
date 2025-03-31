@@ -28,11 +28,12 @@
 #' \url{https://www.biorxiv.org/content/10.1101/074161v1}.
 #'
 #' \code{fasta_input} can either be a file path to a FASTA file or a
-#' FASTA object.
+#' FASTA object. FASTA objects are tibbles that contain the columns
+#' \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
 #'
 #' \code{database} can either be a file path to a FASTA file or a
 #' FASTA object. FASTA objects are tibbles that contain the
-#' text columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
+#' columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
 #' The \code{Header} texts of this file must follow the sintax-pattern, see
 #' \code{\link{make_sintax_db}}.
 #'

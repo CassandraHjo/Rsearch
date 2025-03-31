@@ -38,7 +38,8 @@
 #' \code{uchime_ref}.
 #'
 #' \code{fasta_input} can either be a FASTA file or a FASTA object. FASTA objects
-#' are tibbles that contain the columns \code{Header} and \code{Sequence}.
+#' are tibbles that contain the columns \code{Header} and \code{Sequence}, see
+#' \code{\link{readFasta}}.
 #'
 #' If \code{nonchimeras} and \code{chimeras} are specified, resulting
 #' non-chimeric and chimeric sequences are written to these files in FASTA

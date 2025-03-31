@@ -24,9 +24,9 @@
 #' \code{file1} and \code{file2} can either be paths to FASTA/FASTQ files or
 #' tibble objects containing the sequences.
 #' FASTA objects are tibbles that contain the columns \code{Header} and
-#' \code{Sequence}.
-#' FASTQ objects are tibbles that contain the columns \code{Header},
-#' \code{Sequence}, and \code{Quality}.
+#' \code{Sequence}, see \code{\link{readFasta}}. FASTQ objects are tibbles that
+#' contain the columns \code{Header}, \code{Sequence}, and \code{Quality}, see
+#' \code{\link{readFastq}}.
 #'
 #' Sequence IDs in the \code{Header} fields must be identical for each read pair
 #' in both \code{file1} and \code{file2} for synchronization to work correctly.
