@@ -238,11 +238,13 @@ test_that("dereplicate fastq file, and return fastq tibble with vsearch_options"
   fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   fastx_output <- NULL
   output_format <- "fastq"
+  sample <- "sample1"
   vsearch_options <- c("--relabel", "OTU")
 
   derep_sample1_R1 <- vs_fastx_uniques(fastx_input = fastx_input,
                                        fastx_output = fastx_output,
                                        output_format = output_format,
+                                       sample = sample,
                                        vsearch_options = vsearch_options)
 
   expect_equal(derep_sample1_R1,

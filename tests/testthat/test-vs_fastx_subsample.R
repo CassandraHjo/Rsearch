@@ -17,8 +17,8 @@ test_that("error when input is fasta and output_format is fastq", {
   sample_size <- 20
 
   expect_error(vs_fastx_subsample(fastx_input = fastx_input,
-                                output_format = output_format,
-                                sample_size = sample_size),
+                                  output_format = output_format,
+                                  sample_size = sample_size),
                "Invalid output_format when input tibble is of type 'fasta'")
 })
 
@@ -267,6 +267,7 @@ test_that("subsample fastq file with size, and return fastq tibble with vsearch_
   output_format <- "fastq"
   sample_size <- 100
   randseed <- 1
+  sample <- "sample1"
   vsearch_options <- c("--relabel", "OTU")
 
   subsample_sample1_R1 <- vs_fastx_subsample(fastx_input = fastx_input,
@@ -274,6 +275,7 @@ test_that("subsample fastq file with size, and return fastq tibble with vsearch_
                                              output_format = output_format,
                                              sample_size = sample_size,
                                              randseed = randseed,
+                                             sample = sample,
                                              vsearch_options = vsearch_options
   )
 

@@ -63,7 +63,7 @@
 #' If \code{nonchimeras} and \code{chimeras} are \code{NULL}, A FASTA object
 #' containing non-chimeric sequences with an attribute \code{"chimeras"}
 #' containing a tibble of chimeric sequences is returned. If no chimeras are
-#' found, the \code{"chimeras"} attribute is \code{NULL}.
+#' found, the \code{"chimeras"} attribute is an empty data frame.
 #'
 #' Additionally, the returned tibble (when applicable) has an attribute
 #' \code{"statistics"} containing a tibble with chimera detection statistics.
@@ -241,18 +241,17 @@ vs_uchime_denovo <- function(fasta_input,
     # Read output into FASTA object (tbl)
     nonchimeras.tbl <- microseq::readFasta(nonchimeras_file)
 
+    # Create empty table
+    chimeras.tbl <- data.frame()
+
     # Check if chimeras file contains something
     if (file.info(chimeras_file)$size > 0){
 
       chimeras.tbl <- microseq::readFasta(chimeras_file)
-
-      # Add additional table as attribute to the primary table
-      attr(nonchimeras.tbl, "chimeras") <- chimeras.tbl
-
-    } else {
-      # Add empty attribute to the primary table because no chimeras were found
-      attr(nonchimeras.tbl, "chimeras") <- NULL
     }
+
+    # Add additional table as attribute to the primary table
+    attr(nonchimeras.tbl, "chimeras") <- chimeras.tbl
 
     # Add statistics
     statistics <- calculate_uchime_statistics(fasta_file,

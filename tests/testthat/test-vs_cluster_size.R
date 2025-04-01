@@ -18,6 +18,18 @@ test_that("error when input fasta_input does not exist", {
                paste("Cannot find input file:", fasta_input))
 })
 
+test_that("error when both outputs are specified", {
+
+  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  centroids <- withr::local_tempfile()
+  otutabout <- withr::local_tempfile()
+
+  expect_error(vs_cluster_size(fasta_input = fasta_input,
+                               centroids = centroids,
+                               otutabout = otutabout),
+               "Only one of 'centroids' or 'otutabout' can be specified.")
+})
+
 test_that("cluster sequences from fasta file, and return fasta file", {
 
   fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
@@ -88,8 +100,44 @@ test_that("cluster sequences from fasta tibble, and return fasta tibble", {
   centroids <- NULL
 
   cluster_sample1_R1 <- vs_cluster_size(fasta_input = fasta_input,
-                                        centroids = centroids)
+                                        centroids = centroids,
+                                        size_column = TRUE)
 
   expect_equal(cluster_sample1_R1,
                readRDS(test_path("testdata", "output", "cluster_R1_sample1_tibble.rds")))
+})
+
+test_that("vs_cluster_size returns OTU table tibble when otutabout = TRUE", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+    dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
+
+  otu_tbl <- vs_cluster_size(fasta_input = fasta_input,
+                             otutabout = TRUE,
+                             relabel = "OTU",
+                             sample = "sample1")
+
+  expect_equal(otu_tbl,
+               readRDS(test_path("testdata",
+                                 "output",
+                                 "cluster_R1_sample1_otu.rds")))
+})
+
+test_that("vs_cluster_size writes OTU table to file when otutabout is path", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+    dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
+
+  otutable_out <- withr::local_tempfile(fileext = ".tsv")
+
+  return_val <- vs_cluster_size(fasta_input = fasta_input,
+                                otutabout = otutable_out,
+                                relabel = "OTU")
+
+  expect_null(return_val)
+  expect_true(file.exists(otutable_out))
+  expect_equal(suppressMessages(readr::read_delim(otutable_out)),
+               readRDS(test_path("testdata",
+                                 "output",
+                                 "cluster_R1_sample1_otu.rds")))
 })

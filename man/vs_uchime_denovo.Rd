@@ -65,7 +65,7 @@ FASTA format, and no tibbles are returned.
 If \code{nonchimeras} and \code{chimeras} are \code{NULL}, A FASTA object
 containing non-chimeric sequences with an attribute \code{"chimeras"}
 containing a tibble of chimeric sequences is returned. If no chimeras are
-found, the \code{"chimeras"} attribute is \code{NULL}.
+found, the \code{"chimeras"} attribute is an empty data frame.
 
 Additionally, the returned tibble (when applicable) has an attribute
 \code{"statistics"} containing a tibble with chimera detection statistics.

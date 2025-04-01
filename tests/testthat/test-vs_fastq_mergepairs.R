@@ -5,8 +5,8 @@ test_that("error when wrong output_format", {
   output_format <- "fastx"
 
   expect_error(vs_fastq_mergepairs(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format),
+                                   reverse = R2,
+                                   output_format = output_format),
                "Invalid output_format. Choose from fasta or fastq.")
 })
 
@@ -18,9 +18,9 @@ test_that("error when output_format is 'fasta', and fastqout is defined", {
   fastqout <- "some_file.fq"
 
   expect_error(vs_fastq_mergepairs(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format,
-                               fastqout = fastqout),
+                                   reverse = R2,
+                                   output_format = output_format,
+                                   fastqout = fastqout),
                "When output_format is defined as 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
 })
 
@@ -32,9 +32,9 @@ test_that("error when output_format is 'fastq', and fastaout is defined", {
   fastaout <- "some_file.fa"
 
   expect_error(vs_fastq_mergepairs(fastq_input = R1,
-                               reverse = R2,
-                               output_format = output_format,
-                               fastaout = fastaout),
+                                   reverse = R2,
+                                   output_format = output_format,
+                                   fastaout = fastaout),
                "When output_format is defined as 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
 })
 
@@ -135,8 +135,8 @@ test_that("fastq_input and reverse can be merged when files, and results given a
   output_format <- "fastq"
 
   merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-                                      reverse = reverse,
-                                      output_format = output_format)
+                                        reverse = reverse,
+                                        output_format = output_format)
 
   expect_equal(merged_sample1,
                readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds")))
@@ -216,11 +216,13 @@ test_that("fastq_input and reverse can be merged when files, and results given a
   fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
   reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
   output_format <- "fastq"
+  sample <- "sample1"
   vsearch_options <- c("--relabel", "OTU")
 
   merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
                                         reverse = reverse,
                                         output_format = output_format,
+                                        sample = sample,
                                         vsearch_options = vsearch_options)
 
   expect_equal(merged_sample1,
