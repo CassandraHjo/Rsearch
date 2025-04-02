@@ -12,6 +12,20 @@ test_that("error when wrong strand", {
                "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
 })
 
+test_that("error when both outputs are specified", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
+  userout <- withr::local_tempfile()
+  otutabout <- withr::local_tempfile()
+
+  expect_error(vs_usearch_global(fastx_input = fastx_input,
+                                 db = db,
+                                 userout = userout,
+                                 otutabout = otutabout),
+               "Only one of 'userout' or 'otutabout' can be specified.")
+})
+
 test_that("error when wrong columns in fastx_input fastq", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
@@ -175,3 +189,89 @@ test_that("allignment with default values with fasta file and tibble as input", 
   expect_equal(actual,
                readRDS(test_path("testdata", "output", "sample1_usearch_global_default_fasta_files.rds")))
 })
+
+test_that("vs_usearch_global returns OTU table tibble when otutabout = TRUE", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+    dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
+
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds")) |>
+    dplyr::select(-Quality)
+
+  otu_tbl <- vs_usearch_global(fastx_input = fasta_input,
+                               db = db,
+                               otutabout = TRUE)
+
+  expect_equal(otu_tbl,
+               readRDS(test_path("testdata",
+                                 "output",
+                                 "sample1_usearch_global_otu.rds")))
+})
+
+test_that("vs_usearch_global writes OTU table to file when otutabout is path", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+    dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
+
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds")) |>
+    dplyr::select(-Quality)
+
+  otutable_out <- withr::local_tempfile(fileext = ".tsv")
+
+  return_val <- vs_usearch_global(fastx_input = fasta_input,
+                                  db = db,
+                                  otutabout = otutable_out)
+
+  expect_null(return_val)
+  expect_true(file.exists(otutable_out))
+  expect_equal(suppressMessages(readr::read_delim(otutable_out)),
+               readRDS(test_path("testdata",
+                                 "output",
+                                 "sample1_usearch_global_otu.rds")))
+})
+
+test_that("vs_usearch_global returns tibble with default userfields when no output file is specified", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
+
+  result <- vs_usearch_global(fastx_input = fastx_input,
+                              db = db)
+
+  expect_s3_class(result, "tbl_df")
+  expect_named(result, c("query", "target", "id", "alnlen", "mism", "opens",
+                         "qlo", "qhi", "tlo", "thi", "evalue", "bits"))
+  expect_equal(result,
+               readRDS(test_path("testdata", "output", "sample1_usearch_global_userfields.rds")))
+})
+
+test_that("vs_usearch_global respects custom userfields", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
+  userfields <- "query+target+id+alnlen"
+
+  result <- vs_usearch_global(fastx_input = fastx_input,
+                              db = db,
+                              userfields = userfields)
+
+  expect_s3_class(result, "tbl_df")
+  expect_named(result, c("query", "target", "id", "alnlen"))
+  expect_equal(result,
+               readRDS(test_path("testdata", "output", "sample1_usearch_global_userfields_custom.rds")))
+})
+
+test_that("vs_usearch_global runs when strand is 'both' (without maxaccepts)", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
+
+  result <- vs_usearch_global(fastx_input = fastx_input,
+                              db = db,
+                              strand = "both")
+
+  expect_s3_class(result, "tbl_df")
+  expect_equal(result,
+               readRDS(test_path("testdata", "output", "sample1_usearch_global_strand_both.rds")))
+})
+

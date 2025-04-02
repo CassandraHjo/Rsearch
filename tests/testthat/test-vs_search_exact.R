@@ -12,6 +12,20 @@ test_that("error when wrong strand", {
                "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
 })
 
+test_that("error when both outputs are specified", {
+
+  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
+  userout <- withr::local_tempfile()
+  otutabout <- withr::local_tempfile()
+
+  expect_error(vs_search_exact(fastx_input = fastx_input,
+                               db = db,
+                               userout = userout,
+                               otutabout = otutabout),
+               "Only one of 'userout' or 'otutabout' can be specified.")
+})
+
 test_that("error when wrong columns in fastx_input fastq", {
 
   fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
@@ -41,9 +55,6 @@ test_that("error when wrong columns in db fastq", {
                                strand = strand),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
-
-
-
 
 test_that("error when wrong columns in fastx_input fasta", {
 
@@ -177,4 +188,68 @@ test_that("search with default values with fasta file and tibble as input", {
 
   expect_equal(actual,
                readRDS(test_path("testdata", "output", "sample1_search_exact_default.rds")))
+})
+
+test_that("vs_search_exact returns OTU table tibble when otutabout = TRUE", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+    dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
+
+  db <- fasta_input[1:10, ]  # ensure exact matches exist
+
+  otu_tbl <- vs_search_exact(fastx_input = fasta_input,
+                             db = db,
+                             otutabout = TRUE)
+
+  expect_s3_class(otu_tbl, "tbl_df")
+  expect_true("#OTU ID" %in% names(otu_tbl))
+  expect_equal(otu_tbl, readRDS(test_path("testdata", "output", "sample1_search_exact_otu_tibble.rds")))
+})
+
+test_that("vs_search_exact writes OTU table to file when otutabout is path", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+    dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
+
+  db <- fasta_input[1:10, ]
+
+  otu_outfile <- withr::local_tempfile(fileext = ".tsv")
+
+  return_val <- vs_search_exact(fastx_input = fasta_input,
+                                db = db,
+                                otutabout = otu_outfile)
+
+  actual <- suppressMessages(readr::read_delim(otu_outfile))
+
+  expect_null(return_val)
+  expect_true(file.exists(otu_outfile))
+  expect_equal(actual, readRDS(test_path("testdata", "output", "sample1_search_exact_otu_tibble.rds")))
+})
+
+test_that("vs_search_exact returns alignment tibble with default userfields", {
+
+  fasta_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  db <- fasta_input[1:10, ]
+
+  out_tbl <- vs_search_exact(fastx_input = fasta_input,
+                             db = db)
+
+  expect_s3_class(out_tbl, "tbl_df")
+  expect_named(out_tbl, c("query", "target", "id", "alnlen", "mism", "opens",
+                          "qlo", "qhi", "tlo", "thi", "evalue", "bits"))
+  expect_equal(out_tbl,
+               readRDS(test_path("testdata", "output", "sample1_search_exact_userout.rds")))
+})
+
+test_that("vs_search_exact works with sample argument", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
+  db <- fasta_input[1:10, ]
+
+  out_tbl <- vs_search_exact(fastx_input = fasta_input,
+                             db = db,
+                             sample = "test_sample")
+
+  expect_s3_class(out_tbl, "tbl_df")
+  expect_true("query" %in% colnames(out_tbl))
 })
