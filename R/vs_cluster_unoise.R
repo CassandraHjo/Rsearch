@@ -298,18 +298,36 @@ vs_cluster_unoise <- function(fasta_input,
       return(suppressMessages(readr::read_delim(outfile))) # Return as tibble
     }
   } else {
-    centroids_fasta <- microseq::readFasta(outfile)
+    if (file.exists(outfile) && file.info(outfile)$size > 0) {
+      centroids_fasta <- microseq::readFasta(outfile)
+    } else {
+      centroids_fasta <- tibble::tibble(Header = character(), Sequence = character())
+      warning("No centroid sequences were returned by VSEARCH. Check input quality or parameters.")
+    }
 
-    if (size_column) {
+    if (size_column && nrow(centroids_fasta) > 0) {
       centroids_fasta <- centroids_fasta |>
         dplyr::mutate(centroid_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
         dplyr::mutate(centroid_size = as.numeric(centroid_size)) |>
         dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
     }
 
+    if (nrow(centroids_fasta) > 0) {
     statistics <- calculate_cluster_statistics(centroids_fasta,
                                                fasta_file,
                                                fasta_input_name)
+    } else {
+      statistics <- tibble::tibble(num_nucleotides = 0,
+                                   min_length_input_seq = 0,
+                                   max_length_input_seq = 0,
+                                   avg_length_input_seq = 0,
+                                   num_clusters = 0,
+                                   min_size_cluster = 0,
+                                   max_size_cluster = 0,
+                                   avg_size_cluster = 0,
+                                   num_singletons = 0,
+                                   input = fasta_input_name)
+    }
     attr(centroids_fasta, "statistics") <- statistics
     return(centroids_fasta)
   }
