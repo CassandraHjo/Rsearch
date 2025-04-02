@@ -34,7 +34,8 @@
 #' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param sample Add the given sample identifier string to sequence headers. For
 #' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
+#' to the header. his option is only applicable when the output format is FASTA
+#' (\code{centroids}). If \code{NULL} (default), no identifier is added.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.

@@ -240,16 +240,3 @@ test_that("vs_search_exact returns alignment tibble with default userfields", {
   expect_equal(out_tbl,
                readRDS(test_path("testdata", "output", "sample1_search_exact_userout.rds")))
 })
-
-test_that("vs_search_exact works with sample argument", {
-
-  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
-  db <- fasta_input[1:10, ]
-
-  out_tbl <- vs_search_exact(fastx_input = fasta_input,
-                             db = db,
-                             sample = "test_sample")
-
-  expect_s3_class(out_tbl, "tbl_df")
-  expect_true("query" %in% colnames(out_tbl))
-})

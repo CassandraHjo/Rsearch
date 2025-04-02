@@ -13,7 +13,6 @@ vs_search_exact(
   userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
   strand = "plus",
   threads = 1,
-  sample = NULL,
   vsearch_options = NULL
 )
 }
@@ -42,10 +41,6 @@ Can be either \code{"plus"} (default) or \code{"both"}.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
-
-\item{sample}{Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If \code{NULL} (default), no identifier is added.}
 
 \item{vsearch_options}{A character string of additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
