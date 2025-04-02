@@ -6,7 +6,7 @@ test_that("error when fastq_input has incorrect columns if input is tibble", {
   R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
 
   expect_error(vs_merging_lengths(fastq_input = R1,
-                                   reverse = R2),
+                                  reverse = R2),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
@@ -18,7 +18,7 @@ test_that("error when reverse has incorrect columns if input is tibble", {
     dplyr::select(-Header)
 
   expect_error(vs_merging_lengths(fastq_input = R1,
-                                   reverse = R2),
+                                  reverse = R2),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
@@ -79,7 +79,7 @@ test_that("vs_merging_lengths creates histograms when R1 and R2 lengths vary", {
   # Run function
   suppressWarnings({
     merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
-                               reverse = reverse)
+                                             reverse = reverse)
   })
 
   expect_s3_class(attr(merging_lengths_df, "plot"), "ggplot")

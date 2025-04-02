@@ -1,4 +1,5 @@
 test_that("rsearch_obj constructs object correctly from data frames", {
+
   # Simulated inputs
   readcount_data <- tibble::tibble(
     OTU = c("OTU1", "OTU2", "OTU3"),
@@ -32,6 +33,7 @@ test_that("rsearch_obj constructs object correctly from data frames", {
 })
 
 test_that("rsearch_obj handles subsetting to intersecting samples and OTUs", {
+
   readcount_data <- tibble::tibble(
     OTU = c("OTU1", "OTU2"),
     Sample1 = c(1, 2),
@@ -56,6 +58,7 @@ test_that("rsearch_obj handles subsetting to intersecting samples and OTUs", {
 })
 
 test_that("rsearch_obj accepts input files", {
+
   # Create temp input files
   readcount_file <- withr::local_tempfile(fileext = ".tsv")
   sequence_file <- withr::local_tempfile(fileext = ".tsv")
@@ -85,6 +88,7 @@ test_that("rsearch_obj accepts input files", {
 })
 
 test_that("rsearch_obj strips size annotation from sequence headers", {
+
   readcount_data <- tibble::tibble(OTU = "OTU1", Sample1 = 42)
   sequence_data <- tibble::tibble(Header = "OTU1;size=999", Sequence = "AGTC")
   sample_data <- tibble::tibble(sample_id = "Sample1")

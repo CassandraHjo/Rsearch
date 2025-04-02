@@ -5,8 +5,8 @@ test_that("error when wrong output_format", {
   output_format <- "fastx"
 
   expect_error(vs_fastq_join(fastq_input = R1,
-                                   reverse = R2,
-                                   output_format = output_format),
+                             reverse = R2,
+                             output_format = output_format),
                "Invalid output_format. Choose from fasta or fastq.")
 })
 
@@ -18,9 +18,9 @@ test_that("error when output_format is 'fasta', and fastqout is defined", {
   fastqout <- "some_file.fq"
 
   expect_error(vs_fastq_join(fastq_input = R1,
-                                   reverse = R2,
-                                   output_format = output_format,
-                                   fastqout = fastqout),
+                             reverse = R2,
+                             output_format = output_format,
+                             fastqout = fastqout),
                "When output_format is defined as 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
 })
 
@@ -32,9 +32,9 @@ test_that("error when output_format is 'fastq', and fastaout is defined", {
   fastaout <- "some_file.fa"
 
   expect_error(vs_fastq_join(fastq_input = R1,
-                                   reverse = R2,
-                                   output_format = output_format,
-                                   fastaout = fastaout),
+                             reverse = R2,
+                             output_format = output_format,
+                             fastaout = fastaout),
                "When output_format is defined as 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
 })
 
@@ -48,8 +48,8 @@ test_that("error when fastq_input has incorrect columns if input is tibble", {
   output_format <- "fastq"
 
   expect_error(vs_fastq_join(fastq_input = R1,
-                                   reverse = R2,
-                                   output_format = output_format),
+                             reverse = R2,
+                             output_format = output_format),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
@@ -63,8 +63,8 @@ test_that("error when reverse has incorrect columns if input is tibble", {
   output_format <- "fastq"
 
   expect_error(vs_fastq_join(fastq_input = R1,
-                                   reverse = R2,
-                                   output_format = output_format),
+                             reverse = R2,
+                             output_format = output_format),
                "FASTQ object must contain columns: Header, Sequence, Quality")
 })
 
@@ -75,8 +75,8 @@ test_that("error when input file does not exist", {
   output_format <- "fastq"
 
   expect_error(vs_fastq_join(fastq_input = fastq_input,
-                                   reverse = reverse,
-                                   output_format = output_format),
+                             reverse = reverse,
+                             output_format = output_format),
                paste("Cannot find input FASTQ file:", fastq_input))
 })
 
@@ -87,8 +87,8 @@ test_that("error when reverse file does not exist", {
   output_format <- "fastq"
 
   expect_error(vs_fastq_join(fastq_input = fastq_input,
-                                   reverse = reverse,
-                                   output_format = output_format),
+                             reverse = reverse,
+                             output_format = output_format),
                paste("Cannot find reverse FASTQ file:", reverse))
 })
 
@@ -100,9 +100,9 @@ test_that("fastq_input and reverse can be joined when files, and results written
   output_format <- "fastq"
 
   return_value <- vs_fastq_join(fastq_input = fastq_input,
-                                      reverse = reverse,
-                                      fastqout = fastqout,
-                                      output_format = output_format)
+                                reverse = reverse,
+                                fastqout = fastqout,
+                                output_format = output_format)
 
   expect_null(return_value)
 
@@ -118,9 +118,9 @@ test_that("fastq_input and reverse can be joined when files, and results written
   output_format <- "fasta"
 
   return_value <- vs_fastq_join(fastq_input = fastq_input,
-                                      reverse = reverse,
-                                      fastaout = fastaout,
-                                      output_format = output_format)
+                                reverse = reverse,
+                                fastaout = fastaout,
+                                output_format = output_format)
 
   expect_null(return_value)
 
@@ -136,9 +136,9 @@ test_that("fastq_input and reverse can be joined when files, and results given a
   output_format <- "fastq"
 
   joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        fastqout = fastqout,
-                                        output_format = output_format)
+                                  reverse = reverse,
+                                  fastqout = fastqout,
+                                  output_format = output_format)
 
   expect_equal(joined_sample1,
                readRDS(test_path("testdata", "output", "joined_sample1_fastq_files.rds")))
@@ -153,9 +153,9 @@ test_that("fastq_input and reverse can be joined when files, and results given a
   output_format <- "fasta"
 
   joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        fastaout = fastaout,
-                                        output_format = output_format)
+                                  reverse = reverse,
+                                  fastaout = fastaout,
+                                  output_format = output_format)
 
   expect_equal(joined_sample1,
                readRDS(test_path("testdata", "output", "joined_sample1_fasta_files.rds")))
@@ -170,9 +170,9 @@ test_that("fastq_input and reverse can be joined when tibbles, and results writt
   output_format <- "fastq"
 
   return_value <- vs_fastq_join(fastq_input = fastq_input,
-                                      reverse = reverse,
-                                      fastqout = fastqout,
-                                      output_format = output_format)
+                                reverse = reverse,
+                                fastqout = fastqout,
+                                output_format = output_format)
 
   expect_null(return_value)
 
@@ -188,9 +188,9 @@ test_that("fastq_input and reverse can be joined when tibbles, and results given
   output_format <- "fastq"
 
   joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        fastqout = fastqout,
-                                        output_format = output_format)
+                                  reverse = reverse,
+                                  fastqout = fastqout,
+                                  output_format = output_format)
 
   expect_equal(joined_sample1,
                readRDS(test_path("testdata", "output", "joined_sample1_fastq_tibbles.rds")))
@@ -205,10 +205,10 @@ test_that("log file exists when specified", {
   log_file <- withr::local_tempfile()
 
   return_value <- vs_fastq_join(fastq_input = fastq_input,
-                                      reverse = reverse,
-                                      fastqout = fastqout,
-                                      output_format = output_format,
-                                      log_file = log_file)
+                                reverse = reverse,
+                                fastqout = fastqout,
+                                output_format = output_format,
+                                log_file = log_file)
   expect_null(return_value)
 
   expect_true(file.exists(log_file))

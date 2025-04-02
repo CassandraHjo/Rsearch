@@ -5,8 +5,8 @@ test_that("error when wrong strand", {
   strand <- "wrong_input"
 
   expect_error(vs_cluster_unoise(fasta_input = fasta_input,
-                               centroids = centroids,
-                               strand = strand),
+                                 centroids = centroids,
+                                 strand = strand),
                "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
 })
 
@@ -25,8 +25,8 @@ test_that("error when both outputs are specified", {
   otutabout <- withr::local_tempfile()
 
   expect_error(vs_cluster_unoise(fasta_input = fasta_input,
-                               centroids = centroids,
-                               otutabout = otutabout),
+                                 centroids = centroids,
+                                 otutabout = otutabout),
                "Only one of 'centroids' or 'otutabout' can be specified.")
 })
 

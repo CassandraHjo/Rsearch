@@ -5,8 +5,8 @@ test_that("error when wrong file_format", {
   file_format <- "fastx"
 
   expect_error(fastx_synchronize(file1 = file1,
-                        file2 = file2,
-                        file_format = file_format),
+                                 file2 = file2,
+                                 file_format = file_format),
                "Invalid file_format. The files must be a fasta or fastq.")
 })
 
@@ -166,10 +166,10 @@ test_that("two fastq files can be synchronized, and return fastq tibble with att
 
 
   sync_file1 <- fastx_synchronize(file1 = file1,
-                                    file2 = file2,
-                                    file_format = file_format,
-                                    file1_out = file1_out,
-                                    file2_out = file2_out)
+                                  file2 = file2,
+                                  file_format = file_format,
+                                  file1_out = file1_out,
+                                  file2_out = file2_out)
 
   sync_file2 <- attr(sync_file1, "reverse")
 
