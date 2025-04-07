@@ -2,12 +2,10 @@
 #'
 #' @description \code{vs_uchime_ref} detects chimeras present in the FASTA
 #' sequences in using \code{VSEARCH}'s \code{uchime_ref} algorithm.
-#' Automatically sorts sequences by decreasing abundance to enhance chimera
-#' detection accuracy.
 #'
 #' @param fasta_input A FASTA file path or a FASTA object with reads. See
 #' \emph{Details}.
-#' @param db A FASTA file path or FASTA tibble object containing the
+#' @param database A FASTA file path or FASTA tibble object containing the
 #' reference sequences. These sequences are assumed to be chimera-free.
 #' @param nonchimeras Name of the FASTA output file for the non-chimeric
 #' sequences. If \code{NULL} (default), no output is written to file.
@@ -41,15 +39,8 @@
 #' are tibbles that contain the columns \code{Header} and \code{Sequence}, see
 #' \code{\link{readFasta}}.
 #'
-#' If \code{nonchimeras} and \code{chimeras} are specified, resulting
-#' non-chimeric and chimeric sequences are written to these files in FASTA
-#' format.
-#'
-#' If \code{nonchimeras} and \code{chimeras} are \code{NULL}, results are
-#' returned as a FASTA-objects.
-#'
-#' \code{nonchimeras} and \code{chimeras} must either both be specified or both
-#' be \code{NULL}.
+#' \code{database} must be a FASTA file or a FASTA object with high-quality
+#' non-chimeric sequences.
 #'
 #' \code{vsearch_options} allows users to pass additional command-line arguments
 #' to \code{VSEARCH} that are not directly supported by this function. Refer to
@@ -90,21 +81,18 @@
 #' @examples
 #' \dontrun{
 #' # Define arguments
-#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "R1_sample1_small.fa")
-#' nonchimeras <- "nonchimeras.fa"
-#' chimeras <- "chimeras.fa"
-#' db <- "db.fa"
+#' query_file <- system.file("extdata", "small.fasta", package = "Rsearch")
+#' db <- system.file("extdata", "sintax_db.fasta", package = "Rsearch")
 #'
 #' # Detect chimeras with default parameters and return FASTA files
-#' vs_uchime_ref(fasta_input = fasta_input,
-#'               db = db,
-#'               nonchimeras = nonchimeras,
-#'               chimeras = chimeras)
+#' vs_uchime_ref(fasta_input = query_file,
+#'               database = db,
+#'               nonchimeras = "nonchimeras.fa",
+#'               chimeras = "chimeras.fa")
 #'
 #' # Detect chimeras with default parameters and return a FASTA tibble
-#' nonchimeras.tbl <- vs_uchime_ref(fasta_input = fasta_input,
-#'                                  db = db,
+#' nonchimeras.tbl <- vs_uchime_ref(fasta_input = query_file,
+#'                                  database = db,
 #'                                  nonchimeras = NULL,
 #'                                  chimeras = NULL)
 #'
@@ -124,7 +112,7 @@
 #' @export
 #'
 vs_uchime_ref <- function(fasta_input,
-                          db,
+                          database,
                           nonchimeras = NULL,
                           chimeras = NULL,
                           sizein = TRUE,
@@ -178,15 +166,15 @@ vs_uchime_ref <- function(fasta_input,
   # Check is input file exists at given path
   if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
 
-  # Check if db is file or tibble
-  if (!is.character(db)){
+  # Check if database is file or tibble
+  if (!is.character(database)){
     temp_file_db <- tempfile(pattern = "db", fileext = ".fa")
     temp_files <- c(temp_files, temp_file_db)
-    microseq::writeFasta(db, temp_file_db)
+    microseq::writeFasta(database, temp_file_db)
     db_file <- temp_file_db
 
   } else {
-    db_file <- db
+    db_file <- database
   }
 
   # Determine nonchimeras file

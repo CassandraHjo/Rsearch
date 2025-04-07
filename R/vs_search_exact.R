@@ -82,12 +82,12 @@
 #'                 userout = "delete_me.txt")
 #'
 #' # Read results, and give column names
-#' outfile_search <- read.table("delete_me.txt",
-#'                              sep = "\t",
-#'                              header = FALSE,
-#'                              col.names = c("query", "target", "id", "alnlen",
-#'                                            "mism", "opens", "qlo", "qhi",
-#'                                            "tlo", "thi", "evalue", "bits"))
+#' result.tbl <- read.table("delete_me.txt",
+#'                          sep = "\t",
+#'                          header = FALSE,
+#'                          col.names = c("query", "target", "id", "alnlen",
+#'                                        "mism", "opens", "qlo", "qhi",
+#'                                        "tlo", "thi", "evalue", "bits"))
 #' }
 #'
 #' @references \url{https://github.com/torognes/vsearch}
