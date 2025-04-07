@@ -39,6 +39,20 @@ In some taxonomies the domain rank is named kingdom, but here we use the
 word domain. You may very well have empty (NA) entries in the taxonomy
 columns of the table.
 }
+\examples{
+\dontrun{
+# First, you need a table of the same format as output by vs_sintax:
+db.file <- system.file("extdata", "sintax_db.fasta", package = "Rsearch")
+fasta.file <- system.file("extdata", "small.fasta", package = "Rsearch")
+tax.tbl <- vs_sintax(fasta_input = fasta.file, database = db.file)
+
+# Inspect tax.tbl to see its columns. You replace the column content with
+# your desired taxonomy.
+# From such a tax.tbl you create the database file:
+make_sintax_db(tax.tbl, outfile = "delete_ma.fasta")
+}
+
+}
 \references{
 \url{https://www.biorxiv.org/content/10.1101/074161v1}
 }

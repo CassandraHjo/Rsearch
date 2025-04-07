@@ -83,6 +83,18 @@ The \code{Header} texts of this file must follow the sintax-pattern, see
 to \code{VSEARCH} that are not directly supported by this function. Refer to
 the \code{VSEARCH} manual for more details.
 }
+\examples{
+\dontrun{
+# Example files
+db.file <- system.file("extdata", "sintax_db.fasta", package = "Rsearch")
+fasta.file <- system.file("extdata", "small.fasta", package = "Rsearch")
+
+tax.tbl <- vs_sintax(fasta_input = fasta.file, database = db.file)
+View(tax.tbl)
+}
+
+
+}
 \references{
 \url{https://github.com/torognes/vsearch}
 \url{https://www.biorxiv.org/content/10.1101/074161v1}
