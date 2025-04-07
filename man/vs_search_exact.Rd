@@ -7,7 +7,7 @@
 \usage{
 vs_search_exact(
   fastx_input,
-  db,
+  database,
   userout = NULL,
   otutabout = NULL,
   userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
@@ -20,7 +20,7 @@ vs_search_exact(
 \item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object
 containing the query sequences. See \emph{Details}.}
 
-\item{db}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
+\item{database}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
 target sequences.}
 
 \item{userout}{A character string specifying the name of the output file for
@@ -48,7 +48,9 @@ Defaults to \code{1}.}
 \value{
 A tibble or \code{NULL}.
 
-If \code{userout} is specified the alignment results are written to the
+If \code{userout} is \code{NULL} a tibble containing the alignment results
+with the fields specified by \code{userfields} is returned. If \code{userout}
+is specified the alignment results are written to the
 specified file, and no tibble is returned.
 
 If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
@@ -59,17 +61,16 @@ If neither \code{userout} nor \code{otutabout} is specified, a tibble
 containing the alignment results is returned.
 }
 \description{
-\code{vs_search_exact} searches for exact full-length matches to
-the query sequences in the database of target sequences using \code{VSEARCH}.
-Only 100% exact matches are reported, making this command much faster than
-\code{\link{vs_usearch_global}}.
+\code{vs_search_exact} searches for exact full-length matches of
+query sequences in a database of target sequences using \code{VSEARCH}.
 }
 \details{
 Identifies exact full-length matches between query and target sequences
 using \code{VSEARCH}. Only 100% identical matches are reported, ensuring high
-specificity.
+specificity and making this command much faster than
+\code{\link{vs_usearch_global}}.
 
-\code{fastx_input} and \code{db} can either be file paths to a FASTA/FASTQ
+\code{fastx_input} and \code{database} can either be file paths to a FASTA/FASTQ
 files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
 columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
 objects are tibbles that contain the columns \code{Header}, \code{Sequence},
@@ -82,23 +83,12 @@ value of \code{userfields} equals
 gives a blast-like tab-separated format of twelve fields. See the
 'Userfields' section in the \code{VSEARCH} manual for more information.
 
-If \code{userout} is specified the alignment results are written to the
-specified file, and no tibble is returned.
-
-If \code{userout} is \code{NULL} a tibble containing the alignment results
-with the fields specified by \code{userfields} is returned.
-
 \code{otutabout} gives the option to output the results in an OTU
 table format with tab-separated columns. The first line will start with
 the string \"#OTU ID\" and is followed by a tab-separated list of all sample
 identifiers (\"sample=X\"). The following lines, one for each OTU, start with
 the OTU identifier and are followed by a tab-separated list of abundances for
-that OTU in each sample. If \code{otutabout} is a character string, the output
-is written to the specified file. If \code{otutabout} is \code{TRUE}, the
-function returns the OTU table as a tibble.
-
-If neither \code{userout} nor \code{otutabout} is specified (default), the
-function returns the alignment results as a userout tibble.
+that OTU in each sample.
 
 \code{vsearch_options} allows users to pass additional command-line arguments
 to \code{VSEARCH} that are not directly supported by this function. Refer to
@@ -106,25 +96,22 @@ the \code{VSEARCH} manual for more details.
 }
 \examples{
 \dontrun{
-# Define arguments
-fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                         "R1_sample1_small.fq")
-db <- microseq::readFastq(fastx_input)[1:80, ]
-userout <- "userout.txt"
+# You would typically use something else as database
+query_file <- system.file("extdata", "small.fasta", package = "Rsearch")
+db <- query_file
 
 # Search for exact full-length matches with default parameters, with file as output
-vs_search_exact(fastx_input = fastx_input,
-                db = db,
-                userout = userout)
+vs_search_exact(fastx_input = query_file,
+                database = db,
+                userout = "delete_me.txt")
 
 # Read results, and give column names
-outfile_search <- read.delim(userout,
+outfile_search <- read.table("delete_me.txt",
                              sep = "\t",
-                             header = FALSE)
-
-colnames(outfile_alignment) <- c("query", "target", "id", "alnlen",
-                                 "mism", "opens", "qlo", "qhi",
-                                 "tlo", "thi", "evalue", "bits")
+                             header = FALSE,
+                             col.names = c("query", "target", "id", "alnlen",
+                                           "mism", "opens", "qlo", "qhi",
+                                           "tlo", "thi", "evalue", "bits"))
 }
 
 }
