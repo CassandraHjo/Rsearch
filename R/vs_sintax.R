@@ -328,28 +328,33 @@ make_sintax_db <- function(taxonomy_table, outfile){
 #'
 #' @description Creates a phylo object based on taxonomy
 #'
-#' @param taxonomy_table A data.frame with sequences and taxonomy information, see \emph{Details}.
-#' @param confidence A threshold value used to replace taxa with confidence scores below this to \code{NA}.
+#' @param taxonomy_table A data.frame with sequences and taxonomy information,
+#' see \emph{Details}.
+#' @param confidence A threshold value used to replace taxa with confidence
+#' scores below this to \code{NA}.
 #'
-#' @details In some data analyses involving OTU data a phylogenetic tree describing the
-#' relatedness of the OTUs is required. To construct such trees you typically need to
-#' make a multiple alignment of the sequences behind each OTU, which is a huge job.
+#' @details In some data analyses involving OTU data a phylogenetic tree
+#' describing the relatedness of the OTUs is required. To construct such trees
+#' you typically need to make a multiple alignment of the sequences behind each
+#' OTU, which is a huge job.
 #'
-#' An alternative is then to simply use the taxonomy, and create a 'taxonomy-tree' instead
-#' a phylogenetic tree. This function creates such a tree from a taxonomy table of the
-#' same format as output by \code{\link{vs_sintax}}.
+#' An alternative is then to simply use the taxonomy, and create a
+#' 'taxonomy-tree' instead of a phylogenetic tree. This function creates such a
+#' tree from a taxonomy table of the same format as output by
+#' \code{\link{vs_sintax}}.
 #'
-#' Distances between two OTUs reflect how high up in the taxonomy they have a common
-#' taxon, i.e if they are of the same species the distance is 0, if different species but
-#' same genus the distance is 1 etc. Note that \code{NA}s in the taxonomy are not matched,
-#' increasing the distances, i.e if two OTUs have \code{NA} as species and genus,
-#' but share family, the distance is 2.
+#' Distances between two OTUs reflect how high up in the taxonomy they have a
+#' common taxon, i.e if they are of the same species the distance is 0, if
+#' different species but same genus the distance is 1 etc. Note that \code{NA}s
+#' in the taxonomy are not matched, increasing the distances, i.e if two OTUs
+#' have \code{NA} as species and genus, but share family, the distance is 2.
 #'
-#' The \code{confidence} sets a threshold for replacing low-confidence taxa to \code{NA}.
-#' For this to work the \code{taxonomy_table} must have columns with such confidence scores
-#' i.e. columns domain_score, phylum_score,...species_score. If the species_score is below
-#' \code{confidence} the corresponding species name is set to \code{NA}, and similar
-#' for all ranks. The default is to ignore this confidence (\code{confidence = NULL}).
+#' The \code{confidence} sets a threshold for replacing low-confidence taxa to
+#' \code{NA}. For this to work the \code{taxonomy_table} must have columns with
+#' such confidence scores i.e. columns domain_score, phylum_score,
+#' ...species_score. If the species_score is below \code{confidence} the
+#' corresponding species name is set to \code{NA}, and similar for all ranks.
+#' The default is to ignore this confidence (\code{confidence = NULL}).
 #'
 #' From these distances a Neighbor Joining tree is built using \code{\link{nj}}.
 #'
@@ -442,7 +447,15 @@ taxonomy_tree <- function(taxonomy_table, confidence = NULL){
     }
   }
 
-  tax.mat <- dplyr::select(taxonomy_table, Header, domain, phylum, class, order, family, genus, species) |>
+  tax.mat <- dplyr::select(taxonomy_table,
+                           Header,
+                           domain,
+                           phylum,
+                           class,
+                           order,
+                           family,
+                           genus,
+                           species) |>
     as.matrix()
   D.mat <- matrix(7, nrow = nrow(tax.tbl), ncol = nrow(tax.tbl))
   for(i in 2:8){
