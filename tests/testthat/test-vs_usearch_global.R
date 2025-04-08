@@ -6,7 +6,7 @@ test_that("error when wrong strand", {
   strand <- "wrong_input"
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout,
                                  strand = strand),
                "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
@@ -20,7 +20,7 @@ test_that("error when both outputs are specified", {
   otutabout <- withr::local_tempfile()
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout,
                                  otutabout = otutabout),
                "Only one of 'userout' or 'otutabout' can be specified.")
@@ -35,7 +35,7 @@ test_that("error when wrong columns in fastx_input fastq", {
   strand <- "plus"
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout,
                                  strand = strand),
                "FASTQ object must contain columns: Header, Sequence, Quality")
@@ -50,7 +50,7 @@ test_that("error when wrong columns in db fastq", {
   strand <- "plus"
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout,
                                  strand = strand),
                "FASTQ object must contain columns: Header, Sequence, Quality")
@@ -66,7 +66,7 @@ test_that("error when wrong columns in fastx_input fasta", {
   strand <- "plus"
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout,
                                  strand = strand),
                "FASTA object must contain columns: Header and Sequence")
@@ -82,7 +82,7 @@ test_that("error when wrong columns in db fasta", {
   strand <- "plus"
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout,
                                  strand = strand),
                "FASTA object must contain columns: Header and Sequence")
@@ -95,7 +95,7 @@ test_that("error when fastx_input does not exist", {
   userout <- withr::local_tempfile()
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout),
                paste0("Cannot find input file: ", fastx_input))
 })
@@ -107,7 +107,7 @@ test_that("error when db does not exist", {
   userout <- withr::local_tempfile()
 
   expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 db = db,
+                                 database = db,
                                  userout = userout),
                paste0("Cannot find input file: ", db))
 })
@@ -120,7 +120,7 @@ test_that("allignment with default values with fastq tibbles as input", {
   vsearch_options <- c("")
 
   return_value <- vs_usearch_global(fastx_input = fastx_input,
-                                    db = db,
+                                    database = db,
                                     userout = userout,
                                     vsearch_options = vsearch_options)
 
@@ -146,7 +146,7 @@ test_that("allignment with default values with fasta files as input", {
   userout <- withr::local_tempfile()
 
   return_value <- vs_usearch_global(fastx_input = fastx_input,
-                                    db = db,
+                                    database = db,
                                     userout = userout)
 
   actual <- read.delim(userout,
@@ -172,7 +172,7 @@ test_that("allignment with default values with fasta file and tibble as input", 
   userout <- withr::local_tempfile()
 
   return_value <- vs_usearch_global(fastx_input = fastx_input,
-                                    db = db,
+                                    database = db,
                                     userout = userout)
 
   actual <- read.delim(userout,
@@ -199,7 +199,7 @@ test_that("vs_usearch_global returns OTU table tibble when otutabout = TRUE", {
     dplyr::select(-Quality)
 
   otu_tbl <- vs_usearch_global(fastx_input = fasta_input,
-                               db = db,
+                               database = db,
                                otutabout = TRUE)
 
   expect_equal(otu_tbl,
@@ -219,7 +219,7 @@ test_that("vs_usearch_global writes OTU table to file when otutabout is path", {
   otutable_out <- withr::local_tempfile(fileext = ".tsv")
 
   return_val <- vs_usearch_global(fastx_input = fasta_input,
-                                  db = db,
+                                  database = db,
                                   otutabout = otutable_out)
 
   expect_null(return_val)
@@ -236,7 +236,7 @@ test_that("vs_usearch_global returns tibble with default userfields when no outp
   db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
 
   result <- vs_usearch_global(fastx_input = fastx_input,
-                              db = db)
+                              database = db)
 
   expect_s3_class(result, "tbl_df")
   expect_named(result, c("query", "target", "id", "alnlen", "mism", "opens",
@@ -252,7 +252,7 @@ test_that("vs_usearch_global respects custom userfields", {
   userfields <- "query+target+id+alnlen"
 
   result <- vs_usearch_global(fastx_input = fastx_input,
-                              db = db,
+                              database = db,
                               userfields = userfields)
 
   expect_s3_class(result, "tbl_df")
@@ -267,7 +267,7 @@ test_that("vs_usearch_global runs when strand is 'both' (without maxaccepts)", {
   db <- readRDS(test_path("testdata", "output", "merged_sample1_fastq_files.rds"))
 
   result <- vs_usearch_global(fastx_input = fastx_input,
-                              db = db,
+                              database = db,
                               strand = "both")
 
   expect_s3_class(result, "tbl_df")

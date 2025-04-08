@@ -6,7 +6,7 @@ test_that("error when wrong strand", {
   strand <- "wrong_input"
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout,
                                strand = strand),
                "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
@@ -20,7 +20,7 @@ test_that("error when both outputs are specified", {
   otutabout <- withr::local_tempfile()
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout,
                                otutabout = otutabout),
                "Only one of 'userout' or 'otutabout' can be specified.")
@@ -35,7 +35,7 @@ test_that("error when wrong columns in fastx_input fastq", {
   strand <- "plus"
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout,
                                strand = strand),
                "FASTQ object must contain columns: Header, Sequence, Quality")
@@ -50,7 +50,7 @@ test_that("error when wrong columns in db fastq", {
   strand <- "plus"
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout,
                                strand = strand),
                "FASTQ object must contain columns: Header, Sequence, Quality")
@@ -66,7 +66,7 @@ test_that("error when wrong columns in fastx_input fasta", {
   strand <- "plus"
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout,
                                strand = strand),
                "FASTA object must contain columns: Header and Sequence")
@@ -82,7 +82,7 @@ test_that("error when wrong columns in db fasta", {
   strand <- "plus"
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout,
                                strand = strand),
                "FASTA object must contain columns: Header and Sequence")
@@ -95,7 +95,7 @@ test_that("error when fastx_input does not exist", {
   userout <- withr::local_tempfile()
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout),
                paste0("Cannot find input file: ", fastx_input))
 })
@@ -107,7 +107,7 @@ test_that("error when db does not exist", {
   userout <- withr::local_tempfile()
 
   expect_error(vs_search_exact(fastx_input = fastx_input,
-                               db = db,
+                               database = db,
                                userout = userout),
                paste0("Cannot find input file: ", db))
 })
@@ -120,7 +120,7 @@ test_that("search with default values with fastq tibbles as input", {
   vsearch_options <- c("")
 
   return_value <- vs_search_exact(fastx_input = fastx_input,
-                                  db = db,
+                                  database = db,
                                   userout = userout,
                                   vsearch_options = vsearch_options)
 
@@ -146,7 +146,7 @@ test_that("search with default values with fasta files as input", {
   userout <- withr::local_tempfile()
 
   return_value <- vs_search_exact(fastx_input = fastx_input,
-                                  db = db,
+                                  database = db,
                                   userout = userout)
 
   actual <- read.delim(userout,
@@ -172,7 +172,7 @@ test_that("search with default values with fasta file and tibble as input", {
   userout <- withr::local_tempfile()
 
   return_value <- vs_search_exact(fastx_input = fastx_input,
-                                  db = db,
+                                  database = db,
                                   userout = userout)
 
   actual <- read.delim(userout,
@@ -198,7 +198,7 @@ test_that("vs_search_exact returns OTU table tibble when otutabout = TRUE", {
   db <- fasta_input[1:10, ]  # ensure exact matches exist
 
   otu_tbl <- vs_search_exact(fastx_input = fasta_input,
-                             db = db,
+                             database = db,
                              otutabout = TRUE)
 
   expect_s3_class(otu_tbl, "tbl_df")
@@ -216,7 +216,7 @@ test_that("vs_search_exact writes OTU table to file when otutabout is path", {
   otu_outfile <- withr::local_tempfile(fileext = ".tsv")
 
   return_val <- vs_search_exact(fastx_input = fasta_input,
-                                db = db,
+                                database = db,
                                 otutabout = otu_outfile)
 
   actual <- suppressMessages(readr::read_delim(otu_outfile))
@@ -230,9 +230,8 @@ test_that("vs_search_exact returns alignment tibble with default userfields", {
 
   fasta_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
   db <- fasta_input[1:10, ]
-
   out_tbl <- vs_search_exact(fastx_input = fasta_input,
-                             db = db)
+                             database = db)
 
   expect_s3_class(out_tbl, "tbl_df")
   expect_named(out_tbl, c("query", "target", "id", "alnlen", "mism", "opens",
