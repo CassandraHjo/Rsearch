@@ -177,7 +177,7 @@ the \code{VSEARCH} manual for more details.
 \dontrun{
 # Define arguments
 fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                                   "R1_sample1_small.fa")
+                                   "small.fasta")
 centroids <- NULL
 
 # Denoise sequences and return a FASTA tibble

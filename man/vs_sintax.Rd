@@ -86,8 +86,10 @@ the \code{VSEARCH} manual for more details.
 \examples{
 \dontrun{
 # Example files
-db.file <- system.file("extdata", "sintax_db.fasta", package = "Rsearch")
-fasta.file <- system.file("extdata", "small.fasta", package = "Rsearch")
+db.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "sintax_db.fasta")
+fasta.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "small.fasta")
 
 tax.tbl <- vs_sintax(fasta_input = fasta.file, database = db.file)
 View(tax.tbl)

@@ -132,7 +132,7 @@
 #' \dontrun{
 #' # Define arguments
 #' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                                    "R1_sample1_small.fa")
+#'                                    "small.fasta")
 #' centroids <- NULL
 #'
 #' # Denoise sequences and return a FASTA tibble
@@ -314,9 +314,9 @@ vs_cluster_unoise <- function(fasta_input,
     }
 
     if (nrow(centroids_fasta) > 0) {
-    statistics <- calculate_cluster_statistics(centroids_fasta,
-                                               fasta_file,
-                                               fasta_input_name)
+      statistics <- calculate_cluster_statistics(centroids_fasta,
+                                                 fasta_file,
+                                                 fasta_input_name)
     } else {
       statistics <- tibble::tibble(num_nucleotides = 0,
                                    min_length_input_seq = 0,

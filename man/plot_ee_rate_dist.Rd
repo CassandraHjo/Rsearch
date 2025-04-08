@@ -47,7 +47,7 @@ higher EE rate suggests lower confidence in the read.
 \dontrun{
 # Define input file path
 fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                         "R1_sample1_small.fq")
+                         "small_R1.fq")
 
 # Generate and display histogram
 ee_plot <- plot_ee_rate_dist(fastq_input = fastq_input)

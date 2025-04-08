@@ -59,9 +59,9 @@
 #' \dontrun{
 #' # Define arguments
 #' file1 <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                    "R1_sample1_small.fq")
+#'                    "small_R1.fq")
 #' file2 <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                    "R2_sample1_small.fq")
+#'                    "small_R2.fq")
 #' file_format <- "fastq"
 #' file1_out <- NULL
 #' file2_out <- NULL

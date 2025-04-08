@@ -69,9 +69,9 @@ and trimming of reads such that the merged reads are of high quality.
 \dontrun{
 # Define arguments
 R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                     "R1_sample1_small.fq")
+                     "small_R1.fq")
 R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                     "R2_sample1_small.fq")
+                     "small_R2.fq")
 
 # Run function
 merging.tbl <- vs_merging_lengths(fastq_input = R1.file,

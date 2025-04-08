@@ -117,8 +117,10 @@ the \code{VSEARCH} manual for more details.
 \examples{
 \dontrun{
 # Define arguments
-query_file <- system.file("extdata", "small.fasta", package = "Rsearch")
-db <- system.file("extdata", "sintax_db.fasta", package = "Rsearch")
+query_file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                        "small.fasta")
+db <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                "sintax_db.fasta")
 
 # Detect chimeras with default parameters and return FASTA files
 vs_uchime_ref(fasta_input = query_file,

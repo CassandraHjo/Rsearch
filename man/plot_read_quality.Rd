@@ -57,7 +57,7 @@ Marginal histograms are added to display the distribution of read lengths
 \dontrun{
 # Define arguments
 fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                         "R1_sample1_small.fq")
+                         "small_R1.fq")
 
 # Generate and display scatter plot with mean quality score on y-axis
 p1 <- plot_read_quality(fastq_input = fastq_input)

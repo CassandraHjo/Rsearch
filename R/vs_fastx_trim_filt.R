@@ -148,9 +148,9 @@
 #' \dontrun{
 #' # Define arguments
 #' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "R1_sample1_small.fq")
+#'                          "small_R1.fq")
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                      "R2_sample1_small.fq")
+#'                      "small_R1.fq")
 #' output_format <- "fastq"
 #' maxee_rate <- 0.01
 #' minlen <- 0
@@ -582,13 +582,13 @@ parse_trim_filt_statistics <- function(output, fastx, reverse = NULL) {
   truncated <- as.numeric(stringr::str_extract(
     stats_line,
     "(?<=of which )\\d+(?= truncated)")
-    )
+  )
 
   # Extract number of discarded sequences
   discarded <- as.numeric(stringr::str_extract(
     stats_line,
     "(?<=, )\\d+(?= sequences discarded)")
-    )
+  )
 
   # Create table
   result_table <- data.frame(
