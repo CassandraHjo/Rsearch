@@ -24,3 +24,7 @@ This function converts an Rsearch object, which is a simple
 \code{list}, to a \code{\link{phyloseq}} object from the \code{phyloseq} R
 package.
 }
+\examples{
+For example see \code{\link{rsearch_obj}}
+
+}

@@ -46,8 +46,6 @@
 #'   \item \code{sampledata.df}: A data frame containing data about the samples.
 #' }
 #'
-#'
-'
 #' @examples
 #' \dontrun{
 #' # Define inputs

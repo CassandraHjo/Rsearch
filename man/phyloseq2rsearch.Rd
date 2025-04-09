@@ -18,10 +18,11 @@ Creating a simple list from a phyloseq object.
 }
 \details{
 This function converts a phyloseq object to a simple
-\code{\link{list}} giving the entries the names as in
-\code{\link{rsearch_obj}}.
+\code{\link{list}} with three elements as dataframes (or tibbles). The
+entries are named according to the structure used in
+\code{\link{rsearch_obj}}
+}
+\examples{
+For example see \code{\link{rsearch_obj}}
 
-This may be convenient for some wrangling on the data, and then perhaps
-converting it back to a phyloseq object again with
-\code{\link{rsearch2phyloseq}}.
 }
