@@ -42,8 +42,10 @@ columns of the table.
 \examples{
 \dontrun{
 # First, you need a table of the same format as output by vs_sintax:
-db.file <- system.file("extdata", "sintax_db.fasta", package = "Rsearch")
-fasta.file <- system.file("extdata", "small.fasta", package = "Rsearch")
+db.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "sintax_db.fasta")
+fasta.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                        "small.fasta")
 tax.tbl <- vs_sintax(fasta_input = fasta.file, database = db.file)
 
 # Inspect tax.tbl to see its columns. You replace the column content with

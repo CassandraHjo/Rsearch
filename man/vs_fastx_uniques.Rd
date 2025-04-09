@@ -115,7 +115,8 @@ the \code{VSEARCH} manual for more details.
 \examples{
 \dontrun{
 # Define arguments
-fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "R1_sample1_small.fq")
+fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                         "small_R1.fq")
 fastx_output <- NULL
 output_format <- "fastq"
 

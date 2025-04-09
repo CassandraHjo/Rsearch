@@ -68,7 +68,7 @@ given breakpoints will be used. If \code{y_breaks} is \code{NULL},
 \dontrun{
 # Define input file
 fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                         "derep_R1_sample1_small.fa")
+                         "small_derep_R1.fa")
 
 # Generate and display plot without cutoff
 size_plot <- plot_size_dist(fastx_input = fastx_input,

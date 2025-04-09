@@ -89,9 +89,9 @@ high-frequency merged sequences.
 \dontrun{
 # Define arguments
 R1.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                     "R1_sample1_small.fq")
+                     "small_R1.fq")
 R2.file <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                     "R2_sample1_small.fq")
+                     "small_R2.fq")
 
 # Run optimizing function
 optimize.tbl <- vs_optimize_truncee_rate(fastq_input = R1.file,

@@ -97,7 +97,8 @@ the \code{VSEARCH} manual for more details.
 \examples{
 \dontrun{
 # You would typically use something else as database
-query_file <- system.file("extdata", "small.fasta", package = "Rsearch")
+query_file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                        "small.fasta")
 db <- query_file
 
 # Search for exact full-length matches with default parameters, with file as output

@@ -68,9 +68,9 @@
 #' \dontrun{
 #' # Define arguments
 #' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "R1_sample1_small.fq")
+#'                          "small_R1.fq")
 #' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                      "R2_sample1_small.fq")
+#'                      "small_R2.fq")
 #' output_format <- "fastq"
 #'
 #' # Execute joining and return a FASTQ tibble

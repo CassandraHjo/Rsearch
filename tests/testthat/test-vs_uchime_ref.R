@@ -1,6 +1,6 @@
 test_that("error when input file does not exist", {
 
-  expect_error(vs_uchime_ref(fasta_input = "missing_file.fa", db = "db.fa"),
+  expect_error(vs_uchime_ref(fasta_input = "missing_file.fa", database = "db.fa"),
                "Cannot find input file: missing_file.fa")
 })
 
@@ -10,7 +10,7 @@ test_that("error when only one of nonchimeras/chimeras is provided", {
   db <- test_path("testdata", "sample1", "R1_sample1.fa")
 
   expect_error(
-    vs_uchime_ref(fasta_input = fasta, db = db, nonchimeras = "nonchim.fa"),
+    vs_uchime_ref(fasta_input = fasta, database = db, nonchimeras = "nonchim.fa"),
     "nonchimeras and chimeras must either both be specified or both unspecified."
   )
 })
@@ -20,7 +20,7 @@ test_that("vs_uchime_ref returns nonchimeras tibble with attributes", {
   fasta <- test_path("testdata", "sample1", "R1_sample1.fa")
   db <- test_path("testdata", "sample1", "R1_sample1.fa") # Needs to be updated with a real e
 
-  out <- vs_uchime_ref(fasta_input = fasta, db = db)
+  out <- vs_uchime_ref(fasta_input = fasta, database = db)
 
   expect_s3_class(out, "tbl_df")
   expect_true("statistics" %in% names(attributes(out)))
@@ -36,7 +36,7 @@ test_that("vs_uchime_ref writes files with relabel and log", {
   log_file <- withr::local_tempfile()
 
   expect_invisible(vs_uchime_ref(fasta_input = fasta,
-                                 db = db,
+                                 database = db,
                                  nonchimeras = nonchimeras,
                                  chimeras = chimeras,
                                  relabel = "relabeled",
@@ -54,7 +54,7 @@ test_that("vs_uchime_ref works with FASTA tibble as input", {
 
 
   out <- vs_uchime_ref(fasta_input = fasta_tbl,
-                       db = db_tbl,
+                       database = db_tbl,
                        relabel_sha1 = TRUE,
                        vsearch_options = c("--threads", "1"))
 
@@ -69,7 +69,7 @@ test_that("vs_uchime_ref returns empty data frame for chimeras if none found", {
   db <- test_path("testdata", "sample1", "R1_sample1.fa")
 
   out <- vs_uchime_ref(fasta_input = fasta,
-                       db = db,
+                       database = db,
                        sample = "sample1")
 
   expect_s3_class(attr(out, "chimeras"), "data.frame")

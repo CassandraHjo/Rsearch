@@ -124,7 +124,8 @@ for information about defining \code{gapopen} and \code{gapext}.
 \examples{
 \dontrun{
 # You would typically use something else as database
-query_file <- system.file("extdata", "small.fasta", package = "Rsearch")
+query_file <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                     "small.fasta")
 db <- query_file
 
 # Run global pairwise alignment with default parameters and write results to file
