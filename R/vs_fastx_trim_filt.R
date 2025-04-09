@@ -505,6 +505,7 @@ vs_fastx_trim_filt <- function(fastx_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
+
   # Handle output if output files are NULL
   if ((output_format == "fasta" && is.null(fastaout)) ||
       (output_format == "fastq" && is.null(fastqout))) {
