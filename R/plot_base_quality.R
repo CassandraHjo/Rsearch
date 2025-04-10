@@ -1,10 +1,8 @@
-#' Plot median and/or mean quality scores per position for FASTQ reads
+#' Display quality scores per position for FASTQ reads
 #'
 #' @description
-#' Generates a plot displaying the median and/or mean quality scores for each
-#' position in FASTQ reads. The plot includes error bars representing a selected
-#' quantile range. If reverse reads are provided, they are plotted in a separate
-#' panel with a reversed x-axis.
+#' Generates a plot displaying the quality scores for each
+#' position in FASTQ reads.
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
 #' reads. See \emph{Details}.
@@ -23,10 +21,9 @@
 #' quality scores is added to the plot.
 #'
 #' @details
-#' Median quality scores for each position in the reads in the input files
-#' (\code{fastq_input} and \code{reverse}) are plotted with ggplot2, displaying
-#' the median quality score along with error bars indicating the selected
-#' quantile range.
+#' The mean and median quality scores for each base position over all reads in
+#' the input file(s) (\code{fastq_input} (and \code{reverse}) are plotted as
+#' curves. The vertical bars at each base indicate the interquartile range.
 #'
 #' \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 #' or FASTQ objects. FASTQ objects are tibbles that contain the columns
@@ -39,10 +36,10 @@
 #' The default error bars represent the interquartile range (25%-75%) in the
 #' quality scores. Custom quantile ranges can be specified via
 #' \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
-#' mean quality lines are plotted by default, but each can be turned off by
+#' mean quality lines may be turned off by
 #' setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
 #'
-#' @return A ggplot2 object with the quality plot(s).
+#' @return A ggplot2 object.
 #'
 #' @examples
 #' \dontrun{
