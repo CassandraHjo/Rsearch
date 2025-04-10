@@ -21,9 +21,8 @@
 #' quality scores is added to the plot.
 #'
 #' @details
-#' The mean and median quality scores for each base position over all reads in
-#' the input file(s) (\code{fastq_input} (and \code{reverse}) are plotted as
-#' curves. The vertical bars at each base indicate the interquartile range.
+#' The mean and median quality scores for each base position over all reads are
+#' plotted as curves. The vertical bars at each base indicate the interquartile range.
 #'
 #' \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 #' or FASTQ objects. FASTQ objects are tibbles that contain the columns
@@ -31,9 +30,9 @@
 #' \code{\link{readFastq}}.
 #'
 #' If \code{reverse} is provided, it is plotted together with the first plot in
-#' its own panel. Note that the x-axis in this plot is reversed.
+#' its own panel. Note that the x-axis in this panel is reversed.
 #'
-#' The default error bars represent the interquartile range (25%-75%) in the
+#' The vertical bars represent the interquartile range (25%-75%) in the
 #' quality scores. Custom quantile ranges can be specified via
 #' \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
 #' mean quality lines may be turned off by
