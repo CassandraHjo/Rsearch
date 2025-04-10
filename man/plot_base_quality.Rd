@@ -56,7 +56,7 @@ or FASTQ objects. FASTQ objects are tibbles that contain the columns
 If \code{reverse} is provided, it is plotted together with the first plot in
 its own panel. Note that the x-axis in this panel is reversed.
 
-The vertical bars represent the interquartile range (25%-75%) in the
+The vertical bars represent the interquartile range (25\% - 75\%) in the
 quality scores. Custom quantile ranges can be specified via
 \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
 mean quality lines may be turned off by
