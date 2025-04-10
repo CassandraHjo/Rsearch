@@ -9,7 +9,7 @@ vs_optimize_truncee_rate(
   fastq_input,
   reverse,
   minovlen = 10,
-  truncee_rate_range = c(seq(0.002, 0.02, by = 0.002)),
+  truncee_rate_range = c(seq(0.002, 0.04, by = 0.002)),
   minlen = 1,
   min_size = 2,
   maxee_rate = 0.01,
@@ -29,7 +29,8 @@ Defaults to \code{10}.}
 
 \item{truncee_rate_range}{A numeric vector of \code{truncee_rate} values to
 test. Defaults to
-\code{c(0.002, 0.004, 0.006, 0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020)}.
+\code{c(0.002, 0.004, 0.006, 0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020,
+0.022, 0.024, 0.026, 0.028, 0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.
 Provide as a numeric vector.}
 
 \item{minlen}{Minimum number of bases a sequence must have to be retained.
