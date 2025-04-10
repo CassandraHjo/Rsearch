@@ -25,6 +25,9 @@ This function converts an Rsearch object, which is a simple
 package.
 }
 \examples{
-For example see \code{\link{rsearch_obj}}
+# HER_TRENGS_KODE
 
+}
+\seealso{
+\code{\link{rsearch_obj}}
 }

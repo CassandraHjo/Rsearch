@@ -23,6 +23,10 @@ entries are named according to the structure used in
 \code{\link{rsearch_obj}}
 }
 \examples{
-For example see \code{\link{rsearch_obj}}
+# HER_TRENGS_KODE
 
+
+}
+\seealso{
+\code{\link{rsearch_obj}}
 }
