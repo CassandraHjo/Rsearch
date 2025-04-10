@@ -150,25 +150,17 @@ Additional usage examples can be found in the
 ``` r
 library(Rsearch)
 
-# Define FASTQ files
+# Define input
 fastx_input <- "R1_sample1.fq"
 reverse <- "R2_sample1.fq"
 
-# Define other arguments
-file_format <- "fastq"
-maxee_rate <- 0.01
-minlen <- 0
-
 # Execute filtering, with tibble as output
 filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
-                                reverse = reverse,
-                                file_format = file_format,
-                                maxee_rate = maxee_rate,
-                                minlen = minlen)
+                                reverse = reverse)
 
 # Extract tibbles with filtered sequences
 R1_filt <- filt_seqs
-R2_filt <- attr(filt_seqs, "filt_reverse")
+R2_filt <- attr(filt_seqs, "reverse")
 
 # Extract filtering statistics
 statistics <- attr(filt_seqs, "statistics")
