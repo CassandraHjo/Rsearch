@@ -150,7 +150,10 @@ rsearch_obj <- function(readcount_data,
 #' @return A \code{\link{phyloseq}} object.
 #'
 #' @examples
-#' For example see \code{\link{rsearch_obj}}
+#' # HER_TRENGS_KODE
+#'
+#' @seealso
+#' \code{\link{rsearch_obj}}
 #'
 #' @export
 #'
@@ -177,7 +180,7 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
   return(ps.obj)
 }
 
-#' @title Convert phyloseq to Rsearch object
+#' Convert phyloseq to Rsearch object
 #'
 #' @description Creating a simple list from a phyloseq object.
 #'
@@ -195,7 +198,11 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #' @importFrom phyloseq phyloseq otu_table sample_data tax_table
 #'
 #' @examples
-#' For example see \code{\link{rsearch_obj}}
+#' # HER_TRENGS_KODE
+#'
+#'
+#' @seealso
+#' \code{\link{rsearch_obj}}
 #'
 #' @export
 #'

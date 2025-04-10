@@ -230,10 +230,15 @@ plot_base_quality <- function(fastq_input,
       Lower = quantiles_quality_R2[1, ],
       Upper = quantiles_quality_R2[2, ])
 
+    y_limits <- range(df_R1$Lower, df_R1$Upper, df_R2$Lower, df_R2$Upper, na.rm = TRUE)
+    y_limits <- c(floor(y_limits[1]) - 1, ceiling(y_limits[2]) + 1)
+
+
     # Plot error bars and labels
     R2.plot <- ggplot2::ggplot(df_R2, ggplot2::aes(x = Position)) +
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                              width = 0.2, color = pal[2]) +
+      ggplot2::scale_x_reverse() +
       ggplot2::labs(title = "R2 reads",
                     x = "Base position",
                     y = "Quality score",
@@ -259,6 +264,10 @@ plot_base_quality <- function(fastq_input,
     if (length(color_mapping) > 0) {
       R2.plot <- R2.plot + ggplot2::scale_color_manual(values = color_mapping)
     }
+
+    # Add limits to y-axis
+    R1.plot <- R1.plot + ggplot2::ylim(y_limits)
+    R2.plot <- R2.plot + ggplot2::ylim(y_limits)
 
     # Add new title to R1 plot
     R1.plot <- R1.plot +

@@ -1,7 +1,7 @@
 Package: Rsearch
 Type: Package
 Title: Processing and analyzing amplicon sequence data
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(
     person("Cassandra", "Hjortdahl", email = "cassandra.hjortdahl@nmbu.no", role = "cre"),
     person("Lars", "Snipen", email = "lars.snipen@nmbu.no", role = "aut"),
