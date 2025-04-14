@@ -9,13 +9,8 @@ Authors@R: c(
     person("Hilde", "Vinje", email = "hilde.vinje@nmbu.no", role = "aut"))
 Maintainer: Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no>
 Description: An R package designed for handling and analyzing targeted sequencing data. 
-  Many of its functions are based on the command-line based tool VSEARCH. 
-  By integrating VSEARCH into an R package, Rsearch provides significant utility 
-  by making the software more accessible to a broad user base, 
-  particularly those who prefer or require an R-based workflow. In addition to 
-  the VSEARCH-based functions, Rsearch includes additional tools to aid 
-  in microbiome data analysis, such as data processing functions and visualizations 
-  of some of the results from the functions.
+  The package provides a user-friendly interface for core VSEARCH functions in 
+  addition to tools for visualization and parameter optimization. 
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
