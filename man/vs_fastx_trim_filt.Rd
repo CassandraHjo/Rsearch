@@ -29,6 +29,8 @@ vs_fastx_trim_filt(
   minsize = NULL,
   maxsize = NULL,
   minqual = 0,
+  relabel = NULL,
+  relabel_sha1 = FALSE,
   fasta_width = 0,
   sample = NULL,
   stats = TRUE,
@@ -110,6 +112,12 @@ applied.}
 \item{minqual}{Minimum base quality for a read to be retained. A read is
 discarded if it contains bases with a quality score below the given value.
 Defaults to \code{0}, meaning no reads are discarded.}
+
+\item{relabel}{Relabel sequences using the given prefix and a ticker to
+construct new headers. Defaults to \code{NULL}.}
+
+\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
+SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
 \item{fasta_width}{Number of characters per line in the output FASTA
 file. Defaults to \code{0}, which eliminates wrapping.}

@@ -58,6 +58,10 @@
 #' @param minqual Minimum base quality for a read to be retained. A read is
 #' discarded if it contains bases with a quality score below the given value.
 #' Defaults to \code{0}, meaning no reads are discarded.
+#' @param relabel Relabel sequences using the given prefix and a ticker to
+#' construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
+#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
 #' @param fasta_width Number of characters per line in the output FASTA
 #' file. Defaults to \code{0}, which eliminates wrapping.
 #' @param sample Add the given sample identifier string to sequence headers. For
@@ -208,6 +212,8 @@ vs_fastx_trim_filt <- function(fastx_input,
                                minsize = NULL,
                                maxsize = NULL,
                                minqual = 0,
+                               relabel = NULL,
+                               relabel_sha1 = FALSE,
                                fasta_width = 0,
                                sample = NULL,
                                stats = TRUE,
@@ -472,6 +478,14 @@ vs_fastx_trim_filt <- function(fastx_input,
 
   if (minqual > 0) {
     args <- c(args, "--fastq_minqual", minqual)
+  }
+
+  if (relabel_sha1) {
+    args <- c(args, "--relabel_sha1", "")
+  }
+
+  if (!is.null(relabel)) {
+    args <- c(args, "--relabel", relabel)
   }
 
   # Add output files based on output_format
