@@ -17,6 +17,7 @@ vs_usearch_global(
   id = 0.7,
   strand = "plus",
   maxaccepts = 1,
+  maxrejects = 32,
   threads = 1,
   vsearch_options = NULL
 )
@@ -56,6 +57,11 @@ Can be either \code{"plus"} (default) or \code{"both"}.}
 \item{maxaccepts}{Maximum number of matching target sequences to accept
 before stopping the search for a given query. Defaults to \code{1}. Only
 works when \code{strand} is set to \code{"plus"} (default).}
+
+\item{maxrejects}{Maximum number of non-matching target sequences to consider
+before stopping the search for a given query. Defaults to 32. If
+\code{maxaccepts} and \code{maxrejects} are both set to 0, the complete
+database is searched.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
