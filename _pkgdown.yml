@@ -1,0 +1,28 @@
+url: https://cassandrahjo.github.io/Rsearch
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:
+      - home
+      - reference
+      - articles
+  components:
+    home:
+      text: "Home"
+      href: index.html
+    reference:
+      text: "Functions"
+      href: reference/index.html
+    articles:
+      text: "Tutorial"
+      href: articles/tutorial.html
+
+articles:
+  - title: "Tutorials"
+    desc: >
+      Walkthroughs and worked examples using Rsearch.
+    contents:
+      - tutorial
