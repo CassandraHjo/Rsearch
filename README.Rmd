@@ -15,13 +15,29 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-`Rsearch` is an R package designed for handling and analyzing targeted sequencing data. Many of its functions are based on the command-line based tool `VSEARCH`. By integrating `VSEARCH` into an R package, `Rsearch` provides significant utility by making the software more accessible to a broad user base, particularly those who prefer or require an R-based workflow. In addition to the `VSEARCH`-based functions, `Rsearch` includes additional tools to aid in microbiome data analysis, such as data processing functions and visualizations of some of the results from the functions. 
+`Rsearch` is an R package designed for handling and analyzing targeted 
+sequencing data. The package provides a user-friendly interface for core VSEARCH 
+functions in addition to tools for visualization and parameter optimization.
 
-The core idea behind `Rsearch` is to retain the output from `VSEARCH` within R's generic data structures, rather than writing results to files as the original `VSEARCH` functions. By offering this option users can choose between working entirely within R and Rstudio or to export results to files as `VSEARCH` typically does. Keeping all results in R data structures allows users to leverage the power of standard data wrangling and visualization tools familiar to R users. 
+The core idea behind `Rsearch` is to retain the output from `VSEARCH` within R's 
+generic data structures, rather than writing results to files as the original 
+`VSEARCH` functions. By offering this option users can choose between working 
+entirely within R and Rstudio or to export results to files as `VSEARCH` 
+typically does. Keeping all results in R data structures allows users to 
+leverage the power of standard data wrangling and visualization tools familiar 
+to R users. 
 
-Another feature that enhances usability for R users is the consistent return format of the functions. All functions return a single table/data frame unless the user specifies that results should be written to a file. For functions that can return multiple results - such as those handling read pairs with forward and reverse reads - the secondary table is included as an attribute of the primary table. The same approach applies to tables containing statistics from function executions. By ensuring that all functions return only one table, navigating and managing results become more straightforward. 
+Another feature that enhances usability for R users is the consistent return 
+format of the functions. All functions return a single table/data frame unless 
+the user specifies that results should be written to a file. For functions that 
+can return multiple results - such as those handling read pairs with forward and 
+reverse reads - the secondary table is included as an attribute of the primary 
+table. The same approach applies to tables containing statistics from function 
+executions. By ensuring that all functions return only one table, navigating and 
+managing results become more straightforward. 
 
-More information about attributes in R can be found [here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and [here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
+More information about attributes in R can be found 
+[here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and [here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
 
 ## Installation
 
@@ -31,19 +47,34 @@ More information about attributes in R can be found [here](https://www.r-blogger
 
 ### Prerequisites
 
-For the `Rsearch` package to function properly on your computer, `VSEARCH` must be installed as well (see below). Please ensure that you are using `VSEARCH` version 2.30.0 or newer.
+For the `Rsearch` package to function properly on your computer, `VSEARCH` must 
+be installed as well (see below). Please ensure that you are using `VSEARCH` 
+version 2.30.0 or newer.
 
-Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site for learning more about `VSEARCH`.
+Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site for 
+learning more about `VSEARCH`.
 
 ### Installing `VSEARCH` 
 
-You typically install `VSEARCH` by simply downloading a pre-compiled binary file to your computer (Windows or Mac). The latest release of `VSEARCH`, with corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). On a High Performance Computing (HPC) cluster we prefer to use an `apptainer` container for `VSEARCH`. These are freely available from many sites, e.g. https://depot.galaxyproject.org/singularity/
+You typically install `VSEARCH` by simply downloading a pre-compiled binary file 
+to your computer (Windows or Mac). The latest release of `VSEARCH`, with 
+corresponding binaries, for installation can be found under [Releases](https://github.com/torognes/vsearch/releases). On a High Performance 
+Computing (HPC) cluster we prefer to use an `apptainer` container for `VSEARCH`. 
+These are freely available from many sites, e.g. 
+https://depot.galaxyproject.org/singularity/
 
-After downloading the binary you may edit your `PATH` environment variable to tell your operating system where to find the `VSEARCH` binary. However, this is not required since the `Rsearch` package has a function  `set_vsearch_executable()` where you specify where your `VSEARCH` binary file is found (see [Set correct vsearch executable](#set-correct-vsearch-executable)) below.
+After downloading the binary you may edit your `PATH` environment variable to 
+tell your operating system where to find the `VSEARCH` binary. However, this is 
+not required since the `Rsearch` package has a function 
+`set_vsearch_executable()` where you specify where your `VSEARCH` binary file is 
+found (see [Set correct vsearch executable](#set-correct-vsearch-executable)) 
+below.
 
 ### Installing `Rsearch`
 
-You can install the development version of `Rsearch` from [GitHub](https://github.com/CassandraHjo/Rsearch) by using the `devtools` package from CRAN:
+You can install the development version of `Rsearch` from 
+[GitHub](https://github.com/CassandraHjo/Rsearch) by using the `devtools` 
+package from CRAN:
 
 ```{r, eval=FALSE}
 install.packages("devtools")
@@ -52,34 +83,43 @@ devtools::install_github("CassandraHjo/Rsearch")
 
 ### Set correct `VSEARCH` executable
 
-In order for most of the functions (those starting with `vs_`) in `Rsearch` to work, the command to invoke VSEARCH must be set correctly. The default command is simply `vsearch`, but this will only work if the file `vsearch.exe` is found in a folder that is included in the `PATH` environment variable. 
+In order for most of the functions (those starting with `vs_`) in `Rsearch` to 
+work, the command to invoke VSEARCH must be set correctly. The default command 
+is simply `vsearch`, but this will only work if the file `vsearch.exe` is found 
+in a folder that is included in the `PATH` environment variable. 
 
-The `Rsearch` function `set_vsearch_executable()` can be used to set the correct command to invoke `VSEARCH` on the computer like this:
+The `Rsearch` function `set_vsearch_executable()` can be used to set the correct 
+command to invoke `VSEARCH` on the computer like this:
 
 ```{r eval=FALSE}
 # For example, if the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
 Rsearch::set_vsearch_executable("C:/Documents/vsearch")
 ```
 
-Note that on a UNIX system where you use an `apptainer` container this would look something like this:
+Note that on a UNIX system where you use an `apptainer` container this would 
+look something like this:
+
 ```{r eval=FALSE}
 Rsearch::set_vsearch_executable("apptainer exec <container name> vsearch")
 ```
 
 You may test if your executable is working properly by running the following command:
+
 ```{r, eval= FALSE}
 Rsearch::vsearch()
 ```
-
 
 ## Documentation
 
 ### Accessing help within R
 
-Documentation can be accessed directly in the R console. Here are some methods to access help:
+Documentation can be accessed directly in the R console. Here are some methods 
+to access help:
 
 * **Function-specific help:**
-To get detailed information about a specific function, use the `?` operator followed by the function name. For example, to access help for the `vs_fastx_trim_filt` function:
+To get detailed information about a specific function, use the `?` operator 
+followed by the function name. For example, to access help for the 
+`vs_fastx_trim_filt` function:
 
 ```{r, eval = FALSE}
 ?vs_fastx_trim_filt
@@ -102,7 +142,8 @@ help(package = "Rsearch")
 
 ## Usage
 
-Additional usage examples can be found in the [documentation](#documentation) for each individual function.
+Additional usage examples can be found in the [documentation](#documentation) 
+for each individual function.
 
 ### Example: Filter paired-end reads based on quality
 
@@ -140,7 +181,8 @@ Please cite the following publication if you use `Rsearch`:
 
 xxx
 
-Please note that citing any of the underlying algorithms, e.g. `VSEARCH`, may also be appropriate. 
+Please note that citing any of the underlying algorithms, e.g. `VSEARCH`, may 
+also be appropriate. 
 
 ## References
 

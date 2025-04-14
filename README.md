@@ -4,14 +4,9 @@
 ## Introduction
 
 `Rsearch` is an R package designed for handling and analyzing targeted
-sequencing data. Many of its functions are based on the command-line
-based tool `VSEARCH`. By integrating `VSEARCH` into an R package,
-`Rsearch` provides significant utility by making the software more
-accessible to a broad user base, particularly those who prefer or
-require an R-based workflow. In addition to the `VSEARCH`-based
-functions, `Rsearch` includes additional tools to aid in microbiome data
-analysis, such as data processing functions and visualizations of some
-of the results from the functions.
+sequencing data. The package provides a user-friendly interface for core
+VSEARCH functions in addition to tools for visualization and parameter
+optimization.
 
 The core idea behind `Rsearch` is to retain the output from `VSEARCH`
 within R’s generic data structures, rather than writing results to files
@@ -59,7 +54,7 @@ binary file to your computer (Windows or Mac). The latest release of
 under [Releases](https://github.com/torognes/vsearch/releases). On a
 High Performance Computing (HPC) cluster we prefer to use an `apptainer`
 container for `VSEARCH`. These are freely available from many sites,
-e.g. <https://depot.galaxyproject.org/singularity/>
+e.g.  <https://depot.galaxyproject.org/singularity/>
 
 After downloading the binary you may edit your `PATH` environment
 variable to tell your operating system where to find the `VSEARCH`
