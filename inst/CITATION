@@ -1,0 +1,16 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "Rsearch",
+  author = c(
+    person("Cassandra", "Hjortdahl"),
+    person("Torbjørn", "Rognes"),
+    person("Lars", "Snipen"),
+    person("Hilde", "Vinje")
+  ),
+  journal  = "x",
+  year     = "x",
+  volume   = "x",
+  number   = "x",
+  pages    = "x",
+  doi      = "x"
+)
