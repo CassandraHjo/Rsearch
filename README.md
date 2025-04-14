@@ -1,5 +1,5 @@
 
-# Rsearch <img src='man/figures/rsearch_logo.png' align="right" height="150" />
+# Rsearch <img src='man/figures/rsearch_logo.png' alt='Rsearch logo' align="right" height="150" />
 
 ## Introduction
 
