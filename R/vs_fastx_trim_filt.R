@@ -63,6 +63,9 @@
 #' @param sample Add the given sample identifier string to sequence headers. For
 #' instance, if the given string is "ABC", the text ";sample=ABC" will be added
 #' to the header. If \code{NULL} (default), no identifier is added.
+#' @param stats If \code{TRUE} (default), a tibble with statistics about the
+#' filtering is added as an attribute of the returned tibble. If \code{FALSE},
+#' no statistics are added.
 #' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
 #' If \code{NULL} (default), no log file is created.
 #' @param threads Number of computational threads to be used by \code{VSEARCH}.
@@ -137,7 +140,6 @@
 #' following columns:
 #' \itemize{
 #'   \item \code{Kept_Sequences}: Number of retained sequences.
-#'   \item \code{Truncated_Sequences}: Number truncated sequences.
 #'   \item \code{Discarded_Sequences}: Number of discarded sequences.
 #'   \item \code{fastx_source}: Name of the file/object with forward (R1) reads.
 #'   \item \code{reverse_source}: (If \code{reverse} is specified) Name of the
@@ -208,6 +210,7 @@ vs_fastx_trim_filt <- function(fastx_input,
                                minqual = 0,
                                fasta_width = 0,
                                sample = NULL,
+                               stats = TRUE,
                                log_file = NULL,
                                threads = 1,
                                vsearch_options = NULL){
@@ -510,13 +513,6 @@ vs_fastx_trim_filt <- function(fastx_input,
   if ((output_format == "fasta" && is.null(fastaout)) ||
       (output_format == "fastq" && is.null(fastqout))) {
 
-    # Extract statistics
-    if (!is.null(reverse)){
-      statistics <- parse_trim_filt_statistics(vsearch_output, fastx_input_name, reverse_name)
-    } else {
-      statistics <- parse_trim_filt_statistics(vsearch_output, fastx_input_name)
-    }
-
     # Process primary sequences
     if (output_format == "fasta") {
       filt_seqs <- microseq::readFasta(outfile_fasta)
@@ -533,8 +529,25 @@ vs_fastx_trim_filt <- function(fastx_input,
       }
     }
 
-    # Add additional tables as attributes to the primary table
-    attr(filt_seqs, "statistics") <- statistics
+    # Extract statistics
+    if (isTRUE(stats)) {
+
+      statistics <- calculate_trim_filt_statistics(
+        input_file = fastx_file,
+        output_file = if (output_format == "fastq") outfile_fastq else outfile_fasta,
+        format = output_format,
+        fastx = fastx_input_name,
+        reverse = if (!is.null(reverse)) reverse_name else NULL,
+        reverse_file = if (!is.null(reverse)) reverse_file else NULL,
+        reverse_output_file = if (!is.null(reverse)) {
+          if (output_format == "fastq") outfile_fastq_rev else outfile_fasta_rev
+        } else NULL
+      )
+
+      attr(filt_seqs, "statistics") <- statistics
+    }
+
+    # Add reverse table as attribute to the primary table
     if (!is.null(reverse)) {
       attr(filt_seqs, "reverse") <- filt_reverse
     }
@@ -549,21 +562,19 @@ vs_fastx_trim_filt <- function(fastx_input,
   }
 }
 
-
-#' Parse filtering statistics from string to tibble
+#' Calculate trimming and filtering statistics
 #'
-#' @description Transforms the output from \code{VSEARCH} when
-#' running \code{vs_fastx_trim_filt} into a tibble.
+#' @param input_file Path to original FASTA/FASTQ file.
+#' @param output_file Path to filtered FASTA/FASTQ file.
+#' @param format Either "fasta" or "fastq".
+#' @param reverse_file Optional reverse input file.
+#' @param reverse_output_file Optional reverse output file.
+#' @param fastx Source name of input file/object (used for reporting).
+#' @param reverse Source name of reverse file/object (used for reporting).
 #'
-#' @param output A string of output from filtering reads based on quality with
-#' \code{VSEARCH}.
-#' @param fastq The name of the file/object with R1 reads.
-#' @param reverse The name of the file/object with R2 reads
-#'
-#' @return A tibble with filtering statistics, including:
+#' @return A tibble with calculated statistics, including:
 #' \itemize{
 #'   \item \code{Kept_Sequences}: Number of retained sequences.
-#'   \item \code{Truncated_Sequences}: Number truncated sequences.
 #'   \item \code{Discarded_Sequences}: Number of discarded sequences.
 #'   \item \code{fastx_source}: Name of the file/object with forward (R1) reads.
 #'   \item \code{reverse_source}: (If \code{reverse} is specified) Name of the
@@ -571,38 +582,37 @@ vs_fastx_trim_filt <- function(fastx_input,
 #' }
 #'
 #' @noRd
-parse_trim_filt_statistics <- function(output, fastx, reverse = NULL) {
+calculate_trim_filt_statistics <- function(input_file,
+                                           output_file,
+                                           format,
+                                           fastx,
+                                           reverse = NULL,
+                                           reverse_file = NULL,
+                                           reverse_output_file = NULL) {
 
-  # Find line with statistics
-  stats_line <- stringr::str_subset(output, "sequences kept")
+  # Read input and output files
+  read_fun <- if (format == "fastq") microseq::readFastq else microseq::readFasta
 
-  # Extract number of kept sequences
-  kept <- as.numeric(stringr::str_extract(stats_line, "^\\d+"))
+  input_seqs <- read_fun(input_file)
+  output_seqs <- read_fun(output_file)
 
-  # Extract number of truncated sequences
-  truncated <- as.numeric(stringr::str_extract(
-    stats_line,
-    "(?<=of which )\\d+(?= truncated)")
-  )
+  n_input <- nrow(input_seqs)
+  if (n_input == 0) {
+    warning("No sequences in input file: ", input_file)
+  }
+  n_output <- nrow(output_seqs)
 
-  # Extract number of discarded sequences
-  discarded <- as.numeric(stringr::str_extract(
-    stats_line,
-    "(?<=, )\\d+(?= sequences discarded)")
-  )
-
-  # Create table
-  result_table <- data.frame(
-    Kept_Sequences = kept,
-    Truncated_Sequences = truncated,
-    Discarded_Sequences = discarded,
+  # Prepare result
+  result_table <- tibble::tibble(
+    Kept_Sequences = n_output,
+    Discarded_Sequences = n_input - n_output,
     fastx_source = fastx
   )
 
-  # Add reverse column if provided
-  if (!is.null(reverse)){
+  if (!is.null(reverse) && nzchar(reverse)) {
     result_table$reverse_source <- reverse
   }
 
   return(result_table)
 }
+

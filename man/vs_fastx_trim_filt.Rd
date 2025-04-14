@@ -31,6 +31,7 @@ vs_fastx_trim_filt(
   minqual = 0,
   fasta_width = 0,
   sample = NULL,
+  stats = TRUE,
   log_file = NULL,
   threads = 1,
   vsearch_options = NULL
@@ -117,6 +118,10 @@ file. Defaults to \code{0}, which eliminates wrapping.}
 instance, if the given string is "ABC", the text ";sample=ABC" will be added
 to the header. If \code{NULL} (default), no identifier is added.}
 
+\item{stats}{If \code{TRUE} (default), a tibble with statistics about the
+filtering is added as an attribute of the returned tibble. If \code{FALSE},
+no statistics are added.}
+
 \item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
 If \code{NULL} (default), no log file is created.}
 
@@ -146,7 +151,6 @@ output files are \code{NULL}) is a tibble with the
 following columns:
 \itemize{
   \item \code{Kept_Sequences}: Number of retained sequences.
-  \item \code{Truncated_Sequences}: Number truncated sequences.
   \item \code{Discarded_Sequences}: Number of discarded sequences.
   \item \code{fastx_source}: Name of the file/object with forward (R1) reads.
   \item \code{reverse_source}: (If \code{reverse} is specified) Name of the

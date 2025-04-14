@@ -356,7 +356,7 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble w
 
 })
 
-test_that("trim/filter fastq sequences from two files, and return fastq tibble", {
+test_that("trim/filter fastq sequences from one file with size values, and return fastq tibble", {
 
   fastx_input <- test_path("testdata", "output", "derep_R1_sample1.fq")
   output_format <- "fastq"
