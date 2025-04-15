@@ -5,10 +5,10 @@
 #' iterates through a specified range of \code{truncqual} values to identify the
 #' optimal value that maximizes the proportion of high-quality merged read pairs.
 #'
-#' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
-#' reads. See \emph{Details}.
-#' @param reverse A FASTQ file path or FASTQ object containing (reverse) reads.
-#' See \emph{Details}.
+#' @param fastq_input A FASTQ file path, FASTQ tibble (forward reads), or a
+#' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param reverse A FASTQ file path or FASTQ tibble (reverse reads). Optional
+#' if \code{fastq_input} is a \code{"pe_df"} object.
 #' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
 #' Defaults to \code{10}.
 #' @param truncqual_range A numeric vector of \code{truncqual} values to test.
@@ -29,6 +29,10 @@
 #' The function uses \code{\link{vs_fastq_mergepairs}},
 #' \code{\link{vs_fastx_trim_filt}}, and \code{\link{vs_fastx_uniques}} where
 #' the arguments to this functions are described in detail.
+#'
+#' If \code{fastq_input} has class \code{"pe_df"}, the reverse reads will be
+#' automatically extracted from the \code{"reverse"} attribute unless
+#' explicitly provided in the \code{reverse} argument.
 #'
 #' The best possible truncation option (\code{truncqual}) for merging is
 #' measured by the number of merged read-pairs with a copy number above the
@@ -81,7 +85,7 @@
 #' @export
 #'
 vs_optimize_truncqual <- function(fastq_input,
-                                  reverse,
+                                  reverse = NULL,
                                   minovlen = 10,
                                   truncqual_range = 1:20,
                                   minlen = 1,
@@ -94,6 +98,13 @@ vs_optimize_truncqual <- function(fastq_input,
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
 
+  # Handle pe_df class
+  if (is_pe_df(fastq_input) && is.null(reverse)) {
+    reverse <- attr(fastq_input, "reverse")
+    if (is.null(reverse)) {
+      stop("fastq_input has class 'pe_df' but no 'reverse' attribute found.")
+    }
+  }
 
   # Create data frame for storing results
   res.df <- data.frame(

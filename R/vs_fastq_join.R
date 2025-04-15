@@ -3,10 +3,11 @@
 #' @description \code{vs_fastq_join} joins paired-end sequence reads into a
 #' single sequence with a specified gap between them using \code{VSEARCH}.
 #'
-#' @param fastq_input A FASTQ file path or a FASTQ object containing (forward)
-#' reads. See \emph{Details}.
-#' @param reverse A FASTQ file path or a FASTQ object containing (reverse) reads.
-#' See \emph{Details}.
+#' @param fastq_input A FASTQ file path, a FASTQ tibble object (forward reads),
+#' or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param reverse A FASTQ file path or a FASTQ tibble object (reverse reads).
+#' Optional if \code{fastq_input} is a \code{"pe_df"} object. See
+#' \emph{Details}.
 #' @param output_format Desired output format of the file or tibble:
 #' \code{"fasta"} or \code{"fastq"} (default).
 #' @param fastaout Name of the FASTA output file with the joined reads.
@@ -39,6 +40,12 @@
 #' \code{Header}, \code{Sequence}, and \code{Quality}, see
 #' \code{\link{readFastq}}. Forward and reverse reads must appear in the same
 #' order and have the same total number of reads in both files.
+#'
+#' If \code{fastq_input} is an object of class \code{"pe_df"}, the reverse reads
+#' are automatically extracted from its \code{"reverse"} attribute unless
+#' explicitly provided via the \code{reverse} argument. This simplifies function
+#' calls when using paired-end tibbles created by functions such as
+#' \code{\link{fastx_synchronize}} or \code{\link{vs_fastx_trim_filt}}.
 #'
 #' If \code{fastaout} or \code{fastqout} is specified, the joined reads are
 #' written to the respective file in either FASTA or FASTQ format.
@@ -93,7 +100,7 @@
 #' @export
 #'
 vs_fastq_join <- function(fastq_input,
-                          reverse,
+                          reverse = NULL,
                           output_format = "fastq",
                           fastaout = NULL,
                           fastqout = NULL,
@@ -102,7 +109,7 @@ vs_fastq_join <- function(fastq_input,
                           fasta_width = 0,
                           log_file = NULL,
                           threads = 1,
-                          vsearch_options = NULL){
+                          vsearch_options = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -110,113 +117,102 @@ vs_fastq_join <- function(fastq_input,
 
   # Validate output_format
   if (!output_format %in% c("fasta", "fastq")) {
-    stop("Invalid output_format. Choose from fasta or fastq.")
+    stop("Invalid output_format. Choose from 'fasta' or 'fastq'.")
   }
 
-  # If output_format is "fasta", fastqout can not be defined
-  if (output_format == "fasta") {
-    if (!is.null(fastqout)) {
-      stop("When output_format is defined as 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
+  if (output_format == "fasta" && !is.null(fastqout)) {
+    stop("When output_format is 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
+  }
+
+  if (output_format == "fastq" && !is.null(fastaout)) {
+    stop("When output_format is 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
+  }
+
+  # Extract reverse from pe_df class if not explicitly provided
+  if (is_pe_df(fastq_input) && is.null(reverse)) {
+    reverse <- attr(fastq_input, "reverse")
+    if (is.null(reverse)) {
+      stop("fastq_input has class 'pe_df' but no 'reverse' attribute found.")
     }
   }
 
-  # If output_format is "fastq", fastaout can not be defined
-  if (output_format == "fastq") {
-    if (!is.null(fastaout)) {
-      stop("When output_format is defined as 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
-    }
+  # Early file existence checks
+  if (is.character(fastq_input) && !file.exists(fastq_input)) {
+    stop("Cannot find input FASTQ file: ", fastq_input)
   }
 
-  # Create empty vector for collecting temporary files
-  temp_files <- c()
+  if (is.character(reverse) && !file.exists(reverse)) {
+    stop("Cannot find reverse FASTQ file: ", reverse)
+  }
 
-  # Set up cleanup of temporary files
+  # Collect temporary files for cleanup
+  temp_files <- character()
   on.exit({
-    if (length(temp_files) > 0) {
+    if (length(temp_files) > 0 && all(file.exists(temp_files))) {
       file.remove(temp_files)
     }
   }, add = TRUE)
 
-  # Handle input: file or tibble
-  if (!is.character(fastq_input)){
-    # Ensure required columns exist
+  # Process forward reads
+  if (!is.character(fastq_input)) {
     required_cols <- c("Header", "Sequence", "Quality")
     if (!all(required_cols %in% colnames(fastq_input))) {
       stop("FASTQ object must contain columns: Header, Sequence, Quality")
     }
-    temp_fastq_file <- tempfile(pattern = "fastq_input_temp_", fileext = ".fq")
-    temp_files <- c(temp_files, temp_fastq_file)
+    temp_fastq_file <- tempfile("fastq_input_", fileext = ".fq")
     microseq::writeFastq(fastq_input, temp_fastq_file)
+    temp_files <- c(temp_files, temp_fastq_file)
     fastq_file <- temp_fastq_file
-
   } else {
-    fastq_file <- fastq_input
+    fastq_file <- normalizePath(fastq_input)
   }
 
-  # Handle reverse: file or tibble
-  if (!is.character(reverse)){
-    # Ensure required columns exist
-    required_cols_rev <- c("Header", "Sequence", "Quality")
-    if (!all(required_cols_rev %in% colnames(reverse))) {
+  # Process reverse reads
+  if (is.null(reverse)) {
+    stop("No reverse reads provided. Please supply reverse or use a 'pe_df' object.")
+  }
+
+  if (!is.character(reverse)) {
+    required_cols <- c("Header", "Sequence", "Quality")
+    if (!all(required_cols %in% colnames(reverse))) {
       stop("Reverse FASTQ object must contain columns: Header, Sequence, Quality")
     }
-    temp_reverse_file <- tempfile(pattern = "reverse_temp_", fileext = ".fq")
+    temp_reverse_file <- tempfile("reverse_input_", fileext = ".fq")
     microseq::writeFastq(reverse, temp_reverse_file)
-    reverse_file <- temp_reverse_file
     temp_files <- c(temp_files, temp_reverse_file)
-
+    reverse_file <- temp_reverse_file
   } else {
-    reverse_file <- reverse
+    reverse_file <- normalizePath(reverse)
   }
 
-  # Check if input files exists
   if (!file.exists(fastq_file)) stop("Cannot find input FASTQ file: ", fastq_file)
-  if (!is.null(reverse) && !file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
+  if (!file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
 
-  # Normalize file paths
-  fastq_file <- normalizePath(fastq_file)
-  reverse_file <- normalizePath(reverse_file)
-
-  # Determine output file
-  if (output_format == "fasta") {
-
-    if (is.null(fastaout)) {
-      outfile_fasta <- tempfile(pattern = "joined_", fileext = ".fa")
-      temp_files <- c(temp_files, outfile_fasta)
-    } else {
-      outfile_fasta <- fastaout
-    }
-  }
-
+  # Define output file paths
   if (output_format == "fastq") {
-    if (is.null(fastqout)) {
-      outfile_fastq <- tempfile(pattern = "joined_", fileext = ".fq")
-      temp_files <- c(temp_files, outfile_fastq)
-    } else {
-      outfile_fastq <- fastqout
-    }
+    outfile <- if (is.null(fastqout)) tempfile("joined_", fileext = ".fq") else fastqout
+  } else {
+    outfile <- if (is.null(fastaout)) tempfile("joined_", fileext = ".fa") else fastaout
   }
+  if (is.null(fastqout) && is.null(fastaout)) temp_files <- c(temp_files, outfile)
 
-  # Build argument string for command line
+  # Construct VSEARCH arguments
   args <- c("--fastq_join", shQuote(fastq_file),
             "--reverse", shQuote(reverse_file),
             "--join_padgap", join_padgap,
             "--join_padgapq", join_padgapq,
             "--threads", threads)
 
-  # Add output files based on output_format
   if (output_format == "fastq") {
-    args <- c(args, "--fastqout", outfile_fastq)
-  } else if (output_format == "fasta") {
-    args <- c(args, "--fastaout", outfile_fasta, "--fasta_width", fasta_width)
+    args <- c(args, "--fastqout", outfile)
+  } else {
+    args <- c(args, "--fastaout", outfile, "--fasta_width", fasta_width)
   }
 
-  # Add log file if specified
   if (!is.null(log_file)) {
     args <- c(args, "--log", log_file)
   }
 
-  # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
   }
@@ -227,26 +223,19 @@ vs_fastq_join <- function(fastq_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
-  # Check for VSEARCH failure
   check_vsearch_status(vsearch_output, args)
 
-  # Handle output if output file is NULL
+  # Read and return results if not written to disk
   if ((output_format == "fasta" && is.null(fastaout)) ||
       (output_format == "fastq" && is.null(fastqout))) {
-
-    # Create results tibble
-    if (output_format == "fastq") {
-      joined_seqs <- microseq::readFastq(outfile_fastq)
-    } else if (output_format == "fasta") {
-      joined_seqs <- microseq::readFasta(outfile_fasta)
+    joined_seqs <- if (output_format == "fastq") {
+      microseq::readFastq(outfile)
+    } else {
+      microseq::readFasta(outfile)
     }
-  }
-
-  # Return results
-  if ((output_format == "fasta" && is.null(fastaout)) ||
-      (output_format == "fastq" && is.null(fastqout))) {
     return(joined_seqs)
   } else {
     return(invisible(NULL))
   }
 }
+

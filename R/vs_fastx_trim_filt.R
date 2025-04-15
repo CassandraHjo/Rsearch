@@ -7,9 +7,10 @@
 #'
 #' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object containing
 #' (forward) reads. See \emph{Details}.
-#' @param reverse An optional FASTA/FASTQ file path or FASTA/FASTQ object
-#' containing reverse reads. If provided, it is processed alongside
-#' \code{fastx_input}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param reverse An optional FASTA/FASTQ file path or object containing reverse
+#' reads. If \code{fastx_input} is a \code{"pe_df"} object and \code{reverse} is
+#' not provided, the reverse reads will be extracted from its \code{"reverse"}
+#' attribute.
 #' @param output_format Desired output format of file or tibble: \code{"fasta"}
 #' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
 #' FASTA object, \code{output_format} cannot be \code{"fastq"}.
@@ -87,6 +88,10 @@
 #' columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
 #' objects are tibbles that contain the columns \code{Header}, \code{Sequence},
 #' and \code{Quality}, see \code{\link{readFastq}}.
+#'
+#' If \code{fastx_input} is an object of class \code{"pe_df"}, the reverse reads
+#' are automatically extracted from its \code{"reverse"} attribute unless
+#' explicitly provided via the \code{reverse} argument.
 #'
 #' If \code{reverse} is provided, it is processed alongside \code{fastx_input}
 #' using the same trimming/filtering criteria.
@@ -249,6 +254,14 @@ vs_fastx_trim_filt <- function(fastx_input,
   if (output_format == "fasta") {
     if (!is.null(fastqout) || !is.null(fastqout_rev)) {
       stop("When output_format is defined as 'fasta', 'fastqout' and 'fastqout_rev' cannot be used. Use 'fastaout' and 'fastaout_rev' instead.")
+    }
+  }
+
+  # Handle case when fastx_input is a pe_df and reverse is NULL
+  if (is_pe_df(fastx_input) && is.null(reverse)) {
+    reverse <- attr(fastx_input, "reverse")
+    if (is.null(reverse)) {
+      stop("fastx_input has class 'pe_df' but no 'reverse' attribute found.")
     }
   }
 

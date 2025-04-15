@@ -8,18 +8,18 @@
 \usage{
 fastx_synchronize(
   file1,
-  file2,
+  file2 = NULL,
   file_format = "fastq",
   file1_out = NULL,
   file2_out = NULL
 )
 }
 \arguments{
-\item{file1}{A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
-\emph{Details}.}
+\item{file1}{A FASTQ file path, a FASTQ tibble, or a
+paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{file2}{A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
-\emph{Details}.}
+\item{file2}{A FASTQ file path or a FASTQ tibble. Optional if \code{file} is
+a \code{"pe_df"} object. See \emph{Details}.}
 
 \item{file_format}{Format of the input (\code{file1} and \code{file2})
 and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
@@ -59,6 +59,12 @@ FASTA objects are tibbles that contain the columns \code{Header} and
 \code{Sequence}, see \code{\link{readFasta}}. FASTQ objects are tibbles that
 contain the columns \code{Header}, \code{Sequence}, and \code{Quality}, see
 \code{\link{readFastq}}.
+
+If \code{file1} is an object of class \code{"pe_df"}, the second read tibble
+is automatically extracted from its \code{"reverse"} attribute unless
+explicitly provided via the \code{file2} argument. This allows streamlined
+input handling for paired-end tibbles created by
+\code{\link{vs_fastx_trim_filt}}.
 
 Sequence IDs in the \code{Header} fields must be identical for each read pair
 in both \code{file1} and \code{file2} for synchronization to work correctly.

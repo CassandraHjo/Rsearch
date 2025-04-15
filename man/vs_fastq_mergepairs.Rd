@@ -11,7 +11,7 @@
 \usage{
 vs_fastq_mergepairs(
   fastq_input,
-  reverse,
+  reverse = NULL,
   output_format = "fastq",
   fastaout = NULL,
   fastqout = NULL,
@@ -25,11 +25,11 @@ vs_fastq_mergepairs(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
-reads. See \emph{Details}.}
+\item{fastq_input}{A FASTQ file path, a FASTQ tibble (forward reads), or a
+paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.
-See \emph{Details}.}
+\item{reverse}{A FASTQ file path or a FASTQ tibble (reverse reads). Optional
+if \code{fastq_input} is a \code{"pe_df"} object. See \emph{Details}.}
 
 \item{output_format}{Desired output format of file or tibble: \code{"fasta"}
 or \code{"fastq"} (default).}
@@ -105,6 +105,12 @@ or FASTQ objects. FASTQ objects are tibbles that contain the columns
 \code{Header}, \code{Sequence}, and \code{Quality}, see
 \code{\link{readFastq}}. Forward and reverse reads must appear in the same
 order and have the same total number of reads in both files.
+
+If \code{fastq_input} is an object of class \code{"pe_df"}, the reverse reads
+are automatically extracted from its \code{"reverse"} attribute unless
+explicitly provided via the \code{reverse} argument. This allows streamlined
+input handling for paired-end tibbles created by
+\code{\link{fastx_synchronize}} or \code{\link{vs_fastx_trim_filt}}.
 
 If \code{fastaout} or \code{fastqout} is specified, the merged reads are
 written to the respective file in either FASTA or FASTQ format.

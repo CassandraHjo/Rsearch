@@ -3,9 +3,11 @@
 #' @description \code{vs_merging_lengths} computes length statistics for forward
 #' reads, reverse reads, merged reads, and their overlaps before and after
 #' merging.
-#' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
-#' reads. See \emph{Details}.
-#' @param reverse A FASTQ file path or FASTQ object containing (reverse) reads.
+#'
+#' @param fastq_input A FASTQ file path, a FASTQ tibble (forward reads), or a
+#' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param reverse A FASTQ file path or FASTQ tibble containing reverse reads.
+#' Optional if \code{fastq_input} is a \code{"pe_df"} object.
 #' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
 #' Defaults to \code{10}.
 #' @param minlen Minimum number of bases a sequence must have to be retained.
@@ -17,6 +19,12 @@
 #'
 #' @details The function uses \code{\link{vs_fastq_mergepairs}} where
 #' the arguments to this function are described in detail.
+#'
+#' If \code{fastq_input} is an object of class \code{"pe_df"}, the reverse reads
+#' are automatically extracted from its \code{"reverse"} attribute unless
+#' explicitly provided via the \code{reverse} argument. This allows streamlined
+#' input handling for paired-end tibbles created by
+#' \code{\link{fastx_synchronize}} or \code{\link{vs_fastx_trim_filt}}.
 #'
 #' These length statistics are most typically used in order to tune the filter
 #' and trimming of reads such that the merged reads are of high quality.
@@ -67,7 +75,7 @@
 #' @export
 #'
 vs_merging_lengths <- function(fastq_input,
-                               reverse,
+                               reverse = NULL,
                                minovlen = 10,
                                minlen = 0,
                                threads = 1,
@@ -82,6 +90,19 @@ vs_merging_lengths <- function(fastq_input,
     R1.tbl <- fastq_input
   } else {
     R1.tbl <- microseq::readFastq(fastq_input)
+  }
+
+  # Check for pe_df and extract reverse if needed
+  if (is_pe_df(fastq_input) && is.null(reverse)) {
+    reverse <- attr(fastq_input, "reverse")
+    if (is.null(reverse)) {
+      stop("fastq_input has class 'pe_df' but no 'reverse' attribute found.")
+    }
+  }
+
+  # Read reverse reads
+  if (is.null(reverse)) {
+    stop("No reverse reads provided. Please supply reverse or use a 'pe_df' object.")
   }
 
   # The reverse reads

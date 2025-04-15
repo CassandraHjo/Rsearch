@@ -7,7 +7,7 @@
 \usage{
 vs_optimize_truncqual(
   fastq_input,
-  reverse,
+  reverse = NULL,
   minovlen = 10,
   truncqual_range = 1:20,
   minlen = 1,
@@ -18,11 +18,11 @@ vs_optimize_truncqual(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
-reads. See \emph{Details}.}
+\item{fastq_input}{A FASTQ file path, FASTQ tibble (forward reads), or a
+paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.
-See \emph{Details}.}
+\item{reverse}{A FASTQ file path or FASTQ tibble (reverse reads). Optional
+if \code{fastq_input} is a \code{"pe_df"} object.}
 
 \item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
 Defaults to \code{10}.}
@@ -72,6 +72,10 @@ optimal value that maximizes the proportion of high-quality merged read pairs.
 The function uses \code{\link{vs_fastq_mergepairs}},
 \code{\link{vs_fastx_trim_filt}}, and \code{\link{vs_fastx_uniques}} where
 the arguments to this functions are described in detail.
+
+If \code{fastq_input} has class \code{"pe_df"}, the reverse reads will be
+automatically extracted from the \code{"reverse"} attribute unless
+explicitly provided in the \code{reverse} argument.
 
 The best possible truncation option (\code{truncqual}) for merging is
 measured by the number of merged read-pairs with a copy number above the

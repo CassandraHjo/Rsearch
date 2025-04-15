@@ -21,7 +21,7 @@ test_that("error when output_format is 'fasta', and fastqout is defined", {
                                    reverse = R2,
                                    output_format = output_format,
                                    fastqout = fastqout),
-               "When output_format is defined as 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
+               "When output_format is 'fasta', 'fastqout' cannot be used. Use 'fastaout' instead.")
 })
 
 test_that("error when output_format is 'fastq', and fastaout is defined", {
@@ -35,7 +35,7 @@ test_that("error when output_format is 'fastq', and fastaout is defined", {
                                    reverse = R2,
                                    output_format = output_format,
                                    fastaout = fastaout),
-               "When output_format is defined as 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
+               "When output_format is 'fastq', 'fastaout' cannot be used. Use 'fastqout' instead.")
 })
 
 test_that("error when fastq_input has incorrect columns if input is tibble", {

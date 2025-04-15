@@ -43,9 +43,10 @@ vs_fastx_trim_filt(
 \item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object containing
 (forward) reads. See \emph{Details}.}
 
-\item{reverse}{An optional FASTA/FASTQ file path or FASTA/FASTQ object
-containing reverse reads. If provided, it is processed alongside
-\code{fastx_input}. Defaults to \code{NULL}. See \emph{Details}.}
+\item{reverse}{An optional FASTA/FASTQ file path or object containing reverse
+reads. If \code{fastx_input} is a \code{"pe_df"} object and \code{reverse} is
+not provided, the reverse reads will be extracted from its \code{"reverse"}
+attribute.}
 
 \item{output_format}{Desired output format of file or tibble: \code{"fasta"}
 or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
@@ -184,6 +185,10 @@ files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
 columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
 objects are tibbles that contain the columns \code{Header}, \code{Sequence},
 and \code{Quality}, see \code{\link{readFastq}}.
+
+If \code{fastx_input} is an object of class \code{"pe_df"}, the reverse reads
+are automatically extracted from its \code{"reverse"} attribute unless
+explicitly provided via the \code{reverse} argument.
 
 If \code{reverse} is provided, it is processed alongside \code{fastx_input}
 using the same trimming/filtering criteria.

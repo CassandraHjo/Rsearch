@@ -4,10 +4,10 @@
 #' FASTA/FASTQ files or objects by retaining only the common sequences present
 #' in both.
 #'
-#' @param file1 A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
-#' \emph{Details}.
-#' @param file2 A FASTA/FASTQ file path or a FASTA/FASTQ tibble object. See
-#' \emph{Details}.
+#' @param file1 A FASTQ file path, a FASTQ tibble, or a
+#' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param file2 A FASTQ file path or a FASTQ tibble. Optional if \code{file} is
+#' a \code{"pe_df"} object. See \emph{Details}.
 #' @param file_format Format of the input (\code{file1} and \code{file2})
 #' and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
 #' This determines the format for both outputs.
@@ -27,6 +27,12 @@
 #' \code{Sequence}, see \code{\link{readFasta}}. FASTQ objects are tibbles that
 #' contain the columns \code{Header}, \code{Sequence}, and \code{Quality}, see
 #' \code{\link{readFastq}}.
+#'
+#' If \code{file1} is an object of class \code{"pe_df"}, the second read tibble
+#' is automatically extracted from its \code{"reverse"} attribute unless
+#' explicitly provided via the \code{file2} argument. This allows streamlined
+#' input handling for paired-end tibbles created by
+#' \code{\link{vs_fastx_trim_filt}}.
 #'
 #' Sequence IDs in the \code{Header} fields must be identical for each read pair
 #' in both \code{file1} and \code{file2} for synchronization to work correctly.
@@ -94,7 +100,7 @@
 #' @export
 #'
 fastx_synchronize <- function(file1,
-                              file2,
+                              file2 = NULL,
                               file_format = "fastq",
                               file1_out = NULL,
                               file2_out = NULL) {
@@ -102,6 +108,14 @@ fastx_synchronize <- function(file1,
   # Validate file_format
   if (!file_format %in% c("fasta", "fastq")) {
     stop("Invalid file_format. The files must be a fasta or fastq.")
+  }
+
+  # Extract file2 if file1 is a pe_df object and file2 is not provided
+  if (is_pe_df(file1) && is.null(file2)) {
+    file2 <- attr(file1, "reverse")
+    if (is.null(file2)) {
+      stop("file1 has class 'pe_df' but no 'reverse' attribute found.")
+    }
   }
 
   # Validate output files

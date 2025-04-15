@@ -7,7 +7,7 @@
 \usage{
 vs_merging_lengths(
   fastq_input,
-  reverse,
+  reverse = NULL,
   minovlen = 10,
   minlen = 0,
   threads = 1,
@@ -15,10 +15,11 @@ vs_merging_lengths(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
-reads. See \emph{Details}.}
+\item{fastq_input}{A FASTQ file path, a FASTQ tibble (forward reads), or a
+paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{reverse}{A FASTQ file path or FASTQ object containing (reverse) reads.}
+\item{reverse}{A FASTQ file path or FASTQ tibble containing reverse reads.
+Optional if \code{fastq_input} is a \code{"pe_df"} object.}
 
 \item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
 Defaults to \code{10}.}
@@ -61,6 +62,12 @@ merging.
 \details{
 The function uses \code{\link{vs_fastq_mergepairs}} where
 the arguments to this function are described in detail.
+
+If \code{fastq_input} is an object of class \code{"pe_df"}, the reverse reads
+are automatically extracted from its \code{"reverse"} attribute unless
+explicitly provided via the \code{reverse} argument. This allows streamlined
+input handling for paired-end tibbles created by
+\code{\link{fastx_synchronize}} or \code{\link{vs_fastx_trim_filt}}.
 
 These length statistics are most typically used in order to tune the filter
 and trimming of reads such that the merged reads are of high quality.
