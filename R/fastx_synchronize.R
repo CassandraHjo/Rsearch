@@ -210,6 +210,9 @@ fastx_synchronize <- function(file1,
     microseq::writeFasta(sync_file2, file2_out)
   }
 
+  # Add class label
+  class(sync_file1) <- c("pe_df", class(sync_file1))
+
   # Return results
   if (is.null(file1_out) && is.null(file2_out)) { # Return tibble
     # Add sync_file2 as "reverse" attribute

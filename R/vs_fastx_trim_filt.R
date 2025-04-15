@@ -572,6 +572,10 @@ vs_fastx_trim_filt <- function(fastx_input,
   # Return results
   if ((output_format == "fasta" && is.null(fastaout)) ||
       (output_format == "fastq" && is.null(fastqout))) {
+
+    # Add class label
+    class(filt_seqs) <- c("pe_df", class(filt_seqs))
+
     return(filt_seqs)
   } else {
     return(invisible(NULL))
