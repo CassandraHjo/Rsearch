@@ -137,7 +137,7 @@ test_that("vs_cluster_size writes OTU table to file when otutabout is path", {
   expect_null(return_val)
   expect_true(file.exists(otutable_out))
   expect_equal(suppressMessages(readr::read_delim(otutable_out)),
-               readRDS(test_path("testdata",
-                                 "output",
-                                 "cluster_R1_sample1_otu.rds")))
+               suppressMessages(readr::read_delim(test_path("testdata",
+                                                            "output",
+                                                            "cluster_R1_sample1_otu_file.txt"))))
 })

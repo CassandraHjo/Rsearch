@@ -58,13 +58,14 @@
 #' 'Userfields' section in the \code{VSEARCH} manual for more information.
 #'
 #' \code{otutabout} gives the option to output the results in an OTU
-#' table format with tab-separated columns. The first line will start with
-#' the string \"#OTU ID\" and is followed by a tab-separated list of all sample
-#' identifiers (\"sample=X\"). The following lines, one for each OTU, start with
-#' the OTU identifier and are followed by a tab-separated list of abundances for
-#' that OTU in each sample. If \code{otutabout} is a character string, the output
-#' is written to the specified file. If \code{otutabout} is \code{TRUE}, the
-#' function returns the OTU table as a tibble.
+#' table format with tab-separated columns. When writing to a file, the first
+#' line starts with the string "#OTU ID", followed by a tab-separated list of
+#' all sample identifiers (formatted as "sample=X"). Each subsequent line,
+#' corresponding to an OTU, begins with the OTU identifier and is followed by
+#' tab-separated abundances for that OTU in each sample. If \code{otutabout} is
+#' a character string, the output is written to the specified file. If
+#' \code{otutabout} is \code{TRUE}, the function returns the OTU table as a
+#' tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
 #'
 #' Pairwise identity (\code{id}) is calculated as the number of matching columns
 #' divided by the alignment length minus terminal gaps.
@@ -296,7 +297,9 @@ vs_usearch_global <- function(fastx_input,
     if (is.character(otutabout)) {
       return(invisible(NULL)) # File output only
     } else {
-      return(suppressMessages(readr::read_delim(outfile))) # Return as tibble
+      df <- suppressMessages(readr::read_delim(outfile))
+      colnames(df)[1] <- "otu_id"
+      return(df) # Return as tibble
     }
   } else {
     userout_df <- suppressMessages(readr::read_delim(outfile, col_names = FALSE))

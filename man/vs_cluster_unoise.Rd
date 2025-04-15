@@ -148,16 +148,15 @@ function returns the centroid sequences as a FASTA object.
 If \code{centroids} is specified, centroid sequences are written to the
 specified file in FASTA format.
 
-\code{otutabout} gives the option to output the clustering results in an OTU
-table format with tab-separated columns. The first line will start with
-the string ’#OTU ID’ and is followed by a tab-separated list of all sample
-identifiers ("sample=X"). The following lines, one for each OTU, starts with
-the OTU identifier and is followed by a tab-separated list of abundances for
-that OTU in each sample, in the order given on the first line. The OTU and
-sample identifiers are extracted from the FASTA headers of the sequences.
-If \code{otutabout} is a character string, the output is written to the
-specified file. If \code{otutabout} is \code{TRUE}, the function returns
-the OTU table as a tibble.
+\code{otutabout} gives the option to output the results in an OTU
+table format with tab-separated columns. When writing to a file, the first
+line starts with the string "#OTU ID", followed by a tab-separated list of
+all sample identifiers (formatted as "sample=X"). Each subsequent line,
+corresponding to an OTU, begins with the OTU identifier and is followed by
+tab-separated abundances for that OTU in each sample. If \code{otutabout} is
+a character string, the output is written to the specified file. If
+\code{otutabout} is \code{TRUE}, the function returns the OTU table as a
+tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
 
 \code{id} is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is not

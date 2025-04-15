@@ -225,9 +225,9 @@ test_that("vs_usearch_global writes OTU table to file when otutabout is path", {
   expect_null(return_val)
   expect_true(file.exists(otutable_out))
   expect_equal(suppressMessages(readr::read_delim(otutable_out)),
-               readRDS(test_path("testdata",
-                                 "output",
-                                 "sample1_usearch_global_otu.rds")))
+               suppressMessages(readr::read_delim(test_path("testdata",
+                                                            "output",
+                                                            "sample1_usearch_global_otu_file.txt"))))
 })
 
 test_that("vs_usearch_global returns tibble with default userfields when no output file is specified", {
@@ -274,4 +274,3 @@ test_that("vs_usearch_global runs when strand is 'both' (without maxaccepts)", {
   expect_equal(result,
                readRDS(test_path("testdata", "output", "sample1_usearch_global_strand_both.rds")))
 })
-

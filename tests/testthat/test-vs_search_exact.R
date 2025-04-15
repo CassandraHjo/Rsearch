@@ -202,7 +202,7 @@ test_that("vs_search_exact returns OTU table tibble when otutabout = TRUE", {
                              otutabout = TRUE)
 
   expect_s3_class(otu_tbl, "tbl_df")
-  expect_true("#OTU ID" %in% names(otu_tbl))
+  expect_true("otu_id" %in% names(otu_tbl))
   expect_equal(otu_tbl, readRDS(test_path("testdata", "output", "sample1_search_exact_otu_tibble.rds")))
 })
 
@@ -220,10 +220,13 @@ test_that("vs_search_exact writes OTU table to file when otutabout is path", {
                                 otutabout = otu_outfile)
 
   actual <- suppressMessages(readr::read_delim(otu_outfile))
+  expected <- suppressMessages(readr::read_delim(test_path("testdata",
+                                                           "output",
+                                                           "sample1_search_exact_otu_file.txt")))
 
   expect_null(return_val)
   expect_true(file.exists(otu_outfile))
-  expect_equal(actual, readRDS(test_path("testdata", "output", "sample1_search_exact_otu_tibble.rds")))
+  expect_equal(actual, expected)
 })
 
 test_that("vs_search_exact returns alignment tibble with default userfields", {
