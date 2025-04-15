@@ -31,3 +31,21 @@ check_vsearch_status <- function(vsearch_output, args) {
 
   invisible(NULL)
 }
+
+#' Check if an object is a paired-end data frame
+#'
+#' @description
+#' \code{is_pe_df} checks whether a given object is a data frame or tibble with
+#' the class tag \code{"pe_df"}, indicating that it represents paired-end
+#' sequence data.
+#'
+#' @param df An object to test.
+#'
+#' @return \code{TRUE} if \code{df} inherits from class \code{"pe_df"},
+#' \code{FALSE} otherwise.
+#'
+#' @noRd
+is_pe_df <- function(df) {
+  inherits(df, "pe_df")
+}
+
