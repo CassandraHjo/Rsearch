@@ -67,17 +67,17 @@ To convert this tables into a \code{\link{phyloseq}} object, use
 \examples{
 \dontrun{
 # Define inputs
-readcount.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                            "SOME_DATA.tsv")
-sequence.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                      "SOME_DATA.tsv")
-sample.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                         "SOME_DATA.tsv")
+readcount.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                           "SOME_DATA.tsv")
+sequence.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                          "SOME_DATA.tsv")
+sample.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
+                        "SOME_DATA.tsv")
 
 # Create Rsearch object
-obj <- rsearch_obj(readcount_data = readcount.data,
-                   sequence_data = sequence.data,
-                   sample_data = sample.data,
+obj <- rsearch_obj(readcount_data = readcount.dta,
+                   sequence_data = sequence.dta,
+                   sample_data = sample.dta,
                    sample_id_col = "SampleID")
 
 # Convert Rsearch object to phyloseq object

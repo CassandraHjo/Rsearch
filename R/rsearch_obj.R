@@ -49,17 +49,17 @@
 #' @examples
 #' \dontrun{
 #' # Define inputs
-#' readcount.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                             "SOME_DATA.tsv")
-#' sequence.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                       "SOME_DATA.tsv")
-#' sample.data <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "SOME_DATA.tsv")
+#' readcount.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                            "SOME_DATA.tsv")
+#' sequence.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                           "SOME_DATA.tsv")
+#' sample.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
+#'                         "SOME_DATA.tsv")
 #'
 #' # Create Rsearch object
-#' obj <- rsearch_obj(readcount_data = readcount.data,
-#'                    sequence_data = sequence.data,
-#'                    sample_data = sample.data,
+#' obj <- rsearch_obj(readcount_data = readcount.dta,
+#'                    sequence_data = sequence.dta,
+#'                    sample_data = sample.dta,
 #'                    sample_id_col = "SampleID")
 #'
 #' # Convert Rsearch object to phyloseq object
@@ -160,8 +160,8 @@ rsearch_obj <- function(readcount_data,
 rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
   otu.table <- rsearch.obj$readcount.mat
 
-  sample.data <- rsearch.obj$sampledata.df
-  rownames(sample.data) <- rsearch.obj$sampledata.df[,sample_id_col]
+  sample.dta <- rsearch.obj$sampledata.df
+  rownames(sample.dta) <- rsearch.obj$sampledata.df[,sample_id_col]
 
   taxonomy.tbl <- dplyr::select(rsearch.obj$sequence.df, -c(Header, Sequence))
 
@@ -170,12 +170,12 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
     rownames(tax.mat) <- rsearch.obj$sequence.df$Header
     ps.obj <- phyloseq::phyloseq(phyloseq::otu_table(otu.table,
                                                      taxa_are_rows = T),
-                                 phyloseq::sample_data(sample.data),
+                                 phyloseq::sample_data(sample.dta),
                                  phyloseq::tax_table(tax.mat))
   } else {
     ps.obj <- phyloseq::phyloseq(phyloseq::otu_table(otu.table,
                                                      taxa_are_rows = T),
-                                 phyloseq::sample_data(sample.data))
+                                 phyloseq::sample_data(sample.dta))
   }
   return(ps.obj)
 }
