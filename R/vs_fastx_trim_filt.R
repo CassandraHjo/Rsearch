@@ -563,18 +563,18 @@ vs_fastx_trim_filt <- function(fastx_input,
       attr(filt_seqs, "statistics") <- statistics
     }
 
-    # Add reverse table as attribute to the primary table
+    # Add reverse table as attribute and class tag to the primary table
     if (!is.null(reverse)) {
       attr(filt_seqs, "reverse") <- filt_reverse
+
+      # Add class label
+      class(filt_seqs) <- c("pe_df", class(filt_seqs))
     }
   }
 
   # Return results
   if ((output_format == "fasta" && is.null(fastaout)) ||
       (output_format == "fastq" && is.null(fastqout))) {
-
-    # Add class label
-    class(filt_seqs) <- c("pe_df", class(filt_seqs))
 
     return(filt_seqs)
   } else {
