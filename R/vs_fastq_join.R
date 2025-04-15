@@ -221,11 +221,14 @@ vs_fastq_join <- function(fastq_input,
     args <- c(args, vsearch_options)
   }
 
-  # Run vsearch
+  # Run VSEARCH
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
                             stdout = TRUE,
                             stderr = TRUE)
+
+  # Check for VSEARCH failure
+  check_vsearch_status(vsearch_output, args)
 
   # Handle output if output file is NULL
   if ((output_format == "fasta" && is.null(fastaout)) ||

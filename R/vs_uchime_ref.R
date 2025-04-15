@@ -246,6 +246,10 @@ vs_uchime_ref <- function(fasta_input,
                             stdout = TRUE,
                             stderr = TRUE)
 
+  # Check for VSEARCH failure
+  check_vsearch_status(vsearch_output, args)
+
+  # Handle output
   if (is.null(nonchimeras) && is.null(chimeras)) {
 
     # Read output into FASTA object (tbl)

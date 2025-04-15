@@ -283,11 +283,14 @@ vs_cluster_unoise <- function(fasta_input,
     args <- c(args, "--log", log_file)
   }
 
-  # Run vsearch
+  # Run VSEARCH
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
                             stdout = TRUE,
                             stderr = TRUE)
+
+  # Check for VSEARCH failure
+  check_vsearch_status(vsearch_output, args)
 
   # Determine return output
   if (!is.null(centroids)) {

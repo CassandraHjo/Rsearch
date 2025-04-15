@@ -181,11 +181,14 @@ vs_sintax <- function(fasta_input,
     args <- c(args, "--randseed", randseed)
   }
 
-  # Run vsearch
+  # Run VSEARCH
   vsearch_output <- system2(command = vsearch_executable,
                             args = args,
                             stdout = TRUE,
                             stderr = TRUE)
+
+  # Check for VSEARCH failure
+  check_vsearch_status(vsearch_output, args)
 
   # The output table
   out.tbl <- fasta_input
