@@ -54,7 +54,7 @@ merged read pairs.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vs_optimize_truncee_rate</span><span class="op">(</span></span>
 <span>  <span class="va">fastq_input</span>,</span>
-<span>  <span class="va">reverse</span>,</span>
+<span>  reverse <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minovlen <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  truncee_rate_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.002</span>, <span class="fl">0.04</span>, by <span class="op">=</span> <span class="fl">0.002</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  minlen <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -70,13 +70,13 @@ merged read pairs.</p>
 
 
 <dl><dt id="arg-fastq-input">fastq_input<a class="anchor" aria-label="anchor" href="#arg-fastq-input"></a></dt>
-<dd><p>A FASTQ file path or FASTQ object containing (forward)
-reads. See <em>Details</em>.</p></dd>
+<dd><p>A FASTQ file path, FASTQ tibble (forward reads), or a
+paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
-<dd><p>A FASTQ file path or FASTQ object containing (reverse) reads.
-See <em>Details</em>.</p></dd>
+<dd><p>A FASTQ file path or FASTQ tibble (reverse reads). Optional
+if <code>fastq_input</code> is a <code>"pe_df"</code> object.</p></dd>
 
 
 <dt id="arg-minovlen">minovlen<a class="anchor" aria-label="anchor" href="#arg-minovlen"></a></dt>
@@ -136,6 +136,9 @@ dashed line.</p>
     <p>The function uses <code><a href="vs_fastq_mergepairs.html">vs_fastq_mergepairs</a></code>,
 <code><a href="vs_fastx_trim_filt.html">vs_fastx_trim_filt</a></code>, and <code><a href="vs_fastx_uniques.html">vs_fastx_uniques</a></code> where
 the arguments to this functions are described in detail.</p>
+<p>If <code>fastq_input</code> has class <code>"pe_df"</code>, the reverse reads will be
+automatically extracted from the <code>"reverse"</code> attribute unless
+explicitly provided in the <code>reverse</code> argument.</p>
 <p>The best possible truncation option (<code>truncee_rate</code>) for merging is
 measured by the number of merged read-pairs with a copy number above the
 number specified by <code>min_size</code> after dereplication.</p>

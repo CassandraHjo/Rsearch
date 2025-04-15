@@ -45,7 +45,7 @@ overlapping regions into one sequence using <code>VSEARCH</code>.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vs_fastq_mergepairs</span><span class="op">(</span></span>
 <span>  <span class="va">fastq_input</span>,</span>
-<span>  <span class="va">reverse</span>,</span>
+<span>  reverse <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_format <span class="op">=</span> <span class="st">"fastq"</span>,</span>
 <span>  fastaout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fastqout <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -64,13 +64,13 @@ overlapping regions into one sequence using <code>VSEARCH</code>.</p>
 
 
 <dl><dt id="arg-fastq-input">fastq_input<a class="anchor" aria-label="anchor" href="#arg-fastq-input"></a></dt>
-<dd><p>A FASTQ file path or FASTQ object containing (forward)
-reads. See <em>Details</em>.</p></dd>
+<dd><p>A FASTQ file path, a FASTQ tibble (forward reads), or a
+paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
-<dd><p>A FASTQ file path or FASTQ object containing (reverse) reads.
-See <em>Details</em>.</p></dd>
+<dd><p>A FASTQ file path or a FASTQ tibble (reverse reads). Optional
+if <code>fastq_input</code> is a <code>"pe_df"</code> object. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
@@ -158,6 +158,11 @@ or FASTQ objects. FASTQ objects are tibbles that contain the columns
 <code>Header</code>, <code>Sequence</code>, and <code>Quality</code>, see
 <code>readFastq</code>. Forward and reverse reads must appear in the same
 order and have the same total number of reads in both files.</p>
+<p>If <code>fastq_input</code> is an object of class <code>"pe_df"</code>, the reverse reads
+are automatically extracted from its <code>"reverse"</code> attribute unless
+explicitly provided via the <code>reverse</code> argument. This allows streamlined
+input handling for paired-end tibbles created by
+<code><a href="fastx_synchronize.html">fastx_synchronize</a></code> or <code><a href="vs_fastx_trim_filt.html">vs_fastx_trim_filt</a></code>.</p>
 <p>If <code>fastaout</code> or <code>fastqout</code> is specified, the merged reads are
 written to the respective file in either FASTA or FASTQ format.</p>
 <p>If both <code>fastaout</code> or <code>fastqout</code> are <code>NULL</code>, the results are

@@ -70,8 +70,11 @@ on sequence quality, length, abundance, and more.</p>
 <span>  minsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maxsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minqual <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  relabel <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  relabel_sha1 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  fasta_width <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  sample <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stats <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  vsearch_options <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -88,9 +91,10 @@ on sequence quality, length, abundance, and more.</p>
 
 
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
-<dd><p>An optional FASTA/FASTQ file path or FASTA/FASTQ object
-containing reverse reads. If provided, it is processed alongside
-<code>fastx_input</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>An optional FASTA/FASTQ file path or object containing reverse
+reads. If <code>fastx_input</code> is a <code>"pe_df"</code> object and <code>reverse</code> is
+not provided, the reverse reads will be extracted from its <code>"reverse"</code>
+attribute.</p></dd>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
@@ -195,6 +199,16 @@ discarded if it contains bases with a quality score below the given value.
 Defaults to <code>0</code>, meaning no reads are discarded.</p></dd>
 
 
+<dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>
+<dd><p>Relabel sequences using the given prefix and a ticker to
+construct new headers. Defaults to <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-relabel-sha-">relabel_sha1<a class="anchor" aria-label="anchor" href="#arg-relabel-sha-"></a></dt>
+<dd><p>If <code>TRUE</code> (default), relabel sequences using the
+SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
+
+
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
 <dd><p>Number of characters per line in the output FASTA
 file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
@@ -204,6 +218,12 @@ file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
 <dd><p>Add the given sample identifier string to sequence headers. For
 instance, if the given string is "ABC", the text ";sample=ABC" will be added
 to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
+
+
+<dt id="arg-stats">stats<a class="anchor" aria-label="anchor" href="#arg-stats"></a></dt>
+<dd><p>If <code>TRUE</code> (default), a tibble with statistics about the
+filtering is added as an attribute of the returned tibble. If <code>FALSE</code>,
+no statistics are added.</p></dd>
 
 
 <dt id="arg-log-file">log_file<a class="anchor" aria-label="anchor" href="#arg-log-file"></a></dt>
@@ -232,11 +252,12 @@ the trimmed and/or filtered reads from <code>fastx_input</code> in the format
 specified by <code>output_format</code> is returned.</p>
 <p>If <code>reverse</code> is provided, a tibble containing the trimmed and/or
 filtered reverse sequences is attached as an attribute, named
-<code>"reverse"</code>, to the primary table.</p>
+<code>"reverse"</code> to the returned table.</p>
+<p>When the reverse reads are present, the returned tibble is assigned the
+class <code>"pe_df"</code>, identifying it as paired-end data.</p>
 <p>The <code>"statistics"</code> attribute of the returned tibble (when
 output files are <code>NULL</code>) is a tibble with the
 following columns:</p><ul><li><p><code>Kept_Sequences</code>: Number of retained sequences.</p></li>
-<li><p><code>Truncated_Sequences</code>: Number truncated sequences.</p></li>
 <li><p><code>Discarded_Sequences</code>: Number of discarded sequences.</p></li>
 <li><p><code>fastx_source</code>: Name of the file/object with forward (R1) reads.</p></li>
 <li><p><code>reverse_source</code>: (If <code>reverse</code> is specified) Name of the
@@ -252,6 +273,9 @@ files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
 columns <code>Header</code> and <code>Sequence</code>, see <code>readFasta</code>. FASTQ
 objects are tibbles that contain the columns <code>Header</code>, <code>Sequence</code>,
 and <code>Quality</code>, see <code>readFastq</code>.</p>
+<p>If <code>fastx_input</code> is an object of class <code>"pe_df"</code>, the reverse reads
+are automatically extracted from its <code>"reverse"</code> attribute unless
+explicitly provided via the <code>reverse</code> argument.</p>
 <p>If <code>reverse</code> is provided, it is processed alongside <code>fastx_input</code>
 using the same trimming/filtering criteria.</p>
 <p>Note that if you want to trim/filter the forward and reverse reads
@@ -264,6 +288,10 @@ written to these files in the specified format.</p>
 <p>If output files are <code>NULL</code>, results are returned as a tibbles. When
 returning tibbles, the reverse sequences (if provided) are attached as an
 attribute named <code>"reverse"</code>.</p>
+<p>When reverse reads are returned as an attribute, the primary tibble is also
+assigned the S3 class <code>"pe_df"</code> to indicate that it represents
+paired-end data. This class tag can be used by downstream tools to recognize
+paired-end tibbles.</p>
 <p>Note that certain options are not compatible with both file formats. For
 instance, options that trim or filter sequences based on quality scores are
 unavailable when the input is of type <code>"fasta"</code>. Visit the
