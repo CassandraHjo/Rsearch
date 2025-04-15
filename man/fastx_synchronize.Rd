@@ -72,6 +72,10 @@ returns a FASTA/FASTQ object containing synchronized reads from \code{file1}.
 The synchronized reads from \code{file2} are included as an attribute named
 \code{"reverse"} in the returned tibble.
 
+The returned tibble is assigned the S3 class \code{"pe_df"}, indicating that
+it represents paired-end sequence data. Downstream functions can use this
+class tag to distinguish paired-end tibbles from other tibbles.
+
 Both \code{file1_out} and \code{file2_out} must either be \code{NULL} or both
 must be character strings specifying the file paths.
 }

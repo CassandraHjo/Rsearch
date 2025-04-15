@@ -104,6 +104,11 @@
 #' returning tibbles, the reverse sequences (if provided) are attached as an
 #' attribute named \code{"reverse"}.
 #'
+#' When reverse reads are returned as an attribute, the primary tibble is also
+#' assigned the S3 class \code{"pe_df"} to indicate that it represents
+#' paired-end data. This class tag can be used by downstream tools to recognize
+#' paired-end tibbles.
+#'
 #' Note that certain options are not compatible with both file formats. For
 #' instance, options that trim or filter sequences based on quality scores are
 #' unavailable when the input is of type \code{"fasta"}. Visit the
@@ -137,7 +142,10 @@
 #'
 #' If \code{reverse} is provided, a tibble containing the trimmed and/or
 #' filtered reverse sequences is attached as an attribute, named
-#' \code{"reverse"}, to the primary table.
+#' \code{"reverse"} to the returned table.
+#'
+#' When the reverse reads are present, the returned tibble is assigned the
+#' class \code{"pe_df"}, identifying it as paired-end data.
 #'
 #' The \code{"statistics"} attribute of the returned tibble (when
 #' output files are \code{NULL}) is a tibble with the
