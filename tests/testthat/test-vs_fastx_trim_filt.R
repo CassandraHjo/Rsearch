@@ -132,7 +132,9 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
                                   reverse = R2,
-                                  output_format = output_format),
+                                  output_format = output_format,
+                                  maxee_rate = NULL,
+                                  truncqual = NULL),
                "FASTA object must contain columns: Header and Sequence")
 })
 
@@ -180,7 +182,9 @@ test_that("error when reverse file does not exist when output_format is fasta", 
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
                                   reverse = reverse,
-                                  output_format = output_format),
+                                  output_format = output_format,
+                                  maxee_rate = NULL,
+                                  truncqual = NULL),
                paste("Cannot find reverse file:", reverse))
 })
 

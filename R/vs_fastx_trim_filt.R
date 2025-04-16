@@ -298,6 +298,7 @@ vs_fastx_trim_filt <- function(fastx_input,
   }, add = TRUE)
 
   # Handle input for primary sequences
+  fasta_input_detected <- FALSE
   if (!is.character(fastx_input)){
     if ("Quality" %in% colnames(fastx_input)){
 
@@ -335,6 +336,8 @@ vs_fastx_trim_filt <- function(fastx_input,
 
       # Capture original name for statistics table later
       fastx_input_name <- as.character(substitute(fastx_input))
+
+      fasta_input_detected <- TRUE
     }
   } else {
     if (!file.exists(fastx_input)) stop("Cannot find input file: ", fastx_input)
@@ -343,6 +346,38 @@ vs_fastx_trim_filt <- function(fastx_input,
 
     # Capture original name for statistics table later
     fastx_input_name <- basename(fastx_input)
+  }
+
+  # Disable FASTQ-only options for FASTA input
+  if (!is.character(fastx_input)) {
+    if (!"Quality" %in% colnames(fastx_input)) {
+      fasta_input_detected <- TRUE
+    }
+  } else {
+    # For character path input, check if input appears to be a FASTA file by reading the first line
+    first_line <- tryCatch(readLines(fastx_input, n = 1), error = function(e) "")
+    if (grepl("^>", first_line)) {
+      fasta_input_detected <- TRUE
+    }
+  }
+
+  if (isTRUE(fasta_input_detected)) {
+    if (!is.null(maxee_rate)) {
+      warning("maxee_rate is ignored for FASTA input and will be set to NULL")
+      maxee_rate <- NULL
+    }
+    if (!is.null(truncqual)) {
+      warning("truncqual is ignored for FASTA input and will be set to NULL")
+      truncqual <- NULL
+    }
+    if (!is.null(truncee)) {
+      warning("truncee is ignored for FASTA input and will be set to NULL")
+      truncee <- NULL
+    }
+    if (!is.null(truncee_rate)) {
+      warning("truncee_rate is ignored for FASTA input and will be set to NULL")
+      truncee_rate <- NULL
+    }
   }
 
   # Handle input for reverse sequences
