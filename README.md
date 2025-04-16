@@ -24,11 +24,16 @@ handling read pairs with forward and reverse reads - the secondary table
 is included as an attribute of the primary table. The same approach
 applies to tables containing statistics from function executions. By
 ensuring that all functions return only one table, navigating and
-managing results become more straightforward.
+managing results become more straightforward. Additionally, since all
+core functions return data frames or tibbles, they are compatible with
+piping using the `%>%` or `|>` operators.
 
 More information about attributes in R can be found
 [here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and
 [here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
+
+**Full documentation and tutorials with usage examples are available on
+the [Rsearch website](https://cassandrahjo.github.io/Rsearch/)**
 
 ## Installation
 
