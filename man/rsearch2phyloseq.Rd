@@ -25,7 +25,10 @@ This function converts an Rsearch object, which is a simple
 package.
 }
 \examples{
-# HER_TRENGS_KODE
+\dontrun{
+# Convert Rsearch object to phyloseq object
+phy_obj <- rsearch2phyloseq(obj, sample_id_col = "sample_id")
+}
 
 }
 \seealso{

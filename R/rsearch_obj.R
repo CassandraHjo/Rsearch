@@ -14,10 +14,11 @@
 #' @param sequence_data A file path or a data frame (or tibble) containing
 #' centroid sequences representing each OTU, typically obtained from
 #' clustering (\code{\link{vs_cluster_size}}) or denoising
-#' (\code{\link{vs_cluster_unoise}}). The first column must contain OTU
-#' identifiers. One of the remaining columns must be named \code{Sequence},
-#' containing the actual DNA sequences. Additional columns may include taxonomic
-#' classification data, e.g. from \code{\link{vs_sintax}}.
+#' (\code{\link{vs_cluster_unoise}}). The first column must be called
+#' \code{Header} and contain OTU identifiers. One of the remaining columns must
+#' be named \code{Sequence}, containing the actual DNA sequences. Additional
+#' columns may include taxonomic classification data, e.g. from
+#' \code{\link{vs_sintax}}.
 #' @param sample_data A file path or a data frame (or tibble) containing
 #' metadata about each sample. Samples are assumed to be in rows, and one of
 #' the columns \strong{must} contain a unique identifier for each sample that
@@ -28,11 +29,11 @@
 #' Defaults to \code{"sample_id"}.
 #'
 #' @details This function accepts three datasets—read count data, sequence data,
-#' and sample metadata—standardizes them, and returns a streamlined input suitable
-#' for constructing a phyloseq object using the phyloseq package. The function
-#' combines these into a single list object. The implementation uses a standard
-#' \code{list} in R rather than a specialized class providing an open and easily
-#' accessible structure.
+#' and sample metadata—standardizes them, and returns a streamlined input
+#' suitable for constructing a phyloseq object using the phyloseq package. The
+#' function combines these into a single list object. The implementation uses a
+#' standard \code{list} in R rather than a specialized class providing an open
+#' and easily accessible structure.
 #'
 #' To convert this tables into a \code{\link{phyloseq}} object, use
 #' \code{\link{rsearch2phyloseq}}.
@@ -50,26 +51,27 @@
 #' \dontrun{
 #' # Define inputs
 #' readcount.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                            "SOME_DATA.tsv")
+#'                            "readcount_data.tsv")
 #' sequence.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                           "SOME_DATA.tsv")
+#'                           "sequence_data.tsv")
 #' sample.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                         "SOME_DATA.tsv")
+#'                         "sample_data.tsv")
 #'
 #' # Create Rsearch object
 #' obj <- rsearch_obj(readcount_data = readcount.dta,
 #'                    sequence_data = sequence.dta,
 #'                    sample_data = sample.dta,
-#'                    sample_id_col = "SampleID")
+#'                    sample_id_col = "sample_id")
 #'
 #' # Convert Rsearch object to phyloseq object
-#' phy_obj <- rsearch2phyloseq(obj, sample_id_col = "SampleID")
+#' phy_obj <- rsearch2phyloseq(obj, sample_id_col = "sample_id")
 #'
 #' # Convert phyloseq object to Rsearch object
 #' rsearch_obj <- phyloseq2rsearch(phy_obj)
 #'
 #' }
 #'
+#' @seealso \link{rsearch2phyloseq} \link{phyloseq2rsearch}
 #' @export
 #'
 rsearch_obj <- function(readcount_data,
@@ -95,9 +97,8 @@ rsearch_obj <- function(readcount_data,
   if (is.character(sequence_data)) {
 
     # Read from file
-    sequence_data <- suppressMessages(utils::read.delim(sequence_data,
-                                                        header = TRUE,
-                                                        sep = "\t"))
+    sequence_data <- suppressMessages(readr::read_delim(sequence_data,
+                                                        delim = "\t"))
   }
 
   sequence_data <- sequence_data |>
@@ -108,9 +109,8 @@ rsearch_obj <- function(readcount_data,
   if (is.character(sample_data)) {
 
     # Read from file
-    sample_data <- suppressMessages(utils::read.delim(sample_data,
-                                                      sep = "\t",
-                                                      header = TRUE))
+    sample_data <- suppressMessages(readr::read_delim(sample_data,
+                                                      delim = "\t"))
   }
 
   # Match samples between read count data and metadata
@@ -150,7 +150,10 @@ rsearch_obj <- function(readcount_data,
 #' @return A \code{\link{phyloseq}} object.
 #'
 #' @examples
-#' # HER_TRENGS_KODE
+#' \dontrun{
+#' # Convert Rsearch object to phyloseq object
+#' phy_obj <- rsearch2phyloseq(obj, sample_id_col = "sample_id")
+#' }
 #'
 #' @seealso
 #' \code{\link{rsearch_obj}}
@@ -158,10 +161,10 @@ rsearch_obj <- function(readcount_data,
 #' @export
 #'
 rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
-  otu.table <- rsearch.obj$readcount.mat
 
-  sample.dta <- rsearch.obj$sampledata.df
-  rownames(sample.dta) <- rsearch.obj$sampledata.df[,sample_id_col]
+  otu.table <- rsearch.obj$readcount.mat
+  sample.dta <- as.data.frame(rsearch.obj$sampledata.df)
+  rownames(sample.dta) <- sample.dta[[sample_id_col]]
 
   taxonomy.tbl <- dplyr::select(rsearch.obj$sequence.df, -c(Header, Sequence))
 
@@ -198,8 +201,19 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #' @importFrom phyloseq phyloseq otu_table sample_data tax_table
 #'
 #' @examples
-#' # HER_TRENGS_KODE
+#' \dontrun{
+#' # Convert phyloseq object to Rsearch object
+#' rsearch_obj <- phyloseq2rsearch(phy_obj)
 #'
+#' # Extract read count data
+#' rsearch_obj$readcount.mat
+#'
+#' # Extract sample data
+#' rsearch_obj$sampledata.df
+#'
+#' # Extract sequence data
+#' rsearch_obj$sequence.df
+#' }
 #'
 #' @seealso
 #' \code{\link{rsearch_obj}}

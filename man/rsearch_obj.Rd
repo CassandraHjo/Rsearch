@@ -23,10 +23,11 @@ found across all data structures are discarded.}
 \item{sequence_data}{A file path or a data frame (or tibble) containing
 centroid sequences representing each OTU, typically obtained from
 clustering (\code{\link{vs_cluster_size}}) or denoising
-(\code{\link{vs_cluster_unoise}}). The first column must contain OTU
-identifiers. One of the remaining columns must be named \code{Sequence},
-containing the actual DNA sequences. Additional columns may include taxonomic
-classification data, e.g. from \code{\link{vs_sintax}}.}
+(\code{\link{vs_cluster_unoise}}). The first column must be called
+\code{Header} and contain OTU identifiers. One of the remaining columns must
+be named \code{Sequence}, containing the actual DNA sequences. Additional
+columns may include taxonomic classification data, e.g. from
+\code{\link{vs_sintax}}.}
 
 \item{sample_data}{A file path or a data frame (or tibble) containing
 metadata about each sample. Samples are assumed to be in rows, and one of
@@ -55,11 +56,11 @@ phyloseq object in the phyloseq package.
 }
 \details{
 This function accepts three datasets—read count data, sequence data,
-and sample metadata—standardizes them, and returns a streamlined input suitable
-for constructing a phyloseq object using the phyloseq package. The function
-combines these into a single list object. The implementation uses a standard
-\code{list} in R rather than a specialized class providing an open and easily
-accessible structure.
+and sample metadata—standardizes them, and returns a streamlined input
+suitable for constructing a phyloseq object using the phyloseq package. The
+function combines these into a single list object. The implementation uses a
+standard \code{list} in R rather than a specialized class providing an open
+and easily accessible structure.
 
 To convert this tables into a \code{\link{phyloseq}} object, use
 \code{\link{rsearch2phyloseq}}.
@@ -68,24 +69,27 @@ To convert this tables into a \code{\link{phyloseq}} object, use
 \dontrun{
 # Define inputs
 readcount.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                           "SOME_DATA.tsv")
+                           "readcount_data.tsv")
 sequence.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                          "SOME_DATA.tsv")
+                          "sequence_data.tsv")
 sample.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                        "SOME_DATA.tsv")
+                        "sample_data.tsv")
 
 # Create Rsearch object
 obj <- rsearch_obj(readcount_data = readcount.dta,
                    sequence_data = sequence.dta,
                    sample_data = sample.dta,
-                   sample_id_col = "SampleID")
+                   sample_id_col = "sample_id")
 
 # Convert Rsearch object to phyloseq object
-phy_obj <- rsearch2phyloseq(obj, sample_id_col = "SampleID")
+phy_obj <- rsearch2phyloseq(obj, sample_id_col = "sample_id")
 
 # Convert phyloseq object to Rsearch object
 rsearch_obj <- phyloseq2rsearch(phy_obj)
 
 }
 
+}
+\seealso{
+\link{rsearch2phyloseq} \link{phyloseq2rsearch}
 }

@@ -23,8 +23,19 @@ entries are named according to the structure used in
 \code{\link{rsearch_obj}}
 }
 \examples{
-# HER_TRENGS_KODE
+\dontrun{
+# Convert phyloseq object to Rsearch object
+rsearch_obj <- phyloseq2rsearch(phy_obj)
 
+# Extract read count data
+rsearch_obj$readcount.mat
+
+# Extract sample data
+rsearch_obj$sampledata.df
+
+# Extract sequence data
+rsearch_obj$sequence.df
+}
 
 }
 \seealso{
