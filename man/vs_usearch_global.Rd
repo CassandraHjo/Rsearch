@@ -80,9 +80,6 @@ tibble containing the alignment results with the fields specified by
 If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
 If \code{otutabout} is a character string, the output is written to the file,
 and no tibble is returned.
-
-If neither \code{userout} nor \code{otutabout} is specified, a tibble
-containing the alignment results is returned.
 }
 \description{
 \code{vs_usearch_global} performs global pairwise alignment of query

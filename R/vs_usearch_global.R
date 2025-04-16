@@ -90,9 +90,6 @@
 #' If \code{otutabout} is a character string, the output is written to the file,
 #' and no tibble is returned.
 #'
-#' If neither \code{userout} nor \code{otutabout} is specified, a tibble
-#' containing the alignment results is returned.
-#'
 #' @examples
 #' \dontrun{
 #' # You would typically use something else as database
