@@ -46,7 +46,7 @@ More information about attributes in R can be found
 ## Installation
 
 * [A short video on how to install on a Windows laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps){target="blank"}
-* [A short video on how to install on a Mac laptop](https://youtu.be/pPeLGUDUbww?si=kr88WhP_8fOO0YXr){target="blank"}
+* [A short video on how to install on a Mac laptop](https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG){target="blank"}
 
 
 ### Prerequisites
@@ -55,7 +55,7 @@ For the `Rsearch` package to function properly on your computer, `VSEARCH` must
 be installed as well (see below). Please ensure that you are using `VSEARCH` 
 version 2.30.0 or newer.
 
-Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site for 
+Visit the [`VSEARCH`](https://github.com/torognes/vsearch){target="blank"} GitHub site for 
 learning more about `VSEARCH`.
 
 ### Installing `VSEARCH` 

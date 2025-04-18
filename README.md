@@ -39,7 +39,7 @@ the [Rsearch website](https://cassandrahjo.github.io/Rsearch/)**
 
 - <a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps"
   target="blank">A short video on how to install on a Windows laptop</a>
-- <a href="https://youtu.be/pPeLGUDUbww?si=kr88WhP_8fOO0YXr"
+- <a href="https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG"
   target="blank">A short video on how to install on a Mac laptop</a>
 
 ### Prerequisites
@@ -48,8 +48,9 @@ For the `Rsearch` package to function properly on your computer,
 `VSEARCH` must be installed as well (see below). Please ensure that you
 are using `VSEARCH` version 2.30.0 or newer.
 
-Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site
-for learning more about `VSEARCH`.
+Visit the <a href="https://github.com/torognes/vsearch"
+target="blank"><code>VSEARCH</code></a> GitHub site for learning more
+about `VSEARCH`.
 
 ### Installing `VSEARCH`
 
