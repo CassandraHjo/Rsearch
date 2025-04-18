@@ -39,8 +39,8 @@ the [Rsearch website](https://cassandrahjo.github.io/Rsearch/)**
 
 - <a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps"
   target="blank">A short video on how to install on a Windows laptop</a>
-- <a href="" target="blank">A short video on how to install on a Mac
-  laptop</a>
+- <a href="https://youtu.be/pPeLGUDUbww?si=kr88WhP_8fOO0YXr"
+  target="blank">A short video on how to install on a Mac laptop</a>
 
 ### Prerequisites
 

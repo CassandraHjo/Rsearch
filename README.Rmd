@@ -46,7 +46,7 @@ More information about attributes in R can be found
 ## Installation
 
 * [A short video on how to install on a Windows laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps){target="blank"}
-* [A short video on how to install on a Mac laptop](){target="blank"}
+* [A short video on how to install on a Mac laptop](https://youtu.be/pPeLGUDUbww?si=kr88WhP_8fOO0YXr){target="blank"}
 
 
 ### Prerequisites
