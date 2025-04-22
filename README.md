@@ -171,8 +171,7 @@ statistics <- attr(filt_seqs, "statistics")
 
 The main contributors to `Rsearch`:
 
-- Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no> (Coding, testing,
-  documentation, maintaining)
+- Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no> (Coding, documentation, testing, maintaining)
 - Lars Snipen <lars.snipen@nmbu.no> (Coding, documentation)
 - Torbjørn Rognes <torognes@ifi.uio.no> (Coding, documentation)
 - Hilde Vinje <hilde.vinje@nmbu.no> (Coding, documentation)
