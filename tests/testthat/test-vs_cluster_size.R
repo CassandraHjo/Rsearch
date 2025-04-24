@@ -64,11 +64,10 @@ test_that("cluster sequences from fasta file, and return fasta file", {
 test_that("cluster sequences from fasta file, and return fasta tibble", {
 
   fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
-  centroids <- NULL
   vsearch_options <- c("")
 
   cluster_sample1_R1 <- vs_cluster_size(fasta_input = fasta_input,
-                                        centroids = centroids,
+                                        relabel = "OTU",
                                         vsearch_options = vsearch_options)
 
   expect_equal(cluster_sample1_R1,

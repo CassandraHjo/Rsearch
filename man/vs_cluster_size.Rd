@@ -87,8 +87,9 @@ If \code{otutabout} is a character string, the output is written to the file,
 and no tibble is returned.
 
 If neither \code{centroids} nor \code{otutabout} is specified, a FASTA object
-containing the centroid sequences is returned. The clustering statistics are
-included as an attribute named \code{"statistics"}.
+with the centroid sequences and additional column \code{otu_id} is returned.
+The clustering statistics are included as an attribute named
+\code{"statistics"}.
 
 The \code{"statistics"} attribute of the returned tibble (when
 \code{centroids} is \code{NULL}) is a tibble with the following columns:
@@ -125,7 +126,9 @@ object. FASTA objects are tibbles that contain the columns \code{Header} and
 \code{Sequence}, see \code{\link{readFasta}}.
 
 If neither \code{centroids} nor \code{otutabout} is specified (default), the
-function returns the centroid sequences as a FASTA object.
+function returns the centroid sequences as a FASTA object with an additional
+column \code{otu_id}. This column contains the identifier extracted from each
+sequence header.
 
 If \code{centroids} is specified, centroid sequences are written to the
 specified file in FASTA format.

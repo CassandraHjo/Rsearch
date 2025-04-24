@@ -66,7 +66,9 @@
 #' \code{sizeout = TRUE} argument.
 #'
 #' If neither \code{centroids} nor \code{otutabout} is specified (default), the
-#' function returns the centroid sequences as a FASTA object.
+#' function returns the centroid sequences as a FASTA object with an additional
+#' column \code{otu_id}. This column contains the identifier extracted from each
+#' sequence header.
 #'
 #' If \code{centroids} is specified, centroid sequences are written to the
 #' specified file in FASTA format.
@@ -105,8 +107,9 @@
 #' and no tibble is returned.
 #'
 #' If neither \code{centroids} nor \code{otutabout} is specified, a FASTA object
-#' containing the centroid sequences is returned. The clustering statistics are
-#' included as an attribute named \code{"statistics"}.
+#' with the centroid sequences and additional column \code{otu_id} is returned.
+#' The clustering statistics are included as an attribute named
+#' \code{"statistics"}.
 #'
 #' The \code{"statistics"} attribute of the returned tibble (when
 #' \code{centroids} is \code{NULL}) is a tibble with the following columns:
@@ -304,7 +307,8 @@ vs_cluster_unoise <- function(fasta_input,
     }
   } else {
     if (file.exists(outfile) && file.info(outfile)$size > 0) {
-      centroids_fasta <- microseq::readFasta(outfile)
+      centroids_fasta <- microseq::readFasta(outfile) |>
+        dplyr::mutate(otu_id = stringr::str_extract(Header, "^[^;]+"))
     } else {
       centroids_fasta <- tibble::tibble(Header = character(), Sequence = character())
       warning("No centroid sequences were returned by VSEARCH. Check input quality or parameters.")
