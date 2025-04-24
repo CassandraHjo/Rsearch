@@ -42,6 +42,11 @@ The EE rate is calculated as the sum of error probabilities per read, where
 the error probability for each base is computed as \eqn{10^{(-Q/10)}} from
 Phred scores. A lower EE rate indicates higher sequence quality, while a
 higher EE rate suggests lower confidence in the read.
+
+If \code{fastq_input} contains more than 10 000 reads, the function will
+randomly select 10 000 rows for downstream calculations. This subsampling is
+performed to reduce computation time and improve performance on large
+datasets.
 }
 \examples{
 \dontrun{

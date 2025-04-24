@@ -27,6 +27,11 @@
 #' Phred scores. A lower EE rate indicates higher sequence quality, while a
 #' higher EE rate suggests lower confidence in the read.
 #'
+#' If \code{fastq_input} contains more than 10 000 reads, the function will
+#' randomly select 10 000 rows for downstream calculations. This subsampling is
+#' performed to reduce computation time and improve performance on large
+#' datasets.
+#'
 #' @return A ggplot2 object displaying the histogram of EE rate distribution.
 #'
 #' @examples
@@ -56,6 +61,12 @@ plot_ee_rate_dist <- function(fastq_input,
     fastq.tbl <- fastq_input
   } else {
     fastq.tbl <- microseq::readFastq(fastq_input)
+  }
+
+  # If it is more than 10 000 reads, take a random sample of 10 000 reads
+  if (nrow(fastq.tbl) > 10000) {
+    sample_indices <- sample(seq_len(nrow(fastq.tbl)), 10000)
+    fastq.tbl <- fastq.tbl[sample_indices, ]
   }
 
   # Convert quality symbols to numeric scores

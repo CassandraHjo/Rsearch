@@ -52,6 +52,11 @@ higher EE rate suggests lower confidence in the read.
 
 Marginal histograms are added to display the distribution of read lengths
 (top) and quality scores or EE rates (right).
+
+If \code{fastq_input} contains more than 10 000 reads, the function will
+randomly select 10 000 rows for downstream calculations. This subsampling is
+performed to reduce computation time and improve performance on large
+datasets.
 }
 \examples{
 \dontrun{

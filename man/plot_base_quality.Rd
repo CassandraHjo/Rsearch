@@ -41,8 +41,8 @@ quality scores is added to the plot.}
 A ggplot2 object.
 }
 \description{
-Generates a plot displaying the quality scores for each
-position in FASTQ reads.
+Generates a plot displaying the quality scores for each position in FASTQ
+reads.
 }
 \details{
 The mean and median quality scores for each base position over all reads are
@@ -61,6 +61,11 @@ quality scores. Custom quantile ranges can be specified via
 \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
 mean quality lines may be turned off by
 setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
+
+If \code{fastq_input} (and \code{reverse}, if provided) contains more than
+10 000 reads, the function will randomly select 10 000 rows for downstream
+calculations. This subsampling is performed to reduce computation time and
+improve performance on large datasets.
 }
 \examples{
 \dontrun{

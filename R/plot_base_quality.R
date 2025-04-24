@@ -1,8 +1,8 @@
 #' Display quality scores per position for FASTQ reads
 #'
 #' @description
-#' Generates a plot displaying the quality scores for each
-#' position in FASTQ reads.
+#' Generates a plot displaying the quality scores for each position in FASTQ
+#' reads.
 #'
 #' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
 #' reads. See \emph{Details}.
@@ -37,6 +37,11 @@
 #' \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
 #' mean quality lines may be turned off by
 #' setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
+#'
+#' If \code{fastq_input} (and \code{reverse}, if provided) contains more than
+#' 10 000 reads, the function will randomly select 10 000 rows for downstream
+#' calculations. This subsampling is performed to reduce computation time and
+#' improve performance on large datasets.
 #'
 #' @return A ggplot2 object.
 #'
@@ -107,6 +112,15 @@ plot_base_quality <- function(fastq_input,
       reverse.tbl <- reverse
     } else {
       reverse.tbl <- microseq::readFastq(reverse)
+    }
+  }
+
+  # If it is more than 10 000 reads, take a random sample of 10 000 reads
+  if (nrow(fastq.tbl) > 10000) {
+    sample_indices <- sample(seq_len(nrow(fastq.tbl)), 10000)
+    fastq.tbl <- fastq.tbl[sample_indices, ]
+    if (!is.null(reverse)) {
+      reverse.tbl <- reverse.tbl[sample_indices, ]
     }
   }
 
