@@ -150,7 +150,8 @@ help(package = "Rsearch")
 ## Usage
 
 Additional usage examples can be found in the
-[documentation](#documentation) for each individual function.
+[documentation](#documentation) for each individual function and on the 
+[package website](https://cassandrahjo.github.io/Rsearch/).
 
 ### Example: Filter paired-end reads based on quality
 
