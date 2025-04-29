@@ -76,9 +76,15 @@ You can install the development version of `Rsearch` from
 `devtools` package from CRAN:
 
 ``` r
-install.packages("devtools")
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
 devtools::install_github("CassandraHjo/Rsearch")
 ```
+
+After installing the package, it is recommended to restart the R session 
+in RStudio to ensure that all changes take effect. You can do this by 
+navigating to the "Session" menu and selecting "Restart R".
 
 ### Set correct `VSEARCH` executable
 
