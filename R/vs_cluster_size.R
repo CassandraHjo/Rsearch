@@ -386,7 +386,7 @@ calculate_cluster_statistics <- function(centroids_fasta,
   num_singletons <- sum(centroids_fasta$centroid_size == 1)
 
   # Create table
-  result_table <- data.frame(
+  result_table <- tibble::tibble(
     num_nucleotides = num_nucleotides,
     min_length_input_seq = min_length_input_seq,
     max_length_input_seq = max_length_input_seq,

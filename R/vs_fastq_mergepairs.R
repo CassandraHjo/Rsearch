@@ -342,7 +342,7 @@ calculate_merge_statistics <- function(fastq_file,
 
 
   # Create statistics table
-  result_table <- data.frame(
+  result_table <- tibble::tibble(
     Tot_num_pairs = pairs,
     Merged = merged,
     Mean_Read_Length_before_merging = mean_length_before,
