@@ -82,9 +82,9 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 devtools::install_github("CassandraHjo/Rsearch")
 ```
 
-After installing the package, it is recommended to restart the R session 
-in RStudio to ensure that all changes take effect. You can do this by 
-navigating to the "Session" menu and selecting "Restart R".
+After installation, it is a good idea to restart your R session (in
+Rstudio: *Session* \> *Restart R*) to make sure every thing is properly
+loaded.
 
 ### Set correct `VSEARCH` executable
 
@@ -150,7 +150,7 @@ help(package = "Rsearch")
 ## Usage
 
 Additional usage examples can be found in the
-[documentation](#documentation) for each individual function and on the 
+[documentation](#documentation) for each individual function and on the
 [package website](https://cassandrahjo.github.io/Rsearch/).
 
 ### Example: Filter paired-end reads based on quality
@@ -178,7 +178,8 @@ statistics <- attr(filt_seqs, "statistics")
 
 The main contributors to `Rsearch`:
 
-- Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no> (Coding, documentation, testing, maintaining)
+- Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no> (Coding, testing,
+  documentation, maintaining)
 - Lars Snipen <lars.snipen@nmbu.no> (Coding, documentation)
 - Torbjørn Rognes <torognes@ifi.uio.no> (Coding, documentation)
 - Hilde Vinje <hilde.vinje@nmbu.no> (Coding, documentation)

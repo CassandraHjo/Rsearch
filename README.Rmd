@@ -81,9 +81,13 @@ You can install the development version of `Rsearch` from
 package from CRAN:
 
 ```{r, eval=FALSE}
-install.packages("devtools")
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
 devtools::install_github("CassandraHjo/Rsearch")
 ```
+
+After installation, it is a good idea to restart your R session (in Rstudio: *Session* > *Restart R*) to make sure every thing is properly loaded. 
 
 ### Set correct `VSEARCH` executable
 
@@ -147,7 +151,7 @@ help(package = "Rsearch")
 ## Usage
 
 Additional usage examples can be found in the [documentation](#documentation) 
-for each individual function.
+for each individual function and on the [package website](https://cassandrahjo.github.io/Rsearch/).
 
 ### Example: Filter paired-end reads based on quality
 
