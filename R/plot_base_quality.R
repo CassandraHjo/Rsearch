@@ -19,6 +19,9 @@
 #' quality scores is added to the plot.
 #' @param show_mean If \code{TRUE} (default), a line representing the mean
 #' quality scores is added to the plot.
+#' @param show_overlap_box If \code{TRUE}, the mean overlap length for
+#' all the reads is shaded. Defaults to \code{FALSE}. This is only relevant if
+#' \code{reverse} is provided.
 #'
 #' @details
 #' The mean and median quality scores for each base position over all reads are
@@ -35,8 +38,9 @@
 #' The vertical bars represent the interquartile range (25\% - 75\%) in the
 #' quality scores. Custom quantile ranges can be specified via
 #' \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
-#' mean quality lines may be turned off by
-#' setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
+#' mean quality lines, and overlap-shading box may be turned off by
+#' setting \code{show_median = FALSE}, \code{show_mean = FALSE}, or
+#' \code{show_overlap_box = FALSE}, respectively.
 #'
 #' If \code{fastq_input} (and \code{reverse}, if provided) contains more than
 #' 10 000 reads, the function will randomly select 10 000 rows for downstream
@@ -87,7 +91,8 @@ plot_base_quality <- function(fastq_input,
                               quantile_upper = 0.75,
                               plot_title = "Per-position quality scores: median and mean",
                               show_median = TRUE,
-                              show_mean = TRUE) {
+                              show_mean = TRUE,
+                              show_overlap_box = TRUE) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -134,6 +139,15 @@ plot_base_quality <- function(fastq_input,
     stop("Invalid quantile range: 'quantile_lower' must be smaller than 'quantile_upper'.")
   }
 
+  if (show_overlap_box && !is.null(reverse)) {
+    merging_length.tbl <- vs_merging_lengths(fastq.tbl,
+                                             reverse.tbl)
+
+    mean_overlap_length <- round(mean(merging_length.tbl$length_overlap,
+                                      na.rm = TRUE)
+    )
+  }
+
   # Make fastq.tbl plot
 
   # Convert quality symbols to numeric scores
@@ -175,7 +189,18 @@ plot_base_quality <- function(fastq_input,
   pal <- RColorBrewer::brewer.pal(4, "YlGnBu")
 
   # Plot error bars and labels
-  R1.plot <- ggplot2::ggplot(df_R1, ggplot2::aes(x = Position)) +
+  R1.plot <- ggplot2::ggplot(df_R1, ggplot2::aes(x = Position))
+  if (show_overlap_box && !is.null(reverse)) {
+    R1.plot <- R1.plot +
+      ggplot2::annotate("rect",
+                        xmin = max_length - mean_overlap_length,
+                        xmax = max_length,
+                        ymin = -Inf,
+                        ymax = Inf,
+                        alpha = 0.15,
+                        fill = "blue")
+  }
+  R1.plot <- R1.plot +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                            width = 0.2, color = pal[2]) +
     ggplot2::labs(title = plot_title,
@@ -246,9 +271,19 @@ plot_base_quality <- function(fastq_input,
     y_limits <- range(df_R1$Lower, df_R1$Upper, df_R2$Lower, df_R2$Upper, na.rm = TRUE)
     y_limits <- c(floor(y_limits[1]) - 1, ceiling(y_limits[2]) + 1)
 
-
     # Plot error bars and labels
-    R2.plot <- ggplot2::ggplot(df_R2, ggplot2::aes(x = Position)) +
+    R2.plot <- ggplot2::ggplot(df_R2, ggplot2::aes(x = Position))
+    if (show_overlap_box) {
+      R2.plot <- R2.plot +
+        ggplot2::annotate("rect",
+                          xmin = max_length - mean_overlap_length,
+                          xmax = max_length,
+                          ymin = -Inf,
+                          ymax = Inf,
+                          alpha = 0.15,
+                          fill = "blue")
+    }
+    R2.plot <- R2.plot +
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
                              width = 0.2, color = pal[2]) +
       ggplot2::scale_x_reverse() +

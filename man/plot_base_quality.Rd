@@ -11,7 +11,8 @@ plot_base_quality(
   quantile_upper = 0.75,
   plot_title = "Per-position quality scores: median and mean",
   show_median = TRUE,
-  show_mean = TRUE
+  show_mean = TRUE,
+  show_overlap_box = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ quality scores is added to the plot.}
 
 \item{show_mean}{If \code{TRUE} (default), a line representing the mean
 quality scores is added to the plot.}
+
+\item{show_overlap_box}{If \code{TRUE}, the mean overlap length for
+all the reads is shaded. Defaults to \code{FALSE}. This is only relevant if
+\code{reverse} is provided.}
 }
 \value{
 A ggplot2 object.
@@ -59,8 +64,9 @@ its own panel. Note that the x-axis in this panel is reversed.
 The vertical bars represent the interquartile range (25\% - 75\%) in the
 quality scores. Custom quantile ranges can be specified via
 \code{quantile_lower} and \code{quantile_upper}. Additionally, the median and
-mean quality lines may be turned off by
-setting \code{show_median = FALSE} or \code{show_mean = FALSE}, respectively.
+mean quality lines, and overlap-shading box may be turned off by
+setting \code{show_median = FALSE}, \code{show_mean = FALSE}, or
+\code{show_overlap_box = FALSE}, respectively.
 
 If \code{fastq_input} (and \code{reverse}, if provided) contains more than
 10 000 reads, the function will randomly select 10 000 rows for downstream
