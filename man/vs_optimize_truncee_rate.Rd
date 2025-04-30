@@ -28,10 +28,10 @@ if \code{fastq_input} is a \code{"pe_df"} object.}
 Defaults to \code{10}.}
 
 \item{truncee_rate_range}{A numeric vector of \code{truncee_rate} values to
-test. Defaults to
-\code{c(0.002, 0.004, 0.006, 0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020,
-0.022, 0.024, 0.026, 0.028, 0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.
-Provide as a numeric vector.}
+test. Sequences are truncated so that their average expected error per base
+is lower than the specified value. Defaults to \code{(0.002, 0.004, 0.006,
+0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020, 0.022, 0.024, 0.026, 0.028,
+0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.}
 
 \item{minlen}{Minimum number of bases a sequence must have to be retained.
 Defaults to \code{0}. See \emph{Details}.}

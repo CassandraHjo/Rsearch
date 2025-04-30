@@ -3,7 +3,7 @@
 \name{vs_optimize_truncqual}
 \alias{vs_optimize_truncqual}
 \alias{optimize_truncqual}
-\title{Optimize truncation of reads with truncqual for optimal read merging}
+\title{Optimize read truncation with truncqual}
 \usage{
 vs_optimize_truncqual(
   fastq_input,
@@ -29,7 +29,7 @@ Defaults to \code{10}.}
 
 \item{truncqual_range}{A numeric vector of \code{truncqual} values to test.
 Sequences are truncated starting from the first base with the specified base
-quality score or lower. Defaults to \code{1:20}. Provide as a numeric vector.}
+quality score or lower. Defaults to \code{1:20}.}
 
 \item{minlen}{Minimum number of bases a sequence must have to be retained.
 Defaults to \code{0}. See \emph{Details}.}
@@ -38,7 +38,7 @@ Defaults to \code{0}. See \emph{Details}.}
 included in the results. Defaults to \code{2}.}
 
 \item{maxee_rate}{Threshold for average expected error. Must range from
-\code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.}
+\code{0.0} to \code{1.0}. Defaults to \code{0.01}. See \emph{Details}.}
 
 \item{threads}{Number of computational threads to be used by \code{VSEARCH}.
 Defaults to \code{1}.}
