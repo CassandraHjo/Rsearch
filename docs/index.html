@@ -55,21 +55,22 @@
 </h2>
 <p><code>Rsearch</code> is an R package designed for handling and analyzing targeted sequencing data. The package provides a user-friendly interface for core VSEARCH functions in addition to tools for visualization and parameter optimization.</p>
 <p>The core idea behind <code>Rsearch</code> is to retain the output from <code>VSEARCH</code> within R’s generic data structures, rather than writing results to files as the original <code>VSEARCH</code> functions. By offering this option users can choose between working entirely within R and Rstudio or to export results to files as <code>VSEARCH</code> typically does. Keeping all results in R data structures allows users to leverage the power of standard data wrangling and visualization tools familiar to R users.</p>
-<p>Another feature that enhances usability for R users is the consistent return format of the functions. All functions return a single table/data frame unless the user specifies that results should be written to a file. For functions that can return multiple results - such as those handling read pairs with forward and reverse reads - the secondary table is included as an attribute of the primary table. The same approach applies to tables containing statistics from function executions. By ensuring that all functions return only one table, navigating and managing results become more straightforward.</p>
+<p>Another feature that enhances usability for R users is the consistent return format of the functions. All functions return a single table/data frame unless the user specifies that results should be written to a file. For functions that can return multiple results - such as those handling read pairs with forward and reverse reads - the secondary table is included as an attribute of the primary table. The same approach applies to tables containing statistics from function executions. By ensuring that all functions return only one table, navigating and managing results become more straightforward. Additionally, since all core functions return data frames or tibbles, they are compatible with piping using the <code>%&gt;%</code> or <code>|&gt;</code> operators.</p>
 <p>More information about attributes in R can be found <a href="https://www.r-bloggers.com/2020/10/attributes-in-r/" class="external-link">here</a> and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes" class="external-link">here</a>.</p>
+<p><strong>Full documentation and tutorials with usage examples are available on the <a href="https://cassandrahjo.github.io/Rsearch/">Rsearch website</a></strong></p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <ul>
 <li><a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps" target="blank" class="external-link">A short video on how to install on a Windows laptop</a></li>
-<li><a href="" target="blank">A short video on how to install on a Mac laptop</a></li>
+<li><a href="https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG" target="blank" class="external-link">A short video on how to install on a Mac laptop</a></li>
 </ul>
 <div class="section level3">
 <h3 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
 </h3>
 <p>For the <code>Rsearch</code> package to function properly on your computer, <code>VSEARCH</code> must be installed as well (see below). Please ensure that you are using <code>VSEARCH</code> version 2.30.0 or newer.</p>
-<p>Visit the <a href="https://github.com/torognes/vsearch" class="external-link"><code>VSEARCH</code></a> GitHub site for learning more about <code>VSEARCH</code>.</p>
+<p>Visit the <a href="https://github.com/torognes/vsearch" target="blank" class="external-link"><code>VSEARCH</code></a> GitHub site for learning more about <code>VSEARCH</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="installing-vsearch">Installing <code>VSEARCH</code>
@@ -84,8 +85,11 @@
 </h3>
 <p>You can install the development version of <code>Rsearch</code> from <a href="https://github.com/CassandraHjo/Rsearch" class="external-link">GitHub</a> by using the <code>devtools</code> package from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"CassandraHjo/Rsearch"</span><span class="op">)</span></span></code></pre></div>
+<p>After installation, it is a good idea to restart your R session (in Rstudio: <em>Session</em> &gt; <em>Restart R</em>) to make sure every thing is properly loaded.</p>
 </div>
 <div class="section level3">
 <h3 id="set-correct-vsearch-executable">Set correct <code>VSEARCH</code> executable<a class="anchor" aria-label="anchor" href="#set-correct-vsearch-executable"></a>
@@ -131,7 +135,7 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Additional usage examples can be found in the <a href="#documentation">documentation</a> for each individual function.</p>
+<p>Additional usage examples can be found in the <a href="#documentation">documentation</a> for each individual function and on the <a href="https://cassandrahjo.github.io/Rsearch/">package website</a>.</p>
 <div class="section level3">
 <h3 id="example-filter-paired-end-reads-based-on-quality">Example: Filter paired-end reads based on quality<a class="anchor" aria-label="anchor" href="#example-filter-paired-end-reads-based-on-quality"></a>
 </h3>
