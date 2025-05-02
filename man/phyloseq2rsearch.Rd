@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsearch_obj.R
 \name{phyloseq2rsearch}
 \alias{phyloseq2rsearch}
-\title{Convert phyloseq to Rsearch object}
+\title{Convert phyloseq object to Rsearch object}
 \usage{
 phyloseq2rsearch(phyloseq.obj)
 }
@@ -14,7 +14,7 @@ A \code{list} with entries as in a Rsearch object, except that the
 \code{sequence.tbl} do not contain sequences, only taxonomy.
 }
 \description{
-Creating a simple list from a phyloseq object.
+Creating an Rsearch object (list) from a phyloseq object.
 }
 \details{
 This function converts a phyloseq object to a simple
@@ -37,6 +37,9 @@ rsearch_obj$sampledata.df
 rsearch_obj$sequence.df
 }
 
+}
+\references{
+\url{https://joey711.github.io/phyloseq/}
 }
 \seealso{
 \code{\link{rsearch_obj}}

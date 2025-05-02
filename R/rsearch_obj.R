@@ -1,6 +1,9 @@
-#' Create an Rsearch object
+#' Create Rsearch object
 #'
-#' @description \code{rsearch_obj} Standardizes and creates a list containing
+#' @description \code{rsearch_obj} standardizes and organizes data into an
+#' Rsearch object.
+#'
+#' creates a list containing
 #' three elements with data structures that can be used as input to build a
 #' phyloseq object in the phyloseq package.
 #'
@@ -28,14 +31,18 @@
 #' This column will be used to match sample metadata to read count data.
 #' Defaults to \code{"sample_id"}.
 #'
-#' @details This function accepts three datasets—read count data, sequence data,
-#' and sample metadata—standardizes them, and returns a streamlined input
-#' suitable for constructing a phyloseq object using the phyloseq package. The
-#' function combines these into a single list object. The implementation uses a
+#' @details This function standardizes and organizes data into an
+#' Rsearch object: a structured three key data components used or generated
+#' during the Rsearch workflow: read count data, sequence data, and sample data.
+#'
+#' The function accepts three datasets—read count data, sequence data,
+#' and sample metadata, and returns a streamlined input
+#' suitable for constructing a phyloseq object using the
+#' \code{\link{rsearch2phyloseq}} function. The implementation uses a
 #' standard \code{list} in R rather than a specialized class providing an open
 #' and easily accessible structure.
 #'
-#' To convert this tables into a \code{\link{phyloseq}} object, use
+#' To convert this object into a \code{\link{phyloseq}} object, use
 #' \code{\link{rsearch2phyloseq}}.
 #'
 #' @return A straightforward named list with three elements:
@@ -134,9 +141,10 @@ rsearch_obj <- function(readcount_data,
               sampledata.df = sampledata.df))
 }
 
-#' Convert Rsearch to phyloseq object
+#' Convert Rsearch object to phyloseq object
 #'
-#' @description Creating a phyloseq object from a Rsearch object.
+#' @description \code{rsearch2phyloseq} converts an Rsearch object to a phyloseq
+#' object.
 #'
 #' @param rsearch.obj A Rsearch object, see \code{\link{rsearch_obj}}.
 #' @param sample_id_col A character string specifying the name of the column in
@@ -148,6 +156,9 @@ rsearch_obj <- function(readcount_data,
 #' package.
 #'
 #' @return A \code{\link{phyloseq}} object.
+#'
+#' @references
+#' \url{https://joey711.github.io/phyloseq/}
 #'
 #' @examples
 #' \dontrun{
@@ -183,9 +194,9 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
   return(ps.obj)
 }
 
-#' Convert phyloseq to Rsearch object
+#' Convert phyloseq object to Rsearch object
 #'
-#' @description Creating a simple list from a phyloseq object.
+#' @description Creating an Rsearch object (list) from a phyloseq object.
 #'
 #' @param phyloseq.obj A phyloseq object, see \code{\link{phyloseq}}.
 #'
@@ -197,8 +208,8 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #' @return A \code{list} with entries as in a Rsearch object, except that the
 #' \code{sequence.tbl} do not contain sequences, only taxonomy.
 #'
-#'
-#' @importFrom phyloseq phyloseq otu_table sample_data tax_table
+#' @references
+#' \url{https://joey711.github.io/phyloseq/}
 #'
 #' @examples
 #' \dontrun{

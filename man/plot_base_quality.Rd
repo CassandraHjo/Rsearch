@@ -38,9 +38,10 @@ quality scores is added to the plot.}
 \item{show_mean}{If \code{TRUE} (default), a line representing the mean
 quality scores is added to the plot.}
 
-\item{show_overlap_box}{If \code{TRUE}, the mean overlap length for
-all the reads is shaded. Defaults to \code{FALSE}. This is only relevant if
-\code{reverse} is provided.}
+\item{show_overlap_box}{If \code{TRUE}, a shaded box is drawn to indicate 
+the mean overlap length that would result from merging all reads in their 
+current state. This visualization is only applicable when \code{reverse} is 
+ specified. Defaults to \code{FALSE}.}
 }
 \value{
 A ggplot2 object.

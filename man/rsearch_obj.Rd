@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsearch_obj.R
 \name{rsearch_obj}
 \alias{rsearch_obj}
-\title{Create an Rsearch object}
+\title{Create Rsearch object}
 \usage{
 rsearch_obj(
   readcount_data,
@@ -50,19 +50,26 @@ A straightforward named list with three elements:
 }
 }
 \description{
-\code{rsearch_obj} Standardizes and creates a list containing
+\code{rsearch_obj} standardizes and organizes data into an
+Rsearch object.
+
+creates a list containing
 three elements with data structures that can be used as input to build a
 phyloseq object in the phyloseq package.
 }
 \details{
-This function accepts three datasets—read count data, sequence data,
-and sample metadata—standardizes them, and returns a streamlined input
-suitable for constructing a phyloseq object using the phyloseq package. The
-function combines these into a single list object. The implementation uses a
+This function standardizes and organizes data into an
+Rsearch object: a structured three key data components used or generated
+during the Rsearch workflow: read count data, sequence data, and sample data.
+
+The function accepts three datasets—read count data, sequence data,
+and sample metadata, and returns a streamlined input
+suitable for constructing a phyloseq object using the
+\code{\link{rsearch2phyloseq}} function. The implementation uses a
 standard \code{list} in R rather than a specialized class providing an open
 and easily accessible structure.
 
-To convert this tables into a \code{\link{phyloseq}} object, use
+To convert this object into a \code{\link{phyloseq}} object, use
 \code{\link{rsearch2phyloseq}}.
 }
 \examples{

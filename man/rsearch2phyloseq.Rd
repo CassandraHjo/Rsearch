@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsearch_obj.R
 \name{rsearch2phyloseq}
 \alias{rsearch2phyloseq}
-\title{Convert Rsearch to phyloseq object}
+\title{Convert Rsearch object to phyloseq object}
 \usage{
 rsearch2phyloseq(rsearch.obj, sample_id_col = "sample_id")
 }
@@ -17,7 +17,8 @@ rsearch2phyloseq(rsearch.obj, sample_id_col = "sample_id")
 A \code{\link{phyloseq}} object.
 }
 \description{
-Creating a phyloseq object from a Rsearch object.
+\code{rsearch2phyloseq} converts an Rsearch object to a phyloseq
+object.
 }
 \details{
 This function converts an Rsearch object, which is a simple
@@ -30,6 +31,9 @@ package.
 phy_obj <- rsearch2phyloseq(obj, sample_id_col = "sample_id")
 }
 
+}
+\references{
+\url{https://joey711.github.io/phyloseq/}
 }
 \seealso{
 \code{\link{rsearch_obj}}
