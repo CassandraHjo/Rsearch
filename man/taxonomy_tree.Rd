@@ -7,11 +7,11 @@
 taxonomy_tree(taxonomy_table, confidence = NULL)
 }
 \arguments{
-\item{taxonomy_table}{A data.frame with sequences and taxonomy information,
-see \emph{Details}.}
+\item{taxonomy_table}{(Required). A data.frame with sequences and taxonomy
+information, see \emph{Details}.}
 
-\item{confidence}{A threshold value used to replace taxa with confidence
-scores below this to \code{NA}.}
+\item{confidence}{(Optional). A threshold value used to replace taxa with
+confidence scores below this to \code{NA}.}
 }
 \value{
 A phylo object, see \code{\link{nj}}.

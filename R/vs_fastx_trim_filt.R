@@ -5,78 +5,82 @@
 #' reverse reads (if provided) and allows for various filtering criteria based
 #' on sequence quality, length, abundance, and more.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object containing
-#' (forward) reads. See \emph{Details}.
-#' @param reverse An optional FASTA/FASTQ file path or object containing reverse
-#' reads. If \code{fastx_input} is a \code{"pe_df"} object and \code{reverse} is
-#' not provided, the reverse reads will be extracted from its \code{"reverse"}
-#' attribute.
-#' @param output_format Desired output format of file or tibble: \code{"fasta"}
-#' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
-#' FASTA object, \code{output_format} cannot be \code{"fastq"}.
-#' @param fastaout Name of the FASTA output file for the sequences given in
-#' \code{fastx_input}. If \code{NULL} (default), no FASTA sequences are written
-#' to file. See \emph{Details}.
-#' @param fastqout Name of the FASTQ output file for the sequences given in
-#' \code{fastx_input}. If \code{NULL} (default), no FASTQ sequences are written
-#' to file. See \emph{Details}.
-#' @param fastaout_rev Name of the FASTA output file for the reverse sequences.
-#' If \code{NULL} (default), no FASTA sequences are written to file. See
+#' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ object
+#' containing (forward) reads. See \emph{Details}.
+#' @param reverse (Optional). A FASTA/FASTQ file path or object containing
+#' reverse reads. If \code{fastx_input} is a \code{"pe_df"} object and
+#' \code{reverse} is not provided, the reverse reads will be extracted from its
+#' \code{"reverse"} attribute.
+#' @param output_format (Optional). Desired output format of file or tibble:
+#' \code{"fasta"} or \code{"fastq"} (default). If \code{fastx_input} is a FASTA
+#' file path or a FASTA object, \code{output_format} cannot be \code{"fastq"}.
+#' @param fastaout (Optional). Name of the FASTA output file for the sequences
+#' given in \code{fastx_input}. If \code{NULL} (default), no FASTA sequences are
+#' written to file. See \emph{Details}.
+#' @param fastqout (Optional). Name of the FASTQ output file for the sequences
+#' given in \code{fastx_input}. If \code{NULL} (default), no FASTQ sequences are
+#' written to file. See \emph{Details}.
+#' @param fastaout_rev (Optional). Name of the FASTA output file for the reverse
+#' sequences. If \code{NULL} (default), no FASTA sequences are written to file.
+#' See \emph{Details}.
+#' @param fastqout_rev (Optional). Name of the FASTQ output file for the reverse
+#' sequences. If \code{NULL} (default), no FASTQ sequences are written to file.
+#' See \emph{Details}.
+#' @param trunclen (Optional). Truncate sequences to the specified length.
+#' Shorter sequences are discarded. If \code{NULL} (default), the trimming is
+#' not applied.
+#' @param truncqual (Optional). Truncate sequences starting from the first base
+#' with a quality score of the specified value or lower. Defaults to \code{1}.
+#' @param truncee (Optional). Truncate sequences so that their total expected
+#' error does not exceed the specified value. If \code{NULL} (default), the
+#' trimming is not applied.
+#' @param truncee_rate (Optional). Truncate sequences so that their average
+#' expected error per base is not higher than the specified value. The
+#' truncation will happen at first occurrence. The average expected error per
+#' base is calculated as the total expected number of errors divided by the
+#' length of the sequence after truncation. If \code{NULL} (default), the
+#' trimming is not applied.
+#' @param stripright (Optional). Number of bases stripped from the right end of
+#' the reads. Defaults to \code{0}.
+#' @param stripleft (Optional). Number of bases stripped from the left end of
+#' the reads. Defaults to \code{0}.
+#' @param maxee_rate (Optional). Threshold for average expected error. Numeric
+#' value ranging form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See
 #' \emph{Details}.
-#' @param fastqout_rev Name of the FASTQ output file for the reverse sequences.
-#' If \code{NULL} (default), no FASTQ sequences are written to file. See
-#' \emph{Details}.
-#' @param trunclen Truncate sequences to the specified length. Shorter sequences
-#' are discarded. If \code{NULL} (default), the trimming is not applied.
-#' @param truncqual Truncate sequences starting from the first base with a
-#' quality score of the specified value or lower. Defaults to \code{1}.
-#' @param truncee Truncate sequences so that their total expected error does not
-#' exceed the specified value. If \code{NULL} (default), the trimming is not
-#' applied.
-#' @param truncee_rate Truncate sequences so that their average expected error
-#' per base is not higher than the specified value. The truncation will happen
-#' at first occurrence. The average expected error per base is calculated as the
-#' total expected number of errors divided by the length of the sequence after
-#' truncation. If \code{NULL} (default), the trimming is not applied.
-#' @param stripright Number of bases stripped from the right end of the reads.
-#' Defaults to \code{0}.
-#' @param stripleft Number of bases stripped from the left end of the reads.
-#' Defaults to \code{0}.
-#' @param maxee_rate Threshold for average expected error. Numeric value ranging
-#' form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See \emph{Details}.
-#' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See \emph{Details}.
-#' @param maxlen Maximum number of bases a sequences can have to be retained. If
-#' \code{NULL} (default), the filter is not applied.
-#' @param maxns Maximum number of N's for a given sequence. Sequences with more
-#' N's than the specified number are discarded. Defaults to \code{0}.
-#' @param minsize Minimum abundance for a given sequence. Sequences with lower
-#' abundance are discarded. If \code{NULL} (default), the filter is not
-#' applied.
-#' @param maxsize Maximum abundance for a given sequence. Sequences with
-#' higher abundance are discarded. If \code{NULL} (default), the filter is not
-#' applied.
-#' @param minqual Minimum base quality for a read to be retained. A read is
-#' discarded if it contains bases with a quality score below the given value.
-#' Defaults to \code{0}, meaning no reads are discarded.
-#' @param relabel Relabel sequences using the given prefix and a ticker to
-#' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
-#' @param stats If \code{TRUE} (default), a tibble with statistics about the
-#' filtering is added as an attribute of the returned tibble. If \code{FALSE},
-#' no statistics are added.
-#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL} (default), no log file is created.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See \emph{Details}.
+#' @param minlen (Optional). Minimum number of bases a sequence must have to be
+#' retained. Defaults to \code{0}. See \emph{Details}.
+#' @param maxlen (Optional). Maximum number of bases a sequences can have to be
+#' retained. If \code{NULL} (default), the filter is not applied.
+#' @param maxns (Optional). Maximum number of N's for a given sequence.
+#' Sequences with more N's than the specified number are discarded. Defaults to
+#' \code{0}.
+#' @param minsize (Optional). Minimum abundance for a given sequence. Sequences
+#' with lower abundance are discarded. If \code{NULL} (default), the filter is
+#' not applied.
+#' @param maxsize (Optional). Maximum abundance for a given sequence. Sequences
+#' with higher abundance are discarded. If \code{NULL} (default), the filter is
+#' not applied.
+#' @param minqual (Optional). Minimum base quality for a read to be retained. A
+#' read is discarded if it contains bases with a quality score below the given
+#' value. Defaults to \code{0}, meaning no reads are discarded.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. If \code{NULL} (default), no identifier is added.
+#' @param stats (Optional). If \code{TRUE} (default), a tibble with statistics
+#' about the filtering is added as an attribute of the returned tibble. If
+#' \code{FALSE}, no statistics are added.
+#' @param log_file (Optional). Name of the log file to capture messages from
+#' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). Additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Reads from the input files/objects (\code{fastx_input} and \code{reverse})

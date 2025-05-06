@@ -3,15 +3,17 @@
 #' @description \code{fastx_combine_files} combines all FASTA or FASTQ files
 #' within a specified directory into a single output file or a tibble object.
 #'
-#' @param files_dir A character string specifying the path to the directory
-#' containing the files to be combined. Files must be uncompressed.
-#' @param output_file A character string specifying the name of the output file.
-#' If \code{NULL} (default), the combined data is returned as a FASTA/FASTQ
-#' object depending on \code{file_format} instead of being written to a file.
-#' @param file_ext File extension of the files to be combined. Defaults to
-#' \code{".fq"}.
-#' @param file_format Format of files to be combined and the desired output
-#' format: either \code{"fasta"} or \code{"fastq"} (default). See \emph{Details}.
+#' @param files_dir (Required). A character string specifying the path to the
+#' directory containing the files to be combined. Files must be uncompressed.
+#' @param output_file (Optional). A character string specifying the name of the
+#' output file. If \code{NULL} (default), the combined data is returned as a
+#' FASTA/FASTQ object depending on \code{file_format} instead of being written
+#' to a file.
+#' @param file_ext (Optional). File extension of the files to be combined.
+#' Defaults to \code{".fq"}.
+#' @param file_format (Optional). Format of files to be combined and the desired
+#' output format: either \code{"fasta"} or \code{"fastq"} (default). See
+#' \emph{Details}.
 #'
 #' @details
 #' \code{files_dir} must contain uncompressed FASTA or FASTQ files matching the

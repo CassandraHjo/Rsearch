@@ -26,55 +26,57 @@ vs_cluster_size(
 )
 }
 \arguments{
-\item{fasta_input}{A FASTA file path or a FASTA object containing reads to
-cluster. See \emph{Details}.}
+\item{fasta_input}{(Required). A FASTA file path or a FASTA object containing
+reads to cluster. See \emph{Details}.}
 
-\item{centroids}{A character string specifying the name of the FASTA output
-file for the cluster centroid sequences. If \code{NULL} (default), no output
-is written to a file and the centroid sequences are returned as a FASTA
-object. See \emph{Details}.}
+\item{centroids}{(Optional). A character string specifying the name of the
+FASTA output file for the cluster centroid sequences. If \code{NULL}
+(default), no output is written to a file and the centroid sequences are
+returned as a FASTA object. See \emph{Details}.}
 
-\item{otutabout}{A character string specifying the name of the output file in
-an OTU table format. If \code{NULL} (default), no output is written to a file.
-If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.}
+\item{otutabout}{(Optional). A character string specifying the name of the
+output file in an OTU table format. If \code{NULL} (default), no output is
+written to a file. If \code{TRUE}, the output is returned as a tibble. See
+\emph{Details}.}
 
-\item{size_column}{If \code{TRUE}, a column with the size of each centroid is
-added to the centroid output tibble.}
+\item{size_column}{(Optional). If \code{TRUE}, a column with the size of each
+centroid is added to the centroid output tibble.}
 
-\item{id}{Pairwise identity threshold for sequence to be added to a
-cluster. Defaults to \code{0.97}. See \emph{Details}.}
+\item{id}{(Optional). Pairwise identity threshold for sequence to be added to
+a cluster. Defaults to \code{0.97}. See \emph{Details}.}
 
-\item{strand}{Specifies which strand to consider when comparing sequences.
-Can be either \code{"plus"} (default) or \code{"both"}.}
+\item{strand}{(Optional). Specifies which strand to consider when comparing
+sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
 
-\item{sizein}{If \code{TRUE} (default), abundance annotations present in
-sequence headers are taken into account.}
+\item{sizein}{(Optional). If \code{TRUE} (default), abundance annotations
+present in sequence headers are taken into account.}
 
-\item{sizeout}{If \code{TRUE} (default), abundance annotations are added to
-FASTA headers.}
+\item{sizeout}{(Optional). If \code{TRUE} (default), abundance annotations
+are added to FASTA headers.}
 
-\item{relabel}{Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to \code{NULL}.}
+\item{relabel}{(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to \code{NULL}.}
 
-\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to \code{FALSE}.}
+\item{relabel_sha1}{(Optional). If \code{TRUE} (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA
-file. Defaults to \code{0}, which eliminates wrapping.}
+\item{fasta_width}{(Optional). Number of characters per line in the output
+FASTA file. Defaults to \code{0}, which eliminates wrapping.}
 
-\item{sample}{Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. his option is only applicable when the output format is FASTA
-(\code{centroids}). If \code{NULL} (default), no identifier is added.}
+\item{sample}{(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. his option is only applicable when the output
+format is FASTA (\code{centroids}). If \code{NULL} (default), no identifier
+is added.}
 
-\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL} (default), no log file is created.}
+\item{log_file}{(Optional). Name of the log file to capture messages from
+\code{VSEARCH}. If \code{NULL} (default), no log file is created.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See \emph{Details}.}
+\item{vsearch_options}{(Optional). Additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

@@ -21,39 +21,40 @@ vs_uchime_denovo(
 )
 }
 \arguments{
-\item{fasta_input}{A FASTA file path or a FASTA object with reads. See
-\emph{Details}.}
+\item{fasta_input}{(Required). A FASTA file path or a FASTA object with reads.
+See \emph{Details}.}
 
-\item{nonchimeras}{Name of the FASTA output file for the non-chimeric
+\item{nonchimeras}{(Optional). Name of the FASTA output file for the
+non-chimeric sequences. If \code{NULL} (default), no output is written to
+file.}
+
+\item{chimeras}{(Optional). Name of the FASTA output file for the chimeric
 sequences. If \code{NULL} (default), no output is written to file.}
 
-\item{chimeras}{Name of the FASTA output file for the chimeric sequences.
-If \code{NULL} (default), no output is written to file.}
+\item{sizein}{(Optional). If \code{TRUE} (default), abundance annotations
+present in sequence headers are taken into account.}
 
-\item{sizein}{If \code{TRUE} (default), abundance annotations present in
-sequence headers are taken into account.}
+\item{sizeout}{(Optional). If \code{TRUE} (default), abundance annotations
+are added to FASTA headers.}
 
-\item{sizeout}{If \code{TRUE} (default), abundance annotations are added to
-FASTA headers.}
+\item{relabel}{(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to \code{NULL}.}
 
-\item{relabel}{Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to \code{NULL}.}
+\item{relabel_sha1}{(Optional). If \code{TRUE} (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to \code{FALSE}.}
+\item{fasta_width}{(Optional). Number of characters per line in the output
+FASTA file. Defaults to \code{0}, which eliminates wrapping.}
 
-\item{fasta_width}{Number of characters per line in the output FASTA
-file. Defaults to \code{0}, which eliminates wrapping.}
+\item{sample}{(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If \code{NULL} (default), no identifier is added.}
 
-\item{sample}{Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If \code{NULL} (default), no identifier is added.}
+\item{log_file}{(Optional). Name of the log file to capture messages from
+\code{VSEARCH}. If \code{NULL} (default), no log file is created.}
 
-\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL} (default), no log file is created.}
-
-\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See \emph{Details}.}
+\item{vsearch_options}{(Optional). Additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

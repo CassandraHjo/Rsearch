@@ -19,33 +19,33 @@ vs_sintax(
 )
 }
 \arguments{
-\item{fasta_input}{A FASTA file path or a FASTA object with reads to
-classify, see \emph{Details}.}
+\item{fasta_input}{(Required). A FASTA file path or a FASTA object with reads
+to classify, see \emph{Details}.}
 
-\item{database}{A FASTA file path or a FASTA object containing the
-reference database in FASTA format. The sequences need to be annotated
+\item{database}{(Required). A FASTA file path or a FASTA object containing
+the reference database in FASTA format. The sequences need to be annotated
 with taxonomy, see \emph{Details}.}
 
-\item{outfile}{Name of the output file. If \code{NULL}
-(default), results are returned as a data.frame.}
+\item{outfile}{(Optional). Name of the output file. If \code{NULL} (default),
+results are returned as a data.frame.}
 
-\item{cutoff}{minimum level of bootstrap support (0.0-1.0) for the
-classifications. Defaults to \code{0.0}.}
+\item{cutoff}{(Optional). Minimum level of bootstrap support (0.0-1.0) for
+the classifications. Defaults to \code{0.0}.}
 
-\item{strand}{Specifies which strand to consider when comparing sequences.
-Can be either \code{"plus"} (default) or \code{"both"}.}
+\item{strand}{(Optional). Specifies which strand to consider when comparing
+sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
 
-\item{randseed}{Seed for the random number generator used in the Sintax
-algorithm. Defaults to \code{NULL}.}
+\item{randseed}{(Optional). Seed for the random number generator used in the
+Sintax algorithm. Defaults to \code{NULL}.}
 
-\item{logfile}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL} (default), no log file is created.}
+\item{logfile}{(Optional). Name of the log file to capture messages from
+\code{VSEARCH}. If \code{NULL} (default), no log file is created.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{vsearch_options}{A character string of additional arguments to pass to
-\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+\item{vsearch_options}{(Optional). A character string of additional arguments
+to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 If \code{outfile} is \code{NULL} a data.frame is returned. If it

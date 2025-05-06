@@ -4,37 +4,38 @@
 #' file or object by randomly extracting sequences based on number or percentage
 #' using \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
-#' \emph{Details}.
-#' @param output_format Desired output format of file or tibble: \code{"fasta"}
-#' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
-#' FASTA object, \code{output_format} cannot be \code{"fastq"}.
-#' @param fastx_output Name of the output file for subsampled reads from
-#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
-#' \code{output_format}. If \code{NULL} (default), no sequences are written to
-#' file. See \emph{Details}.
-#' @param sample_pct Percentage of the input sequences to be subsampled.
-#' Numeric value ranging from \code{0.0} to \code{100.0}. Defaults to \code{NULL}.
-#' @param sample_size The given number of sequences to extract.
-#' Must be a positive integer if specified. Defaults to \code{NULL}.
-#' @param sizein If \code{TRUE} (default), abundance annotations present in
-#' sequence headers are taken into account.
-#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
-#' FASTA headers.
-#' @param relabel Relabel sequences using the given prefix and a ticker to
-#' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param randseed Random seed. Must be a positive integer. A given seed always
-#' produces the same output, which is useful for replicability. Defaults to
-#' \code{NULL}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
+#' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
+#' See \emph{Details}.
+#' @param output_format (Optional). Desired output format of file or tibble:
+#' \code{"fasta"} or \code{"fastq"} (default). If \code{fastx_input} is a FASTA
+#' file path or a FASTA object, \code{output_format} cannot be \code{"fastq"}.
+#' @param fastx_output (Optional). Name of the output file for subsampled reads
+#' from \code{fastx_input}. File can be in either FASTA or FASTQ format,
+#' depending on \code{output_format}. If \code{NULL} (default), no sequences are
+#' written to file. See \emph{Details}.
+#' @param sample_pct (Optional). Percentage of the input sequences to be
+#' subsampled. Numeric value ranging from \code{0.0} to \code{100.0}. Defaults
+#' to \code{NULL}.
+#' @param sample_size (Optional). The given number of sequences to extract. Must
+#' be a positive integer if specified. Defaults to \code{NULL}.
+#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
+#' present in sequence headers are taken into account.
+#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
+#' are added to FASTA headers.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param randseed (Optional). Random seed. Must be a positive integer. A given
+#' seed always produces the same output, which is useful for replicability.
+#' Defaults to \code{NULL}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. If \code{NULL} (default), no identifier is added.
+#' @param threads (Optional). Number of computational threads to be used by
+#'  \code{VSEARCH}.Defaults to \code{1}.
 #' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
 #' Defaults to \code{NULL}. See \emph{Details}.
 #'

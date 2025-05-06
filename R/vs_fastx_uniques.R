@@ -4,37 +4,37 @@
 #' FASTA/FASTQ file or object by merging identical sequences using
 #' \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
-#' \emph{Details}.
-#' @param output_format Desired output format of file or tibble: \code{"fasta"}
-#' or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
-#' FASTA object, \code{output_format} cannot be \code{"fastq"}.
-#' @param fastx_output Name of the output file for dereplicated reads from
-#' \code{fastx_input}. File can be in either FASTA or FASTQ format, depending on
-#' \code{output_format}. If \code{NULL} (default), no sequences are written to
-#' file. See \emph{Details}.
-#' @param minuniquesize Minimum abundance value post-dereplication for a
-#' sequence not to be discarded. Defaults to \code{1}.
-#' @param strand Specifies which strand to consider when comparing sequences.
-#' Can be either \code{"plus"} (default) or \code{"both"}.
-#' @param sizein If \code{TRUE} (default), abundance annotations present in
-#' sequence headers are taken into account.
-#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
-#' FASTA headers.
-#' @param relabel Relabel sequences using the given prefix and a ticker to
-#' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param fastq_qout_max If \code{TRUE}, the quality score will be the
-#' highest (best) quality score observed in each position. Defaults to
+#' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
+#' See \emph{Details}.
+#' @param output_format (Optional). Desired output format of file or tibble:
+#' \code{"fasta"} or \code{"fastq"} (default). If \code{fastx_input} is a FASTA
+#' file path or a FASTA object, \code{output_format} cannot be \code{"fastq"}.
+#' @param fastx_output (Optional). Name of the output file for dereplicated
+#' reads from \code{fastx_input}. File can be in either FASTA or FASTQ format,
+#' depending on \code{output_format}. If \code{NULL} (default), no sequences are
+#' written to file. See \emph{Details}.
+#' @param minuniquesize (Optional). Minimum abundance value post-dereplication
+#' for a sequence not to be discarded. Defaults to \code{1}.
+#' @param strand (Optional). Specifies which strand to consider when comparing
+#' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
+#' present in sequence headers are taken into account.
+#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
+#' are added to FASTA headers.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param fastq_qout_max (Optional). If \code{TRUE}, the quality score will be
+#' the highest (best) quality score observed in each position. Defaults to
 #' \code{FALSE}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For nstance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. If \code{NULL} (default), no identifier is added.
+#' @param vsearch_options (Optional). A character string of additional arguments
+#' to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Sequences in the input file/object (\code{fastx_input}) are dereplicated by

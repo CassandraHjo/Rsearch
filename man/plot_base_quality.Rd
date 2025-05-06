@@ -16,32 +16,32 @@ plot_base_quality(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or FASTQ object containing (forward)
-reads. See \emph{Details}.}
+\item{fastq_input}{(Required). A FASTQ file path or FASTQ object containing
+(forward) reads. See \emph{Details}.}
 
-\item{reverse}{An optional FASTQ file path or FASTQ tibble containing reverse
-reads. Defaults to \code{NULL}. See \emph{Details}.}
+\item{reverse}{(Optional). An optional FASTQ file path or FASTQ tibble
+containing reverse reads. Defaults to \code{NULL}. See \emph{Details}.}
 
-\item{quantile_lower}{The lower quantile threshold for the error bars in the
-plot. Defaults to \code{0.25}.}
+\item{quantile_lower}{(Optional). The lower quantile threshold for the error
+bars in the plot. Defaults to \code{0.25}.}
 
-\item{quantile_upper}{The upper quantile threshold for the error bars in the
-plot. Defaults to \code{0.75}.}
+\item{quantile_upper}{(Optional). The upper quantile threshold for the error
+bars in the plot. Defaults to \code{0.75}.}
 
-\item{plot_title}{The title of the plot. Defaults to
+\item{plot_title}{(Optional). The title of the plot. Defaults to
 \code{"Per-position quality scores: median and mean"}. Set to \code{""} for
 no title.}
 
-\item{show_median}{If \code{TRUE} (default), a line representing the median
-quality scores is added to the plot.}
+\item{show_median}{(Optional). If \code{TRUE} (default), a line representing
+the median quality scores is added to the plot.}
 
-\item{show_mean}{If \code{TRUE} (default), a line representing the mean
-quality scores is added to the plot.}
+\item{show_mean}{(Optional). If \code{TRUE} (default), a line representing
+the mean quality scores is added to the plot.}
 
-\item{show_overlap_box}{If \code{TRUE}, a shaded box is drawn to indicate 
-the mean overlap length that would result from merging all reads in their 
-current state. This visualization is only applicable when \code{reverse} is 
- specified. Defaults to \code{FALSE}.}
+\item{show_overlap_box}{(Optional). If \code{TRUE}, a shaded box is drawn to
+indicate the mean overlap length that would result from merging all reads in
+their current state. This visualization is only applicable when
+\code{reverse} is specified. Defaults to \code{FALSE}.}
 }
 \value{
 A ggplot2 object.

@@ -7,7 +7,7 @@
 phyloseq2rsearch(phyloseq.obj)
 }
 \arguments{
-\item{phyloseq.obj}{A phyloseq object, see \code{\link{phyloseq}}.}
+\item{phyloseq.obj}{(Required). A phyloseq object, see \code{\link{phyloseq}}.}
 }
 \value{
 A \code{list} with entries as in a Rsearch object, except that the

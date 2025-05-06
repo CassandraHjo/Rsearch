@@ -61,33 +61,33 @@ merging.</p>
 
 
 <dl><dt id="arg-fastq-input">fastq_input<a class="anchor" aria-label="anchor" href="#arg-fastq-input"></a></dt>
-<dd><p>A FASTQ file path, a FASTQ tibble (forward reads), or a
-paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTQ file path, a FASTQ tibble (forward
+reads), or a paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
-<dd><p>A FASTQ file path or FASTQ tibble containing reverse reads.
-Optional if <code>fastq_input</code> is a <code>"pe_df"</code> object.</p></dd>
+<dd><p>(Optional). A FASTQ file path or FASTQ tibble containing
+reverse reads. Optional if <code>fastq_input</code> is a <code>"pe_df"</code> object.</p></dd>
 
 
 <dt id="arg-minovlen">minovlen<a class="anchor" aria-label="anchor" href="#arg-minovlen"></a></dt>
-<dd><p>Minimum overlap between the merged reads. Must be at least 5.
-Defaults to <code>10</code>.</p></dd>
+<dd><p>(Optional). Minimum overlap between the merged reads. Must be
+at least 5. Defaults to <code>10</code>.</p></dd>
 
 
 <dt id="arg-minlen">minlen<a class="anchor" aria-label="anchor" href="#arg-minlen"></a></dt>
-<dd><p>Minimum number of bases a sequence must have to be retained.
-Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Minimum number of bases a sequence must have to be
+retained. Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-threads">threads<a class="anchor" aria-label="anchor" href="#arg-threads"></a></dt>
-<dd><p>Number of computational threads to be used by <code>VSEARCH</code>.
-Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Number of computational threads to be used by
+<code>VSEARCH</code>. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-plot-title">plot_title<a class="anchor" aria-label="anchor" href="#arg-plot-title"></a></dt>
-<dd><p>If <code>TRUE</code> (default), a summary title will be displayed
-in the plot. Set to <code>FALSE</code> for no title.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), a summary title will
+be displayed in the plot. Set to <code>FALSE</code> for no title.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -159,7 +159,7 @@ and trimming of reads such that the merged reads are of high quality.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

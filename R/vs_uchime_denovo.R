@@ -5,29 +5,30 @@
 #' Automatically sorts sequences by decreasing abundance to enhance chimera
 #' detection accuracy.
 #'
-#' @param fasta_input A FASTA file path or a FASTA object with reads. See
-#' \emph{Details}.
-#' @param nonchimeras Name of the FASTA output file for the non-chimeric
+#' @param fasta_input (Required). A FASTA file path or a FASTA object with reads.
+#' See \emph{Details}.
+#' @param nonchimeras (Optional). Name of the FASTA output file for the
+#' non-chimeric sequences. If \code{NULL} (default), no output is written to
+#' file.
+#' @param chimeras (Optional). Name of the FASTA output file for the chimeric
 #' sequences. If \code{NULL} (default), no output is written to file.
-#' @param chimeras Name of the FASTA output file for the chimeric sequences.
-#' If \code{NULL} (default), no output is written to file.
-#' @param sizein If \code{TRUE} (default), abundance annotations present in
-#' sequence headers are taken into account.
-#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
-#' FASTA headers.
-#' @param relabel Relabel sequences using the given prefix and a ticker to
-#' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
-#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL} (default), no log file is created.
-#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See \emph{Details}.
+#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
+#' present in sequence headers are taken into account.
+#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
+#' are added to FASTA headers.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. If \code{NULL} (default), no identifier is added.
+#' @param log_file (Optional). Name of the log file to capture messages from
+#' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
+#' @param vsearch_options (Optional). Additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Chimeras in the input FASTA sequences are detected using \code{VSEARCH}´s
@@ -277,7 +278,7 @@ vs_uchime_denovo <- function(fasta_input,
 #' Calculate chimera detection statistics
 #'
 #' @description Calculates important chimera detection statistics after running
-#' \code{vs_uchime_denovo()}, including the number of chimeric and non-chimeric
+#' \code{vs_uchime_denovo()} or \code{vs_uchime_ref()}, including the number of chimeric and non-chimeric
 #' sequences.
 #'
 #' @param fasta_file The FASTA file containing the input sequences to the
@@ -289,7 +290,6 @@ vs_uchime_denovo <- function(fasta_input,
 #' @param chimeras.tbl The output tibble from chimera detection with the
 #' chimeric sequences. Contains the columns: Header and Sequence. If the table
 #' is \code{NULL}, it means that no chimeras were found.
-
 #'
 #' @return A tibble with the following columns:
 #' \itemize{

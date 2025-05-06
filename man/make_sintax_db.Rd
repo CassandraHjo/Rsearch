@@ -8,10 +8,10 @@
 make_sintax_db(taxonomy_table, outfile)
 }
 \arguments{
-\item{taxonomy_table}{A data.frame with sequences and proper information for
-making a Sintax database, see \emph{Details}.}
+\item{taxonomy_table}{(Required). A data.frame with sequences and proper
+information for making a Sintax database, see \emph{Details}.}
 
-\item{outfile}{Name of database file to create (a FASTA file).}
+\item{outfile}{(Required). Name of database file to create (a FASTA file).}
 }
 \value{
 No return in R, but a FASTA file (\code{outfile}) with properly

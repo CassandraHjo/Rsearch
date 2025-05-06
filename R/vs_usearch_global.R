@@ -4,39 +4,40 @@
 #' \code{vs_usearch_global} performs global pairwise alignment of query
 #' sequences against target sequences using \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object. See
+#' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
+#' See \emph{Details}.
+#' @param database (Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+#' object containing the target sequences.
+#' @param userout (Optional). A character string specifying the name of the
+#' output file for the alignment results. If \code{NULL} (default), no output is
+#' written to a file and the results are returned as a tibble with the columns
+#' specified in \code{userfields}. See \emph{Details}.
+#' @param otutabout (Optional). A character string specifying the name of the
+#' output file in an OTU table format. If \code{NULL} (default), no output is
+#' written to a file. If \code{TRUE}, the output is returned as a tibble. See
 #' \emph{Details}.
-#' @param database A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
-#' target sequences.
-#' @param userout A character string specifying the name of the output file for
-#' the alignment results. If \code{NULL} (default), no output is written to a
-#' file and the results are returned as a tibble with the columns specified in
-#' \code{userfields}. See \emph{Details}.
-#' @param otutabout A character string specifying the name of the output file in
-#' an OTU table format. If \code{NULL} (default), no output is written to a file.
-#' If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.
-#' @param userfields Fields to include in the output file. Defaults to
-#' \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
-#' \emph{Details}.
-#' @param gapopen Penalties for gap opening. Defaults to \code{"20I/2E"}. See
-#' \emph{Details}.
-#' @param gapext Penalties for gap extension. Defaults to \code{"2I/1E"}. See
-#' \emph{Details}.
-#' @param id Pairwise identity threshold. Defines the minimum identity required
-#' for matches. Defaults to \code{0.7}.
-#' @param strand Specifies which strand to consider when comparing sequences.
-#' Can be either \code{"plus"} (default) or \code{"both"}.
-#' @param maxaccepts Maximum number of matching target sequences to accept
-#' before stopping the search for a given query. Defaults to \code{1}. Only
-#' works when \code{strand} is set to \code{"plus"} (default).
-#' @param maxrejects Maximum number of non-matching target sequences to consider
-#' before stopping the search for a given query. Defaults to 32. If
+#' @param userfields (Optional). Fields to include in the output file. Defaults
+#' to \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.
+#' See \emph{Details}.
+#' @param gapopen (Optional). Penalties for gap opening. Defaults to
+#' \code{"20I/2E"}. See \emph{Details}.
+#' @param gapext (Optional). Penalties for gap extension. Defaults to
+#' \code{"2I/1E"}. See \emph{Details}.
+#' @param id (Optional). Pairwise identity threshold. Defines the minimum
+#' identity required for matches. Defaults to \code{0.7}.
+#' @param strand (Optional). Specifies which strand to consider when comparing
+#' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param maxaccepts (Optional). Maximum number of matching target sequences to
+#' accept before stopping the search for a given query. Defaults to \code{1}.
+#' Only works when \code{strand} is set to \code{"plus"} (default).
+#' @param maxrejects (Optional). Maximum number of non-matching target sequences
+#' to consider before stopping the search for a given query. Defaults to 32. If
 #' \code{maxaccepts} and \code{maxrejects} are both set to 0, the complete
 #' database is searched.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See \emph{Details}.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). Additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Performs global pairwise alignment between query and target sequences using

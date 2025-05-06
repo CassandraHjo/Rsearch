@@ -7,11 +7,12 @@
 rsearch2phyloseq(rsearch.obj, sample_id_col = "sample_id")
 }
 \arguments{
-\item{rsearch.obj}{A Rsearch object, see \code{\link{rsearch_obj}}.}
+\item{rsearch.obj}{(Required). An Rsearch object, see
+\code{\link{rsearch_obj}}.}
 
-\item{sample_id_col}{A character string specifying the name of the column in
-\code{sampledata.df} that contains sample identifiers. Defaults to
-\code{"sample_id"}.}
+\item{sample_id_col}{(Optional). A character string specifying the name of
+the column in \code{sampledata.df} that contains sample identifiers. Defaults
+to \code{"sample_id"}.}
 }
 \value{
 A \code{\link{phyloseq}} object.

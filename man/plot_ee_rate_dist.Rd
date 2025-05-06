@@ -11,13 +11,13 @@ plot_ee_rate_dist(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or FASTQ object containing reads. See
-\emph{Details}.}
+\item{fastq_input}{(Required). A FASTQ file path or FASTQ object containing
+reads. See \emph{Details}.}
 
-\item{n_bins}{Number of bins used in the histogram. Defaults to \code{30},
-which is the default value in \code{ggplot2::geom_histogram()}.}
+\item{n_bins}{(Optional). Number of bins used in the histogram. Defaults to
+\code{30}, which is the default value in \code{ggplot2::geom_histogram()}.}
 
-\item{plot_title}{The title of the plot. Defaults to
+\item{plot_title}{(Optional). The title of the plot. Defaults to
 \code{"Distribution of the expected error (EE) rate of reads"}. Set to
 \code{""} for no title.}
 }

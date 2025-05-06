@@ -15,23 +15,23 @@ fastx_synchronize(
 )
 }
 \arguments{
-\item{file1}{A FASTQ file path, a FASTQ tibble, or a
+\item{file1}{(Required). A FASTQ file path, a FASTQ tibble, or a
 paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{file2}{A FASTQ file path or a FASTQ tibble. Optional if \code{file} is
-a \code{"pe_df"} object. See \emph{Details}.}
+\item{file2}{(Optional). A FASTQ file path or a FASTQ tibble. Optional if
+\code{file1} is a \code{"pe_df"} object. See \emph{Details}.}
 
-\item{file_format}{Format of the input (\code{file1} and \code{file2})
-and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
-This determines the format for both outputs.}
+\item{file_format}{(Optional). Format of the input (\code{file1} and
+\code{file2}) and the desired output format: \code{"fasta"} or \code{"fastq"}
+(default). This determines the format for both outputs.}
 
-\item{file1_out}{Name of the output file for synchronized reads from
-\code{file1}. The file is in either FASTA or FASTQ format, depending on
+\item{file1_out}{(Optional). Name of the output file for synchronized reads
+from \code{file1}. The file is in either FASTA or FASTQ format, depending on
 \code{file_format}. If \code{NULL} (default), no sequences are written to a
 file. See \emph{Details}.}
 
-\item{file2_out}{Name of the output file for synchronized reads from
-\code{file2}. The file is in either FASTA or FASTQ format, depending on
+\item{file2_out}{(Optional). Name of the output file for synchronized reads
+from \code{file2}. The file is in either FASTA or FASTQ format, depending on
 \code{file_format}. If \code{NULL} (default), no sequences are written to a
 file. See \emph{Details}.}
 }

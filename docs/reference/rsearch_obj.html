@@ -65,18 +65,19 @@ phyloseq object in the phyloseq package.</p>
 
 
 <dl><dt id="arg-readcount-data">readcount_data<a class="anchor" aria-label="anchor" href="#arg-readcount-data"></a></dt>
-<dd><p>A file path or a data frame (or tibble) containing OTU
-count data, typically the output from <code><a href="vs_cluster_size.html">vs_cluster_size</a></code> or
-similar. This must have one row per OTU and one column per sample. The first
-column must contain OTU identifiers corresponding to those in the first
-column of <code>sequence_data</code>, and the remaining columns must have names
-matching the sample identifiers in <code>sample_data</code>. OTUs and samples not
-found across all data structures are discarded.</p></dd>
+<dd><p>(Required). A file path or a data frame (or tibble)
+containing OTU count data, typically the output from
+<code><a href="vs_cluster_size.html">vs_cluster_size</a></code> or similar. This must have one row per OTU and
+one column per sample. The first column must contain OTU identifiers
+corresponding to those in the first column of <code>sequence_data</code>, and the
+remaining columns must have names matching the sample identifiers in
+<code>sample_data</code>. OTUs and samples not found across all data structures are
+discarded.</p></dd>
 
 
 <dt id="arg-sequence-data">sequence_data<a class="anchor" aria-label="anchor" href="#arg-sequence-data"></a></dt>
-<dd><p>A file path or a data frame (or tibble) containing
-centroid sequences representing each OTU, typically obtained from
+<dd><p>(Required). A file path or a data frame (or tibble)
+containing centroid sequences representing each OTU, typically obtained from
 clustering (<code><a href="vs_cluster_size.html">vs_cluster_size</a></code>) or denoising
 (<code><a href="vs_cluster_unoise.html">vs_cluster_unoise</a></code>). The first column must be called
 <code>Header</code> and contain OTU identifiers. One of the remaining columns must
@@ -86,15 +87,15 @@ columns may include taxonomic classification data, e.g. from
 
 
 <dt id="arg-sample-data">sample_data<a class="anchor" aria-label="anchor" href="#arg-sample-data"></a></dt>
-<dd><p>A file path or a data frame (or tibble) containing
-metadata about each sample. Samples are assumed to be in rows, and one of
-the columns <strong>must</strong> contain a unique identifier for each sample that
-matches the column names in <code>readcount_data</code>.</p></dd>
+<dd><p>(Required). A file path or a data frame (or tibble)
+containing metadata about each sample. Samples are assumed to be in rows, and
+one of the columns <strong>must</strong> contain a unique identifier for each sample
+that matches the column names in <code>readcount_data</code>.</p></dd>
 
 
 <dt id="arg-sample-id-col">sample_id_col<a class="anchor" aria-label="anchor" href="#arg-sample-id-col"></a></dt>
-<dd><p>A character string specifying the name of the column in
-<code>sample_data</code> that contains the unique sample identifiers.
+<dd><p>(Optional). A character string specifying the name of
+the column in <code>sample_data</code> that contains the unique sample identifiers.
 This column will be used to match sample metadata to read count data.
 Defaults to <code>"sample_id"</code>.</p></dd>
 
@@ -162,7 +163,7 @@ and easily accessible structure.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

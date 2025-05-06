@@ -61,49 +61,49 @@ implemented in <code>VSEARCH</code>.</p>
 
 
 <dl><dt id="arg-fasta-input">fasta_input<a class="anchor" aria-label="anchor" href="#arg-fasta-input"></a></dt>
-<dd><p>A FASTA file path or a FASTA object with reads to
-classify, see <em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTA file path or a FASTA object with reads
+to classify, see <em>Details</em>.</p></dd>
 
 
 <dt id="arg-database">database<a class="anchor" aria-label="anchor" href="#arg-database"></a></dt>
-<dd><p>A FASTA file path or a FASTA object containing the
-reference database in FASTA format. The sequences need to be annotated
+<dd><p>(Required). A FASTA file path or a FASTA object containing
+the reference database in FASTA format. The sequences need to be annotated
 with taxonomy, see <em>Details</em>.</p></dd>
 
 
 <dt id="arg-outfile">outfile<a class="anchor" aria-label="anchor" href="#arg-outfile"></a></dt>
-<dd><p>Name of the output file. If <code>NULL</code>
-(default), results are returned as a data.frame.</p></dd>
+<dd><p>(Optional). Name of the output file. If <code>NULL</code> (default),
+results are returned as a data.frame.</p></dd>
 
 
 <dt id="arg-cutoff">cutoff<a class="anchor" aria-label="anchor" href="#arg-cutoff"></a></dt>
-<dd><p>minimum level of bootstrap support (0.0-1.0) for the
-classifications. Defaults to <code>0.0</code>.</p></dd>
+<dd><p>(Optional). Minimum level of bootstrap support (0.0-1.0) for
+the classifications. Defaults to <code>0.0</code>.</p></dd>
 
 
 <dt id="arg-strand">strand<a class="anchor" aria-label="anchor" href="#arg-strand"></a></dt>
-<dd><p>Specifies which strand to consider when comparing sequences.
-Can be either <code>"plus"</code> (default) or <code>"both"</code>.</p></dd>
+<dd><p>(Optional). Specifies which strand to consider when comparing
+sequences. Can be either <code>"plus"</code> (default) or <code>"both"</code>.</p></dd>
 
 
 <dt id="arg-randseed">randseed<a class="anchor" aria-label="anchor" href="#arg-randseed"></a></dt>
-<dd><p>Seed for the random number generator used in the Sintax
-algorithm. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). Seed for the random number generator used in the
+Sintax algorithm. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-logfile">logfile<a class="anchor" aria-label="anchor" href="#arg-logfile"></a></dt>
-<dd><p>Name of the log file to capture messages from <code>VSEARCH</code>.
-If <code>NULL</code> (default), no log file is created.</p></dd>
+<dd><p>(Optional). Name of the log file to capture messages from
+<code>VSEARCH</code>. If <code>NULL</code> (default), no log file is created.</p></dd>
 
 
 <dt id="arg-threads">threads<a class="anchor" aria-label="anchor" href="#arg-threads"></a></dt>
-<dd><p>Number of computational threads to be used by <code>VSEARCH</code>.
-Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Number of computational threads to be used by
+<code>VSEARCH</code>. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
-<dd><p>A character string of additional arguments to pass to
-<code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). A character string of additional arguments
+to pass to <code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -167,7 +167,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

@@ -69,73 +69,74 @@ using <code>VSEARCH</code>.</p>
 
 
 <dl><dt id="arg-fastx-input">fastx_input<a class="anchor" aria-label="anchor" href="#arg-fastx-input"></a></dt>
-<dd><p>A FASTA/FASTQ file path or FASTA/FASTQ object. See
-<em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
+See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
-<dd><p>Desired output format of file or tibble: <code>"fasta"</code>
-or <code>"fastq"</code> (default). If <code>fastx_input</code> is a FASTA file path or a
-FASTA object, <code>output_format</code> cannot be <code>"fastq"</code>.</p></dd>
+<dd><p>(Optional). Desired output format of file or tibble:
+<code>"fasta"</code> or <code>"fastq"</code> (default). If <code>fastx_input</code> is a FASTA
+file path or a FASTA object, <code>output_format</code> cannot be <code>"fastq"</code>.</p></dd>
 
 
 <dt id="arg-fastx-output">fastx_output<a class="anchor" aria-label="anchor" href="#arg-fastx-output"></a></dt>
-<dd><p>Name of the output file for subsampled reads from
-<code>fastx_input</code>. File can be in either FASTA or FASTQ format, depending on
-<code>output_format</code>. If <code>NULL</code> (default), no sequences are written to
-file. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the output file for subsampled reads
+from <code>fastx_input</code>. File can be in either FASTA or FASTQ format,
+depending on <code>output_format</code>. If <code>NULL</code> (default), no sequences are
+written to file. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-sample-pct">sample_pct<a class="anchor" aria-label="anchor" href="#arg-sample-pct"></a></dt>
-<dd><p>Percentage of the input sequences to be subsampled.
-Numeric value ranging from <code>0.0</code> to <code>100.0</code>. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). Percentage of the input sequences to be
+subsampled. Numeric value ranging from <code>0.0</code> to <code>100.0</code>. Defaults
+to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-sample-size">sample_size<a class="anchor" aria-label="anchor" href="#arg-sample-size"></a></dt>
-<dd><p>The given number of sequences to extract.
-Must be a positive integer if specified. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). The given number of sequences to extract. Must
+be a positive integer if specified. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-sizein">sizein<a class="anchor" aria-label="anchor" href="#arg-sizein"></a></dt>
-<dd><p>If <code>TRUE</code> (default), abundance annotations present in
-sequence headers are taken into account.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+present in sequence headers are taken into account.</p></dd>
 
 
 <dt id="arg-sizeout">sizeout<a class="anchor" aria-label="anchor" href="#arg-sizeout"></a></dt>
-<dd><p>If <code>TRUE</code> (default), abundance annotations are added to
-FASTA headers.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+are added to FASTA headers.</p></dd>
 
 
 <dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>
-<dd><p>Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-relabel-sha-">relabel_sha1<a class="anchor" aria-label="anchor" href="#arg-relabel-sha-"></a></dt>
-<dd><p>If <code>TRUE</code> (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-randseed">randseed<a class="anchor" aria-label="anchor" href="#arg-randseed"></a></dt>
-<dd><p>Random seed. Must be a positive integer. A given seed always
-produces the same output, which is useful for replicability. Defaults to
-<code>NULL</code>.</p></dd>
+<dd><p>(Optional). Random seed. Must be a positive integer. A given
+seed always produces the same output, which is useful for replicability.
+Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
-<dd><p>Number of characters per line in the output FASTA
-file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
+<dd><p>(Optional). Number of characters per line in the output
+FASTA file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
+<dd><p>(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
 
 
 <dt id="arg-threads">threads<a class="anchor" aria-label="anchor" href="#arg-threads"></a></dt>
-<dd><p>Number of computational threads to be used by <code>VSEARCH</code>.
-Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Number of computational threads to be used by
+<code>VSEARCH</code>.Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
@@ -212,7 +213,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

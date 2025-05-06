@@ -86,159 +86,163 @@ on sequence quality, length, abundance, and more.</p>
 
 
 <dl><dt id="arg-fastx-input">fastx_input<a class="anchor" aria-label="anchor" href="#arg-fastx-input"></a></dt>
-<dd><p>A FASTA/FASTQ file path or FASTA/FASTQ object containing
-(forward) reads. See <em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTA/FASTQ file path or FASTA/FASTQ object
+containing (forward) reads. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
-<dd><p>An optional FASTA/FASTQ file path or object containing reverse
-reads. If <code>fastx_input</code> is a <code>"pe_df"</code> object and <code>reverse</code> is
-not provided, the reverse reads will be extracted from its <code>"reverse"</code>
-attribute.</p></dd>
+<dd><p>(Optional). A FASTA/FASTQ file path or object containing
+reverse reads. If <code>fastx_input</code> is a <code>"pe_df"</code> object and
+<code>reverse</code> is not provided, the reverse reads will be extracted from its
+<code>"reverse"</code> attribute.</p></dd>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
-<dd><p>Desired output format of file or tibble: <code>"fasta"</code>
-or <code>"fastq"</code> (default). If <code>fastx_input</code> is a FASTA file path or a
-FASTA object, <code>output_format</code> cannot be <code>"fastq"</code>.</p></dd>
+<dd><p>(Optional). Desired output format of file or tibble:
+<code>"fasta"</code> or <code>"fastq"</code> (default). If <code>fastx_input</code> is a FASTA
+file path or a FASTA object, <code>output_format</code> cannot be <code>"fastq"</code>.</p></dd>
 
 
 <dt id="arg-fastaout">fastaout<a class="anchor" aria-label="anchor" href="#arg-fastaout"></a></dt>
-<dd><p>Name of the FASTA output file for the sequences given in
-<code>fastx_input</code>. If <code>NULL</code> (default), no FASTA sequences are written
-to file. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the FASTA output file for the sequences
+given in <code>fastx_input</code>. If <code>NULL</code> (default), no FASTA sequences are
+written to file. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-fastqout">fastqout<a class="anchor" aria-label="anchor" href="#arg-fastqout"></a></dt>
-<dd><p>Name of the FASTQ output file for the sequences given in
-<code>fastx_input</code>. If <code>NULL</code> (default), no FASTQ sequences are written
-to file. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the FASTQ output file for the sequences
+given in <code>fastx_input</code>. If <code>NULL</code> (default), no FASTQ sequences are
+written to file. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-fastaout-rev">fastaout_rev<a class="anchor" aria-label="anchor" href="#arg-fastaout-rev"></a></dt>
-<dd><p>Name of the FASTA output file for the reverse sequences.
-If <code>NULL</code> (default), no FASTA sequences are written to file. See
-<em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the FASTA output file for the reverse
+sequences. If <code>NULL</code> (default), no FASTA sequences are written to file.
+See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-fastqout-rev">fastqout_rev<a class="anchor" aria-label="anchor" href="#arg-fastqout-rev"></a></dt>
-<dd><p>Name of the FASTQ output file for the reverse sequences.
-If <code>NULL</code> (default), no FASTQ sequences are written to file. See
-<em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the FASTQ output file for the reverse
+sequences. If <code>NULL</code> (default), no FASTQ sequences are written to file.
+See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-trunclen">trunclen<a class="anchor" aria-label="anchor" href="#arg-trunclen"></a></dt>
-<dd><p>Truncate sequences to the specified length. Shorter sequences
-are discarded. If <code>NULL</code> (default), the trimming is not applied.</p></dd>
+<dd><p>(Optional). Truncate sequences to the specified length.
+Shorter sequences are discarded. If <code>NULL</code> (default), the trimming is
+not applied.</p></dd>
 
 
 <dt id="arg-truncqual">truncqual<a class="anchor" aria-label="anchor" href="#arg-truncqual"></a></dt>
-<dd><p>Truncate sequences starting from the first base with a
-quality score of the specified value or lower. Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Truncate sequences starting from the first base
+with a quality score of the specified value or lower. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-truncee">truncee<a class="anchor" aria-label="anchor" href="#arg-truncee"></a></dt>
-<dd><p>Truncate sequences so that their total expected error does not
-exceed the specified value. If <code>NULL</code> (default), the trimming is not
-applied.</p></dd>
+<dd><p>(Optional). Truncate sequences so that their total expected
+error does not exceed the specified value. If <code>NULL</code> (default), the
+trimming is not applied.</p></dd>
 
 
 <dt id="arg-truncee-rate">truncee_rate<a class="anchor" aria-label="anchor" href="#arg-truncee-rate"></a></dt>
-<dd><p>Truncate sequences so that their average expected error
-per base is not higher than the specified value. The truncation will happen
-at first occurrence. The average expected error per base is calculated as the
-total expected number of errors divided by the length of the sequence after
-truncation. If <code>NULL</code> (default), the trimming is not applied.</p></dd>
+<dd><p>(Optional). Truncate sequences so that their average
+expected error per base is not higher than the specified value. The
+truncation will happen at first occurrence. The average expected error per
+base is calculated as the total expected number of errors divided by the
+length of the sequence after truncation. If <code>NULL</code> (default), the
+trimming is not applied.</p></dd>
 
 
 <dt id="arg-stripright">stripright<a class="anchor" aria-label="anchor" href="#arg-stripright"></a></dt>
-<dd><p>Number of bases stripped from the right end of the reads.
-Defaults to <code>0</code>.</p></dd>
+<dd><p>(Optional). Number of bases stripped from the right end of
+the reads. Defaults to <code>0</code>.</p></dd>
 
 
 <dt id="arg-stripleft">stripleft<a class="anchor" aria-label="anchor" href="#arg-stripleft"></a></dt>
-<dd><p>Number of bases stripped from the left end of the reads.
-Defaults to <code>0</code>.</p></dd>
+<dd><p>(Optional). Number of bases stripped from the left end of
+the reads. Defaults to <code>0</code>.</p></dd>
 
 
 <dt id="arg-maxee-rate">maxee_rate<a class="anchor" aria-label="anchor" href="#arg-maxee-rate"></a></dt>
-<dd><p>Threshold for average expected error. Numeric value ranging
-form <code>0.0</code> to <code>1.0</code>. Defaults to <code>0.01</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Threshold for average expected error. Numeric
+value ranging form <code>0.0</code> to <code>1.0</code>. Defaults to <code>0.01</code>. See
+<em>Details</em>.</p></dd>
 
 
 <dt id="arg-minlen">minlen<a class="anchor" aria-label="anchor" href="#arg-minlen"></a></dt>
-<dd><p>Minimum number of bases a sequence must have to be retained.
-Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Minimum number of bases a sequence must have to be
+retained. Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-maxlen">maxlen<a class="anchor" aria-label="anchor" href="#arg-maxlen"></a></dt>
-<dd><p>Maximum number of bases a sequences can have to be retained. If
-<code>NULL</code> (default), the filter is not applied.</p></dd>
+<dd><p>(Optional). Maximum number of bases a sequences can have to be
+retained. If <code>NULL</code> (default), the filter is not applied.</p></dd>
 
 
 <dt id="arg-maxns">maxns<a class="anchor" aria-label="anchor" href="#arg-maxns"></a></dt>
-<dd><p>Maximum number of N's for a given sequence. Sequences with more
-N's than the specified number are discarded. Defaults to <code>0</code>.</p></dd>
+<dd><p>(Optional). Maximum number of N's for a given sequence.
+Sequences with more N's than the specified number are discarded. Defaults to
+<code>0</code>.</p></dd>
 
 
 <dt id="arg-minsize">minsize<a class="anchor" aria-label="anchor" href="#arg-minsize"></a></dt>
-<dd><p>Minimum abundance for a given sequence. Sequences with lower
-abundance are discarded. If <code>NULL</code> (default), the filter is not
-applied.</p></dd>
+<dd><p>(Optional). Minimum abundance for a given sequence. Sequences
+with lower abundance are discarded. If <code>NULL</code> (default), the filter is
+not applied.</p></dd>
 
 
 <dt id="arg-maxsize">maxsize<a class="anchor" aria-label="anchor" href="#arg-maxsize"></a></dt>
-<dd><p>Maximum abundance for a given sequence. Sequences with
-higher abundance are discarded. If <code>NULL</code> (default), the filter is not
-applied.</p></dd>
+<dd><p>(Optional). Maximum abundance for a given sequence. Sequences
+with higher abundance are discarded. If <code>NULL</code> (default), the filter is
+not applied.</p></dd>
 
 
 <dt id="arg-minqual">minqual<a class="anchor" aria-label="anchor" href="#arg-minqual"></a></dt>
-<dd><p>Minimum base quality for a read to be retained. A read is
-discarded if it contains bases with a quality score below the given value.
-Defaults to <code>0</code>, meaning no reads are discarded.</p></dd>
+<dd><p>(Optional). Minimum base quality for a read to be retained. A
+read is discarded if it contains bases with a quality score below the given
+value. Defaults to <code>0</code>, meaning no reads are discarded.</p></dd>
 
 
 <dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>
-<dd><p>Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-relabel-sha-">relabel_sha1<a class="anchor" aria-label="anchor" href="#arg-relabel-sha-"></a></dt>
-<dd><p>If <code>TRUE</code> (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
-<dd><p>Number of characters per line in the output FASTA
-file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
+<dd><p>(Optional). Number of characters per line in the output
+FASTA file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
+<dd><p>(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
 
 
 <dt id="arg-stats">stats<a class="anchor" aria-label="anchor" href="#arg-stats"></a></dt>
-<dd><p>If <code>TRUE</code> (default), a tibble with statistics about the
-filtering is added as an attribute of the returned tibble. If <code>FALSE</code>,
-no statistics are added.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), a tibble with statistics
+about the filtering is added as an attribute of the returned tibble. If
+<code>FALSE</code>, no statistics are added.</p></dd>
 
 
 <dt id="arg-log-file">log_file<a class="anchor" aria-label="anchor" href="#arg-log-file"></a></dt>
-<dd><p>Name of the log file to capture messages from <code>VSEARCH</code>.
-If <code>NULL</code> (default), no log file is created.</p></dd>
+<dd><p>(Optional). Name of the log file to capture messages from
+<code>VSEARCH</code>. If <code>NULL</code> (default), no log file is created.</p></dd>
 
 
 <dt id="arg-threads">threads<a class="anchor" aria-label="anchor" href="#arg-threads"></a></dt>
-<dd><p>Number of computational threads to be used by <code>VSEARCH</code>.
-Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Number of computational threads to be used by
+<code>VSEARCH</code>. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
-<dd><p>Additional arguments to pass to <code>VSEARCH</code>.
-Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Additional arguments to pass to
+<code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -362,7 +366,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

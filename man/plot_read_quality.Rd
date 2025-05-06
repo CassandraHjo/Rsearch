@@ -12,20 +12,20 @@ plot_read_quality(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path or FASTQ object containing reads. See
-\emph{Details}.}
+\item{fastq_input}{(Required). A FASTQ file path or FASTQ object containing
+reads. See \emph{Details}.}
 
-\item{use_ee_rate}{If \code{TRUE}, the plot will display the expected error
-rate (EE) on the y-axis instead of the mean quality score. Defaults to
-\code{FALSE}.}
+\item{use_ee_rate}{(Optional). If \code{TRUE}, the plot will display the
+expected error rate (EE) on the y-axis instead of the mean quality score.
+Defaults to \code{FALSE}.}
 
-\item{plot_title}{If \code{TRUE} (default), a title will be displayed
-in the plot. The title will either be "Read length vs Expected error rate
-(EE) of read" or "Read length vs Average quality score of read", depending on
-\code{use_ee_rate}. Set to \code{FALSE} for no title.}
+\item{plot_title}{(Optional). If \code{TRUE} (default), a title will be
+displayed in the plot. The title will either be "Read length vs Expected
+error rate (EE) of read" or "Read length vs Average quality score of read",
+depending on \code{use_ee_rate}. Set to \code{FALSE} for no title.}
 
-\item{alpha}{The transparency level of the points in the scatter plot.
-Defaults to \code{0.5}.}
+\item{alpha}{(Optional). The transparency level of the points in the scatter
+plot. Defaults to \code{0.5}.}
 }
 \value{
 A ggplot2 object displaying the scatter plot with marginal histograms.

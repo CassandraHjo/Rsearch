@@ -60,47 +60,48 @@ query sequences in a database of target sequences using <code>VSEARCH</code>.</p
 
 
 <dl><dt id="arg-fastx-input">fastx_input<a class="anchor" aria-label="anchor" href="#arg-fastx-input"></a></dt>
-<dd><p>A FASTA/FASTQ file path or FASTA/FASTQ tibble object
-containing the query sequences. See <em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+object containing the query sequences. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-database">database<a class="anchor" aria-label="anchor" href="#arg-database"></a></dt>
-<dd><p>A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
-target sequences.</p></dd>
+<dd><p>(Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+object containing the target sequences.</p></dd>
 
 
 <dt id="arg-userout">userout<a class="anchor" aria-label="anchor" href="#arg-userout"></a></dt>
-<dd><p>A character string specifying the name of the output file for
-the alignment results. If <code>NULL</code> (default), no output is written to a
-file and the results are returned as a tibble with the columns specified in
-<code>userfields</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). A character string specifying the name of the
+output file for the alignment results. If <code>NULL</code> (default), no output is
+written to a file and the results are returned as a tibble with the columns
+specified in <code>userfields</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-otutabout">otutabout<a class="anchor" aria-label="anchor" href="#arg-otutabout"></a></dt>
-<dd><p>A character string specifying the name of the output file in
-an OTU table format. If <code>NULL</code> (default), no output is written to a file.
-If <code>TRUE</code>, the output is returned as a tibble. See <em>Details</em>.</p></dd>
-
-
-<dt id="arg-userfields">userfields<a class="anchor" aria-label="anchor" href="#arg-userfields"></a></dt>
-<dd><p>Fields to include in the output file. Defaults to
-<code>"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"</code>. See
+<dd><p>(Optional). A character string specifying the name of the
+output file in an OTU table format. If <code>NULL</code> (default), no output is
+written to a file. If <code>TRUE</code>, the output is returned as a tibble. See
 <em>Details</em>.</p></dd>
 
 
+<dt id="arg-userfields">userfields<a class="anchor" aria-label="anchor" href="#arg-userfields"></a></dt>
+<dd><p>(Optional). Fields to include in the output file. Defaults
+to <code>"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"</code>.
+See <em>Details</em>.</p></dd>
+
+
 <dt id="arg-strand">strand<a class="anchor" aria-label="anchor" href="#arg-strand"></a></dt>
-<dd><p>Specifies which strand to consider when comparing sequences.
-Can be either <code>"plus"</code> (default) or <code>"both"</code>.</p></dd>
+<dd><p>(Optional). Specifies which strand to consider when comparing
+sequences. Can be either <code>"plus"</code> (default) or <code>"both"</code>.</p></dd>
 
 
 <dt id="arg-threads">threads<a class="anchor" aria-label="anchor" href="#arg-threads"></a></dt>
-<dd><p>Number of computational threads to be used by <code>VSEARCH</code>.
-Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Number of computational threads to be used by
+<code>VSEARCH</code>. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
-<dd><p>A character string of additional arguments to pass to
-<code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). A character string of additional arguments
+to pass to <code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -188,7 +189,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

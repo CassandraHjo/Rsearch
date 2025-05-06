@@ -3,32 +3,35 @@
 #' @description \code{vs_fastq_mergepairs} merges paired-end sequence reads with
 #' overlapping regions into one sequence using \code{VSEARCH}.
 #'
-#' @param fastq_input A FASTQ file path, a FASTQ tibble (forward reads), or a
-#' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
-#' @param reverse A FASTQ file path or a FASTQ tibble (reverse reads). Optional
-#' if \code{fastq_input} is a \code{"pe_df"} object. See \emph{Details}.
-#' @param output_format Desired output format of file or tibble: \code{"fasta"}
-#' or \code{"fastq"} (default).
-#' @param fastaout Name of the FASTA output file with the merged reads. If
-#' \code{NULL} (default), no output is written to file. See \emph{Details}.
-#' @param fastqout Name of the FASTQ output file with the merged reads. If
-#' \code{NULL} (default) no output is written to file. See \emph{Details}.
-#' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
-#' Defaults to \code{10}.
-#' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See \emph{Details}.
-#' @param fasta_width Number of characters per line in the output FASTA file.
-#' Only applies if the output file is in FASTA format. Defaults to \code{0},
-#' which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
-#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL} (default), no log file is created.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See \emph{Details}.
+#' @param fastq_input (Required). A FASTQ file path, a FASTQ tibble (forward
+#' reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param reverse (Optional). A FASTQ file path or a FASTQ tibble (reverse
+#' reads). Optional if \code{fastq_input} is a \code{"pe_df"} object. See
+#' \emph{Details}.
+#' @param output_format (Optional). Desired output format of file or tibble:
+#' \code{"fasta"} or \code{"fastq"} (default).
+#' @param fastaout (Optional). Name of the FASTA output file with the merged
+#' reads. If \code{NULL} (default), no output is written to file. See
+#' \emph{Details}.
+#' @param fastqout (Optional). Name of the FASTQ output file with the merged
+#' reads. If \code{NULL} (default) no output is written to file. See
+#' \emph{Details}.
+#' @param minovlen (Optional). Minimum overlap between the merged reads. Must be
+#' at least 5. Defaults to \code{10}.
+#' @param minlen (Optional). Minimum number of bases a sequence must have to be
+#' retained. Defaults to \code{0}. See \emph{Details}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Only applies if the output file is in FASTA format. Defaults to
+#' \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. If \code{NULL} (default), no identifier is added.
+#' @param log_file (Optional). Name of the log file to capture messages from
+#' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). Additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})

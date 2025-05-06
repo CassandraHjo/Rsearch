@@ -40,105 +40,109 @@ vs_fastx_trim_filt(
 )
 }
 \arguments{
-\item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object containing
-(forward) reads. See \emph{Details}.}
+\item{fastx_input}{(Required). A FASTA/FASTQ file path or FASTA/FASTQ object
+containing (forward) reads. See \emph{Details}.}
 
-\item{reverse}{An optional FASTA/FASTQ file path or object containing reverse
-reads. If \code{fastx_input} is a \code{"pe_df"} object and \code{reverse} is
-not provided, the reverse reads will be extracted from its \code{"reverse"}
-attribute.}
+\item{reverse}{(Optional). A FASTA/FASTQ file path or object containing
+reverse reads. If \code{fastx_input} is a \code{"pe_df"} object and
+\code{reverse} is not provided, the reverse reads will be extracted from its
+\code{"reverse"} attribute.}
 
-\item{output_format}{Desired output format of file or tibble: \code{"fasta"}
-or \code{"fastq"} (default). If \code{fastx_input} is a FASTA file path or a
-FASTA object, \code{output_format} cannot be \code{"fastq"}.}
+\item{output_format}{(Optional). Desired output format of file or tibble:
+\code{"fasta"} or \code{"fastq"} (default). If \code{fastx_input} is a FASTA
+file path or a FASTA object, \code{output_format} cannot be \code{"fastq"}.}
 
-\item{fastaout}{Name of the FASTA output file for the sequences given in
-\code{fastx_input}. If \code{NULL} (default), no FASTA sequences are written
-to file. See \emph{Details}.}
+\item{fastaout}{(Optional). Name of the FASTA output file for the sequences
+given in \code{fastx_input}. If \code{NULL} (default), no FASTA sequences are
+written to file. See \emph{Details}.}
 
-\item{fastqout}{Name of the FASTQ output file for the sequences given in
-\code{fastx_input}. If \code{NULL} (default), no FASTQ sequences are written
-to file. See \emph{Details}.}
+\item{fastqout}{(Optional). Name of the FASTQ output file for the sequences
+given in \code{fastx_input}. If \code{NULL} (default), no FASTQ sequences are
+written to file. See \emph{Details}.}
 
-\item{fastaout_rev}{Name of the FASTA output file for the reverse sequences.
-If \code{NULL} (default), no FASTA sequences are written to file. See
+\item{fastaout_rev}{(Optional). Name of the FASTA output file for the reverse
+sequences. If \code{NULL} (default), no FASTA sequences are written to file.
+See \emph{Details}.}
+
+\item{fastqout_rev}{(Optional). Name of the FASTQ output file for the reverse
+sequences. If \code{NULL} (default), no FASTQ sequences are written to file.
+See \emph{Details}.}
+
+\item{trunclen}{(Optional). Truncate sequences to the specified length.
+Shorter sequences are discarded. If \code{NULL} (default), the trimming is
+not applied.}
+
+\item{truncqual}{(Optional). Truncate sequences starting from the first base
+with a quality score of the specified value or lower. Defaults to \code{1}.}
+
+\item{truncee}{(Optional). Truncate sequences so that their total expected
+error does not exceed the specified value. If \code{NULL} (default), the
+trimming is not applied.}
+
+\item{truncee_rate}{(Optional). Truncate sequences so that their average
+expected error per base is not higher than the specified value. The
+truncation will happen at first occurrence. The average expected error per
+base is calculated as the total expected number of errors divided by the
+length of the sequence after truncation. If \code{NULL} (default), the
+trimming is not applied.}
+
+\item{stripright}{(Optional). Number of bases stripped from the right end of
+the reads. Defaults to \code{0}.}
+
+\item{stripleft}{(Optional). Number of bases stripped from the left end of
+the reads. Defaults to \code{0}.}
+
+\item{maxee_rate}{(Optional). Threshold for average expected error. Numeric
+value ranging form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See
 \emph{Details}.}
 
-\item{fastqout_rev}{Name of the FASTQ output file for the reverse sequences.
-If \code{NULL} (default), no FASTQ sequences are written to file. See
-\emph{Details}.}
+\item{minlen}{(Optional). Minimum number of bases a sequence must have to be
+retained. Defaults to \code{0}. See \emph{Details}.}
 
-\item{trunclen}{Truncate sequences to the specified length. Shorter sequences
-are discarded. If \code{NULL} (default), the trimming is not applied.}
+\item{maxlen}{(Optional). Maximum number of bases a sequences can have to be
+retained. If \code{NULL} (default), the filter is not applied.}
 
-\item{truncqual}{Truncate sequences starting from the first base with a
-quality score of the specified value or lower. Defaults to \code{1}.}
+\item{maxns}{(Optional). Maximum number of N's for a given sequence.
+Sequences with more N's than the specified number are discarded. Defaults to
+\code{0}.}
 
-\item{truncee}{Truncate sequences so that their total expected error does not
-exceed the specified value. If \code{NULL} (default), the trimming is not
-applied.}
+\item{minsize}{(Optional). Minimum abundance for a given sequence. Sequences
+with lower abundance are discarded. If \code{NULL} (default), the filter is
+not applied.}
 
-\item{truncee_rate}{Truncate sequences so that their average expected error
-per base is not higher than the specified value. The truncation will happen
-at first occurrence. The average expected error per base is calculated as the
-total expected number of errors divided by the length of the sequence after
-truncation. If \code{NULL} (default), the trimming is not applied.}
+\item{maxsize}{(Optional). Maximum abundance for a given sequence. Sequences
+with higher abundance are discarded. If \code{NULL} (default), the filter is
+not applied.}
 
-\item{stripright}{Number of bases stripped from the right end of the reads.
-Defaults to \code{0}.}
+\item{minqual}{(Optional). Minimum base quality for a read to be retained. A
+read is discarded if it contains bases with a quality score below the given
+value. Defaults to \code{0}, meaning no reads are discarded.}
 
-\item{stripleft}{Number of bases stripped from the left end of the reads.
-Defaults to \code{0}.}
+\item{relabel}{(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to \code{NULL}.}
 
-\item{maxee_rate}{Threshold for average expected error. Numeric value ranging
-form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See \emph{Details}.}
+\item{relabel_sha1}{(Optional). If \code{TRUE} (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
-\item{minlen}{Minimum number of bases a sequence must have to be retained.
-Defaults to \code{0}. See \emph{Details}.}
+\item{fasta_width}{(Optional). Number of characters per line in the output
+FASTA file. Defaults to \code{0}, which eliminates wrapping.}
 
-\item{maxlen}{Maximum number of bases a sequences can have to be retained. If
-\code{NULL} (default), the filter is not applied.}
+\item{sample}{(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If \code{NULL} (default), no identifier is added.}
 
-\item{maxns}{Maximum number of N's for a given sequence. Sequences with more
-N's than the specified number are discarded. Defaults to \code{0}.}
+\item{stats}{(Optional). If \code{TRUE} (default), a tibble with statistics
+about the filtering is added as an attribute of the returned tibble. If
+\code{FALSE}, no statistics are added.}
 
-\item{minsize}{Minimum abundance for a given sequence. Sequences with lower
-abundance are discarded. If \code{NULL} (default), the filter is not
-applied.}
+\item{log_file}{(Optional). Name of the log file to capture messages from
+\code{VSEARCH}. If \code{NULL} (default), no log file is created.}
 
-\item{maxsize}{Maximum abundance for a given sequence. Sequences with
-higher abundance are discarded. If \code{NULL} (default), the filter is not
-applied.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{minqual}{Minimum base quality for a read to be retained. A read is
-discarded if it contains bases with a quality score below the given value.
-Defaults to \code{0}, meaning no reads are discarded.}
-
-\item{relabel}{Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to \code{NULL}.}
-
-\item{relabel_sha1}{If \code{TRUE} (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to \code{FALSE}.}
-
-\item{fasta_width}{Number of characters per line in the output FASTA
-file. Defaults to \code{0}, which eliminates wrapping.}
-
-\item{sample}{Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If \code{NULL} (default), no identifier is added.}
-
-\item{stats}{If \code{TRUE} (default), a tibble with statistics about the
-filtering is added as an attribute of the returned tibble. If \code{FALSE},
-no statistics are added.}
-
-\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL} (default), no log file is created.}
-
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
-
-\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See \emph{Details}.}
+\item{vsearch_options}{(Optional). Additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

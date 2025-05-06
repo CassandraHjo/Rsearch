@@ -6,27 +6,28 @@
 #' to identify the optimal value that maximizes the proportion of high-quality
 #' merged read pairs.
 #'
-#' @param fastq_input A FASTQ file path, FASTQ tibble (forward reads), or a
-#' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
-#' @param reverse A FASTQ file path or FASTQ tibble (reverse reads). Optional
-#' if \code{fastq_input} is a \code{"pe_df"} object.
-#' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
-#' Defaults to \code{10}.
-#' @param truncee_rate_range A numeric vector of \code{truncee_rate} values to
-#' test. Sequences are truncated so that their average expected error per base
-#' is lower than the specified value. Defaults to \code{(0.002, 0.004, 0.006,
-#' 0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020, 0.022, 0.024, 0.026, 0.028,
-#' 0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.
-#' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See \emph{Details}.
-#' @param min_size Minimum copy number (size) for a merged read to be
-#' included in the results. Defaults to \code{2}.
-#' @param maxee_rate Threshold for average expected error. Must range from
-#' \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See\emph{Details}.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param plot_title If \code{TRUE} (default), a summary title will be displayed
-#' in the plot. Set to \code{FALSE} for no title.
+#' @param fastq_input (Required). A FASTQ file path, FASTQ tibble (forward
+#' reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param reverse (Optional). A FASTQ file path or FASTQ tibble (reverse reads).
+#' Optional if \code{fastq_input} is a \code{"pe_df"} object.
+#' @param minovlen (Optional). Minimum overlap between the merged reads. Must be
+#' at least 5. Defaults to \code{10}.
+#' @param truncee_rate_range (Optional). A numeric vector of \code{truncee_rate}
+#' values to test. Sequences are truncated so that their average expected error
+#' per base is lower than the specified value. Defaults to \code{(0.002, 0.004,
+#' 0.006, 0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020, 0.022, 0.024, 0.026,
+#' 0.028, 0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.
+#' @param minlen (Optional). Minimum number of bases a sequence must have to be
+#' retained. Defaults to \code{0}. See \emph{Details}.
+#' @param min_size (Optional). Minimum copy number (size) for a merged read to
+#' be included in the results. Defaults to \code{2}.
+#' @param maxee_rate (Optional). Threshold for average expected error. Must
+#' range from \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See
+#' \emph{Details}.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param plot_title (Optional). If \code{TRUE} (default), a summary title will
+#' be displayed in the plot. Set to \code{FALSE} for no title.
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}},

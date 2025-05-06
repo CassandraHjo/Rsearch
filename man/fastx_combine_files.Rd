@@ -14,18 +14,20 @@ fastx_combine_files(
 )
 }
 \arguments{
-\item{files_dir}{A character string specifying the path to the directory
-containing the files to be combined. Files must be uncompressed.}
+\item{files_dir}{(Required). A character string specifying the path to the
+directory containing the files to be combined. Files must be uncompressed.}
 
-\item{output_file}{A character string specifying the name of the output file.
-If \code{NULL} (default), the combined data is returned as a FASTA/FASTQ
-object depending on \code{file_format} instead of being written to a file.}
+\item{output_file}{(Optional). A character string specifying the name of the
+output file. If \code{NULL} (default), the combined data is returned as a
+FASTA/FASTQ object depending on \code{file_format} instead of being written
+to a file.}
 
-\item{file_ext}{File extension of the files to be combined. Defaults to
-\code{".fq"}.}
+\item{file_ext}{(Optional). File extension of the files to be combined.
+Defaults to \code{".fq"}.}
 
-\item{file_format}{Format of files to be combined and the desired output
-format: either \code{"fasta"} or \code{"fastq"} (default). See \emph{Details}.}
+\item{file_format}{(Optional). Format of files to be combined and the desired
+output format: either \code{"fasta"} or \code{"fastq"} (default). See
+\emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

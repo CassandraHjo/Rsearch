@@ -4,25 +4,25 @@
 #' Generates a plot displaying the quality scores for each position in FASTQ
 #' reads.
 #'
-#' @param fastq_input A FASTQ file path or FASTQ object containing (forward)
-#' reads. See \emph{Details}.
-#' @param reverse An optional FASTQ file path or FASTQ tibble containing reverse
-#' reads. Defaults to \code{NULL}. See \emph{Details}.
-#' @param quantile_lower The lower quantile threshold for the error bars in the
-#' plot. Defaults to \code{0.25}.
-#' @param quantile_upper The upper quantile threshold for the error bars in the
-#' plot. Defaults to \code{0.75}.
-#' @param plot_title The title of the plot. Defaults to
+#' @param fastq_input (Required). A FASTQ file path or FASTQ object containing
+#' (forward) reads. See \emph{Details}.
+#' @param reverse (Optional). An optional FASTQ file path or FASTQ tibble
+#' containing reverse reads. Defaults to \code{NULL}. See \emph{Details}.
+#' @param quantile_lower (Optional). The lower quantile threshold for the error
+#' bars in the plot. Defaults to \code{0.25}.
+#' @param quantile_upper (Optional). The upper quantile threshold for the error
+#' bars in the plot. Defaults to \code{0.75}.
+#' @param plot_title (Optional). The title of the plot. Defaults to
 #' \code{"Per-position quality scores: median and mean"}. Set to \code{""} for
 #' no title.
-#' @param show_median If \code{TRUE} (default), a line representing the median
-#' quality scores is added to the plot.
-#' @param show_mean If \code{TRUE} (default), a line representing the mean
-#' quality scores is added to the plot.
-#' @param show_overlap_box If \code{TRUE}, a shaded box is drawn to indicate 
-#' the mean overlap length that would result from merging all reads in their 
-#' current state. This visualization is only applicable when \code{reverse} is 
-#' specified. Defaults to \code{FALSE}.
+#' @param show_median (Optional). If \code{TRUE} (default), a line representing
+#' the median quality scores is added to the plot.
+#' @param show_mean (Optional). If \code{TRUE} (default), a line representing
+#' the mean quality scores is added to the plot.
+#' @param show_overlap_box (Optional). If \code{TRUE}, a shaded box is drawn to
+#' indicate the mean overlap length that would result from merging all reads in
+#' their current state. This visualization is only applicable when
+#' \code{reverse} is specified. Defaults to \code{FALSE}.
 #'
 #' @details
 #' The mean and median quality scores for each base position over all reads are

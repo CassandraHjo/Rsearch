@@ -3,26 +3,27 @@
 #' @description \code{vs_search_exact} searches for exact full-length matches of
 #' query sequences in a database of target sequences using \code{VSEARCH}.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ tibble object
-#' containing the query sequences. See \emph{Details}.
-#' @param database A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
-#' target sequences.
-#' @param userout A character string specifying the name of the output file for
-#' the alignment results. If \code{NULL} (default), no output is written to a
-#' file and the results are returned as a tibble with the columns specified in
-#' \code{userfields}. See \emph{Details}.
-#' @param otutabout A character string specifying the name of the output file in
-#' an OTU table format. If \code{NULL} (default), no output is written to a file.
-#' If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.
-#' @param userfields Fields to include in the output file. Defaults to
-#' \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
+#' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+#' object containing the query sequences. See \emph{Details}.
+#' @param database (Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+#' object containing the target sequences.
+#' @param userout (Optional). A character string specifying the name of the
+#' output file for the alignment results. If \code{NULL} (default), no output is
+#' written to a file and the results are returned as a tibble with the columns
+#' specified in \code{userfields}. See \emph{Details}.
+#' @param otutabout (Optional). A character string specifying the name of the
+#' output file in an OTU table format. If \code{NULL} (default), no output is
+#' written to a file. If \code{TRUE}, the output is returned as a tibble. See
 #' \emph{Details}.
-#' @param strand Specifies which strand to consider when comparing sequences.
-#' Can be either \code{"plus"} (default) or \code{"both"}.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param userfields (Optional). Fields to include in the output file. Defaults
+#' to \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.
+#' See \emph{Details}.
+#' @param strand (Optional). Specifies which strand to consider when comparing
+#' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). A character string of additional arguments
+#' to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Identifies exact full-length matches between query and target sequences

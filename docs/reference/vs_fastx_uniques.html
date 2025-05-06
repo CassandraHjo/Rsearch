@@ -68,73 +68,73 @@ FASTA/FASTQ file or object by merging identical sequences using
 
 
 <dl><dt id="arg-fastx-input">fastx_input<a class="anchor" aria-label="anchor" href="#arg-fastx-input"></a></dt>
-<dd><p>A FASTA/FASTQ file path or FASTA/FASTQ object. See
-<em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
+See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
-<dd><p>Desired output format of file or tibble: <code>"fasta"</code>
-or <code>"fastq"</code> (default). If <code>fastx_input</code> is a FASTA file path or a
-FASTA object, <code>output_format</code> cannot be <code>"fastq"</code>.</p></dd>
+<dd><p>(Optional). Desired output format of file or tibble:
+<code>"fasta"</code> or <code>"fastq"</code> (default). If <code>fastx_input</code> is a FASTA
+file path or a FASTA object, <code>output_format</code> cannot be <code>"fastq"</code>.</p></dd>
 
 
 <dt id="arg-fastx-output">fastx_output<a class="anchor" aria-label="anchor" href="#arg-fastx-output"></a></dt>
-<dd><p>Name of the output file for dereplicated reads from
-<code>fastx_input</code>. File can be in either FASTA or FASTQ format, depending on
-<code>output_format</code>. If <code>NULL</code> (default), no sequences are written to
-file. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the output file for dereplicated
+reads from <code>fastx_input</code>. File can be in either FASTA or FASTQ format,
+depending on <code>output_format</code>. If <code>NULL</code> (default), no sequences are
+written to file. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-minuniquesize">minuniquesize<a class="anchor" aria-label="anchor" href="#arg-minuniquesize"></a></dt>
-<dd><p>Minimum abundance value post-dereplication for a
-sequence not to be discarded. Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Minimum abundance value post-dereplication
+for a sequence not to be discarded. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-strand">strand<a class="anchor" aria-label="anchor" href="#arg-strand"></a></dt>
-<dd><p>Specifies which strand to consider when comparing sequences.
-Can be either <code>"plus"</code> (default) or <code>"both"</code>.</p></dd>
+<dd><p>(Optional). Specifies which strand to consider when comparing
+sequences. Can be either <code>"plus"</code> (default) or <code>"both"</code>.</p></dd>
 
 
 <dt id="arg-sizein">sizein<a class="anchor" aria-label="anchor" href="#arg-sizein"></a></dt>
-<dd><p>If <code>TRUE</code> (default), abundance annotations present in
-sequence headers are taken into account.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+present in sequence headers are taken into account.</p></dd>
 
 
 <dt id="arg-sizeout">sizeout<a class="anchor" aria-label="anchor" href="#arg-sizeout"></a></dt>
-<dd><p>If <code>TRUE</code> (default), abundance annotations are added to
-FASTA headers.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+are added to FASTA headers.</p></dd>
 
 
 <dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>
-<dd><p>Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-relabel-sha-">relabel_sha1<a class="anchor" aria-label="anchor" href="#arg-relabel-sha-"></a></dt>
-<dd><p>If <code>TRUE</code> (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-fastq-qout-max">fastq_qout_max<a class="anchor" aria-label="anchor" href="#arg-fastq-qout-max"></a></dt>
-<dd><p>If <code>TRUE</code>, the quality score will be the
-highest (best) quality score observed in each position. Defaults to
+<dd><p>(Optional). If <code>TRUE</code>, the quality score will be
+the highest (best) quality score observed in each position. Defaults to
 <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
-<dd><p>Number of characters per line in the output FASTA
-file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
+<dd><p>(Optional). Number of characters per line in the output
+FASTA file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
+<dd><p>(Optional). Add the given sample identifier string to sequence
+headers. For nstance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
-<dd><p>A character string of additional arguments to pass to
-<code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). A character string of additional arguments
+to pass to <code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -204,7 +204,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

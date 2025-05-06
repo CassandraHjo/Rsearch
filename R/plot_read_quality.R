@@ -6,17 +6,17 @@
 #' or the expected error (EE) rate. Marginal histograms are included to show the
 #' distribution of read lengths and quality metrics.
 #'
-#' @param fastq_input A FASTQ file path or FASTQ object containing reads. See
-#' \emph{Details}.
-#' @param use_ee_rate If \code{TRUE}, the plot will display the expected error
-#' rate (EE) on the y-axis instead of the mean quality score. Defaults to
-#' \code{FALSE}.
-#' @param plot_title If \code{TRUE} (default), a title will be displayed
-#' in the plot. The title will either be "Read length vs Expected error rate
-#' (EE) of read" or "Read length vs Average quality score of read", depending on
-#' \code{use_ee_rate}. Set to \code{FALSE} for no title.
-#' @param alpha The transparency level of the points in the scatter plot.
-#' Defaults to \code{0.5}.
+#' @param fastq_input (Required). A FASTQ file path or FASTQ object containing
+#' reads. See \emph{Details}.
+#' @param use_ee_rate (Optional). If \code{TRUE}, the plot will display the
+#' expected error rate (EE) on the y-axis instead of the mean quality score.
+#' Defaults to \code{FALSE}.
+#' @param plot_title (Optional). If \code{TRUE} (default), a title will be
+#' displayed in the plot. The title will either be "Read length vs Expected
+#' error rate (EE) of read" or "Read length vs Average quality score of read",
+#' depending on \code{use_ee_rate}. Set to \code{FALSE} for no title.
+#' @param alpha (Optional). The transparency level of the points in the scatter
+#' plot. Defaults to \code{0.5}.
 #'
 #' @details
 #' This function visualizes the relationship between read length and read

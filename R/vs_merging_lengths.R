@@ -4,18 +4,18 @@
 #' reads, reverse reads, merged reads, and their overlaps before and after
 #' merging.
 #'
-#' @param fastq_input A FASTQ file path, a FASTQ tibble (forward reads), or a
-#' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
-#' @param reverse A FASTQ file path or FASTQ tibble containing reverse reads.
-#' Optional if \code{fastq_input} is a \code{"pe_df"} object.
-#' @param minovlen Minimum overlap between the merged reads. Must be at least 5.
-#' Defaults to \code{10}.
-#' @param minlen Minimum number of bases a sequence must have to be retained.
-#' Defaults to \code{0}. See \emph{Details}.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param plot_title If \code{TRUE} (default), a summary title will be displayed
-#' in the plot. Set to \code{FALSE} for no title.
+#' @param fastq_input (Required). A FASTQ file path, a FASTQ tibble (forward
+#' reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
+#' @param reverse (Optional). A FASTQ file path or FASTQ tibble containing
+#' reverse reads. Optional if \code{fastq_input} is a \code{"pe_df"} object.
+#' @param minovlen (Optional). Minimum overlap between the merged reads. Must be
+#' at least 5. Defaults to \code{10}.
+#' @param minlen (Optional). Minimum number of bases a sequence must have to be
+#' retained. Defaults to \code{0}. See \emph{Details}.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param plot_title (Optional). If \code{TRUE} (default), a summary title will
+#' be displayed in the plot. Set to \code{FALSE} for no title.
 #'
 #' @details The function uses \code{\link{vs_fastq_mergepairs}} where
 #' the arguments to this function are described in detail.

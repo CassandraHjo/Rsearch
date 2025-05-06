@@ -17,33 +17,34 @@ vs_search_exact(
 )
 }
 \arguments{
-\item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object
-containing the query sequences. See \emph{Details}.}
+\item{fastx_input}{(Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+object containing the query sequences. See \emph{Details}.}
 
-\item{database}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
-target sequences.}
+\item{database}{(Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+object containing the target sequences.}
 
-\item{userout}{A character string specifying the name of the output file for
-the alignment results. If \code{NULL} (default), no output is written to a
-file and the results are returned as a tibble with the columns specified in
-\code{userfields}. See \emph{Details}.}
+\item{userout}{(Optional). A character string specifying the name of the
+output file for the alignment results. If \code{NULL} (default), no output is
+written to a file and the results are returned as a tibble with the columns
+specified in \code{userfields}. See \emph{Details}.}
 
-\item{otutabout}{A character string specifying the name of the output file in
-an OTU table format. If \code{NULL} (default), no output is written to a file.
-If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.}
-
-\item{userfields}{Fields to include in the output file. Defaults to
-\code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
+\item{otutabout}{(Optional). A character string specifying the name of the
+output file in an OTU table format. If \code{NULL} (default), no output is
+written to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
 
-\item{strand}{Specifies which strand to consider when comparing sequences.
-Can be either \code{"plus"} (default) or \code{"both"}.}
+\item{userfields}{(Optional). Fields to include in the output file. Defaults
+to \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.
+See \emph{Details}.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{strand}{(Optional). Specifies which strand to consider when comparing
+sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
 
-\item{vsearch_options}{A character string of additional arguments to pass to
-\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
+
+\item{vsearch_options}{(Optional). A character string of additional arguments
+to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

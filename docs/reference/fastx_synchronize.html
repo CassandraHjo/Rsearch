@@ -60,31 +60,31 @@ in both.</p>
 
 
 <dl><dt id="arg-file-">file1<a class="anchor" aria-label="anchor" href="#arg-file-"></a></dt>
-<dd><p>A FASTQ file path, a FASTQ tibble, or a
+<dd><p>(Required). A FASTQ file path, a FASTQ tibble, or a
 paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-file-">file2<a class="anchor" aria-label="anchor" href="#arg-file-"></a></dt>
-<dd><p>A FASTQ file path or a FASTQ tibble. Optional if <code>file</code> is
-a <code>"pe_df"</code> object. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). A FASTQ file path or a FASTQ tibble. Optional if
+<code>file1</code> is a <code>"pe_df"</code> object. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-file-format">file_format<a class="anchor" aria-label="anchor" href="#arg-file-format"></a></dt>
-<dd><p>Format of the input (<code>file1</code> and <code>file2</code>)
-and the desired output format: <code>"fasta"</code> or <code>"fastq"</code> (default).
-This determines the format for both outputs.</p></dd>
+<dd><p>(Optional). Format of the input (<code>file1</code> and
+<code>file2</code>) and the desired output format: <code>"fasta"</code> or <code>"fastq"</code>
+(default). This determines the format for both outputs.</p></dd>
 
 
 <dt id="arg-file-out">file1_out<a class="anchor" aria-label="anchor" href="#arg-file-out"></a></dt>
-<dd><p>Name of the output file for synchronized reads from
-<code>file1</code>. The file is in either FASTA or FASTQ format, depending on
+<dd><p>(Optional). Name of the output file for synchronized reads
+from <code>file1</code>. The file is in either FASTA or FASTQ format, depending on
 <code>file_format</code>. If <code>NULL</code> (default), no sequences are written to a
 file. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-file-out">file2_out<a class="anchor" aria-label="anchor" href="#arg-file-out"></a></dt>
-<dd><p>Name of the output file for synchronized reads from
-<code>file2</code>. The file is in either FASTA or FASTQ format, depending on
+<dd><p>(Optional). Name of the output file for synchronized reads
+from <code>file2</code>. The file is in either FASTA or FASTQ format, depending on
 <code>file_format</code>. If <code>NULL</code> (default), no sequences are written to a
 file. See <em>Details</em>.</p></dd>
 
@@ -171,7 +171,7 @@ must be character strings specifying the file paths.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

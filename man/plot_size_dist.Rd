@@ -15,31 +15,32 @@ plot_size_dist(
 )
 }
 \arguments{
-\item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object containing
-reads with size values embedded in the \code{Header} column. See
+\item{fastx_input}{(Required). A FASTA/FASTQ file path or FASTA/FASTQ object
+containing reads with size values embedded in the \code{Header} column. See
 \emph{Details}.}
 
-\item{input_format}{The format of the input file. Must be \code{"fasta"} or
-\code{"fastq"} if \code{fastx_input} is a file path. Defaults to \code{NULL}.}
+\item{input_format}{(Optional). The format of the input file. Must be
+\code{"fasta"} or \code{"fastq"} if \code{fastx_input} is a file path.
+Defaults to \code{NULL}.}
 
-\item{cutoff}{An optional numeric value specifying a size threshold. Reads
+\item{cutoff}{(Optional). A numeric value specifying a size threshold. Reads
 with size greater than this value will be grouped into a single category
 labeled \code{"> cutoff"} in the plot. Defaults to \code{NULL} (no cutoff
 applied).}
 
-\item{y_breaks}{A numeric vector specifying the breakpoints for the y-axis
-if log10 scaling is applied (\code{log_scale_y = TRUE}. Defaults to
-\code{NULL}.}
+\item{y_breaks}{(Optional). A numeric vector specifying the breakpoints for
+the y-axis if log10 scaling is applied (\code{log_scale_y = TRUE}. Defaults
+to \code{NULL}.}
 
-\item{plot_title}{The title of the plot. Defaults to
+\item{plot_title}{(Optional). The title of the plot. Defaults to
 \code{"Size distribution"}. Set to \code{""} for no title.}
 
-\item{log_scale_y}{If \code{TRUE} (default), applies a log10 scale to the
-y-axis. If \code{FALSE}, the y-axis remains linear.}
+\item{log_scale_y}{(Optional). If \code{TRUE} (default), applies a log10
+scale to the y-axis. If \code{FALSE}, the y-axis remains linear.}
 
-\item{n_bins}{Number of bins used in the histogram if \code{cutoff} is
-unspecified. Defaults to \code{30}, which is the default value in
-\code{ggplot2::geom_histogram()}.}
+\item{n_bins}{(Optional). Number of bins used in the histogram if
+\code{cutoff} is unspecified. Defaults to \code{30}, which is the default
+value in \code{ggplot2::geom_histogram()}.}
 }
 \value{
 A ggplot2 object displaying a plot of size distribution.

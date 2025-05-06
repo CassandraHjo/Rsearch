@@ -4,19 +4,19 @@
 #' FASTA/FASTQ files or objects by retaining only the common sequences present
 #' in both.
 #'
-#' @param file1 A FASTQ file path, a FASTQ tibble, or a
+#' @param file1 (Required). A FASTQ file path, a FASTQ tibble, or a
 #' paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
-#' @param file2 A FASTQ file path or a FASTQ tibble. Optional if \code{file} is
-#' a \code{"pe_df"} object. See \emph{Details}.
-#' @param file_format Format of the input (\code{file1} and \code{file2})
-#' and the desired output format: \code{"fasta"} or \code{"fastq"} (default).
-#' This determines the format for both outputs.
-#' @param file1_out Name of the output file for synchronized reads from
-#' \code{file1}. The file is in either FASTA or FASTQ format, depending on
+#' @param file2 (Optional). A FASTQ file path or a FASTQ tibble. Optional if
+#' \code{file1} is a \code{"pe_df"} object. See \emph{Details}.
+#' @param file_format (Optional). Format of the input (\code{file1} and
+#' \code{file2}) and the desired output format: \code{"fasta"} or \code{"fastq"}
+#' (default). This determines the format for both outputs.
+#' @param file1_out (Optional). Name of the output file for synchronized reads
+#' from \code{file1}. The file is in either FASTA or FASTQ format, depending on
 #' \code{file_format}. If \code{NULL} (default), no sequences are written to a
 #' file. See \emph{Details}.
-#' @param file2_out Name of the output file for synchronized reads from
-#' \code{file2}. The file is in either FASTA or FASTQ format, depending on
+#' @param file2_out (Optional). Name of the output file for synchronized reads
+#' from \code{file2}. The file is in either FASTA or FASTQ format, depending on
 #' \code{file_format}. If \code{NULL} (default), no sequences are written to a
 #' file. See \emph{Details}.
 #'

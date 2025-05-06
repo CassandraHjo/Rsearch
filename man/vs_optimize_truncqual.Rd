@@ -18,33 +18,34 @@ vs_optimize_truncqual(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path, FASTQ tibble (forward reads), or a
-paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
+\item{fastq_input}{(Required). A FASTQ file path, FASTQ tibble (forward
+reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{reverse}{A FASTQ file path or FASTQ tibble (reverse reads). Optional
-if \code{fastq_input} is a \code{"pe_df"} object.}
+\item{reverse}{(Optional). A FASTQ file path or FASTQ tibble (reverse reads).
+Optional if \code{fastq_input} is a \code{"pe_df"} object.}
 
-\item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
-Defaults to \code{10}.}
+\item{minovlen}{(Optional). Minimum overlap between the merged reads. Must be
+at least 5. Defaults to \code{10}.}
 
-\item{truncqual_range}{A numeric vector of \code{truncqual} values to test.
-Sequences are truncated starting from the first base with the specified base
-quality score or lower. Defaults to \code{1:20}.}
+\item{truncqual_range}{(Optional). A numeric vector of \code{truncqual}
+values to test. Sequences are truncated starting from the first base with the
+specified base quality score or lower. Defaults to \code{1:20}.}
 
-\item{minlen}{Minimum number of bases a sequence must have to be retained.
-Defaults to \code{0}. See \emph{Details}.}
+\item{minlen}{(Optional). Minimum number of bases a sequence must have to be
+retained. Defaults to \code{0}. See \emph{Details}.}
 
-\item{min_size}{Minimum copy number (size) for a merged read to be
-included in the results. Defaults to \code{2}.}
+\item{min_size}{(Optional). Minimum copy number (size) for a merged read to
+be included in the results. Defaults to \code{2}.}
 
-\item{maxee_rate}{Threshold for average expected error. Must range from
-\code{0.0} to \code{1.0}. Defaults to \code{0.01}. See \emph{Details}.}
+\item{maxee_rate}{(Optional). Threshold for average expected error. Must
+range from \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See
+\emph{Details}.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{plot_title}{If \code{TRUE} (default), a summary title will be displayed
-in the plot. Set to \code{FALSE} for no title.}
+\item{plot_title}{(Optional). If \code{TRUE} (default), a summary title will
+be displayed in the plot. Set to \code{FALSE} for no title.}
 }
 \value{
 A data frame with the following columns:

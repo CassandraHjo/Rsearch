@@ -3,8 +3,8 @@
 #' @description \code{set_vsearch_executable} specifies the valid command to
 #' invoke \code{VSEARCH}.
 #'
-#' @param vsearch_executable Full path to the VSEARCH executable on your
-#' computer.
+#' @param vsearch_executable (Required). Full path to the VSEARCH executable on
+#' your computer.
 #'
 #' @details Use this function to change the command used to invoke the external
 #' software VSEARCH on this computer. When the \code{Rsearch} package is

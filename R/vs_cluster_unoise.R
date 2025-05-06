@@ -3,45 +3,47 @@
 #' @description \code{vs_cluster_unoise} performs denoising of FASTA sequences from a
 #' given file or object using \code{VSEARCH}´s \code{cluster_unoise} method.
 #'
-#' @param fasta_input A FASTA file path or a FASTA object containing reads to
-#' denoise. See \emph{Details}.
-#' @param centroids A character string specifying the name of the FASTA output
-#' file for the cluster centroid sequences. If \code{NULL} (default), no output
-#' is written to a file and the centroid sequences are returned as a FASTA
-#' object. See \emph{Details}.
-#' @param otutabout A character string specifying the name of the output file in
-#' an OTU table format. If \code{NULL} (default), no output is written to a file.
-#' If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.
-#' @param size_column If \code{TRUE}, a column with the size of each centroid is
-#' added to the centroid output tibble.
-#' @param id Pairwise identity threshold for sequence to be added to a
-#' cluster. Defaults to \code{0.97}. See \emph{Details}.
-#' @param minsize Minimum abundance of sequences for denoising. Defaults to
-#' \code{8}.
-#' @param unoise_alpha Alpha value for the UNOISE algorithm. Defaults to
-#' \code{2}.
-#' @param strand Specifies which strand to consider when comparing sequences.
-#' Can be either \code{"plus"} (default) or \code{"both"}.
-#' @param sizein If \code{TRUE} (default), abundance annotations present in
-#' sequence headers are taken into account.
-#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
-#' FASTA headers.
-#' @param relabel Relabel sequences using the given prefix and a ticker to
-#' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. his option is only applicable when the output format is FASTA
-#' (\code{centroids}). If \code{NULL} (default), no identifier is added.
-#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL} (default), no log file is created.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See \emph{Details}.
+#' @param fasta_input (Required). A FASTA file path or a FASTA object containing
+#' reads to denoise. See \emph{Details}.
+#' @param centroids (Optional). A character string specifying the name of the
+#' FASTA output file for the cluster centroid sequences. If \code{NULL}
+#' (default), no output is written to a file and the centroid sequences are
+#' returned as a FASTA object. See \emph{Details}.
+#' @param otutabout (Optional). A character string specifying the name of the
+#' output file in an OTU table format. If \code{NULL} (default), no output is
+#' written to a file. If \code{TRUE}, the output is returned as a tibble. See
+#' \emph{Details}.
+#' @param size_column (Optional). If \code{TRUE}, a column with the size of each
+#' centroid is added to the centroid output tibble.
+#' @param id (Optional). Pairwise identity threshold for sequence to be added to
+#' a cluster. Defaults to \code{0.97}. See \emph{Details}.
+#' @param minsize (Optional). Minimum abundance of sequences for denoising.
+#' Defaults to \code{8}.
+#' @param unoise_alpha (Optional). Alpha value for the UNOISE algorithm.
+#' Defaults to \code{2}.
+#' @param strand (Optional). Specifies which strand to consider when comparing
+#' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
+#' present in sequence headers are taken into account.
+#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
+#' are added to FASTA headers.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. his option is only applicable when the output
+#' format is FASTA (\code{centroids}). If \code{NULL} (default), no identifier
+#' is added.
+#' @param log_file (Optional). Name of the log file to capture messages from
+#' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). Additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Sequences are denoised according to the UNOISE version 3 algorithm by Robert

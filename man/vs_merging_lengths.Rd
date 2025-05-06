@@ -15,23 +15,23 @@ vs_merging_lengths(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path, a FASTQ tibble (forward reads), or a
-paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
+\item{fastq_input}{(Required). A FASTQ file path, a FASTQ tibble (forward
+reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
-\item{reverse}{A FASTQ file path or FASTQ tibble containing reverse reads.
-Optional if \code{fastq_input} is a \code{"pe_df"} object.}
+\item{reverse}{(Optional). A FASTQ file path or FASTQ tibble containing
+reverse reads. Optional if \code{fastq_input} is a \code{"pe_df"} object.}
 
-\item{minovlen}{Minimum overlap between the merged reads. Must be at least 5.
-Defaults to \code{10}.}
+\item{minovlen}{(Optional). Minimum overlap between the merged reads. Must be
+at least 5. Defaults to \code{10}.}
 
-\item{minlen}{Minimum number of bases a sequence must have to be retained.
-Defaults to \code{0}. See \emph{Details}.}
+\item{minlen}{(Optional). Minimum number of bases a sequence must have to be
+retained. Defaults to \code{0}. See \emph{Details}.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{plot_title}{If \code{TRUE} (default), a summary title will be displayed
-in the plot. Set to \code{FALSE} for no title.}
+\item{plot_title}{(Optional). If \code{TRUE} (default), a summary title will
+be displayed in the plot. Set to \code{FALSE} for no title.}
 }
 \value{
 A tibble with the following columns:

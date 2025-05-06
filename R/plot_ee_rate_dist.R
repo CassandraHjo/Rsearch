@@ -5,11 +5,11 @@
 #' rate for reads. The EE rate represents the cumulative probability of errors
 #' in a read, calculated from Phred quality scores.
 #'
-#' @param fastq_input A FASTQ file path or FASTQ object containing reads. See
-#' \emph{Details}.
-#' @param n_bins Number of bins used in the histogram. Defaults to \code{30},
-#' which is the default value in \code{ggplot2::geom_histogram()}.
-#' @param plot_title The title of the plot. Defaults to
+#' @param fastq_input (Required). A FASTQ file path or FASTQ object containing
+#' reads. See \emph{Details}.
+#' @param n_bins (Optional). Number of bins used in the histogram. Defaults to
+#' \code{30}, which is the default value in \code{ggplot2::geom_histogram()}.
+#' @param plot_title (Optional). The title of the plot. Defaults to
 #' \code{"Distribution of the expected error (EE) rate of reads"}. Set to
 #' \code{""} for no title.
 #'

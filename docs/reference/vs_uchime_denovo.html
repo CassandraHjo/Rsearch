@@ -69,59 +69,60 @@ detection accuracy.</p>
 
 
 <dl><dt id="arg-fasta-input">fasta_input<a class="anchor" aria-label="anchor" href="#arg-fasta-input"></a></dt>
-<dd><p>A FASTA file path or a FASTA object with reads. See
-<em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTA file path or a FASTA object with reads.
+See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-nonchimeras">nonchimeras<a class="anchor" aria-label="anchor" href="#arg-nonchimeras"></a></dt>
-<dd><p>Name of the FASTA output file for the non-chimeric
-sequences. If <code>NULL</code> (default), no output is written to file.</p></dd>
+<dd><p>(Optional). Name of the FASTA output file for the
+non-chimeric sequences. If <code>NULL</code> (default), no output is written to
+file.</p></dd>
 
 
 <dt id="arg-chimeras">chimeras<a class="anchor" aria-label="anchor" href="#arg-chimeras"></a></dt>
-<dd><p>Name of the FASTA output file for the chimeric sequences.
-If <code>NULL</code> (default), no output is written to file.</p></dd>
+<dd><p>(Optional). Name of the FASTA output file for the chimeric
+sequences. If <code>NULL</code> (default), no output is written to file.</p></dd>
 
 
 <dt id="arg-sizein">sizein<a class="anchor" aria-label="anchor" href="#arg-sizein"></a></dt>
-<dd><p>If <code>TRUE</code> (default), abundance annotations present in
-sequence headers are taken into account.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+present in sequence headers are taken into account.</p></dd>
 
 
 <dt id="arg-sizeout">sizeout<a class="anchor" aria-label="anchor" href="#arg-sizeout"></a></dt>
-<dd><p>If <code>TRUE</code> (default), abundance annotations are added to
-FASTA headers.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+are added to FASTA headers.</p></dd>
 
 
 <dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>
-<dd><p>Relabel sequences using the given prefix and a ticker to
-construct new headers. Defaults to <code>NULL</code>.</p></dd>
+<dd><p>(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-relabel-sha-">relabel_sha1<a class="anchor" aria-label="anchor" href="#arg-relabel-sha-"></a></dt>
-<dd><p>If <code>TRUE</code> (default), relabel sequences using the
-SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>(Optional). If <code>TRUE</code> (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
-<dd><p>Number of characters per line in the output FASTA
-file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
+<dd><p>(Optional). Number of characters per line in the output
+FASTA file. Defaults to <code>0</code>, which eliminates wrapping.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
+<dd><p>(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
 
 
 <dt id="arg-log-file">log_file<a class="anchor" aria-label="anchor" href="#arg-log-file"></a></dt>
-<dd><p>Name of the log file to capture messages from <code>VSEARCH</code>.
-If <code>NULL</code> (default), no log file is created.</p></dd>
+<dd><p>(Optional). Name of the log file to capture messages from
+<code>VSEARCH</code>. If <code>NULL</code> (default), no log file is created.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
-<dd><p>Additional arguments to pass to <code>VSEARCH</code>.
-Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Additional arguments to pass to
+<code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -215,7 +216,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

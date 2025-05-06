@@ -3,25 +3,25 @@
 #' @description \code{vs_sintax} classifies sequences using the Sintax algorithm
 #' implemented in \code{VSEARCH}.
 #'
-#' @param fasta_input A FASTA file path or a FASTA object with reads to
-#' classify, see \emph{Details}.
-#' @param database A FASTA file path or a FASTA object containing the
-#' reference database in FASTA format. The sequences need to be annotated
+#' @param fasta_input (Required). A FASTA file path or a FASTA object with reads
+#' to classify, see \emph{Details}.
+#' @param database (Required). A FASTA file path or a FASTA object containing
+#' the reference database in FASTA format. The sequences need to be annotated
 #' with taxonomy, see \emph{Details}.
-#' @param outfile Name of the output file. If \code{NULL}
-#' (default), results are returned as a data.frame.
-#' @param cutoff minimum level of bootstrap support (0.0-1.0) for the
-#' classifications. Defaults to \code{0.0}.
-#' @param strand Specifies which strand to consider when comparing sequences.
-#' Can be either \code{"plus"} (default) or \code{"both"}.
-#' @param randseed Seed for the random number generator used in the Sintax
-#' algorithm. Defaults to \code{NULL}.
-#' @param logfile Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL} (default), no log file is created.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options A character string of additional arguments to pass to
-#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param outfile (Optional). Name of the output file. If \code{NULL} (default),
+#' results are returned as a data.frame.
+#' @param cutoff (Optional). Minimum level of bootstrap support (0.0-1.0) for
+#' the classifications. Defaults to \code{0.0}.
+#' @param strand (Optional). Specifies which strand to consider when comparing
+#' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param randseed (Optional). Seed for the random number generator used in the
+#' Sintax algorithm. Defaults to \code{NULL}.
+#' @param logfile (Optional). Name of the log file to capture messages from
+#' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). A character string of additional arguments
+#' to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details The sequences in the input file are classified according to the
 #' Sintax algorithm, using \code{VSEARCH}, see
@@ -242,9 +242,9 @@ vs_sintax <- function(fasta_input,
 #' @description Creates a properly formatted FASTA file for the use as a Sintax
 #' database.
 #'
-#' @param taxonomy_table A data.frame with sequences and proper information for
-#' making a Sintax database, see \emph{Details}.
-#' @param outfile Name of database file to create (a FASTA file).
+#' @param taxonomy_table (Required). A data.frame with sequences and proper
+#' information for making a Sintax database, see \emph{Details}.
+#' @param outfile (Required). Name of database file to create (a FASTA file).
 #'
 #' @details The Sintax algorithm is used by \code{VSEARCH} to assign taxonomic
 #' information to 16S sequences. It requires a database, which is nothing but a
@@ -287,7 +287,9 @@ vs_sintax <- function(fasta_input,
 #'
 #' @export
 #'
-make_sintax_db <- function(taxonomy_table, outfile){
+make_sintax_db <- function(taxonomy_table,
+                           outfile){
+
   if(!exists("Header", where = taxonomy_table)){
     stop("The taxonomy_table must have a column named Header, with a unique text for each sequence")
   }
@@ -335,10 +337,10 @@ make_sintax_db <- function(taxonomy_table, outfile){
 #'
 #' @description Creates a phylo object based on taxonomy
 #'
-#' @param taxonomy_table A data.frame with sequences and taxonomy information,
-#' see \emph{Details}.
-#' @param confidence A threshold value used to replace taxa with confidence
-#' scores below this to \code{NA}.
+#' @param taxonomy_table (Required). A data.frame with sequences and taxonomy
+#' information, see \emph{Details}.
+#' @param confidence (Optional). A threshold value used to replace taxa with
+#' confidence scores below this to \code{NA}.
 #'
 #' @details In some data analyses involving OTU data a phylogenetic tree
 #' describing the relatedness of the OTUs is required. To construct such trees
@@ -386,7 +388,9 @@ make_sintax_db <- function(taxonomy_table, outfile){
 #'
 #' @export
 #'
-taxonomy_tree <- function(taxonomy_table, confidence = NULL){
+taxonomy_tree <- function(taxonomy_table,
+                          confidence = NULL){
+
   if(!exists("Header", where = taxonomy_table)){
     stop("The taxonomy_table must have a column named Header, with a unique text for each OTU")
   }

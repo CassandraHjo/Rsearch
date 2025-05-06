@@ -64,65 +64,68 @@ overlapping regions into one sequence using <code>VSEARCH</code>.</p>
 
 
 <dl><dt id="arg-fastq-input">fastq_input<a class="anchor" aria-label="anchor" href="#arg-fastq-input"></a></dt>
-<dd><p>A FASTQ file path, a FASTQ tibble (forward reads), or a
-paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Required). A FASTQ file path, a FASTQ tibble (forward
+reads), or a paired-end tibble of class <code>"pe_df"</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
-<dd><p>A FASTQ file path or a FASTQ tibble (reverse reads). Optional
-if <code>fastq_input</code> is a <code>"pe_df"</code> object. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). A FASTQ file path or a FASTQ tibble (reverse
+reads). Optional if <code>fastq_input</code> is a <code>"pe_df"</code> object. See
+<em>Details</em>.</p></dd>
 
 
 <dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
-<dd><p>Desired output format of file or tibble: <code>"fasta"</code>
-or <code>"fastq"</code> (default).</p></dd>
+<dd><p>(Optional). Desired output format of file or tibble:
+<code>"fasta"</code> or <code>"fastq"</code> (default).</p></dd>
 
 
 <dt id="arg-fastaout">fastaout<a class="anchor" aria-label="anchor" href="#arg-fastaout"></a></dt>
-<dd><p>Name of the FASTA output file with the merged reads. If
-<code>NULL</code> (default), no output is written to file. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the FASTA output file with the merged
+reads. If <code>NULL</code> (default), no output is written to file. See
+<em>Details</em>.</p></dd>
 
 
 <dt id="arg-fastqout">fastqout<a class="anchor" aria-label="anchor" href="#arg-fastqout"></a></dt>
-<dd><p>Name of the FASTQ output file with the merged reads. If
-<code>NULL</code> (default) no output is written to file. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Name of the FASTQ output file with the merged
+reads. If <code>NULL</code> (default) no output is written to file. See
+<em>Details</em>.</p></dd>
 
 
 <dt id="arg-minovlen">minovlen<a class="anchor" aria-label="anchor" href="#arg-minovlen"></a></dt>
-<dd><p>Minimum overlap between the merged reads. Must be at least 5.
-Defaults to <code>10</code>.</p></dd>
+<dd><p>(Optional). Minimum overlap between the merged reads. Must be
+at least 5. Defaults to <code>10</code>.</p></dd>
 
 
 <dt id="arg-minlen">minlen<a class="anchor" aria-label="anchor" href="#arg-minlen"></a></dt>
-<dd><p>Minimum number of bases a sequence must have to be retained.
-Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Minimum number of bases a sequence must have to be
+retained. Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
-<dd><p>Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to <code>0</code>,
-which eliminates wrapping.</p></dd>
+<dd><p>(Optional). Number of characters per line in the output
+FASTA file. Only applies if the output file is in FASTA format. Defaults to
+<code>0</code>, which eliminates wrapping.</p></dd>
 
 
 <dt id="arg-sample">sample<a class="anchor" aria-label="anchor" href="#arg-sample"></a></dt>
-<dd><p>Add the given sample identifier string to sequence headers. For
-instance, if the given string is "ABC", the text ";sample=ABC" will be added
-to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
+<dd><p>(Optional). Add the given sample identifier string to sequence
+headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+will be added to the header. If <code>NULL</code> (default), no identifier is added.</p></dd>
 
 
 <dt id="arg-log-file">log_file<a class="anchor" aria-label="anchor" href="#arg-log-file"></a></dt>
-<dd><p>Name of the log file to capture messages from <code>VSEARCH</code>.
-If <code>NULL</code> (default), no log file is created.</p></dd>
+<dd><p>(Optional). Name of the log file to capture messages from
+<code>VSEARCH</code>. If <code>NULL</code> (default), no log file is created.</p></dd>
 
 
 <dt id="arg-threads">threads<a class="anchor" aria-label="anchor" href="#arg-threads"></a></dt>
-<dd><p>Number of computational threads to be used by <code>VSEARCH</code>.
-Defaults to <code>1</code>.</p></dd>
+<dd><p>(Optional). Number of computational threads to be used by
+<code>VSEARCH</code>. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
-<dd><p>Additional arguments to pass to <code>VSEARCH</code>.
-Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+<dd><p>(Optional). Additional arguments to pass to
+<code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -219,7 +222,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>

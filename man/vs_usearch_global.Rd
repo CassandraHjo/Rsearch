@@ -23,51 +23,52 @@ vs_usearch_global(
 )
 }
 \arguments{
-\item{fastx_input}{A FASTA/FASTQ file path or FASTA/FASTQ object. See
+\item{fastx_input}{(Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
+See \emph{Details}.}
+
+\item{database}{(Required). A FASTA/FASTQ file path or FASTA/FASTQ tibble
+object containing the target sequences.}
+
+\item{userout}{(Optional). A character string specifying the name of the
+output file for the alignment results. If \code{NULL} (default), no output is
+written to a file and the results are returned as a tibble with the columns
+specified in \code{userfields}. See \emph{Details}.}
+
+\item{otutabout}{(Optional). A character string specifying the name of the
+output file in an OTU table format. If \code{NULL} (default), no output is
+written to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
 
-\item{database}{A FASTA/FASTQ file path or FASTA/FASTQ tibble object containing the
-target sequences.}
+\item{userfields}{(Optional). Fields to include in the output file. Defaults
+to \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.
+See \emph{Details}.}
 
-\item{userout}{A character string specifying the name of the output file for
-the alignment results. If \code{NULL} (default), no output is written to a
-file and the results are returned as a tibble with the columns specified in
-\code{userfields}. See \emph{Details}.}
+\item{gapopen}{(Optional). Penalties for gap opening. Defaults to
+\code{"20I/2E"}. See \emph{Details}.}
 
-\item{otutabout}{A character string specifying the name of the output file in
-an OTU table format. If \code{NULL} (default), no output is written to a file.
-If \code{TRUE}, the output is returned as a tibble. See \emph{Details}.}
+\item{gapext}{(Optional). Penalties for gap extension. Defaults to
+\code{"2I/1E"}. See \emph{Details}.}
 
-\item{userfields}{Fields to include in the output file. Defaults to
-\code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}. See
-\emph{Details}.}
+\item{id}{(Optional). Pairwise identity threshold. Defines the minimum
+identity required for matches. Defaults to \code{0.7}.}
 
-\item{gapopen}{Penalties for gap opening. Defaults to \code{"20I/2E"}. See
-\emph{Details}.}
+\item{strand}{(Optional). Specifies which strand to consider when comparing
+sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
 
-\item{gapext}{Penalties for gap extension. Defaults to \code{"2I/1E"}. See
-\emph{Details}.}
+\item{maxaccepts}{(Optional). Maximum number of matching target sequences to
+accept before stopping the search for a given query. Defaults to \code{1}.
+Only works when \code{strand} is set to \code{"plus"} (default).}
 
-\item{id}{Pairwise identity threshold. Defines the minimum identity required
-for matches. Defaults to \code{0.7}.}
-
-\item{strand}{Specifies which strand to consider when comparing sequences.
-Can be either \code{"plus"} (default) or \code{"both"}.}
-
-\item{maxaccepts}{Maximum number of matching target sequences to accept
-before stopping the search for a given query. Defaults to \code{1}. Only
-works when \code{strand} is set to \code{"plus"} (default).}
-
-\item{maxrejects}{Maximum number of non-matching target sequences to consider
-before stopping the search for a given query. Defaults to 32. If
+\item{maxrejects}{(Optional). Maximum number of non-matching target sequences
+to consider before stopping the search for a given query. Defaults to 32. If
 \code{maxaccepts} and \code{maxrejects} are both set to 0, the complete
 database is searched.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See \emph{Details}.}
+\item{vsearch_options}{(Optional). Additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

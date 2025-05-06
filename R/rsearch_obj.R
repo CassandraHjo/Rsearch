@@ -7,27 +7,28 @@
 #' three elements with data structures that can be used as input to build a
 #' phyloseq object in the phyloseq package.
 #'
-#' @param readcount_data A file path or a data frame (or tibble) containing OTU
-#' count data, typically the output from \code{\link{vs_cluster_size}} or
-#' similar. This must have one row per OTU and one column per sample. The first
-#' column must contain OTU identifiers corresponding to those in the first
-#' column of \code{sequence_data}, and the remaining columns must have names
-#' matching the sample identifiers in \code{sample_data}. OTUs and samples not
-#' found across all data structures are discarded.
-#' @param sequence_data A file path or a data frame (or tibble) containing
-#' centroid sequences representing each OTU, typically obtained from
+#' @param readcount_data (Required). A file path or a data frame (or tibble)
+#' containing OTU count data, typically the output from
+#' \code{\link{vs_cluster_size}} or similar. This must have one row per OTU and
+#' one column per sample. The first column must contain OTU identifiers
+#' corresponding to those in the first column of \code{sequence_data}, and the
+#' remaining columns must have names matching the sample identifiers in
+#' \code{sample_data}. OTUs and samples not found across all data structures are
+#' discarded.
+#' @param sequence_data (Required). A file path or a data frame (or tibble)
+#' containing centroid sequences representing each OTU, typically obtained from
 #' clustering (\code{\link{vs_cluster_size}}) or denoising
 #' (\code{\link{vs_cluster_unoise}}). The first column must be called
 #' \code{Header} and contain OTU identifiers. One of the remaining columns must
 #' be named \code{Sequence}, containing the actual DNA sequences. Additional
 #' columns may include taxonomic classification data, e.g. from
 #' \code{\link{vs_sintax}}.
-#' @param sample_data A file path or a data frame (or tibble) containing
-#' metadata about each sample. Samples are assumed to be in rows, and one of
-#' the columns \strong{must} contain a unique identifier for each sample that
-#' matches the column names in \code{readcount_data}.
-#' @param sample_id_col A character string specifying the name of the column in
-#' \code{sample_data} that contains the unique sample identifiers.
+#' @param sample_data (Required). A file path or a data frame (or tibble)
+#' containing metadata about each sample. Samples are assumed to be in rows, and
+#' one of the columns \strong{must} contain a unique identifier for each sample
+#' that matches the column names in \code{readcount_data}.
+#' @param sample_id_col (Optional). A character string specifying the name of
+#' the column in \code{sample_data} that contains the unique sample identifiers.
 #' This column will be used to match sample metadata to read count data.
 #' Defaults to \code{"sample_id"}.
 #'
@@ -146,10 +147,11 @@ rsearch_obj <- function(readcount_data,
 #' @description \code{rsearch2phyloseq} converts an Rsearch object to a phyloseq
 #' object.
 #'
-#' @param rsearch.obj A Rsearch object, see \code{\link{rsearch_obj}}.
-#' @param sample_id_col A character string specifying the name of the column in
-#' \code{sampledata.df} that contains sample identifiers. Defaults to
-#' \code{"sample_id"}.
+#' @param rsearch.obj (Required). An Rsearch object, see
+#' \code{\link{rsearch_obj}}.
+#' @param sample_id_col (Optional). A character string specifying the name of
+#' the column in \code{sampledata.df} that contains sample identifiers. Defaults
+#' to \code{"sample_id"}.
 #'
 #' @details This function converts an Rsearch object, which is a simple
 #' \code{list}, to a \code{\link{phyloseq}} object from the \code{phyloseq} R
@@ -198,7 +200,7 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #'
 #' @description Creating an Rsearch object (list) from a phyloseq object.
 #'
-#' @param phyloseq.obj A phyloseq object, see \code{\link{phyloseq}}.
+#' @param phyloseq.obj (Required). A phyloseq object, see \code{\link{phyloseq}}.
 #'
 #' @details This function converts a phyloseq object to a simple
 #' \code{\link{list}} with three elements as dataframes (or tibbles). The

@@ -23,41 +23,44 @@ vs_fastq_join(
 )
 }
 \arguments{
-\item{fastq_input}{A FASTQ file path, a FASTQ tibble object (forward reads),
-or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
-
-\item{reverse}{A FASTQ file path or a FASTQ tibble object (reverse reads).
-Optional if \code{fastq_input} is a \code{"pe_df"} object. See
+\item{fastq_input}{(Required). A FASTQ file path, a FASTQ tibble object
+(forward reads), or a paired-end tibble of class \code{"pe_df"}. See
 \emph{Details}.}
 
-\item{output_format}{Desired output format of the file or tibble:
+\item{reverse}{(Optional). A FASTQ file path or a FASTQ tibble object
+(reverse reads). Optional if \code{fastq_input} is a \code{"pe_df"} object.
+See \emph{Details}.}
+
+\item{output_format}{(Optional). Desired output format of the file or tibble:
 \code{"fasta"} or \code{"fastq"} (default).}
 
-\item{fastaout}{Name of the FASTA output file with the joined reads.
-If \code{NULL} (default), no output is written to a file. See \emph{Details}.}
+\item{fastaout}{(Optional). Name of the FASTA output file with the joined
+reads. If \code{NULL} (default), no output is written to a file. See
+\emph{Details}.}
 
-\item{fastqout}{Name of the FASTQ output file with the joined reads.
-If \code{NULL} (default), no output is written to a file. See \emph{Details}.}
+\item{fastqout}{(Optional). Name of the FASTQ output file with the joined
+reads. If \code{NULL} (default), no output is written to a file. See
+\emph{Details}.}
 
-\item{join_padgap}{Padding sequence to use in the gap between the sequences.
-Defaults to \code{"NNNNNNNN"}.}
+\item{join_padgap}{(Optional). Padding sequence to use in the gap between the
+sequences. Defaults to \code{"NNNNNNNN"}.}
 
-\item{join_padgapq}{Quality of the padding sequence. Defaults to
-\code{"IIIIIIII"}, corresponding to a base quality score of 40
-(a very high quality score with error probability \code{0.0001}).}
+\item{join_padgapq}{(Optional). Quality of the padding sequence. Defaults to
+\code{"IIIIIIII"}, corresponding to a base quality score of 40 (a very high
+quality score with error probability \code{0.0001}).}
 
-\item{fasta_width}{Number of characters per line in the output FASTA file.
-Only applies if the output file is in FASTA format. Defaults to \code{0},
-which eliminates wrapping.}
+\item{fasta_width}{(Optional). Number of characters per line in the output
+FASTA file. Only applies if the output file is in FASTA format. Defaults to
+\code{0}, which eliminates wrapping.}
 
-\item{log_file}{Name of the log file to capture messages from \code{VSEARCH}.
-If \code{NULL} (default), no log file is created.}
+\item{log_file}{(Optional). Name of the log file to capture messages from
+\code{VSEARCH}. If \code{NULL} (default), no log file is created.}
 
-\item{threads}{Number of computational threads to be used by \code{VSEARCH}.
-Defaults to \code{1}.}
+\item{threads}{(Optional). Number of computational threads to be used by
+\code{VSEARCH}. Defaults to \code{1}.}
 
-\item{vsearch_options}{Additional arguments to pass to \code{VSEARCH}.
-Defaults to \code{NULL}. See \emph{Details}.}
+\item{vsearch_options}{(Optional). Additional arguments to pass to
+\code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 }
 \value{
 A tibble or \code{NULL}.

@@ -4,25 +4,26 @@
 #' Generates a plot representing the distribution of size values from a FASTA or
 #' FASTQ file/object.
 #'
-#' @param fastx_input A FASTA/FASTQ file path or FASTA/FASTQ object containing
-#' reads with size values embedded in the \code{Header} column. See
+#' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ object
+#' containing reads with size values embedded in the \code{Header} column. See
 #' \emph{Details}.
-#' @param input_format The format of the input file. Must be \code{"fasta"} or
-#' \code{"fastq"} if \code{fastx_input} is a file path. Defaults to \code{NULL}.
-#' @param cutoff An optional numeric value specifying a size threshold. Reads
+#' @param input_format (Optional). The format of the input file. Must be
+#' \code{"fasta"} or \code{"fastq"} if \code{fastx_input} is a file path.
+#' Defaults to \code{NULL}.
+#' @param cutoff (Optional). A numeric value specifying a size threshold. Reads
 #' with size greater than this value will be grouped into a single category
 #' labeled \code{"> cutoff"} in the plot. Defaults to \code{NULL} (no cutoff
 #' applied).
-#' @param y_breaks A numeric vector specifying the breakpoints for the y-axis
-#' if log10 scaling is applied (\code{log_scale_y = TRUE}. Defaults to
-#' \code{NULL}.
-#' @param plot_title The title of the plot. Defaults to
+#' @param y_breaks (Optional). A numeric vector specifying the breakpoints for
+#' the y-axis if log10 scaling is applied (\code{log_scale_y = TRUE}. Defaults
+#' to \code{NULL}.
+#' @param plot_title (Optional). The title of the plot. Defaults to
 #' \code{"Size distribution"}. Set to \code{""} for no title.
-#' @param log_scale_y If \code{TRUE} (default), applies a log10 scale to the
-#' y-axis. If \code{FALSE}, the y-axis remains linear.
-#' @param n_bins Number of bins used in the histogram if \code{cutoff} is
-#' unspecified. Defaults to \code{30}, which is the default value in
-#' \code{ggplot2::geom_histogram()}.
+#' @param log_scale_y (Optional). If \code{TRUE} (default), applies a log10
+#' scale to the y-axis. If \code{FALSE}, the y-axis remains linear.
+#' @param n_bins (Optional). Number of bins used in the histogram if
+#' \code{cutoff} is unspecified. Defaults to \code{30}, which is the default
+#' value in \code{ggplot2::geom_histogram()}.
 #'
 #' @details
 #'

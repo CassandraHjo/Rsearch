@@ -3,33 +3,35 @@
 #' @description \code{vs_uchime_ref} detects chimeras present in the FASTA
 #' sequences in using \code{VSEARCH}'s \code{uchime_ref} algorithm.
 #'
-#' @param fasta_input A FASTA file path or a FASTA object with reads. See
-#' \emph{Details}.
-#' @param database A FASTA file path or FASTA tibble object containing the
-#' reference sequences. These sequences are assumed to be chimera-free.
-#' @param nonchimeras Name of the FASTA output file for the non-chimeric
+#' @param fasta_input (Required). A FASTA file path or a FASTA object with reads.
+#' See \emph{Details}.
+#' @param database (Required). A FASTA file path or FASTA tibble object
+#' containing the reference sequences. These sequences are assumed to be
+#' chimera-free.
+#' @param nonchimeras (Optional). Name of the FASTA output file for the
+#' non-chimeric sequences. If \code{NULL} (default), no output is written to
+#' file.
+#' @param chimeras (Optional). Name of the FASTA output file for the chimeric
 #' sequences. If \code{NULL} (default), no output is written to file.
-#' @param chimeras Name of the FASTA output file for the chimeric sequences.
-#' If \code{NULL} (default), no output is written to file.
-#' @param sizein If \code{TRUE} (default), abundance annotations present in
-#' sequence headers are taken into account.
-#' @param sizeout If \code{TRUE} (default), abundance annotations are added to
-#' FASTA headers.
-#' @param relabel Relabel sequences using the given prefix and a ticker to
-#' construct new headers. Defaults to \code{NULL}.
-#' @param relabel_sha1 If \code{TRUE} (default), relabel sequences using the
-#' SHA1 message digest algorithm. Defaults to \code{FALSE}.
-#' @param fasta_width Number of characters per line in the output FASTA
-#' file. Defaults to \code{0}, which eliminates wrapping.
-#' @param sample Add the given sample identifier string to sequence headers. For
-#' instance, if the given string is "ABC", the text ";sample=ABC" will be added
-#' to the header. If \code{NULL} (default), no identifier is added.
-#' @param log_file Name of the log file to capture messages from \code{VSEARCH}.
-#' If \code{NULL} (default), no log file is created.
-#' @param threads Number of computational threads to be used by \code{VSEARCH}.
-#' Defaults to \code{1}.
-#' @param vsearch_options Additional arguments to pass to \code{VSEARCH}.
-#' Defaults to \code{NULL}. See \emph{Details}.
+#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
+#' present in sequence headers are taken into account.
+#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
+#' are added to FASTA headers.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
+#' @param fasta_width (Optional). Number of characters per line in the output
+#' FASTA file. Defaults to \code{0}, which eliminates wrapping.
+#' @param sample (Optional). Add the given sample identifier string to sequence
+#' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
+#' will be added to the header. If \code{NULL} (default), no identifier is added.
+#' @param log_file (Optional). Name of the log file to capture messages from
+#' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
+#' @param threads (Optional). Number of computational threads to be used by
+#' \code{VSEARCH}. Defaults to \code{1}.
+#' @param vsearch_options (Optional). Additional arguments to pass to
+#' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
 #'
 #' @details
 #' Chimeras in the input FASTA sequences are detected using \code{VSEARCH}´s
@@ -283,80 +285,4 @@ vs_uchime_ref <- function(fasta_input,
   } else {
     return(invisible(NULL)) # No return when output file is written
   }
-}
-
-#' Calculate chimera detection statistics
-#'
-#' @description Calculates important chimera detection statistics after running
-#' \code{vs_uchime_ref()}, including the number of chimeric and non-chimeric
-#' sequences.
-#'
-#' @param fasta_file The FASTA file containing the input sequences to the
-#' chimera detection.
-#' @param fasta_input_name The name of the file/object with the input sequences
-#' that was used in the chimera detection.
-#' @param nonchimeras.tbl The output tibble from chimera detection with the
-#' non-cimeric sequences. Contains the columns: Header and Sequence.
-#' @param chimeras.tbl The output tibble from chimera detection with the
-#' chimeric sequences. Contains the columns: Header and Sequence. If the table
-#' is \code{NULL}, it means that no chimeras were found.
-
-#'
-#' @return A tibble with the following columns:
-#' \itemize{
-#'   \item \code{num_nucleotides}: The total number of nucleotides used as input
-#'   for chimera detection.
-#'   \item \code{num_sequences}: The total number of sequences used as input for
-#'   chimera detection.
-#'   \item \code{min_length_input_seq}: The length of the shortest sequence used
-#'   as input for chimera detection.
-#'   \item \code{max_length_input_seq}: The length of the longest sequence used
-#'   as input for chimera detection.
-#'   \item \code{avg_length_input_seq}: The average length of the sequences used
-#'   as input for chimera detection.
-#'   \item \code{num_non_chimeras}: The number of non-chimeric sequences.
-#'   \item \code{num_chimeras}: The number of chimeric sequences.
-#'   \item \code{input}: The name of the input file/object for the chimera
-#'   detection.
-#' }
-#'
-#' @return A tibble with chimera detection statistics.
-#'
-#' @noRd
-#'
-calculate_uchime_statistics <- function(fasta_file,
-                                        fasta_input_name,
-                                        nonchimeras.tbl,
-                                        chimeras.tbl) {
-
-  # Make tibble from input sequences to the clustering
-  input.df <- microseq::readFasta(fasta_file)
-
-  # Calculate statistics
-  num_nucleotides <- sum(nchar(input.df$Sequence))
-  num_sequences <- nrow(input.df)
-  min_length_input_seq <- min(nchar(input.df$Sequence))
-  max_length_input_seq <- max(nchar(input.df$Sequence))
-  avg_length_input_seq <- mean(nchar(input.df$Sequence))
-  num_non_chimeras <- nrow(nonchimeras.tbl)
-
-  if (!is.null(chimeras.tbl)) {
-    num_chimeras <- nrow(chimeras.tbl)
-  } else {
-    num_chimeras <- 0
-  }
-
-  # Create table
-  result_table <- data.frame(
-    num_nucleotides = num_nucleotides,
-    num_sequences = num_sequences,
-    min_length_input_seq = min_length_input_seq,
-    max_length_input_seq = max_length_input_seq,
-    avg_length_input_seq = avg_length_input_seq,
-    num_non_chimeras = num_non_chimeras,
-    num_chimeras = num_chimeras,
-    input = fasta_input_name
-  )
-
-  return(result_table)
 }
