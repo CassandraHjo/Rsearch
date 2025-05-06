@@ -93,7 +93,7 @@ plot_base_quality <- function(fastq_input,
                               plot_title = "Per-position quality scores: median and mean",
                               show_median = TRUE,
                               show_mean = TRUE,
-                              show_overlap_box = TRUE) {
+                              show_overlap_box = FALSE) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){

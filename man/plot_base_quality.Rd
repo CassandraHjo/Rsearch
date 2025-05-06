@@ -12,7 +12,7 @@ plot_base_quality(
   plot_title = "Per-position quality scores: median and mean",
   show_median = TRUE,
   show_mean = TRUE,
-  show_overlap_box = TRUE
+  show_overlap_box = FALSE
 )
 }
 \arguments{
