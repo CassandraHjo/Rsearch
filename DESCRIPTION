@@ -38,3 +38,5 @@ RoxygenNote: 7.3.2
 URL: https://cassandrahjo.github.io/Rsearch, https://github.com/CassandraHjo/Rsearch
 BugReports: https://github.com/CassandraHjo/Rsearch/issues
 VignetteBuilder: knitr
+Depends: 
+    R (>= 4.4)
