@@ -6,3 +6,6 @@
 ^README\.Rmd$
 ^\.github$
 ^doc$
+^Meta$
+^tutorial_data$
+^docs$

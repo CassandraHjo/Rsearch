@@ -1,19 +1,627 @@
 ---
-title: "Rsearch Tutorial"
-output: rmarkdown::html_vignette
+title: "Rsearch tutorial (v1.0.0)"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{Rsearch Tutorial}
+  %\VignetteIndexEntry{Rsearch tutorial (v1.0.0)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup_knitr, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+  collapse = FALSE,
+  comment = ""
 )
 ```
 
-```{r setup}
+# Introduction
+
+In this tutorial, we will walk through an example workflow using the `Rsearch` package to process a small multi-sample dataset. We will start with a collection of Illumina-sequenced paired-end FASTQ files, split by sample.
+
+Using `Rsearch`, we will demonstrate how to perform key processing steps, including:
+
+* [Inspecting raw data](#inspect-the-raw-data)
+* [Trimming and filtering](#trimming-and-filtering)
+* [Merging read pairs](#merging-trimmed-and-filtered-reads)
+* [Dereplicate reads](#dereplicating-the-merged-reads)
+* [Chimera detection](#chimera-detection)
+* [Clustering reads into OTUs](#clustering)
+* [Taxonomic assignment](#assign-taxonomy)
+
+Finally, we will show how the data generated in `Rsearch` can be imported into the `phyloseq` R package for downstream microbiome analysis. You han jump directly to that section [here](#handoff-to-phyloseq).
+
+If you prefer to run the entire example workflow without inspecting intermediate steps, a streamlined version is provided at the [end of the tutorial](#full-pipeline-short-version), using the pipe operator.
+
+# Installing `Rsearch`
+
+To install `Rsearch` from GitHub, you will first need the `devtools` package. If it's not installed yet, you can install it with: 
+
+```{r install_devtools, eval = FALSE}
+# Install devtools if not already installed
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+```
+
+You will also need to install the `phyloseq` package if you do not already have it before installing `Rsearch`:
+
+```{r install_phyloseq, eval = FALSE}
+# Install phyloseq if not already installed
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("phyloseq")
+```
+
+Now you are ready to install `Rsearch`:
+
+```{r install_rsearch, eval = F}
+# Install Rsearch from GitHub
+devtools::install_github("CassandraHjo/Rsearch")
+```
+
+After installation, it is a good idea to restart your R session (in Rstudio: *Session* > *Restart R*) to make sure every thing is properly loaded. 
+
+`Rsearch` requires that you have `VSEARCH` installed. `VSEARCH` performs the heavy computational tasks quickly, while `Rsearch` allows you to run these operations conveniently from within R. Without `Rsearch`, you would need to execute `VSEARCH` manually from the command line.
+
+Installation instruction for `VSEARCH` are available on the [Rsearch GitHub page](https://github.com/CassandraHjo/Rsearch){target="blank"}.
+
+You can verify the installation of both `Rsearch` and `VSEARCH` by running:
+
+```{r test_rsearch_install, eval=TRUE}
 library(Rsearch)
+packageVersion("Rsearch")
+
+vsearch()
+```
+
+# Getting started
+
+## Example data
+
+The example data set in this tutorial is a subset of the samples from the publicly available project [Sequencing marine seafloor samples](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA1034510){target="blank"}.
+
+[Download a zipped archive with example data here](https://github.com/CassandraHjo/Rsearch/releases/download/v1.0-data/tutorial_data.zip){target="blank"}
+
+The data set contains samples with zymbiomics mock communities. 
+
+After unpacking the zipped archive you should have
+
+* A text-file `metadata.txt`
+* A folder named `fastq` with 16 pairs of FASTQ files.
+* An example database file `example_database.fa.gz` for taxonomic assignment.
+
+First, define the paths to your FASTQ files, metadata and example database:
+
+```{r setup_data, include=FALSE}
+data_dir <- file.path(tempdir(), "tutorial_data")
+metadata_file <- file.path(data_dir, "metadata.txt")
+fastq_path <- file.path(data_dir, "fastq")
+all_tbl_path <- file.path(data_dir, "all_tbl.txt.zip")
+
+if (!file.exists(metadata_file)) {
+  message("Downloading tutorial data...")
+  zip_url <- "https://github.com/CassandraHjo/Rsearch/releases/download/v1.0-data/tutorial_data.zip"
+  zip_file <- tempfile(fileext = ".zip")
+  download.file(zip_url, zip_file, mode = "wb")
+  message("Unzipping tutorial data...")
+  unzip(zip_file, exdir = tempdir())
+}
+```
+
+```{r path_example_data, eval=FALSE}
+fastq_path <- "../tutorial_data/fastq" # Edit to the directory containing the FASTQ files
+
+# You also need the metadata file
+metadata_file <- "../tutorial_data/metadata.txt" # Change me 
+```
+
+```{r view_example_data, eval=TRUE}
+list.files(fastq_path)
+file.exists(metadata_file)
+file.info(metadata_file)$size > 0
+```
+
+If you see the expected files listed and no errors, you are ready to proceed.
+
+## Load required libraries
+
+Load the libraries needed for this tutorial:
+
+```{r load_libraries, message=FALSE}
+library(Rsearch)
+library(microseq)
+library(readr)
+```
+
+# Inspect the raw data
+
+First, we read the metadata file:
+
+```{r read_metadata, message=FALSE}
+sample.tbl <- read_tsv(metadata_file)
+
+cat("Number of samples in the metadata file: ", nrow(sample.tbl), "\n")
+```
+
+## Read quality
+
+To help you run the tutorial interactively, we have included a `break` statement inside some `for`-loops. This causes the `for`-loop to stop after processing the first sample, allowing you to quickly preview results. You can simply remove the break line to process all samples.
+
+We assess the read quality using `plot_base_quality`, which plots the mean and median base quality scores across all bases for each read. Error bars show the interquartile range (25th to 75th percentiles). Note that the x-axis for the R2 panel has been flipped to remind us that R1 and R2 reads are read in opposite directions.
+
+```{r plot_base_quality_raw, message=FALSE}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  gg.obj <- plot_base_quality(R1.tbl, R2.tbl, show_overlap_box = TRUE)
+  print(gg.obj)
+  break # Remove this line to loop through all samples
+}
+```
+
+In the first sample, we see that the R1 reads have generally higher and more stable quality compared to the R2 reads, which is a common feature of Illumina paired-end sequencing. The shaded regions at the curve end represent the average overlap length when merging the paired-end reads, offering insight into the quality within those overlapping segments. As expected, read quality declines toward the ends, especially for the R2 reads, suggesting that trimming and filtering may be necessary before proceeding with downstream analyses.
+
+## Expected Error (EE) rate distribution
+
+We can also explore the distribution of expected error (EE) rates across reads, which provides a measure of read quality (lower EE rates indicate higher quality).
+
+```{r plot_ee_distribution}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  R1.gg.obj <- plot_ee_rate_dist(R1.tbl,
+                                 plot_title = "Distribution of the expected error (EE) rate of R1 reads")
+  R2.gg.obj <- plot_ee_rate_dist(R2.tbl,
+                                 plot_title = "Distribution of the expected error (EE) rate of R2 reads")
+  
+  print(R1.gg.obj)
+  print(R2.gg.obj)
+  break # Remove this line to loop through all samples
+}
+```
+
+In the first sample most reads have low expected error rates, indicated by the left-skewed distributions. However, some reads show higher EE rates, suggesting that some low-quality reads are present and should potentially be removed. 
+
+# Trimming and filtering
+
+Choosing the best trimming and filtering settings is important for obtaining good merging results. 
+
+* **Trimming**: Removing poor-quality bases from the ends of the reads. 
+* **Filtering**: Removing whole reads with poor quality. 
+
+`Rsearch` includes helper functions to optimize these steps.
+
+## Merging raw reads
+
+Before trimming, we can try merging the raw reads to get a baseline understanding of read overlap and quality. The `vs_merging_lengths` function can be used to plot some merging statistics:
+
+```{r merge_raw_reads, warning=F}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  merging_raw.tbl <- vs_merging_lengths(fastq_input = R1.tbl, 
+                                        reverse = R2.tbl)
+  
+  print(attr(merging_raw.tbl, "plot"))
+  print(data.frame(attr(merging_raw.tbl, "statistics")))
+  break # Remove this line to loop through all samples
+}
+```
+
+From the first sample, approximately 82% (55 564 out of 67 857) of the read pairs merged successfully. From the two top panels we can see the length distribution of the R1 and R2 reads. In this case all of the R1 and R2 reads are of equal length: 278 and 281 bases long, respectively. 
+
+The two bottom panels show the distribution of the length of the merged reads, and the distribution of the overlap length. In this example, almost all merged reads have a length of around 430 bases, and the length of the overlap is around 140 bases. 
+
+Together this tells us:
+
+* We should discard the very short reads, and we may set a threshold at 50 bases.
+* The rather long overlap means we may trim the 3' ends of the reads quite a lot and still maintain a long enough overlap to merge.
+
+
+## Optimizeing trimming settings
+
+### Optimize `truncqual` value
+
+The `vs_optimize_truncqual` function finds the optimal `truncqual` value for truncating reads, i.e. trimming at the 3' end. The `truncqual` value is the quality score threshold at which the reads are truncated, starting from the first base. The function tests a range of `truncqual` values and visualizes the effect on merging success. The optimal `truncqual` value is measured by the number of merged read pairs with a copy number above the number specified by `min_size`, after dereplication.
+
+The function may take some time to run, but you can view the progress through a progress bar in the console. 
+
+```{r optimize_truncqual, echo=FALSE, fig.keep='all', message=FALSE, warning=FALSE, results='hide'}
+
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  optimize_truncqual.tbl <- vs_optimize_truncqual(fastq_input = R1.tbl, 
+                                                  reverse = R2.tbl
+  )
+  
+  print(attr(optimize_truncqual.tbl, "plot"))
+  
+  break # Remove this line to loop through all samples
+}
+```
+
+For the first sample, the best `truncqual` value is 7. At this setting, 30 688 read pairs are successfully merged. 
+
+Although this number is lower compared to raw merging, the important difference is that only high-quality merged reads with copy number above 2 are considered here. Thus, trimming with `truncqual = 7` effectively retains higher-confidence reads at the cost of discarding lower-quality ones, which is exactly what we want.
+
+Why not merge all reads here? Because singelton reads often have sequencing errors, and this will affect the merging. We base the optimization entirely on multicopy or high-quality reads.
+
+### Optimize `truncee_rate` value
+
+Similarly, the `vs_optimize_truncee_rate` function optimizes the truncation with the `truncee_rate` parameter rather than `truncqual`. The `truncee_rate` value truncates the sequences so that their average expected error per base is not higher than the specified value. The function tests a range of `truncee_rate` values and visualizes the effect on merging success. The optimal `truncee_rate` value is measured by the number of merged read pairs with a copy number above the number specified by `min_size`, after dereplication.
+
+The function may take some time to run, but you can view the progress through a progress bar in the console. 
+
+```{r optimize_truncee_rate, echo=FALSE, fig.keep='all', message=FALSE, warning=FALSE, results='hide'}
+
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  optimize_truncee_rate.tbl <- vs_optimize_truncee_rate(fastq_input = R1.tbl, 
+                                                        reverse = R2.tbl
+  )
+  
+  print(attr(optimize_truncee_rate.tbl, "plot"))
+  
+  break # Remove this line to loop through all samples
+}
+```
+
+The optimal `truncee_rate` for this sample is 0.01, with 31 600 merged read pairs. Again, although fewer reads survive after trimming and merges compared to raw reads, the reads retained are of higher quality and reliability, which is critical for downstream clustering and analysis.
+
+Based on the results from the optimization plots, the `truncqual` and `truncee_rate` values can be set in the trimming and filtering function: `vs_fastx_trim_filt`.
+
+## Trimming and filtering reads
+
+Now we apply trimming and filtering using reasonable parameters. We will use the same `for`-loop as above to loop through all samples, but this time we will add the `vs_fastx_trim_filt` function to trim and filter all the reads. 
+
+```{r trim_filter}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  # Trim and filter
+  R1_filt.tbl <- vs_fastx_trim_filt(R1.tbl, R2.tbl,
+                                    minlen = 50,
+                                    truncee_rate = 0.01,
+                                    stripleft = 12)
+  R2_filt.tbl <- attr(R1_filt.tbl, "reverse")
+  
+  print(data.frame(attr(R1_filt.tbl, "statistics")))
+  break # Remove this line to loop through all samples
+}
+```
+
+Here we also chose to trim off 12 bases at the 5' end (`stripleft = 12`) of all reads since we saw above the read-quality was poorer at the first bases as well.
+
+We can again assess the read quality after trimming and filtering using `plot_base_quality`:
+
+```{r plot_base_quality_trimmed, message=FALSE, warning=FALSE}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  # Trim and filter
+  R1_filt.tbl <- vs_fastx_trim_filt(R1.tbl, R2.tbl,
+                                    minlen = 50,
+                                    truncee_rate = 0.01,
+                                    stripleft = 12)
+  R2_filt.tbl <- attr(R1_filt.tbl, "reverse")
+  
+  gg.obj <- plot_base_quality(R1_filt.tbl, R2_filt.tbl, show_overlap_box = TRUE)
+  print(gg.obj)
+  break # Remove this line to loop through all samples
+}
+```
+
+# Merging trimmed and filtered reads
+
+After trimming and filtering, we merge the read pairs using the `vs_fastq_mergepairs` function. We then expand our previous `for`-loop to include merging like this:
+
+```{r merge_trimmed_filtered}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  # Trim and filter
+  R1_filt.tbl <- vs_fastx_trim_filt(R1.tbl, R2.tbl,
+                                    minlen = 50,
+                                    truncee_rate = 0.01,
+                                    stripleft = 12)
+  R2_filt.tbl <- attr(R1_filt.tbl, "reverse")
+  
+  # Merge reads
+  merged.tbl <- vs_fastq_mergepairs(R1_filt.tbl, R2_filt.tbl)
+  
+  print(data.frame(attr(merged.tbl, "statistics")))
+  break # Remove this line to loop through all samples
+}
+```
+
+In the statistics table from the merging one can see the total number of read pairs, the number of merged reads, and length statistics about the reads before and after merging. For this sample 58 323 out of 60 977 read pairs were successfully merged. The mean read length after merging is approximately 405 bases, with a standard deviation of 2.3 bases. 
+
+# Dereplicating the merged reads
+
+The merged reads are dereplicated to remove redundancy using the `vs_fastx_uniques` function. We expand our `for`-loop to include dereplication, and because the next step, chimera detection, requires a FASTA object as input we will set the `output_format` to `"fasta"`. We also want to add the sample identifier to the header of each sequence, which is done by using the `sample` parameter.
+
+```{r dereplicate_merged_reads}
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  # Trim and filter
+  R1_filt.tbl <- vs_fastx_trim_filt(R1.tbl, R2.tbl,
+                                    minlen = 50,
+                                    truncee_rate = 0.01,
+                                    stripleft = 12)
+  R2_filt.tbl <- attr(R1_filt.tbl, "reverse")
+  
+  # Merge reads
+  merged.tbl <- vs_fastq_mergepairs(R1_filt.tbl, R2_filt.tbl)
+  
+  # Dereplicate
+  derep.tbl <- vs_fastx_uniques(fastx_input = merged.tbl,
+                                output_format = "fasta",
+                                sample = sample.tbl$sample_id[i])
+  
+  cat("Number of unique reads after dereplication: ", nrow(derep.tbl), "\n")
+  
+  break # Remove this line to loop through all samples
+}
+```
+
+## Plot size distribution
+
+An optional step is to plot the size (copy number) distribution of the dereplicated reads, using the `plot_size_dist` function:
+
+```{r plot_size_distribution_derep, warning=F}
+plot_size_dist(fastx_input = derep.tbl)
+```
+
+In this example, we can see that most of the dereplicated reads have a copy number of 1, and only a few reads have a copy number above 2.
+
+# Chimera detection
+
+Chimera detection and removal can be performed using the `vs_uchime_denovo` function. Again, we expand our `for`-loop to include chimera detection. 
+
+This is the last step in the preprocessing of the reads, and we will have to store our results somewhere for downstream analysis. 
+
+* **Option 1**: Store the results from each sample in a FASTA table. 
+* **Option 2**: Write the results to file. 
+
+Both options are demonstrated in the code bellow, but we will use the first option in this tutorial.
+
+```{r detect_chimeras, eval=FALSE}
+# Create empty table to store results
+all.tbl <- tibble()
+
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  # Trim and filter
+  R1_filt.tbl <- vs_fastx_trim_filt(R1.tbl, R2.tbl,
+                                    minlen = 50,
+                                    truncee_rate = 0.01,
+                                    stripleft = 12)
+  R2_filt.tbl <- attr(R1_filt.tbl, "reverse")
+  
+  # Merge reads
+  merged.tbl <- vs_fastq_mergepairs(R1_filt.tbl, R2_filt.tbl)
+  
+  # Dereplicate
+  derep.tbl <- vs_fastx_uniques(fastx_input = merged.tbl,
+                                output_format = "fasta",
+                                sample = sample.tbl$sample_id[i])
+  
+  # Detect chimeras
+  derep_wo_chimera.tbl <- vs_uchime_denovo(derep.tbl)
+  
+  # Store results for downstream analysis
+  
+  # Option 1: Append results to all.tbl
+  all.tbl <- bind_rows(all.tbl, derep_wo_chimera.tbl)
+  
+  # Option 2: Write results to file
+  # writeFasta(derep_wo_chimera.tbl,
+  #            out.file = file.path("fasta", # Change me
+  #                                 str_c(sample.tbl$sample_id[i], ".fasta")))
+  
+  # break # Remove this line to loop through all samples
+}
+```
+
+# Clustering
+
+Clustering sequences at a given identity threshold to create OTUs can be performed using the `vs_cluster_size` function. We will now use the table with all the reads from all samples from earlier (`all.tbl`). 
+
+If you wrote the results to file you need to read the files into R again:
+
+```{r load_cluster_input_files, eval=FALSE}
+files <- list.files("../tutorial_data/fasta", # Change me
+                    full.names = TRUE)
+all.tbl <- lapply(files, readFasta) %>% 
+  bind_rows()
+```
+
+Additionally, if you don't want to run the entire pipeline yourself, you can use the `all_tbl.txt.zip` object that is included in the example data.
+
+```{r load_all_tbl_zip, eval=TRUE, include=FALSE}
+all.tbl <- read_tsv(all_tbl_path)
+```
+
+
+Next we dereplicate the reads again, but this time we will use the `vs_fastx_uniques` function with the `output_format` set to `"fasta"` and `minuniquesize` set to `2`. This will create a FASTA table with all the unique sequences from all samples with a copy number above `2`. We will also use the `relabel` parameter, to relabel the headers of the unique sequences. 
+
+```{r dereplicate_all_sequences}
+all_derep.tbl <- vs_fastx_uniques(all.tbl,
+                                  minuniquesize = 2,
+                                  output_format = "fasta")
+
+head(all_derep.tbl)
+```
+
+Next we cluster the unique sequences at 95% identity using the `vs_cluster_size` function:
+
+```{r cluster_to_otus}
+sequence.tbl <- vs_cluster_size(all_derep.tbl, 
+                                id = 0.95, 
+                                relabel = "OTU")
+
+head(sequence.tbl)
+
+print(data.frame(attr(sequence.tbl, "statistics")))
+```
+
+To plot the distribution of the copy number for the different centroids, you can use the `plot_size_dist` function:
+
+```{r plot_size_distribution_otus, message=FALSE, warning=FALSE}
+plot_size_dist(sequence.tbl)
+```
+
+## Creating the OTU table
+
+Finally, we create the readcount table. This may take some time as we have to search with all reads against all OTU centroids using the `vs_usearch_global` function. To increase the speed you can run the function with multiple threads, but this depends on the computer you are using. 
+
+```{r create_readcount_table, eval=FALSE}
+readcount.tbl <- vs_usearch_global(fastx_input = all.tbl,
+                                   database = sequence.tbl,
+                                   otutabout = TRUE,
+                                   id = 0.95,
+                                   threads = 4 # Change to the number of threads you want to use
+)
+```
+
+# Assign taxonomy 
+
+Taxonomy can be assigned using either:
+
+* `vs_sintax` 
+* `vs_usearch_global` 
+
+Both require a reference database with taxonomy, which you can download from the [SILVA](https://www.arb-silva.de/download/arb-files/){target="blank"}. 
+
+## Alternative 1: `vs_sintax`
+
+The vs_sintax function can be used to assign taxonomy to the OTUs like this:
+
+```{r assign_taxonomy_sintax, eval=FALSE}
+tax.tbl <- vs_sintax(fasta_input = sequence.tbl,
+                     database = "SOME_DATABASE_FILE.fa.gz" # Change me
+                     ) 
+```
+
+## Alternative 2: `vs_usearch_global`
+
+The `vs_usearch_global` function be used to assign taxonomy to the OTUs. The format of the output table is a little different, we therefore do some data wrangling in order to make it the correct format for an `Rsearch` object.
+
+```{r assign_taxonomy_usearch_global, eval=FALSE}
+tax_v2.tbl <- vs_usearch_global(fastx_input = sequence.tbl,
+                                database = "SOME_DATABASE_FILE.fa.gz", # Change me
+                                id = 0.95,
+                                threads = 4
+)
+
+# Make correct format for Rsearch object
+tax_v2.tbl <- tax_v2.tbl |>
+  mutate(domain = str_extract(target, "d:([^,]+)")) |>
+  mutate(domain = str_remove_all(domain, "d:|\\(.+")) |>
+  mutate(phylum = str_extract(target, "p:([^,]+)")) |>
+  mutate(phylum = str_remove_all(phylum, "p:|\\(.+")) |>
+  mutate(class = str_extract(target, "c:([^,]+)")) |>
+  mutate(class = str_remove_all(class, "c:|\\(.+")) |>
+  mutate(order = str_extract(target, "o:([^,]+)")) |>
+  mutate(order = str_remove_all(order, "o:|\\(.+")) |>
+  mutate(family = str_extract(target, "f:([^,]+)")) |>
+  mutate(family = str_remove_all(family, "f:|\\(.+")) |>
+  mutate(genus = str_extract(target, "g:([^,]+)")) |>
+  mutate(genus = str_remove_all(genus, "g:|\\(.+")) |>
+  mutate(species = str_extract(target, "s:([^,]+)")) |>
+  mutate(species = str_remove_all(species, "s:|\\(.+")) |>
+  mutate(Header = query) |>
+  right_join(sequence.tbl, by = "Header")
+```
+
+# Saving processed data
+
+To avoid having to run this pipeline again in the future it can be a good idea to save the current tables as an `RData` object, but this is optional:
+
+```{r save_processed_data, eval=FALSE}
+save(sample.tbl, 
+     sequence.tbl, 
+     readcount.tbl, 
+     tax.tbl,
+     file = "tutorial_data_processed.RData") # Change me
+```
+
+# Full pipeline (short version)
+
+If you want to run the pipeline without all the intermediate steps, you can use the pipe operator in R:
+
+```{r full_pipeline_run, eval=FALSE}
+all.tbl <- tibble()
+
+for(i in 1:nrow(sample.tbl)){
+  R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
+  R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
+  
+  derep_wo_chimera.tbl <- 
+    vs_fastx_trim_filt(R1.tbl, R2.tbl,
+                       minlen = 50,
+                       maxee_rate = 0.01,
+                       truncee_rate = 0.035,
+                       stripleft = 12) %>% 
+    vs_fastq_mergepairs() %>%
+    vs_fastx_uniques(output_format = "fasta",
+                     sample = sample.tbl$sample_id[i]) %>%
+    vs_uchime_denovo()
+  
+  all.tbl <- bind_rows(all.tbl, derep_wo_chimera.tbl)
+}
+
+all_derep.tbl <- vs_fastx_uniques(all.tbl,
+                                  minuniquesize = 2,
+                                  relabel = "OTU",
+                                  output_format = "fasta")
+
+sequence.tbl <- vs_cluster_size(all_derep.tbl)
+
+readcount.tbl <- vs_usearch_global(fastx_input = all.tbl,
+                                   database = sequence.tbl,
+                                   otutabout = TRUE,
+                                   id = 0.95,
+                                   threads = 4
+)
+
+tax.tbl <- vs_sintax(fasta_input = sequence.tbl,
+                     database = "example_database.fa.gz") # Change me
+)
+```
+
+# Handoff to `phyloseq`
+
+The [phyloseq R package](https://joey711.github.io/phyloseq/){target="blank"} is a powerful tool for analyzing microbiome data. We will now show how to import the tables produced in `Rsearch` into `phyloseq`.
+
+The easiest way to hand off `Rsearch` data to `phyloseq` is to first use the `rsearch_obj` function to create an `Rsearch` object. The `Rsearch` object can then be converted to a `phyloseq` object using the `rsearch2phyloseq` function:
+
+```{r handoff_to_phyloseq, eval=FALSE}
+# Create Rsearch object
+rsearch_obj <- rsearch_obj(readcount_data = readcount.tbl,
+                           sequence_data = tax.tbl,
+                           sample_data = sample.tbl,
+                           sample_id_col = "sample_id")
+
+# Convert to phyloseq object
+phy_obj <- rsearch2phyloseq(rsearch_obj, 
+                            sample_id_col = "sample_id")
 ```
