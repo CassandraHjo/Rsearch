@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_base_quality.R
 \name{plot_base_quality}
 \alias{plot_base_quality}
-\title{Display quality scores per position for FASTQ reads}
+\title{Plot quality scores per position for FASTQ reads}
 \usage{
 plot_base_quality(
   fastq_input,

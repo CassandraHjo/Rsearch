@@ -3,7 +3,7 @@
 \name{vs_optimize_truncee_rate}
 \alias{vs_optimize_truncee_rate}
 \alias{optimize_truncee_rate}
-\title{Optimize truncation with truncee_rate for optimal read merging}
+\title{Optimize read truncation with truncee_rate}
 \usage{
 vs_optimize_truncee_rate(
   fastq_input,

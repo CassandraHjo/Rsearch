@@ -1,4 +1,4 @@
-#' Optimize truncation with truncee_rate for optimal read merging
+#' Optimize read truncation with truncee_rate
 #'
 #' @description \code{vs_optimize_truncee_rate} optimizes the truncation
 #' parameter \code{truncee_rate} to achieve the best possible merging results.

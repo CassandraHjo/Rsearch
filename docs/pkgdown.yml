@@ -3,7 +3,7 @@ pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   tutorial: tutorial.html
-last_built: 2025-05-07T13:12Z
+last_built: 2025-05-08T06:58Z
 urls:
   reference: https://cassandrahjo.github.io/Rsearch/reference
   article: https://cassandrahjo.github.io/Rsearch/articles

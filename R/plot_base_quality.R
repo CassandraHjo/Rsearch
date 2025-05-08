@@ -1,4 +1,4 @@
-#' Display quality scores per position for FASTQ reads
+#' Plot quality scores per position for FASTQ reads
 #'
 #' @description
 #' Generates a plot displaying the quality scores for each position in FASTQ

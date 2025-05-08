@@ -2,6 +2,7 @@ url: https://cassandrahjo.github.io/Rsearch
 
 template:
   bootstrap: 5
+  bootswatch: litera
 
 navbar:
   structure:
