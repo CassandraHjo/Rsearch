@@ -1,6 +1,6 @@
 test_that("vs_uchime_denovo errors if only one output file is given", {
 
-  fasta_input <- test_path("testdata", "sample1", "R2_sample1.fa")
+  fasta_input <- test_path("testdata", "R2.fasta")
   nonchimeras <- "some_file.fa"
   chimeras <- NULL
 
@@ -18,12 +18,12 @@ test_that("error when input file is missing", {
 
 test_that("vs_uchime_denovo returns tibble with chimeras and stats", {
 
-  R1 <- test_path("testdata", "output", "derep_R1_sample1.fa")
+  R1 <- test_path("testdata", "output", "R1_derep.fasta")
 
   out <- vs_uchime_denovo(fasta_input = R1)
 
   expected_df <- readRDS(test_path(
-    "testdata", "output", "sample1_uchime_denovo_default_fasta_file.rds"))
+    "testdata", "output", "uchime_denovo_fa_file.rds"))
 
   expect_s3_class(out, "tbl_df")
   expect_true("chimeras" %in% names(attributes(out)))
@@ -33,12 +33,12 @@ test_that("vs_uchime_denovo returns tibble with chimeras and stats", {
 
 test_that("vs_uchime_denovo works with tibble input", {
 
-  R1 <- microseq::readFasta(test_path("testdata", "output", "derep_R1_sample1.fa"))
+  R1 <- microseq::readFasta(test_path("testdata", "output", "R1_derep.fasta"))
 
   out <- vs_uchime_denovo(fasta_input = R1)
 
   expected_df <- readRDS(test_path(
-    "testdata", "output", "sample1_uchime_denovo_default_fasta_tibble.rds"))
+    "testdata", "output", "uchime_denovo_fa_tibble.rds"))
 
   expect_s3_class(out, "tbl_df")
   expect_true("chimeras" %in% names(attributes(out)))
@@ -48,7 +48,7 @@ test_that("vs_uchime_denovo works with tibble input", {
 
 test_that("vs_uchime_denovo writes output files when paths are specified", {
 
-  R1 <- test_path("testdata", "output", "derep_R1_sample1.fa")
+  R1 <- test_path("testdata", "output", "R1_derep.fasta")
 
   tmp_nonchimeras <- withr::local_tempfile()
   tmp_chimeras <- withr::local_tempfile()
@@ -64,7 +64,7 @@ test_that("vs_uchime_denovo writes output files when paths are specified", {
 
 test_that("vs_uchime_denovo handles optional arguments", {
 
-  R1 <- test_path("testdata", "output", "derep_R1_sample1.fa")
+  R1 <- test_path("testdata", "output", "R1_derep.fasta")
   log_file <- withr::local_tempfile()
 
   out <- vs_uchime_denovo(
@@ -76,7 +76,7 @@ test_that("vs_uchime_denovo handles optional arguments", {
   )
 
   expected_df <- readRDS(test_path(
-    "testdata", "output", "sample1_uchime_denovo_optional_arguments.rds"))
+    "testdata", "output", "uchime_denovo_optional_args.rds"))
 
   expect_s3_class(out, "tbl_df")
   expect_true("chimeras" %in% names(attributes(out)))

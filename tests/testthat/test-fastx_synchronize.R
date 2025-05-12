@@ -1,7 +1,7 @@
 test_that("error when wrong file_format", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   file_format <- "fastx"
 
   expect_error(fastx_synchronize(file1 = file1,
@@ -12,8 +12,8 @@ test_that("error when wrong file_format", {
 
 test_that("error if outputfiles are incorrectly specified", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   file_format <- "fastq"
   file1_out <- "output1.fq"
   file2_out <- NULL
@@ -29,8 +29,8 @@ test_that("error if outputfiles are incorrectly specified", {
 
 test_that("error if input is neither character or NULL", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   file_format <- "fastq"
   file1_out <- 1
   file2_out <- 1
@@ -54,9 +54,9 @@ test_that("error if input is neither character or NULL", {
 
 test_that("error when file1 has incorrect columns if input is tibble and file_format = 'fastq'", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
 
   file_format <- "fastq"
 
@@ -68,8 +68,8 @@ test_that("error when file1 has incorrect columns if input is tibble and file_fo
 
 test_that("error when file2 has incorrect columns if input is tibble and file_format = 'fastq'", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   file_format <- "fastq"
@@ -82,9 +82,9 @@ test_that("error when file2 has incorrect columns if input is tibble and file_fo
 
 test_that("error when file1 has incorrect columns if input is tibble and file_format = 'fasta'", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(Quality)
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
 
   file_format <- "fasta"
 
@@ -96,8 +96,8 @@ test_that("error when file1 has incorrect columns if input is tibble and file_fo
 
 test_that("error when file2 has incorrect columns if input is tibble and file_format = 'fasta'", {
 
-  file1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  file2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
+  file1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  file2 <- readRDS(test_path("testdata", "R2_fastq_df.rds")) |>
     dplyr::select(Quality)
 
   file_format <- "fasta"
@@ -111,7 +111,7 @@ test_that("error when file2 has incorrect columns if input is tibble and file_fo
 test_that("error when input file1 does not exist", {
 
   file1 <- "some_file.fq"
-  file2 <- test_path("testdata", "sample1", "R2_sample1.fq")
+  file2 <- test_path("testdata", "R2.fastq")
   file_format <- "fastq"
 
   expect_error(fastx_synchronize(file1 = file1,
@@ -122,7 +122,7 @@ test_that("error when input file1 does not exist", {
 
 test_that("error when input file2 does not exist", {
 
-  file1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  file1 <- test_path("testdata", "R1.fastq")
   file2 <- "some_file.fq"
   file_format <- "fastq"
 
@@ -134,8 +134,8 @@ test_that("error when input file2 does not exist", {
 
 test_that("two fasta files can be synchronized, and return fasta tibble with attribute", {
 
-  file1 <- test_path("testdata", "sample1", "R1_sample1.fa")
-  file2 <- test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fa")
+  file1 <- test_path("testdata", "R1.fasta")
+  file2 <- test_path("testdata", "R2_reduced.fasta")
   file_format <- "fasta"
   file1_out <- NULL
   file2_out <- NULL
@@ -150,16 +150,16 @@ test_that("two fasta files can be synchronized, and return fasta tibble with att
   sync_file2 <- attr(sync_file1, "reverse")
 
   expect_equal(sync_file1,
-               readRDS(test_path("testdata", "output", "sync_sample1_fasta.rds")))
+               readRDS(test_path("testdata", "output", "sync_fa_files_fa_tibble.rds")))
 
   expect_equal(sync_file2,
-               attr(readRDS(test_path("testdata", "output", "sync_sample1_fasta.rds")), "reverse"))
+               attr(readRDS(test_path("testdata", "output", "sync_fa_files_fa_tibble.rds")), "reverse"))
 })
 
 test_that("two fastq files can be synchronized, and return fastq tibble with attribute", {
 
-  file1 <- test_path("testdata", "sample1", "R1_sample1.fq")
-  file2 <- test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fq")
+  file1 <- test_path("testdata", "R1.fastq")
+  file2 <- test_path("testdata", "R2_reduced.fastq")
   file_format <- "fastq"
   file1_out <- NULL
   file2_out <- NULL
@@ -174,16 +174,16 @@ test_that("two fastq files can be synchronized, and return fastq tibble with att
   sync_file2 <- attr(sync_file1, "reverse")
 
   expect_equal(sync_file1,
-               readRDS(test_path("testdata", "output", "sync_sample1_fastq.rds")))
+               readRDS(test_path("testdata", "output", "sync_fq_files_fq_tibble.rds")))
 
   expect_equal(sync_file2,
-               attr(readRDS(test_path("testdata", "output", "sync_sample1_fastq.rds")), "reverse"))
+               attr(readRDS(test_path("testdata", "output", "sync_fq_files_fq_tibble.rds")), "reverse"))
 })
 
 test_that("two fasta files can be synchronized, and return two fasta files", {
 
-  file1 <- test_path("testdata", "sample1", "R1_sample1.fa")
-  file2 <- test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fa")
+  file1 <- test_path("testdata", "R1.fasta")
+  file2 <- test_path("testdata", "R2_reduced.fasta")
   file_format <- "fasta"
   file1_out <- withr::local_tempfile()
   file2_out <- withr::local_tempfile()
@@ -198,16 +198,16 @@ test_that("two fasta files can be synchronized, and return two fasta files", {
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(file1_out),
-               microseq::readFasta(test_path("testdata", "output", "R1_sample1_sync.fa")))
+               microseq::readFasta(test_path("testdata", "output", "R1_sync.fasta")))
 
   expect_equal(microseq::readFasta(file2_out),
-               microseq::readFasta(test_path("testdata", "output", "R2_sample1_sync.fa")))
+               microseq::readFasta(test_path("testdata", "output", "R2_sync.fasta")))
 })
 
 test_that("two fastq files can be synchronized, and return two fastq files", {
 
-  file1 <- test_path("testdata", "sample1", "R1_sample1.fq")
-  file2 <- test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fq")
+  file1 <- test_path("testdata", "R1.fastq")
+  file2 <- test_path("testdata", "R2_reduced.fastq")
   file_format <- "fastq"
   file1_out <- withr::local_tempfile()
   file2_out <- withr::local_tempfile()
@@ -222,16 +222,16 @@ test_that("two fastq files can be synchronized, and return two fastq files", {
   expect_null(return_value)
 
   expect_equal(microseq::readFastq(file1_out),
-               microseq::readFastq(test_path("testdata", "output", "R1_sample1_sync.fq")))
+               microseq::readFastq(test_path("testdata", "output", "R1_sync.fastq")))
 
   expect_equal(microseq::readFastq(file2_out),
-               microseq::readFastq(test_path("testdata", "output", "R2_sample1_sync.fq")))
+               microseq::readFastq(test_path("testdata", "output", "R2_sync.fastq")))
 })
 
 test_that("two fasta tibbles can be synchronized, and return two fasta files", {
 
-  file1 <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
-  file2 <- microseq::readFasta(test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fa"))
+  file1 <- microseq::readFasta(test_path("testdata", "R1.fasta"))
+  file2 <- microseq::readFasta(test_path("testdata", "R2_reduced.fasta"))
   file_format <- "fasta"
   file1_out <- withr::local_tempfile()
   file2_out <- withr::local_tempfile()
@@ -246,16 +246,16 @@ test_that("two fasta tibbles can be synchronized, and return two fasta files", {
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(file1_out),
-               microseq::readFasta(test_path("testdata", "output", "R1_sample1_sync.fa")))
+               microseq::readFasta(test_path("testdata", "output", "R1_sync.fasta")))
 
   expect_equal(microseq::readFasta(file2_out),
-               microseq::readFasta(test_path("testdata", "output", "R2_sample1_sync.fa")))
+               microseq::readFasta(test_path("testdata", "output", "R2_sync.fasta")))
 })
 
 test_that("two fastq tibbles can be synchronized, and return two fastq files", {
 
-  file1 <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  file2 <- microseq::readFastq(test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fq"))
+  file1 <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  file2 <- microseq::readFastq(test_path("testdata", "R2_reduced.fastq"))
   file_format <- "fastq"
   file1_out <- withr::local_tempfile()
   file2_out <- withr::local_tempfile()
@@ -270,16 +270,16 @@ test_that("two fastq tibbles can be synchronized, and return two fastq files", {
   expect_null(return_value)
 
   expect_equal(microseq::readFastq(file1_out),
-               microseq::readFastq(test_path("testdata", "output", "R1_sample1_sync.fq")))
+               microseq::readFastq(test_path("testdata", "output", "R1_sync.fastq")))
 
   expect_equal(microseq::readFastq(file2_out),
-               microseq::readFastq(test_path("testdata", "output", "R2_sample1_sync.fq")))
+               microseq::readFastq(test_path("testdata", "output", "R2_sync.fastq")))
 })
 
 test_that("two fasta tibbles can be synchronized, and return fasta tibble with attribute", {
 
-  file1 <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
-  file2 <- microseq::readFasta(test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fa"))
+  file1 <- microseq::readFasta(test_path("testdata", "R1.fasta"))
+  file2 <- microseq::readFasta(test_path("testdata", "R2_reduced.fasta"))
   file_format <- "fasta"
   file1_out <- NULL
   file2_out <- NULL
@@ -293,17 +293,17 @@ test_that("two fasta tibbles can be synchronized, and return fasta tibble with a
   sync_file2 <- attr(sync_file1, "reverse")
 
   expect_equal(sync_file1,
-               readRDS(test_path("testdata", "output", "sync_sample1_fasta.rds")))
+               readRDS(test_path("testdata", "output", "sync_fa_files_fa_tibble.rds")))
 
   expect_equal(sync_file2,
-               attr(readRDS(test_path("testdata", "output", "sync_sample1_fasta.rds")), "reverse"))
+               attr(readRDS(test_path("testdata", "output", "sync_fa_files_fa_tibble.rds")), "reverse"))
 
 })
 
 test_that("two fastq tibbles can be synchronized, and return fastq tibble with attribute", {
 
-  file1 <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  file2 <- microseq::readFastq(test_path("testdata", "sample1", "reduced_files", "R2_sample1_reduced.fq"))
+  file1 <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  file2 <- microseq::readFastq(test_path("testdata", "R2_reduced.fastq"))
   file_format <- "fastq"
   file1_out <- NULL
   file2_out <- NULL
@@ -317,9 +317,9 @@ test_that("two fastq tibbles can be synchronized, and return fastq tibble with a
   sync_file2 <- attr(sync_file1, "reverse")
 
   expect_equal(sync_file1,
-               readRDS(test_path("testdata", "output", "sync_sample1_fastq.rds")))
+               readRDS(test_path("testdata", "output", "sync_fq_files_fq_tibble.rds")))
 
   expect_equal(sync_file2,
-               attr(readRDS(test_path("testdata", "output", "sync_sample1_fastq.rds")), "reverse"))
+               attr(readRDS(test_path("testdata", "output", "sync_fq_files_fq_tibble.rds")), "reverse"))
 
 })

@@ -1,6 +1,6 @@
 test_that("plot_ee_rate_dist errors when tibble is missing required columns", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   expect_error(plot_ee_rate_dist(fastq_input = R1),
@@ -9,7 +9,7 @@ test_that("plot_ee_rate_dist errors when tibble is missing required columns", {
 
 test_that("plot_ee_rate_dist works with FASTQ file path", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   ee_plot <- plot_ee_rate_dist(fastq_input = R1)
 
@@ -18,7 +18,7 @@ test_that("plot_ee_rate_dist works with FASTQ file path", {
 
 test_that("plot_ee_rate_dist works with in-memory tibble", {
 
-  R1 <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  R1 <- microseq::readFastq(test_path("testdata", "R1.fastq"))
 
   ee_plot <- plot_ee_rate_dist(fastq_input = R1)
 
@@ -27,7 +27,7 @@ test_that("plot_ee_rate_dist works with in-memory tibble", {
 
 test_that("plot_ee_rate_dist uses custom bin count", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
   # This test only checks that it doesn't error
   ee_plot <- plot_ee_rate_dist(fastq_input = R1, n_bins = 10)
 
@@ -36,7 +36,7 @@ test_that("plot_ee_rate_dist uses custom bin count", {
 
 test_that("plot_ee_rate_dist works with no title", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   ee_plot <- plot_ee_rate_dist(fastq_input = R1, plot_title = "")
 

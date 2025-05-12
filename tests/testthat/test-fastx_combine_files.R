@@ -1,6 +1,6 @@
 test_that("error when wrong file_format", {
 
-  files_dir <- test_path("testdata")
+  files_dir <- test_path("testdata", "combine_data")
   file_format <- "fastx"
 
   expect_error(fastx_combine_files(files_dir = files_dir,
@@ -21,7 +21,7 @@ test_that("error when directory does not exist", {
 test_that("error when no files are found in specified folder", {
 
   files_dir <- test_path("testdata", "empty_dir")
-  file_ext <- ".fa"
+  file_ext <- ".fasta"
   file_format <- "fasta"
 
   expect_error(fastx_combine_files(files_dir = files_dir,
@@ -32,9 +32,9 @@ test_that("error when no files are found in specified folder", {
 
 test_that("two fastq files can be combined, and written to fastq file", {
 
-  files_dir <- test_path("testdata", "sample1")
+  files_dir <- test_path("testdata", "combine_data")
   output_file <- withr::local_tempfile()
-  file_ext <- ".fq"
+  file_ext <- ".fastq"
   file_format <- "fastq"
 
   fastx_combine_files(files_dir = files_dir,
@@ -43,30 +43,30 @@ test_that("two fastq files can be combined, and written to fastq file", {
                       file_format = file_format)
 
   expect_equal(microseq::readFastq(output_file),
-               microseq::readFastq(test_path("testdata", "output", "combine_sample1.fq")))
+               microseq::readFastq(test_path("testdata", "output", "combine.fastq")))
 
 })
 
 test_that("two fastq files can be combined, and returned as fastq tibble", {
 
-  files_dir <- test_path("testdata", "sample1")
+  files_dir <- test_path("testdata", "combine_data")
   output_file <- NULL
-  file_ext <- ".fq"
+  file_ext <- ".fastq"
   file_format <- "fastq"
 
   expect_equal(fastx_combine_files(files_dir = files_dir,
                                    output_file = output_file,
                                    file_ext = file_ext,
                                    file_format = file_format),
-               microseq::readFastq(test_path("testdata", "output", "combine_sample1.fq")))
+               microseq::readFastq(test_path("testdata", "output", "combine.fastq")))
 
 })
 
 test_that("two fasta files can be combined, and written to fasta file", {
 
-  files_dir <- test_path("testdata", "sample1")
+  files_dir <- test_path("testdata", "combine_data")
   output_file <- withr::local_tempfile()
-  file_ext <- ".fa"
+  file_ext <- ".fasta"
   file_format <- "fasta"
 
   return_value <- fastx_combine_files(files_dir = files_dir,
@@ -77,21 +77,21 @@ test_that("two fasta files can be combined, and written to fasta file", {
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(output_file),
-               microseq::readFasta(test_path("testdata", "output", "combine_sample1.fa")))
+               microseq::readFasta(test_path("testdata", "output", "combine.fasta")))
 
 })
 
 test_that("two fasta files can be combined, and returned as fasta tibble", {
 
-  files_dir <- test_path("testdata", "sample1")
+  files_dir <- test_path("testdata", "combine_data")
   output_file <- NULL
-  file_ext <- ".fa"
+  file_ext <- ".fasta"
   file_format <- "fasta"
 
   expect_equal(fastx_combine_files(files_dir = files_dir,
                                    output_file = output_file,
                                    file_ext = file_ext,
                                    file_format = file_format),
-               microseq::readFasta(test_path("testdata", "output", "combine_sample1.fa")))
+               microseq::readFasta(test_path("testdata", "output", "combine.fasta")))
 
 })

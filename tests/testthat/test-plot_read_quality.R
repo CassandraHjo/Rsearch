@@ -1,6 +1,6 @@
 test_that("error when fastq_input tibble is missing required columns", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   expect_error(plot_read_quality(R1),
@@ -9,7 +9,7 @@ test_that("error when fastq_input tibble is missing required columns", {
 
 test_that("plot_read_quality works with FASTQ file path (default args)", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   read_plot <- plot_read_quality(fastq_input = R1)
 
@@ -18,7 +18,7 @@ test_that("plot_read_quality works with FASTQ file path (default args)", {
 
 test_that("plot_read_quality works with in-memory FASTQ tibble", {
 
-  R1 <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
+  R1 <- microseq::readFastq(test_path("testdata", "R1.fastq"))
 
   read_plot <- plot_read_quality(fastq_input = R1)
 
@@ -27,7 +27,7 @@ test_that("plot_read_quality works with in-memory FASTQ tibble", {
 
 test_that("plot_read_quality switches to expected error rate if specified", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   read_plot <- plot_read_quality(fastq_input = R1,
                                  use_ee_rate = TRUE)
@@ -37,7 +37,7 @@ test_that("plot_read_quality switches to expected error rate if specified", {
 
 test_that("plot_read_quality works with plot_title = FALSE", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   read_plot <- plot_read_quality(fastq_input = R1,
                                  plot_title = FALSE)
@@ -47,7 +47,7 @@ test_that("plot_read_quality works with plot_title = FALSE", {
 
 test_that("plot_read_quality respects alpha transparency setting", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   read_plot <- plot_read_quality(fastq_input = R1,
                                  alpha = 0.1)

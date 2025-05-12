@@ -1,6 +1,6 @@
 test_that("error when wrong strand", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
   strand <- "wrong_input"
 
@@ -20,7 +20,7 @@ test_that("error when input fasta_input does not exist", {
 
 test_that("error when both outputs are specified", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
   otutabout <- withr::local_tempfile()
 
@@ -32,7 +32,7 @@ test_that("error when both outputs are specified", {
 
 test_that("vs_cluster_unoise works with relabel_sha1", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
 
   expect_invisible(

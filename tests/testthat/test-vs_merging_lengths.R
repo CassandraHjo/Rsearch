@@ -1,9 +1,9 @@
 test_that("error when fastq_input has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
 
   expect_error(vs_merging_lengths(fastq_input = R1,
                                   reverse = R2),
@@ -12,9 +12,9 @@ test_that("error when fastq_input has incorrect columns if input is tibble", {
 
 test_that("error when reverse has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   expect_error(vs_merging_lengths(fastq_input = R1,
@@ -24,13 +24,13 @@ test_that("error when reverse has incorrect columns if input is tibble", {
 
 test_that("get merging lengths from merging two fastq files", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
 
   merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
                                            reverse = reverse)
 
-  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_files.rds"))
+  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_fq_files.rds"))
 
   expect_s3_class(attr(merging_lengths_df, "plot"), "ggplot")
 
@@ -43,14 +43,14 @@ test_that("get merging lengths from merging two fastq files", {
 
 test_that("get merging lengths from merging two fastq tibbles", {
 
-  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
 
   merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input,
                                            reverse = reverse,
                                            plot_title = FALSE)
 
-  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_sample1_fastq_tibbles.rds"))
+  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_fq_tibbles.rds"))
 
   expect_s3_class(attr(merging_lengths_df, "plot"), "ggplot")
 
@@ -64,8 +64,8 @@ test_that("get merging lengths from merging two fastq tibbles", {
 
 test_that("vs_merging_lengths creates histograms when R1 and R2 lengths vary", {
   # Load sample data
-  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
 
   # Artificially shorten half the sequences in both inputs to force multiple lengths
   n_half <- floor(nrow(fastq_input) / 2)

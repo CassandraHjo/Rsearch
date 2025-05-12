@@ -1,6 +1,6 @@
 test_that("error when fastq_input has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   expect_error(plot_base_quality(fastq_input = R1),
@@ -9,9 +9,9 @@ test_that("error when fastq_input has incorrect columns if input is tibble", {
 
 test_that("error when reverse has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   expect_error(plot_base_quality(fastq_input = R1,
@@ -21,8 +21,8 @@ test_that("error when reverse has incorrect columns if input is tibble", {
 
 test_that("error if invalid quantile range", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
-  R2 <- test_path("testdata", "sample1", "R2_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
+  R2 <- test_path("testdata", "R2.fastq")
 
   expect_error(plot_base_quality(fastq_input = R1,
                                  reverse = R2,
@@ -39,7 +39,7 @@ test_that("error if invalid quantile range", {
 
 test_that("plot_base_quality handles forward FASTQ input as file", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   quality_plot <- plot_base_quality(fastq_input = R1)
 
@@ -48,8 +48,8 @@ test_that("plot_base_quality handles forward FASTQ input as file", {
 
 test_that("plot_base_quality handles reverse input correctly", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
-  R2 <- test_path("testdata", "sample1", "R2_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
+  R2 <- test_path("testdata", "R2.fastq")
 
   quality_plot <- plot_base_quality(fastq_input = R1,
                                     reverse = R2)
@@ -59,7 +59,7 @@ test_that("plot_base_quality handles reverse input correctly", {
 
 test_that("plot_base_quality disables title correctly", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   quality_plot <- plot_base_quality(fastq_input = R1,
                                     plot_title = "")
@@ -68,7 +68,7 @@ test_that("plot_base_quality disables title correctly", {
 
 test_that("plot_base_quality only shows mean line", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   quality_plot <- plot_base_quality(fastq_input = R1,
                                     show_median = FALSE)
@@ -78,8 +78,8 @@ test_that("plot_base_quality only shows mean line", {
 
 test_that("plot_base_quality works with in-memory tibble input", {
 
-  R1 <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  R2 <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  R1 <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  R2 <- microseq::readFastq(test_path("testdata", "R2.fastq"))
 
   quality_plot <- plot_base_quality(fastq_input = R1,
                                     reverse = R2)
@@ -89,7 +89,7 @@ test_that("plot_base_quality works with in-memory tibble input", {
 
 test_that("plot_base_quality returns ggplot with neither median nor mean", {
 
-  R1 <- test_path("testdata", "sample1", "R1_sample1.fq")
+  R1 <- test_path("testdata", "R1.fastq")
 
   quality_plot <- plot_base_quality(fastq_input = R1,
                                     show_median = FALSE,

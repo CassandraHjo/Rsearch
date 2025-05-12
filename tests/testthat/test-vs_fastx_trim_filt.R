@@ -1,7 +1,7 @@
 test_that("error when wrong output_format", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fastx"
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
@@ -12,8 +12,8 @@ test_that("error when wrong output_format", {
 
 test_that("error when output_format is fastq, and fastaout and fastaout_rev are defined", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fastq"
   fastaout <- "some_file.fa"
   fastaout_rev <- "some_other_file.fa"
@@ -28,7 +28,7 @@ test_that("error when output_format is fastq, and fastaout and fastaout_rev are 
 
 test_that("error when input is fasta and output_format is fastq", {
 
-  fastx_input <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
+  fastx_input <- readRDS(test_path("testdata", "R1_fasta_df.rds"))
   output_format <- "fastq"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
@@ -38,8 +38,8 @@ test_that("error when input is fasta and output_format is fastq", {
 
 test_that("error when output_format is 'fasta', and fastqout and fastqout_rev are defined", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fasta"
   fastqout <- "some_file.fq"
   fastqout_rev <- "some_other_file.fq"
@@ -54,8 +54,8 @@ test_that("error when output_format is 'fasta', and fastqout and fastqout_rev ar
 
 test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fasta_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fasta_df.rds"))
   output_format <- "fasta"
   fastaout <- "some_file.fa"
   fastaout_rev <- NULL
@@ -70,8 +70,8 @@ test_that("error when reverse is specified, but output files are not both NULL o
 
 test_that("error when reverse is specified, but output files are not both NULL or both character strings", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fastq"
   fastqout <- "some_file.fq"
   fastqout_rev <- NULL
@@ -86,10 +86,10 @@ test_that("error when reverse is specified, but output files are not both NULL o
 
 test_that("error when fastx_input has incorrect columns if input is fastq tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1, reverse = R2),
                "FASTQ object must contain columns: Header, Sequence, Quality")
@@ -97,9 +97,9 @@ test_that("error when fastx_input has incorrect columns if input is fastq tibble
 
 test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1, reverse = R2),
@@ -108,10 +108,10 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
 test_that("error when fastx_input has incorrect columns if input is fasta tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fasta_df.rds")) |>
     dplyr::select(-Header)
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fasta_df.rds"))
 
   output_format <- "fasta"
 
@@ -123,9 +123,9 @@ test_that("error when fastx_input has incorrect columns if input is fasta tibble
 
 test_that("error when reverse has incorrect columns if input is fastq tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fasta_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fasta_df.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds")) |>
+  R2 <- readRDS(test_path("testdata", "R2_fasta_df.rds")) |>
     dplyr::select(-Header)
 
   output_format <- "fasta"
@@ -141,7 +141,7 @@ test_that("error when reverse has incorrect columns if input is fastq tibble", {
 test_that("error when input file does not exist when output_format is fastq", {
 
   fastx_input <- "some_file.fq"
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  reverse <- test_path("testdata", "R2.fastqq")
   output_format <- "fastq"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
@@ -152,7 +152,7 @@ test_that("error when input file does not exist when output_format is fastq", {
 
 test_that("error when reverse file does not exist when output_format is fastq", {
 
-  fastx_input <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastx_input <- test_path("testdata", "R2.fastq")
   reverse <- "some_file.fq"
   output_format <- "fastq"
 
@@ -165,7 +165,7 @@ test_that("error when reverse file does not exist when output_format is fastq", 
 test_that("error when input file does not exist when output_format is fasta", {
 
   fastx_input <- "some_file.fa"
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fa")
+  reverse <- test_path("testdata", "R2.fasta")
   output_format <- "fasta"
 
   expect_error(vs_fastx_trim_filt(fastx_input = fastx_input,
@@ -176,7 +176,7 @@ test_that("error when input file does not exist when output_format is fasta", {
 
 test_that("error when reverse file does not exist when output_format is fasta", {
 
-  fastx_input <- test_path("testdata", "sample1", "R2_sample1.fa")
+  fastx_input <- test_path("testdata", "R2.fasta")
   reverse <- "some_file.fa"
   output_format <- "fasta"
 
@@ -190,8 +190,8 @@ test_that("error when reverse file does not exist when output_format is fasta", 
 
 test_that("error if reverse input is of type fasta and output_format is fastq", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fasta_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fasta_df.rds"))
   output_format <- "fastq"
 
   expect_error(vs_fastx_trim_filt(fastx_input = R1,
@@ -202,8 +202,8 @@ test_that("error if reverse input is of type fasta and output_format is fastq", 
 
 test_that("trim/filter fastq sequences from two files, and return two fastq files", {
 
-  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastx_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastqout <- withr::local_tempfile()
   fastqout_rev <- withr::local_tempfile()
   output_format <- "fastq"
@@ -225,16 +225,16 @@ test_that("trim/filter fastq sequences from two files, and return two fastq file
   expect_true(file.exists(log_file))
 
   expect_equal(microseq::readFastq(fastqout),
-               microseq::readFastq(test_path("testdata", "output", "R1_trim_filt_sample1.fq")))
+               microseq::readFastq(test_path("testdata", "output", "R1_trim_filt_fq_files.fastq")))
 
   expect_equal(microseq::readFastq(fastqout_rev),
-               microseq::readFastq(test_path("testdata", "output", "R2_trim_filt_sample1.fq")))
+               microseq::readFastq(test_path("testdata", "output", "R2_trim_filt_fq_files.fastq")))
 })
 
 test_that("trim/filter fastq sequences from two files, and return fastq tibble", {
 
-  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastx_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   output_format <- "fastq"
   truncee <- 0.01
   sample <- "sample1"
@@ -246,13 +246,13 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble",
                                           sample = sample)
 
   expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_fastq_files.rds")))
+               readRDS(test_path("testdata", "output", "trim_filt_fq_files.rds")))
 
 })
 
 test_that("trim/filter fastq sequences from one file, and return fastq tibble", {
 
-  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
+  fastx_input <- test_path("testdata", "R1.fastq")
   output_format <- "fastq"
   truncee <- 0.01
 
@@ -261,14 +261,14 @@ test_that("trim/filter fastq sequences from one file, and return fastq tibble", 
                                           truncee = truncee)
 
   expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_R1_fastq_file.rds")))
+               readRDS(test_path("testdata", "output", "trim_filt_R1_fq_file.rds")))
 
 })
 
 test_that("trim/filter fastq sequences from two tibbles, and return fastq tibble", {
 
-  fastx_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastx_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
   output_format <- "fastq"
   truncee <- 0.01
 
@@ -278,13 +278,13 @@ test_that("trim/filter fastq sequences from two tibbles, and return fastq tibble
                                           truncee = truncee)
 
   expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_fastq_tibbles.rds")))
+               readRDS(test_path("testdata", "output", "trim_filt_fq_tibbles.rds")))
 })
 
 test_that("trim/filter fasta sequences from two files, and return two fasta files", {
 
-  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fa")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fa")
+  fastx_input <- test_path("testdata", "R1.fasta")
+  reverse <- test_path("testdata", "R2.fasta")
   fastaout <- withr::local_tempfile()
   fastaout_rev <- withr::local_tempfile()
   output_format <- "fasta"
@@ -308,16 +308,16 @@ test_that("trim/filter fasta sequences from two files, and return two fasta file
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(fastaout),
-               microseq::readFasta(test_path("testdata", "output", "R1_trim_filt_sample1.fa")))
+               microseq::readFasta(test_path("testdata", "output", "R1_trim_filt_fa_files.fasta")))
 
   expect_equal(microseq::readFasta(fastaout_rev),
-               microseq::readFasta(test_path("testdata", "output", "R2_trim_filt_sample1.fa")))
+               microseq::readFasta(test_path("testdata", "output", "R2_trim_filt_fa_files.fasta")))
 })
 
 test_that("trim/filter fasta sequences from two tibbles, and return fasta tibble", {
 
-  fastx_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
-  reverse <- microseq::readFasta(test_path("testdata", "sample1", "R2_sample1.fa"))
+  fastx_input <- microseq::readFasta(test_path("testdata", "R1.fasta"))
+  reverse <- microseq::readFasta(test_path("testdata", "R2.fasta"))
   output_format <- "fasta"
 
   maxee_rate <- NULL
@@ -336,13 +336,13 @@ test_that("trim/filter fasta sequences from two tibbles, and return fasta tibble
                                           trunclen = trunclen)
 
   expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_fasta_tibbles.rds")))
+               readRDS(test_path("testdata", "output", "trim_filt_fa_tibbles.rds")))
 })
 
 test_that("trim/filter fastq sequences from two files, and return fastq tibble with stripping", {
 
-  fastx_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastx_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   output_format <- "fastq"
   truncee <- 0.01
   stripright <- 10
@@ -356,13 +356,13 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble w
                                           stripleft = stripleft)
 
   expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_fastq_files_stripping.rds")))
+               readRDS(test_path("testdata", "output", "trim_filt_fq_files_strip.rds")))
 
 })
 
 test_that("trim/filter fastq sequences from one file with size values, and return fastq tibble", {
 
-  fastx_input <- test_path("testdata", "output", "derep_R1_sample1.fq")
+  fastx_input <- test_path("testdata", "output", "R1_derep.fastq")
   output_format <- "fastq"
   truncee <- 0.01
   minsize <- 1
@@ -377,6 +377,6 @@ test_that("trim/filter fastq sequences from one file with size values, and retur
                                           minqual = minqual)
 
   expect_equal(trim_filt_sample1,
-               readRDS(test_path("testdata", "output", "trim_filt_sample1_fastq_files_max_min_size.rds")))
+               readRDS(test_path("testdata", "output", "trim_filt_fq_file_size.rds")))
 
 })

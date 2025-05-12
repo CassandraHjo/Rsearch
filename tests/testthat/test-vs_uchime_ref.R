@@ -6,8 +6,8 @@ test_that("error when input file does not exist", {
 
 test_that("error when only one of nonchimeras/chimeras is provided", {
 
-  fasta <- test_path("testdata", "sample1", "R1_sample1.fa")
-  db <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta <- test_path("testdata", "R1.fasta")
+  db <- test_path("testdata", "R1.fasta")
 
   expect_error(
     vs_uchime_ref(fasta_input = fasta, database = db, nonchimeras = "nonchim.fa"),
@@ -17,8 +17,8 @@ test_that("error when only one of nonchimeras/chimeras is provided", {
 
 test_that("vs_uchime_ref returns nonchimeras tibble with attributes", {
 
-  fasta <- test_path("testdata", "sample1", "R1_sample1.fa")
-  db <- test_path("testdata", "sample1", "R1_sample1.fa") # Needs to be updated with a real e
+  fasta <- test_path("testdata", "R1.fasta")
+  db <- test_path("testdata", "R1.fasta") # Needs to be updated with a real e
 
   out <- vs_uchime_ref(fasta_input = fasta, database = db)
 
@@ -29,8 +29,8 @@ test_that("vs_uchime_ref returns nonchimeras tibble with attributes", {
 
 test_that("vs_uchime_ref writes files with relabel and log", {
 
-  fasta <- test_path("testdata", "sample1", "R1_sample1.fa")
-  db <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta <- test_path("testdata", "R1.fasta")
+  db <- test_path("testdata", "R1.fasta")
   nonchimeras <- withr::local_tempfile()
   chimeras <- withr::local_tempfile()
   log_file <- withr::local_tempfile()
@@ -49,7 +49,7 @@ test_that("vs_uchime_ref writes files with relabel and log", {
 
 test_that("vs_uchime_ref works with FASTA tibble as input", {
 
-  fasta_tbl <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
+  fasta_tbl <- microseq::readFasta(test_path("testdata", "R1.fasta"))
   db_tbl <- fasta_tbl
 
 
@@ -65,8 +65,8 @@ test_that("vs_uchime_ref works with FASTA tibble as input", {
 
 test_that("vs_uchime_ref returns empty data frame for chimeras if none found", {
 
-  fasta <- test_path("testdata", "sample1", "R1_sample1.fa")
-  db <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta <- test_path("testdata", "R1.fasta")
+  db <- test_path("testdata", "R1.fasta")
 
   out <- vs_uchime_ref(fasta_input = fasta,
                        database = db,

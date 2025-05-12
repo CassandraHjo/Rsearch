@@ -1,6 +1,6 @@
 test_that("error when wrong strand", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
   strand <- "wrong_input"
 
@@ -20,7 +20,7 @@ test_that("error when input fasta_input does not exist", {
 
 test_that("error when both outputs are specified", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
   otutabout <- withr::local_tempfile()
 
@@ -32,7 +32,7 @@ test_that("error when both outputs are specified", {
 
 test_that("cluster sequences from fasta file, and return fasta file", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
 
   return_value <- vs_cluster_size(fasta_input = fasta_input,
@@ -42,12 +42,12 @@ test_that("cluster sequences from fasta file, and return fasta file", {
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(centroids),
-               microseq::readFasta(test_path("testdata", "output", "cluster_R1_sample1_file.fa")))
+               microseq::readFasta(test_path("testdata", "output", "cluster.fasta")))
 })
 
 test_that("cluster sequences from fasta file, and return fasta file", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()
   relabel <- "OTU"
 
@@ -58,12 +58,12 @@ test_that("cluster sequences from fasta file, and return fasta file", {
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(centroids),
-               microseq::readFasta(test_path("testdata", "output", "cluster_R1_sample1_file_relabel.fa")))
+               microseq::readFasta(test_path("testdata", "output", "cluster_relabel.fasta")))
 })
 
 test_that("cluster sequences from fasta file, and return fasta tibble", {
 
-  fasta_input <- test_path("testdata", "sample1", "R1_sample1.fa")
+  fasta_input <- test_path("testdata", "R1.fasta")
   vsearch_options <- c("")
 
   cluster_sample1_R1 <- vs_cluster_size(fasta_input = fasta_input,
@@ -71,12 +71,12 @@ test_that("cluster sequences from fasta file, and return fasta tibble", {
                                         vsearch_options = vsearch_options)
 
   expect_equal(cluster_sample1_R1,
-               readRDS(test_path("testdata", "output", "cluster_R1_sample1_file.rds")))
+               readRDS(test_path("testdata", "output", "cluster_fa_file_fa.rds")))
 })
 
 test_that("cluster sequences from fasta tibble, and return fasta file", {
 
-  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
+  fasta_input <- microseq::readFasta(test_path("testdata", "R1.fasta"))
   centroids <- withr::local_tempfile()
   log_file <- withr::local_tempfile()
 
@@ -90,12 +90,12 @@ test_that("cluster sequences from fasta tibble, and return fasta file", {
   expect_true(file.exists(log_file))
 
   expect_equal(microseq::readFasta(centroids),
-               microseq::readFasta(test_path("testdata", "output", "cluster_R1_sample1_file.fa")))
+               microseq::readFasta(test_path("testdata", "output", "cluster.fasta")))
 })
 
 test_that("cluster sequences from fasta tibble, and return fasta tibble", {
 
-  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa"))
+  fasta_input <- microseq::readFasta(test_path("testdata", "R1.fasta"))
   centroids <- NULL
 
   cluster_sample1_R1 <- vs_cluster_size(fasta_input = fasta_input,
@@ -103,12 +103,12 @@ test_that("cluster sequences from fasta tibble, and return fasta tibble", {
                                         size_column = TRUE)
 
   expect_equal(cluster_sample1_R1,
-               readRDS(test_path("testdata", "output", "cluster_R1_sample1_tibble.rds")))
+               readRDS(test_path("testdata", "output", "cluster_fa_tibble_fa.rds")))
 })
 
 test_that("vs_cluster_size returns OTU table tibble when otutabout = TRUE", {
 
-  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+  fasta_input <- microseq::readFasta(test_path("testdata", "R1.fasta")) |>
     dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
 
   otu_tbl <- vs_cluster_size(fasta_input = fasta_input,
@@ -119,12 +119,12 @@ test_that("vs_cluster_size returns OTU table tibble when otutabout = TRUE", {
   expect_equal(otu_tbl,
                readRDS(test_path("testdata",
                                  "output",
-                                 "cluster_R1_sample1_otu.rds")))
+                                 "cluster_fa_tibble_otu.rds")))
 })
 
 test_that("vs_cluster_size writes OTU table to file when otutabout is path", {
 
-  fasta_input <- microseq::readFasta(test_path("testdata", "sample1", "R1_sample1.fa")) |>
+  fasta_input <- microseq::readFasta(test_path("testdata", "R1.fasta")) |>
     dplyr::mutate(Header = paste0(Header, ";sample=sample1"))
 
   otutable_out <- withr::local_tempfile(fileext = ".tsv")
@@ -138,5 +138,5 @@ test_that("vs_cluster_size writes OTU table to file when otutabout is path", {
   expect_equal(suppressMessages(readr::read_delim(otutable_out)),
                suppressMessages(readr::read_delim(test_path("testdata",
                                                             "output",
-                                                            "cluster_R1_sample1_otu_file.txt"))))
+                                                            "cluster_fa_tibble_otu.txt"))))
 })

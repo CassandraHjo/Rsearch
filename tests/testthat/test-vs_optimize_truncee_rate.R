@@ -1,7 +1,7 @@
 test_that("optimizing truncee_rate with default values and files as input", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
 
   optimize.tbl <- vs_optimize_truncee_rate(fastq_input = fastq_input,
                                            reverse = reverse)
@@ -21,8 +21,8 @@ test_that("optimizing truncee_rate with default values and files as input", {
 
 test_that("optimizing truncee_rate with tibbles as input", {
 
-  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
 
   optimize.tbl <- vs_optimize_truncee_rate(fastq_input = fastq_input,
                                            reverse = reverse,

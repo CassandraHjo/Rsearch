@@ -1,6 +1,6 @@
 test_that("make_sintax_db produces a database", {
 
-  input_df <- readRDS(test_path("testdata", "synth_data", "make_sintax_db_input_tibble.rds"))
+  input_df <- readRDS(test_path("testdata", "make_sintax_db.rds"))
 
   temp_out_db <- withr::local_tempfile()
 
@@ -10,12 +10,12 @@ test_that("make_sintax_db produces a database", {
   expect_true(file.exists(temp_out_db))
   expect_equal(
     microseq::readFasta(
-      test_path("testdata", "output", "sintax_db_synthetic.fa")),
+      test_path("testdata", "output", "sintax_db_synthetic.fasta")),
     microseq::readFasta(temp_out_db))
 })
 
 test_that("make_sintax_db errors when required columns are missing", {
-  input_df <- readRDS(test_path("testdata", "synth_data", "make_sintax_db_input_tibble.rds"))
+  input_df <- readRDS(test_path("testdata", "make_sintax_db.rds"))
 
   expect_error(
     make_sintax_db(input_df |> dplyr::select(-Header), outfile),

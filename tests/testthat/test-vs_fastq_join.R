@@ -1,7 +1,7 @@
 test_that("error when wrong output_format", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fastx"
 
   expect_error(vs_fastq_join(fastq_input = R1,
@@ -12,8 +12,8 @@ test_that("error when wrong output_format", {
 
 test_that("error when output_format is 'fasta', and fastqout is defined", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fasta"
   fastqout <- "some_file.fq"
 
@@ -26,8 +26,8 @@ test_that("error when output_format is 'fasta', and fastqout is defined", {
 
 test_that("error when output_format is 'fastq', and fastaout is defined", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
   output_format <- "fastq"
   fastaout <- "some_file.fa"
 
@@ -40,10 +40,10 @@ test_that("error when output_format is 'fastq', and fastaout is defined", {
 
 test_that("error when fastq_input has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds")) |>
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>
     dplyr::select(-Header)
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds"))
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds"))
 
   output_format <- "fastq"
 
@@ -55,9 +55,9 @@ test_that("error when fastq_input has incorrect columns if input is tibble", {
 
 test_that("error when reverse has incorrect columns if input is tibble", {
 
-  R1 <- readRDS(test_path("testdata", "sample1", "R1_sample1_fastq_dataframe.rds"))
+  R1 <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
 
-  R2 <- readRDS(test_path("testdata", "sample1", "R2_sample1_fastq_dataframe.rds")) |>
+  R2 <- readRDS(test_path("testdata", "R2_fastq_df.rds")) |>
     dplyr::select(-Header)
 
   output_format <- "fastq"
@@ -71,7 +71,7 @@ test_that("error when reverse has incorrect columns if input is tibble", {
 test_that("error when input file does not exist", {
 
   fastq_input <- "some_file.fq"
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  reverse <- test_path("testdata", "R2.fastq")
   output_format <- "fastq"
 
   expect_error(vs_fastq_join(fastq_input = fastq_input,
@@ -82,7 +82,7 @@ test_that("error when input file does not exist", {
 
 test_that("error when reverse file does not exist", {
 
-  fastq_input <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R2.fastq")
   reverse <- "some_file.fq"
   output_format <- "fastq"
 
@@ -94,8 +94,8 @@ test_that("error when reverse file does not exist", {
 
 test_that("fastq_input and reverse can be joined when files, and results written to fastq file", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastqout <- withr::local_tempfile()
   output_format <- "fastq"
 
@@ -107,13 +107,13 @@ test_that("fastq_input and reverse can be joined when files, and results written
   expect_null(return_value)
 
   expect_equal(microseq::readFastq(fastqout),
-               microseq::readFastq(test_path("testdata", "output", "joined_sample1.fq")))
+               microseq::readFastq(test_path("testdata", "output", "joined_fq_files.fastq")))
 })
 
 test_that("fastq_input and reverse can be joined when files, and results written to fasta file", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastaout <- withr::local_tempfile()
   output_format <- "fasta"
 
@@ -125,13 +125,13 @@ test_that("fastq_input and reverse can be joined when files, and results written
   expect_null(return_value)
 
   expect_equal(microseq::readFasta(fastaout),
-               microseq::readFasta(test_path("testdata", "output", "joined_sample1.fa")))
+               microseq::readFasta(test_path("testdata", "output", "joined_fq_files.fasta")))
 })
 
 test_that("fastq_input and reverse can be joined when files, and results given as fastq tibble", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastqout <- NULL
   output_format <- "fastq"
 
@@ -141,14 +141,14 @@ test_that("fastq_input and reverse can be joined when files, and results given a
                                   output_format = output_format)
 
   expect_equal(joined_sample1,
-               readRDS(test_path("testdata", "output", "joined_sample1_fastq_files.rds")))
+               readRDS(test_path("testdata", "output", "joined_fq_files_fq_tibble.rds")))
 
 })
 
 test_that("fastq_input and reverse can be joined when files, and results given as fasta tibble", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastaout <- NULL
   output_format <- "fasta"
 
@@ -158,14 +158,14 @@ test_that("fastq_input and reverse can be joined when files, and results given a
                                   output_format = output_format)
 
   expect_equal(joined_sample1,
-               readRDS(test_path("testdata", "output", "joined_sample1_fasta_files.rds")))
+               readRDS(test_path("testdata", "output", "joined_fq_files_fa_tibble.rds")))
 
 })
 
 test_that("fastq_input and reverse can be joined when tibbles, and results written to fastq file", {
 
-  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
   fastqout <- withr::local_tempfile()
   output_format <- "fastq"
 
@@ -177,13 +177,13 @@ test_that("fastq_input and reverse can be joined when tibbles, and results writt
   expect_null(return_value)
 
   expect_equal(microseq::readFastq(fastqout),
-               microseq::readFastq(test_path("testdata", "output", "joined_sample1.fq")))
+               microseq::readFastq(test_path("testdata", "output", "joined_fq_files.fastq")))
 })
 
 test_that("fastq_input and reverse can be joined when tibbles, and results given as tibble", {
 
-  fastq_input <- microseq::readFastq(test_path("testdata", "sample1", "R1_sample1.fq"))
-  reverse <- microseq::readFastq(test_path("testdata", "sample1", "R2_sample1.fq"))
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
   fastqout <- NULL
   output_format <- "fastq"
 
@@ -193,13 +193,13 @@ test_that("fastq_input and reverse can be joined when tibbles, and results given
                                   output_format = output_format)
 
   expect_equal(joined_sample1,
-               readRDS(test_path("testdata", "output", "joined_sample1_fastq_tibbles.rds")))
+               readRDS(test_path("testdata", "output", "joined_fq_tibbles_fq_tibble.rds")))
 })
 
 test_that("log file exists when specified", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastqout <- withr::local_tempfile()
   output_format <- "fastq"
   log_file <- withr::local_tempfile()
@@ -217,8 +217,8 @@ test_that("log file exists when specified", {
 
 test_that("fastq_input and reverse can be joined when files, and results given as fastq tibble with vsearch_options", {
 
-  fastq_input <- test_path("testdata", "sample1", "R1_sample1.fq")
-  reverse <- test_path("testdata", "sample1", "R2_sample1.fq")
+  fastq_input <- test_path("testdata", "R1.fastq")
+  reverse <- test_path("testdata", "R2.fastq")
   fastqout <- NULL
   output_format <- "fastq"
   vsearch_options <- c("")
@@ -230,6 +230,6 @@ test_that("fastq_input and reverse can be joined when files, and results given a
                                   vsearch_options = vsearch_options)
 
   expect_equal(joined_sample1,
-               readRDS(test_path("testdata", "output", "joined_sample1_fastq_files.rds")))
+               readRDS(test_path("testdata", "output", "joined_fq_files_fq_tibble.rds")))
 
 })
