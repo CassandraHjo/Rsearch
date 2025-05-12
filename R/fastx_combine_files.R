@@ -92,9 +92,9 @@ fastx_combine_files <- function(files_dir,
   }, add = TRUE)
 
   # Find all files in the folder
-  comb_files <- list.files(files_dir,
+  comb_files <- sort(list.files(files_dir,
                            pattern = paste0("\\", file_ext, "$"),
-                           full.names = TRUE)
+                           full.names = TRUE))
 
   # Check if any files are found
   if (length(comb_files) == 0) {
@@ -107,6 +107,11 @@ fastx_combine_files <- function(files_dir,
     temp_files <- c(temp_files, out_file)
   } else {
     out_file <- output_file
+  }
+
+  # Ensure the output file does not contain leftover data
+  if (file.exists(out_file)) {
+    file.remove(out_file)
   }
 
   # Full path to the combined output file
