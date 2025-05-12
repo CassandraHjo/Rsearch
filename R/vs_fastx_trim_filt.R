@@ -689,7 +689,7 @@ calculate_trim_filt_statistics <- function(input_file,
     fastx_source = fastx
   )
 
-  if (!is.null(reverse) && nzchar(reverse)) {
+  if (is.character(reverse) && length(reverse) == 1 && nzchar(reverse)) {
     result_table$reverse_source <- reverse
   }
 

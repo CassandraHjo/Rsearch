@@ -108,6 +108,9 @@ test_that("fastq_input and reverse can be joined when files, and results written
 
   expect_equal(microseq::readFastq(fastqout),
                microseq::readFastq(test_path("testdata", "output", "joined_fq_files.fastq")))
+
+  expect_error(vs_fastq_join(fastq_input = fastq_input),
+               "No reverse reads provided. Please supply reverse or use a 'pe_df' object.")
 })
 
 test_that("fastq_input and reverse can be joined when files, and results written to fasta file", {
@@ -135,14 +138,13 @@ test_that("fastq_input and reverse can be joined when files, and results given a
   fastqout <- NULL
   output_format <- "fastq"
 
-  joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                  reverse = reverse,
-                                  fastqout = fastqout,
-                                  output_format = output_format)
+  joined <- vs_fastq_join(fastq_input = fastq_input,
+                          reverse = reverse,
+                          fastqout = fastqout,
+                          output_format = output_format)
 
-  expect_equal(joined_sample1,
+  expect_equal(joined,
                readRDS(test_path("testdata", "output", "joined_fq_files_fq_tibble.rds")))
-
 })
 
 test_that("fastq_input and reverse can be joined when files, and results given as fasta tibble", {
@@ -152,14 +154,13 @@ test_that("fastq_input and reverse can be joined when files, and results given a
   fastaout <- NULL
   output_format <- "fasta"
 
-  joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                  reverse = reverse,
-                                  fastaout = fastaout,
-                                  output_format = output_format)
+  joined <- vs_fastq_join(fastq_input = fastq_input,
+                          reverse = reverse,
+                          fastaout = fastaout,
+                          output_format = output_format)
 
-  expect_equal(joined_sample1,
+  expect_equal(joined,
                readRDS(test_path("testdata", "output", "joined_fq_files_fa_tibble.rds")))
-
 })
 
 test_that("fastq_input and reverse can be joined when tibbles, and results written to fastq file", {
@@ -187,12 +188,12 @@ test_that("fastq_input and reverse can be joined when tibbles, and results given
   fastqout <- NULL
   output_format <- "fastq"
 
-  joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                  reverse = reverse,
-                                  fastqout = fastqout,
-                                  output_format = output_format)
+  joined <- vs_fastq_join(fastq_input = fastq_input,
+                          reverse = reverse,
+                          fastqout = fastqout,
+                          output_format = output_format)
 
-  expect_equal(joined_sample1,
+  expect_equal(joined,
                readRDS(test_path("testdata", "output", "joined_fq_tibbles_fq_tibble.rds")))
 })
 
@@ -212,7 +213,6 @@ test_that("log file exists when specified", {
   expect_null(return_value)
 
   expect_true(file.exists(log_file))
-
 })
 
 test_that("fastq_input and reverse can be joined when files, and results given as fastq tibble with vsearch_options", {
@@ -223,13 +223,26 @@ test_that("fastq_input and reverse can be joined when files, and results given a
   output_format <- "fastq"
   vsearch_options <- c("")
 
-  joined_sample1 <- vs_fastq_join(fastq_input = fastq_input,
-                                  reverse = reverse,
-                                  fastqout = fastqout,
-                                  output_format = output_format,
-                                  vsearch_options = vsearch_options)
+  joined <- vs_fastq_join(fastq_input = fastq_input,
+                          reverse = reverse,
+                          fastqout = fastqout,
+                          output_format = output_format,
+                          vsearch_options = vsearch_options)
 
-  expect_equal(joined_sample1,
+  expect_equal(joined,
                readRDS(test_path("testdata", "output", "joined_fq_files_fq_tibble.rds")))
+})
 
+test_that("join fastq sequences from a pe_df data frame", {
+
+  fastq_input <- readRDS(test_path("testdata", "pe_df.rds"))
+
+  joined <- vs_fastq_join(fastq_input = fastq_input)
+
+  expect_equal(joined,
+               readRDS(test_path("testdata", "output", "joined_pe_df.rds")))
+
+  attr(fastq_input, "reverse") <- NULL
+  expect_error(vs_fastq_join(fastq_input = fastq_input),
+               "fastq_input has class 'pe_df' but no 'reverse' attribute found.")
 })

@@ -134,11 +134,11 @@ test_that("fastq_input and reverse can be merged when files, and results given a
   reverse <- test_path("testdata", "R2.fastq")
   output_format <- "fastq"
 
-  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        output_format = output_format)
+  merged <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                reverse = reverse,
+                                output_format = output_format)
 
-  expect_equal(merged_sample1,
+  expect_equal(merged,
                readRDS(test_path("testdata", "output", "merged_fq_files_fq_tibble.rds")))
 })
 
@@ -149,12 +149,12 @@ test_that("fastq_input and reverse can be merged when files, and results given a
   fastaout <- NULL
   output_format <- "fasta"
 
-  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        fastaout = fastaout,
-                                        output_format = output_format)
+  merged <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                reverse = reverse,
+                                fastaout = fastaout,
+                                output_format = output_format)
 
-  expect_equal(merged_sample1,
+  expect_equal(merged,
                readRDS(test_path("testdata", "output", "merged_fq_files_fa_tibble.rds")))
 })
 
@@ -182,11 +182,11 @@ test_that("fastq_input and reverse can be merged when tibbles, and results given
   reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
   output_format <- "fastq"
 
-  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        output_format = output_format)
+  merged <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                reverse = reverse,
+                                output_format = output_format)
 
-  expect_equal(merged_sample1,
+  expect_equal(merged,
                readRDS(test_path("testdata", "output", "merged_fq_tibbles_fq_tibble.rds")))
 })
 
@@ -216,12 +216,26 @@ test_that("fastq_input and reverse can be merged when files, and results given a
   sample <- "sample1"
   vsearch_options <- c("--relabel", "OTU")
 
-  merged_sample1 <- vs_fastq_mergepairs(fastq_input = fastq_input,
-                                        reverse = reverse,
-                                        output_format = output_format,
-                                        sample = sample,
-                                        vsearch_options = vsearch_options)
+  merged <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                reverse = reverse,
+                                output_format = output_format,
+                                sample = sample,
+                                vsearch_options = vsearch_options)
 
-  expect_equal(merged_sample1,
+  expect_equal(merged,
                readRDS(test_path("testdata", "output", "merged_fq_files_fq_tibble_vs.rds")))
+})
+
+test_that("merge read pairs from a pe_df data frame", {
+
+  fastq_input <- readRDS(test_path("testdata", "pe_df.rds"))
+
+  merged <- vs_fastq_mergepairs(fastq_input = fastq_input)
+
+  expect_equal(merged,
+               readRDS(test_path("testdata", "output", "merged_pe_df.rds")))
+
+  attr(fastq_input, "reverse") <- NULL
+  expect_error(vs_fastq_mergepairs(fastq_input = fastq_input),
+               "fastq_input has class 'pe_df' but no 'reverse' attribute found.")
 })

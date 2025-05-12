@@ -239,13 +239,13 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble",
   truncee <- 0.01
   sample <- "sample1"
 
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           reverse = reverse,
                                           output_format = output_format,
                                           truncee = truncee,
                                           sample = sample)
 
-  expect_equal(trim_filt_sample1,
+  expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_files.rds")))
 
 })
@@ -256,11 +256,11 @@ test_that("trim/filter fastq sequences from one file, and return fastq tibble", 
   output_format <- "fastq"
   truncee <- 0.01
 
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           output_format = output_format,
                                           truncee = truncee)
 
-  expect_equal(trim_filt_sample1,
+  expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_R1_fq_file.rds")))
 
 })
@@ -272,12 +272,12 @@ test_that("trim/filter fastq sequences from two tibbles, and return fastq tibble
   output_format <- "fastq"
   truncee <- 0.01
 
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           reverse = reverse,
                                           output_format = output_format,
                                           truncee = truncee)
 
-  expect_equal(trim_filt_sample1,
+  expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_tibbles.rds")))
 })
 
@@ -326,7 +326,7 @@ test_that("trim/filter fasta sequences from two tibbles, and return fasta tibble
   maxlen <- 1000
   trunclen <- 150
 
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           reverse = reverse,
                                           output_format = output_format,
                                           maxee_rate = maxee_rate,
@@ -335,7 +335,7 @@ test_that("trim/filter fasta sequences from two tibbles, and return fasta tibble
                                           maxlen = maxlen,
                                           trunclen = trunclen)
 
-  expect_equal(trim_filt_sample1,
+  expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fa_tibbles.rds")))
 })
 
@@ -348,14 +348,14 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble w
   stripright <- 10
   stripleft <- 10
 
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           reverse = reverse,
                                           output_format = output_format,
                                           truncee = truncee,
                                           stripright = stripright,
                                           stripleft = stripleft)
 
-  expect_equal(trim_filt_sample1,
+  expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_files_strip.rds")))
 
 })
@@ -369,14 +369,27 @@ test_that("trim/filter fastq sequences from one file with size values, and retur
   maxsize <- 10
   minqual <- 1
 
-  trim_filt_sample1 <- vs_fastx_trim_filt(fastx_input = fastx_input,
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                           output_format = output_format,
                                           truncee = truncee,
                                           minsize = minsize,
                                           maxsize = maxsize,
                                           minqual = minqual)
 
-  expect_equal(trim_filt_sample1,
+  expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_file_size.rds")))
+})
 
+test_that("trim/filter fastq sequences from pe_df data frame", {
+
+  fastx_input <- readRDS(test_path("testdata", "pe_df.rds"))
+
+  trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input)
+
+  expect_equal(trim_filt,
+               readRDS(test_path("testdata", "output", "trim_filt_pe_df.rds")))
+
+  attr(fastx_input, "reverse") <- NULL
+  expect_error(vs_fastx_trim_filt(fastx_input = fastx_input),
+               "fastx_input has class 'pe_df' but no 'reverse' attribute found.")
 })

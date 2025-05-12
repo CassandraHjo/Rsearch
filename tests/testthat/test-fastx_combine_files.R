@@ -95,3 +95,28 @@ test_that("two fasta files can be combined, and returned as fasta tibble", {
                microseq::readFasta(test_path("testdata", "output", "combine.fasta")))
 
 })
+
+test_that("existing output file is removed before combining", {
+
+  files_dir <- test_path("testdata", "combine_data")
+  output_file <- withr::local_tempfile()
+  file_ext <- ".fastq"
+  file_format <- "fastq"
+
+  # Manually create the file so it exists before the function runs
+  writeLines("This file will be overwritten", output_file)
+  expect_true(file.exists(output_file))  # Confirm the file is there
+
+  # Now run the function, which should remove the file
+  fastx_combine_files(files_dir = files_dir,
+                      output_file = output_file,
+                      file_ext = file_ext,
+                      file_format = file_format)
+
+  # The function should overwrite the file with valid FASTQ data
+  combined_data <- microseq::readFastq(output_file)
+  expected_data <- microseq::readFastq(test_path("testdata", "output", "combine.fastq"))
+
+  expect_equal(combined_data, expected_data)
+})
+

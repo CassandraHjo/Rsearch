@@ -39,6 +39,9 @@ test_that("get merging lengths from merging two fastq files", {
   attr(expected_df, "plot") <- NULL
 
   expect_equal(merging_lengths_df, expected_df)
+
+  expect_error(vs_merging_lengths(fastq_input = fastq_input),
+               "No reverse reads provided. Please supply reverse or use a 'pe_df' object.")
 })
 
 test_that("get merging lengths from merging two fastq tibbles", {
@@ -89,5 +92,26 @@ test_that("vs_merging_lengths creates histograms when R1 and R2 lengths vary", {
 
   # Check output is as expected
   expect_s3_class(merging_lengths_df, "tbl_df")
+})
+
+test_that("pe_df tibble can be merged", {
+
+  fastq_input <- readRDS(test_path("testdata", "pe_df.rds"))
+
+  merging_lengths_df <- vs_merging_lengths(fastq_input = fastq_input)
+
+  expected_df <- readRDS(test_path("testdata", "output", "merging_lengths_pe_df.rds"))
+
+  expect_s3_class(attr(merging_lengths_df, "plot"), "ggplot")
+
+  # Remove 'plot' attribute before comparison due to errors with ggplot
+  attr(merging_lengths_df, "plot") <- NULL
+  attr(expected_df, "plot") <- NULL
+
+  expect_equal(merging_lengths_df, expected_df)
+
+  attr(fastq_input, "reverse") <- NULL
+  expect_error(vs_merging_lengths(fastq_input = fastq_input),
+               "fastq_input has class 'pe_df' but no 'reverse' attribute found.")
 })
 

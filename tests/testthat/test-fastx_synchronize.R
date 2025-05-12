@@ -297,7 +297,6 @@ test_that("two fasta tibbles can be synchronized, and return fasta tibble with a
 
   expect_equal(sync_file2,
                attr(readRDS(test_path("testdata", "output", "sync_fa_files_fa_tibble.rds")), "reverse"))
-
 })
 
 test_that("two fastq tibbles can be synchronized, and return fastq tibble with attribute", {
@@ -321,5 +320,23 @@ test_that("two fastq tibbles can be synchronized, and return fastq tibble with a
 
   expect_equal(sync_file2,
                attr(readRDS(test_path("testdata", "output", "sync_fq_files_fq_tibble.rds")), "reverse"))
+})
 
+test_that("pe_df tibble can be synchronized", {
+
+  file1 <- readRDS(test_path("testdata", "pe_df.rds"))
+
+  sync_file1 <- fastx_synchronize(file1 = file1)
+
+  sync_file2 <- attr(sync_file1, "reverse")
+
+  expect_equal(sync_file1,
+               readRDS(test_path("testdata", "output", "sync_pe_df.rds")))
+
+  expect_equal(sync_file2,
+               attr(readRDS(test_path("testdata", "output", "sync_pe_df.rds")), "reverse"))
+
+  attr(file1, "reverse") <- NULL
+  expect_error(fastx_synchronize(file1 = file1),
+               "file1 has class 'pe_df' but no 'reverse' attribute found.")
 })
