@@ -140,3 +140,14 @@ test_that("vs_cluster_size writes OTU table to file when otutabout is path", {
                                                             "output",
                                                             "cluster_fa_tibble_otu.txt"))))
 })
+
+test_that("cluster sequences from empty fasta tibble, and return fasta tibble", {
+
+  fasta_input <- data.frame(
+    Header = "seq1",
+    Sequence = "ATCGGCTA"
+  )
+
+  expect_warning(vs_cluster_size(fasta_input = fasta_input),
+                 "No centroid sequences were returned by VSEARCH. Check input quality or parameters.")
+})

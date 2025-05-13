@@ -271,11 +271,6 @@ vs_fastq_mergepairs <- function(fastq_input,
       microseq::readFasta(outfile)
     }
 
-    # Add warning if no reads were merged
-    if (nrow(merged_seqs) == 0) {
-      warning("No merged reads were produced.")
-    }
-
     stats.tbl <- calculate_merge_statistics(fastq_file,
                                             reverse_file,
                                             merged_seqs,

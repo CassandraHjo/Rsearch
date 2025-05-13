@@ -134,5 +134,4 @@ plot_read_quality <- function(fastq_input,
                                                   col = pal[4])
 
   return(plot_with_marginal_plots)
-
 }

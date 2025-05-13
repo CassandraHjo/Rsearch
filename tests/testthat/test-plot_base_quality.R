@@ -96,3 +96,29 @@ test_that("plot_base_quality returns ggplot with neither median nor mean", {
                                     show_mean = FALSE)
   expect_s3_class(quality_plot, "ggplot")
 })
+
+test_that("plot_base_quality returns ggplot with overlap box", {
+
+  R1 <- test_path("testdata", "R1.fastq")
+  R2 <- test_path("testdata", "R2.fastq")
+
+  quality_plot <- plot_base_quality(fastq_input = R1,
+                                    reverse = R2,
+                                    show_overlap_box = TRUE)
+  expect_s3_class(quality_plot, "ggplot")
+})
+
+test_that("plot_base_quality downsamples if more than 10 000 reads", {
+
+  R1 <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+  R2 <- microseq::readFastq(test_path("testdata", "R2.fastq"))
+
+  # Create a larger datasets by repeating the original data
+  R1_large <- R1[rep(1:nrow(R1), length.out = 10001), ]
+  R2_large <- R2[rep(1:nrow(R2), length.out = 10001), ]
+
+  quality_plot <- plot_base_quality(fastq_input = R1_large,
+                                    reverse = R2_large,
+                                    show_overlap_box = TRUE)
+  expect_s3_class(quality_plot, "ggplot")
+})

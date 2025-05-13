@@ -123,9 +123,6 @@ vs_sintax <- function(fasta_input,
     fasta_input <- microseq::readFasta(fasta_file)
   }
 
-  # Check if input file exists at given path
-  if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
-
   # Handle input data base sequences
   if (!is.character(database)){
     # Validate tibble
@@ -136,7 +133,7 @@ vs_sintax <- function(fasta_input,
 
     temp_file_db <- tempfile(pattern = "db_input", fileext = ".fa")
     temp_files <- c(temp_files, temp_file_db)
-    microseq::writeFasta(db, temp_file_db)
+    microseq::writeFasta(database, temp_file_db)
 
     db_file <- temp_file_db
 
@@ -470,7 +467,7 @@ taxonomy_tree <- function(taxonomy_table,
                            genus,
                            species) |>
     as.matrix()
-  D.mat <- matrix(7, nrow = nrow(tax.tbl), ncol = nrow(tax.tbl))
+  D.mat <- matrix(7, nrow = nrow(tax.mat), ncol = nrow(tax.mat))
   for(i in 2:8){
     idx <- which(outer(tax.mat[,i], tax.mat[,i], FUN = "=="))
     D.mat[idx] <- 8 - i

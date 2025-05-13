@@ -239,3 +239,24 @@ test_that("merge read pairs from a pe_df data frame", {
   expect_error(vs_fastq_mergepairs(fastq_input = fastq_input),
                "fastq_input has class 'pe_df' but no 'reverse' attribute found.")
 })
+
+test_that("error when no reverse reads provided and fastq_input is not pe_df", {
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+
+  expect_error(
+    vs_fastq_mergepairs(fastq_input = fastq_input),
+    "No reverse reads provided. Please supply reverse or use a 'pe_df' object."
+  )
+})
+
+test_that("error when output file is empty and no reads were merged", {
+  empty_fastq <- withr::local_tempfile(fileext = ".fastq")
+  file.create(empty_fastq)
+
+  expect_error(
+    vs_fastq_mergepairs(fastq_input = empty_fastq,
+                        reverse = empty_fastq,
+                        output_format = "fastq"),
+    "Output file is empty. No reads were merged."
+  )
+})

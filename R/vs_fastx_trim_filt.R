@@ -677,9 +677,6 @@ calculate_trim_filt_statistics <- function(input_file,
   output_seqs <- read_fun(output_file)
 
   n_input <- nrow(input_seqs)
-  if (n_input == 0) {
-    warning("No sequences in input file: ", input_file)
-  }
   n_output <- nrow(output_seqs)
 
   # Prepare result

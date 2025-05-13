@@ -97,3 +97,35 @@ test_that("rsearch_obj strips size annotation from sequence headers", {
 
   expect_equal(obj$sequence.df$Header, "OTU1")
 })
+
+test_that("rsearch2phyloseq creates phyloseq object", {
+
+  rsearch.obj <- readRDS(test_path("testdata", "rsearch_obj.rds"))
+
+  phy.obj <- rsearch2phyloseq(rsearch.obj)
+
+  expected <- readRDS(test_path("testdata", "output", "phy_obj.rds"))
+
+  expect_equal(phy.obj, expected)
+})
+
+test_that("rsearch2phyloseq creates phyloseq object without taxonomy", {
+
+  rsearch.obj <- readRDS(test_path("testdata", "rsearch_obj_wo_tax.rds"))
+
+  phy.obj <- rsearch2phyloseq(rsearch.obj)
+
+  expected <- readRDS(test_path("testdata", "output", "phy_obj_wo_tax.rds"))
+
+  expect_equal(phy.obj, expected)
+})
+
+test_that("phyloseq2rsearch creates rsearch object", {
+
+  phy.obj <- readRDS(test_path("testdata", "output", "phy_obj.rds"))
+
+  rsearch.obj <- phyloseq2rsearch(phy.obj)
+
+  expect_type(rsearch.obj, "list")
+  expect_length(rsearch.obj, 3)
+})
