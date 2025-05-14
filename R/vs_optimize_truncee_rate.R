@@ -166,7 +166,7 @@ vs_optimize_truncee_rate <- function(fastq_input,
 
     # Find number of dereplicated merged reads with size > min_size
     derep.df_filt <- derep.df |>
-      dplyr::filter(size > min_size)
+      dplyr::filter(size >= min_size)
 
     # Add results to table
     res.df$merged_read_pairs[i] = sum(derep.df_filt$size)
