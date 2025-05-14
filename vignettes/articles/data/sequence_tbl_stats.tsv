@@ -1,0 +1,2 @@
+num_nucleotides	min_length_input_seq	max_length_input_seq	avg_length_input_seq	num_clusters	min_size_cluster	max_size_cluster	avg_size_cluster	num_singletons	input
+12277056	238	408	404.8092851490372	119	2	151721	6867.1	0	all_derep.tbl

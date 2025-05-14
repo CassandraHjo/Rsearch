@@ -54,7 +54,7 @@
       <h1>Rsearch tutorial (v1.0.0)</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/CassandraHjo/Rsearch/blob/HEAD/vignettes/tutorial.Rmd" class="external-link"><code>vignettes/tutorial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/CassandraHjo/Rsearch/blob/HEAD/vignettes/articles/tutorial.Rmd" class="external-link"><code>vignettes/articles/tutorial.Rmd</code></a></small>
       <div class="d-none name"><code>tutorial.Rmd</code></div>
     </div>
 
@@ -81,10 +81,14 @@ pairs</a></li>
 </ul>
 <p>Finally, we will show how the data generated in <code>Rsearch</code>
 can be imported into the <code>phyloseq</code> R package for downstream
-microbiome analysis. You han jump directly to that section <a href="#handoff-to-phyloseq">here</a>.</p>
+microbiome analysis. You can jump directly to that section <a href="#handoff-to-phyloseq">here</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="for-the-impatient">For the impatient<a class="anchor" aria-label="anchor" href="#for-the-impatient"></a>
+</h2>
 <p>If you prefer to run the entire example workflow without inspecting
-intermediate steps, a streamlined version is provided at the <a href="#full-pipeline-short-version">end of the tutorial</a>, using the
-pipe operator.</p>
+intermediate steps, a streamlined version is provided at the <strong><a href="#full-pipeline-short-version">end of the tutorial</a></strong>,
+using the pipe operator.</p>
 </div>
 <div class="section level2">
 <h2 id="installing-rsearch">Installing <code>Rsearch</code><a class="anchor" aria-label="anchor" href="#installing-rsearch"></a>
@@ -102,7 +106,7 @@ you do not already have it before installing <code>Rsearch</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install phyloseq if not already installed</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"phyloseq"</span><span class="op">)</span></span></code></pre></div>
 <p>Now you are ready to install <code>Rsearch</code>:</p>
@@ -145,8 +149,6 @@ the publicly available project <a href="https://www.ncbi.nlm.nih.gov/bioproject/
 <li>A text-file <code>metadata.txt</code>
 </li>
 <li>A folder named <code>fastq</code> with 16 pairs of FASTQ files.</li>
-<li>An example database file <code>example_database.fa.gz</code> for
-taxonomic assignment.</li>
 </ul>
 <p>First, define the paths to your FASTQ files, metadata and example
 database:</p>
@@ -155,25 +157,6 @@ database:</p>
 <span></span>
 <span><span class="co"># You also need the metadata file</span></span>
 <span><span class="va">metadata_file</span> <span class="op">&lt;-</span> <span class="st">"../tutorial_data/metadata.txt"</span> <span class="co"># Change me </span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">fastq_path</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [1] "P10_ZB_R1.fastq.gz" "P10_ZB_R2.fastq.gz" "P11_ZB_R1.fastq.gz"
- [4] "P11_ZB_R2.fastq.gz" "P12_ZB_R1.fastq.gz" "P12_ZB_R2.fastq.gz"
- [7] "P13_ZB_R1.fastq.gz" "P13_ZB_R2.fastq.gz" "P14_ZB_R1.fastq.gz"
-[10] "P14_ZB_R2.fastq.gz" "P15_ZB_R1.fastq.gz" "P15_ZB_R2.fastq.gz"
-[13] "P16_ZB_R1.fastq.gz" "P16_ZB_R2.fastq.gz" "P17_ZB_R1.fastq.gz"
-[16] "P17_ZB_R2.fastq.gz" "P2_ZB_R1.fastq.gz"  "P2_ZB_R2.fastq.gz" 
-[19] "P3_ZB_R1.fastq.gz"  "P3_ZB_R2.fastq.gz"  "P4_ZB_R1.fastq.gz" 
-[22] "P4_ZB_R2.fastq.gz"  "P5_ZB_R1.fastq.gz"  "P5_ZB_R2.fastq.gz" 
-[25] "P6_ZB_R1.fastq.gz"  "P6_ZB_R2.fastq.gz"  "P7_ZB_R1.fastq.gz" 
-[28] "P7_ZB_R2.fastq.gz"  "P8_ZB_R1.fastq.gz"  "P8_ZB_R2.fastq.gz" 
-[31] "P9_ZB_R1.fastq.gz"  "P9_ZB_R2.fastq.gz" </code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">metadata_file</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] TRUE</code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="va">metadata_file</span><span class="op">)</span><span class="op">$</span><span class="va">size</span> <span class="op">&gt;</span> <span class="fl">0</span></span></code></pre></div>
-<pre><code>[1] TRUE</code></pre>
 <p>If you see the expected files listed and no errors, you are ready to
 proceed.</p>
 </div>
@@ -181,7 +164,7 @@ proceed.</p>
 <h3 id="load-required-libraries">Load required libraries<a class="anchor" aria-label="anchor" href="#load-required-libraries"></a>
 </h3>
 <p>Load the libraries needed for this tutorial:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cassandrahjo.github.io/Rsearch">Rsearch</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">microseq</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span></code></pre></div>
@@ -191,9 +174,8 @@ proceed.</p>
 <h2 id="inspect-the-raw-data">Inspect the raw data<a class="anchor" aria-label="anchor" href="#inspect-the-raw-data"></a>
 </h2>
 <p>First, we read the metadata file:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_tsv</a></span><span class="op">(</span><span class="va">metadata_file</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Number of samples in the metadata file: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Number of samples in the metadata file:  16 </code></pre>
 <div class="section level3">
@@ -209,7 +191,7 @@ which plots the mean and median base quality scores across all bases for
 each read. Error bars show the interquartile range (25th to 75th
 percentiles). Note that the x-axis for the R2 panel has been flipped to
 remind us that R1 and R2 reads are read in opposite directions.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -218,7 +200,7 @@ remind us that R1 and R2 reads are read in opposite directions.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gg.obj</span><span class="op">)</span></span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="tutorial_files/figure-html/plot_base_quality_raw-1.png" width="700"></p>
+<p><img src="figs/plot_base_quality_raw.png" alt=""></p>
 <p>In the first sample, we see that the R1 reads have generally higher
 and more stable quality compared to the R2 reads, which is a common
 feature of Illumina paired-end sequencing. The shaded regions at the
@@ -235,7 +217,7 @@ analyses.</p>
 <p>We can also explore the distribution of expected error (EE) rates
 across reads, which provides a measure of read quality (lower EE rates
 indicate higher quality).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -249,7 +231,7 @@ indicate higher quality).</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">R2.gg.obj</span><span class="op">)</span></span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="tutorial_files/figure-html/plot_ee_distribution-1.png" width="700"><img src="tutorial_files/figure-html/plot_ee_distribution-2.png" width="700"></p>
+<p><img src="figs/EE_R1.png" alt=""><img src="figs/EE_R2.png" alt=""></p>
 <p>In the first sample most reads have low expected error rates,
 indicated by the left-skewed distributions. However, some reads show
 higher EE rates, suggesting that some low-quality reads are present and
@@ -274,11 +256,12 @@ steps.</p>
 <div class="section level3">
 <h3 id="merging-raw-reads">Merging raw reads<a class="anchor" aria-label="anchor" href="#merging-raw-reads"></a>
 </h3>
-<p>Before trimming, we can try merging the raw reads to get a baseline
-understanding of read overlap and quality. The
-<code>vs_merging_lengths</code> function can be used to plot some
-merging statistics:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<p>Before trimming and filtering, we can try merging the raw reads to
+get a baseline understanding of read overlap and quality. Here we try to
+merge all the reads we have got for a given sample, without any trimming
+and filtering. The <code>vs_merging_lengths</code> function can be used
+to plot some merging statistics:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -290,11 +273,36 @@ merging statistics:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">merging_raw.tbl</span>, <span class="st">"statistics"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="tutorial_files/figure-html/merge_raw_reads-1.png" width="700"></p>
-<pre><code>  Tot_num_pairs Merged Mean_Read_Length_before_merging
-1         67857  55564                           279.5
-  Mean_Read_Length_after_merging StdDev_Read_Length     R1     R2
-1                         428.98               2.08 R1.tbl R2.tbl</code></pre>
+<p><img src="figs/merging_stats_raw.png" alt=""></p>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="5%">
+<col width="27%">
+<col width="26%">
+<col width="16%">
+<col width="5%">
+<col width="5%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Tot_num_pairs</th>
+<th align="right">Merged</th>
+<th align="right">Mean_Read_Length_before_merging</th>
+<th align="right">Mean_Read_Length_after_merging</th>
+<th align="right">StdDev_Read_Length</th>
+<th align="left">R1</th>
+<th align="left">R2</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">67857</td>
+<td align="right">55564</td>
+<td align="right">279.5</td>
+<td align="right">428.98</td>
+<td align="right">2.08</td>
+<td align="left">R1.tbl</td>
+<td align="left">R2.tbl</td>
+</tr></tbody>
+</table>
 <p>From the first sample, approximately 82% (55 564 out of 67 857) of
 the read pairs merged successfully. From the two top panels we can see
 the length distribution of the R1 and R2 reads. In this case all of the
@@ -303,7 +311,12 @@ respectively.</p>
 <p>The two bottom panels show the distribution of the length of the
 merged reads, and the distribution of the overlap length. In this
 example, almost all merged reads have a length of around 430 bases, and
-the length of the overlap is around 140 bases.</p>
+the length of the overlap is around 130 bases.</p>
+<p>The results from merging the raw reads above includes singletons,
+merged read pairs with a copy number of 1. If we assume that sequencing
+errors are more likely to occur among singletons and remove them, we are
+left with approximately 49% (33 259 out of 67 857) successfully merged
+read pairs.</p>
 <p>Together this tells us:</p>
 <ul>
 <li>We should discard the very short reads, and we may set a threshold
@@ -313,8 +326,18 @@ quite a lot and still maintain a long enough overlap to merge.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="optimizeing-trimming-settings">Optimizeing trimming settings<a class="anchor" aria-label="anchor" href="#optimizeing-trimming-settings"></a>
+<h3 id="optimizing-trimming-settings">Optimizing trimming settings<a class="anchor" aria-label="anchor" href="#optimizing-trimming-settings"></a>
 </h3>
+<p>In achieve optimal merging results, we need to optimize the trimming
+of the reads. For this purpose, we have created two functions that
+iterate over a range of <code>truncqual</code> and
+<code>truncee_rate</code> values used during trimming, to identify the
+settings that yield the best outcome. We still assume that sequencing
+errors are more likely to occur in singletons, and we therefore choose
+to look at merged reads with a copy number of 2 or more. We assume that
+the more of these merged sequences, the better the merging is. During
+this optimization of truncation, the reads are also filtered to remove
+the reads with average expected error greater than 0.01 (default).</p>
 <div class="section level4">
 <h4 id="optimize-truncqual-value">Optimize <code>truncqual</code> value<a class="anchor" aria-label="anchor" href="#optimize-truncqual-value"></a>
 </h4>
@@ -328,14 +351,17 @@ is measured by the number of merged read pairs with a copy number above
 the number specified by <code>min_size</code>, after dereplication.</p>
 <p>The function may take some time to run, but you can view the progress
 through a progress bar in the console.</p>
-<p><img src="tutorial_files/figure-html/optimize_truncqual-1.png" width="700"></p>
+<p><img src="figs/optimize_truncqual.png" alt=""></p>
 <p>For the first sample, the best <code>truncqual</code> value is 7. At
-this setting, 30 688 read pairs are successfully merged.</p>
-<p>Although this number is lower compared to raw merging, the important
-difference is that only high-quality merged reads with copy number above
-2 are considered here. Thus, trimming with <code>truncqual = 7</code>
-effectively retains higher-confidence reads at the cost of discarding
-lower-quality ones, which is exactly what we want.</p>
+this setting, approximately 50% (33 740 out of 67 857) read pairs are
+successfully merged.</p>
+<p>Although this number is just slightly higher compared to the results
+from the raw merging, the important difference is that only high-quality
+merged reads with copy number above 2 and an average expected error
+bellow 0.01 are considered here. Thus, trimming with
+<code>truncqual = 7</code> effectively retains higher-confidence reads
+at the cost of discarding lower-quality ones, which is exactly what we
+want.</p>
 <p>Why not merge all reads here? Because singelton reads often have
 sequencing errors, and this will affect the merging. We base the
 optimization entirely on multicopy or high-quality reads.</p>
@@ -354,12 +380,13 @@ number of merged read pairs with a copy number above the number
 specified by <code>min_size</code>, after dereplication.</p>
 <p>The function may take some time to run, but you can view the progress
 through a progress bar in the console.</p>
-<p><img src="tutorial_files/figure-html/optimize_truncee_rate-1.png" width="700"></p>
+<p><img src="figs/optimize_truncee_rate.png" alt=""></p>
 <p>The optimal <code>truncee_rate</code> for this sample is 0.01, with
-31 600 merged read pairs. Again, although fewer reads survive after
-trimming and merges compared to raw reads, the reads retained are of
-higher quality and reliability, which is critical for downstream
-clustering and analysis.</p>
+approximately 51% (34 668 out of 67 857) successfully merged read pairs.
+Again, the number of merged read pairs is just slightly higher compared
+to merging raw reads, but here the reads retained are of higher quality
+and reliability, because singletons and low quality reads are removed,
+which is critical for downstream clustering and analysis.</p>
 <p>Based on the results from the optimization plots, the
 <code>truncqual</code> and <code>truncee_rate</code> values can be set
 in the trimming and filtering function:
@@ -373,7 +400,7 @@ in the trimming and filtering function:
 will use the same <code>for</code>-loop as above to loop through all
 samples, but this time we will add the <code>vs_fastx_trim_filt</code>
 function to trim and filter all the reads.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -388,14 +415,26 @@ function to trim and filter all the reads.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">R1_filt.tbl</span>, <span class="st">"statistics"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<pre><code>  Kept_Sequences Discarded_Sequences fastx_source reverse_source
-1          60977                6880       R1.tbl         R2.tbl</code></pre>
+<table class="table">
+<thead><tr class="header">
+<th align="right">Kept_Sequences</th>
+<th align="right">Discarded_Sequences</th>
+<th align="left">fastx_source</th>
+<th align="left">reverse_source</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">60977</td>
+<td align="right">6880</td>
+<td align="left">R1.tbl</td>
+<td align="left">R2.tbl</td>
+</tr></tbody>
+</table>
 <p>Here we also chose to trim off 12 bases at the 5’ end
 (<code>stripleft = 12</code>) of all reads since we saw above the
 read-quality was poorer at the first bases as well.</p>
 <p>We can again assess the read quality after trimming and filtering
 using <code>plot_base_quality</code>:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -411,7 +450,7 @@ using <code>plot_base_quality</code>:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gg.obj</span><span class="op">)</span></span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="tutorial_files/figure-html/plot_base_quality_trimmed-1.png" width="700"></p>
+<p><img src="figs/plot_base_quality_after_filt.png" alt=""></p>
 </div>
 </div>
 <div class="section level2">
@@ -420,7 +459,7 @@ using <code>plot_base_quality</code>:</p>
 <p>After trimming and filtering, we merge the read pairs using the
 <code>vs_fastq_mergepairs</code> function. We then expand our previous
 <code>for</code>-loop to include merging like this:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -438,10 +477,35 @@ using <code>plot_base_quality</code>:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">merged.tbl</span>, <span class="st">"statistics"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<pre><code>  Tot_num_pairs Merged Mean_Read_Length_before_merging
-1         60977  58323                          254.92
-  Mean_Read_Length_after_merging StdDev_Read_Length          R1          R2
-1                         404.97               2.33 R1_filt.tbl R2_filt.tbl</code></pre>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="5%">
+<col width="25%">
+<col width="24%">
+<col width="14%">
+<col width="9%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Tot_num_pairs</th>
+<th align="right">Merged</th>
+<th align="right">Mean_Read_Length_before_merging</th>
+<th align="right">Mean_Read_Length_after_merging</th>
+<th align="right">StdDev_Read_Length</th>
+<th align="left">R1</th>
+<th align="left">R2</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">60977</td>
+<td align="right">58323</td>
+<td align="right">254.92</td>
+<td align="right">404.97</td>
+<td align="right">2.33</td>
+<td align="left">R1_filt.tbl</td>
+<td align="left">R2_filt.tbl</td>
+</tr></tbody>
+</table>
 <p>In the statistics table from the merging one can see the total number
 of read pairs, the number of merged reads, and length statistics about
 the reads before and after merging. For this sample 58 323 out of 60 977
@@ -458,7 +522,7 @@ step, chimera detection, requires a FASTA object as input we will set
 the <code>output_format</code> to <code>"fasta"</code>. We also want to
 add the sample identifier to the header of each sequence, which is done
 by using the <code>sample</code> parameter.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -478,10 +542,10 @@ by using the <code>sample</code> parameter.</p>
 <span>                                output_format <span class="op">=</span> <span class="st">"fasta"</span>,</span>
 <span>                                sample <span class="op">=</span> <span class="va">sample.tbl</span><span class="op">$</span><span class="va">sample_id</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Number of unique reads after dereplication: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">derep.tbl</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span>  </span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Number of unique reads after dereplication: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">derep.tbl</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Number of unique reads after dereplication:  25645 </code></pre>
 <div class="section level3">
 <h3 id="plot-size-distribution">Plot size distribution<a class="anchor" aria-label="anchor" href="#plot-size-distribution"></a>
@@ -489,11 +553,11 @@ by using the <code>sample</code> parameter.</p>
 <p>An optional step is to plot the size (copy number) distribution of
 the dereplicated reads, using the <code>plot_size_dist</code>
 function:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_size_dist.html">plot_size_dist</a></span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">derep.tbl</span><span class="op">)</span></span></code></pre></div>
-<p><img src="tutorial_files/figure-html/plot_size_distribution_derep-1.png" width="700"></p>
+<p><img src="figs/derep_size_dist.png" alt=""></p>
 <p>In this example, we can see that most of the dereplicated reads have
-a copy number of 1, and only a few reads have a copy number above 2.</p>
+a low copy number, and only a few reads have high copy numbers.</p>
 </div>
 </div>
 <div class="section level2">
@@ -513,7 +577,7 @@ FASTA table.</li>
 </ul>
 <p>Both options are demonstrated in the code bellow, but we will use the
 first option in this tutorial.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create empty table to store results</span></span>
 <span><span class="va">all.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -561,14 +625,16 @@ now use the table with all the reads from all samples from earlier
 (<code>all.tbl</code>).</p>
 <p>If you wrote the results to file you need to read the files into R
 again:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"../tutorial_data/fasta"</span>, <span class="co"># Change me</span></span>
 <span>                    full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">all.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">files</span>, <span class="va">readFasta</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Additionally, if you don’t want to run the entire pipeline yourself,
+<p>Alternatively, if you don’t want to run the entire pipeline yourself,
 you can use the <code>all_tbl.txt.zip</code> object that is included in
 the example data.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">all.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_tsv</a></span><span class="op">(</span><span class="st">"path/to/all_tbl.txt.zip"</span><span class="op">)</span> <span class="co"># Change me</span></span></code></pre></div>
 <p>Next we dereplicate the reads again, but this time we will use the
 <code>vs_fastx_uniques</code> function with the
 <code>output_format</code> set to <code>"fasta"</code> and
@@ -576,51 +642,142 @@ the example data.</p>
 FASTA table with all the unique sequences from all samples with a copy
 number above <code>2</code>. We will also use the <code>relabel</code>
 parameter, to relabel the headers of the unique sequences.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_derep.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_fastx_uniques.html">vs_fastx_uniques</a></span><span class="op">(</span><span class="va">all.tbl</span>,</span>
 <span>                                  minuniquesize <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>                                  output_format <span class="op">=</span> <span class="st">"fasta"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_derep.tbl</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [38;5;246m# A tibble: 6 × 2 [39m
-  Header                                                                Sequence
-   [3m [38;5;246m&lt;chr&gt; [39m [23m                                                                  [3m [38;5;246m&lt;chr&gt; [39m [23m   
- [38;5;250m1 [39m M07166:204:000000000-KN9DC:1:1101:22227:1435;sample=P10_ZB;size=74637 CGCAATG…
- [38;5;250m2 [39m M07166:204:000000000-KN9DC:1:1101:21037:1765;sample=P10_ZB;size=60912 CACAATG…
- [38;5;250m3 [39m M07166:204:000000000-KN9DC:1:1101:10597:1525;sample=P10_ZB;size=59016 CACAATG…
- [38;5;250m4 [39m M07166:204:000000000-KN9DC:1:1101:18309:1743;sample=P10_ZB;size=45432 GGCAATG…
- [38;5;250m5 [39m M07166:204:000000000-KN9DC:1:1101:12703:1536;sample=P10_ZB;size=39963 GACAATG…
- [38;5;250m6 [39m M07166:204:000000000-KN9DC:1:1101:22294:1864;sample=P10_ZB;size=37536 CGCAATG…</code></pre>
+<span>                                  output_format <span class="op">=</span> <span class="st">"fasta"</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="14%">
+<col width="85%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Header</th>
+<th align="left">Sequence</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">M07166:204:000000000-KN9DC:1:1101:22227:1435;sample=P10_ZB;size=74637</td>
+<td align="left">CGCAATGGACGAAAGTCTGACGGAGCAACGCCGCGTGAGTGATGAAGGTTTTCGGATCGTAAAGCTCTGTTGTTAGGGAAGAACAAGTACCGTTCGAATAGGGCGGTACCTTGACGGTACCTAACCAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGAATTATTGGGCGTAAAGGGCTCGCAGGCGGTTCCTTAAGTCTGATGTGAAAGCCCCCGGCTCAACCGGGGAGGGTCATTGGAAACTGGGGAACTTGAGTGCAGAAGAGGAGAGTGGAATTCCACGTGTAGCGGTGAAATGCGTAGAGATGTGGAGGAACACCAGTGGCGAAGGCGACTCTCTGGTCTGTAACTGACGCTGAGGAGCGAAAGCGTGG</td>
+</tr>
+<tr class="even">
+<td align="left">M07166:204:000000000-KN9DC:1:1101:21037:1765;sample=P10_ZB;size=60912</td>
+<td align="left">CACAATGGGCGCAAGCCTGATGCAGCCATGCCGCGTGTATGAAGAAGGCCTTCGGGTTGTAAAGTACTTTCAGCGGGGAGGAAGGTGTTGTGGTTAATAACCGCAGCAATTGACGTTACCCGCAGAAGAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCACGCAGGCGGTCTGTCAAGTCGGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATTCGAAACTGGCAGGCTTGAGTCTTGTAGAGGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACAAAGACTGACGCTCAGGTGCGAAAGCGTGG</td>
+</tr>
+<tr class="odd">
+<td align="left">M07166:204:000000000-KN9DC:1:1101:10597:1525;sample=P10_ZB;size=59016</td>
+<td align="left">CACAATGGGCGCAAGCCTGATGCAGCCATGCCGCGTGTATGAAGAAGGCCTTCGGGTTGTAAAGTACTTTCAGCGGGGAGGAAGGGAGTAAAGTTAATACCTTTGCTCATTGACGTTACCCGCAGAAGAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCACGCAGGCGGTTTGTTAAGTCAGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATCTGATACTGGCAAGCTTGAGTCTCGTAGAGGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACGAAGACTGACGCTCAGGTGCGAAAGCGTGG</td>
+</tr>
+<tr class="even">
+<td align="left">M07166:204:000000000-KN9DC:1:1101:18309:1743;sample=P10_ZB;size=45432</td>
+<td align="left">GGCAATGGACGAAAGTCTGACCGAGCAACGCCGCGTGAGTGAAGAAGGTTTTCGGATCGTAAAACTCTGTTGTTAGAGAAGAACAAGGACGTTAGTAACTGAACGTCCCCTGACGGTATCTAACCAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGATTTATTGGGCGTAAAGCGAGCGCAGGCGGTTTCTTAAGTCTGATGTGAAAGCCCCCGGCTCAACCGGGGAGGGTCATTGGAAACTGGGAGACTTGAGTGCAGAAGAGGAGAGTGGAATTCCATGTGTAGCGGTGAAATGCGTAGATATATGGAGGAACACCAGTGGCGAAGGCGGCTCTCTGGTCTGTAACTGACGCTGAGGCTCGAAAGCGTGG</td>
+</tr>
+<tr class="odd">
+<td align="left">M07166:204:000000000-KN9DC:1:1101:12703:1536;sample=P10_ZB;size=39963</td>
+<td align="left">GACAATGGGCGAAAGCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGTCTTCGGATTGTAAAGCACTTTAAGTTGGGAGGAAGGGCAGTAAGTTAATACCTTGCTGTTTTGACGTTACCAACAGAATAAGCACCGGCTAACTTCGTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATCCAAAACTACTGAGCTAGAGTACGGTAGAGGGTGGTGGAATTTCCTGTGTAGCGGTGAAATGCGTAGATATAGGAAGGAACACCAGTGGCGAAGGCGACCACCTGGACTGATACTGACACTGAGGTGCGAAAGCGTGG</td>
+</tr>
+<tr class="even">
+<td align="left">M07166:204:000000000-KN9DC:1:1101:22294:1864;sample=P10_ZB;size=37536</td>
+<td align="left">CGCAATGGGCGAAAGCCTGACGGAGCAACGCCGCGTGAGTGATGAAGGTCTTCGGATCGTAAAACTCTGTTATTAGGGAAGAACATATGTGTAAGTAACTGTGCACATCTTGACGGTACCTAATCAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTATCCGGAATTATTGGGCGTAAAGCGCGCGTAGGCGGTTTTTTAAGTCTGATGTGAAAGCCCACGGCTCAACCGTGGAGGGTCATTGGAAACTGGAAAACTTGAGTGCAGAAGAGGAAAGTGGAATTCCATGTGTAGCGGTGAAATGCGCAGAGATATGGAGGAACACCAGTGGCGAAGGCGACTTTCTGGTCTGTAACTGACGCTGATGTGCGAAAGCGTGG</td>
+</tr>
+</tbody>
+</table>
 <p>Next we cluster the unique sequences at 95% identity using the
 <code>vs_cluster_size</code> function:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sequence.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_cluster_size.html">vs_cluster_size</a></span><span class="op">(</span><span class="va">all_derep.tbl</span>, </span>
 <span>                                id <span class="op">=</span> <span class="fl">0.95</span>, </span>
 <span>                                relabel <span class="op">=</span> <span class="st">"OTU"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sequence.tbl</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [38;5;246m# A tibble: 6 × 3 [39m
-  Header           Sequence                                               otu_id
-   [3m [38;5;246m&lt;chr&gt; [39m [23m             [3m [38;5;246m&lt;chr&gt; [39m [23m                                                   [3m [38;5;246m&lt;chr&gt; [39m [23m 
- [38;5;250m1 [39m OTU1;size=151721 CGCAATGGACGAAAGTCTGACGGAGCAACGCCGCGTGAGTGATGAAGGTTTTC… OTU1  
- [38;5;250m2 [39m OTU2;size=142184 CACAATGGGCGCAAGCCTGATGCAGCCATGCCGCGTGTATGAAGAAGGCCTTC… OTU2  
- [38;5;250m3 [39m OTU3;size=138095 CACAATGGGCGCAAGCCTGATGCAGCCATGCCGCGTGTATGAAGAAGGCCTTC… OTU3  
- [38;5;250m4 [39m OTU4;size=93098  GGCAATGGACGAAAGTCTGACCGAGCAACGCCGCGTGAGTGAAGAAGGTTTTC… OTU4  
- [38;5;250m5 [39m OTU5;size=79738  GACAATGGGCGAAAGCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGTCTTC… OTU5  
- [38;5;250m6 [39m OTU6;size=91320  CGCAATGGGCGAAAGCCTGACGGAGCAACGCCGCGTGAGTGATGAAGGTCTTC… OTU6  </code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sequence.tbl</span>, <span class="st">"statistics"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code>  num_nucleotides min_length_input_seq max_length_input_seq
-1        12277056                  238                  408
-  avg_length_input_seq num_clusters min_size_cluster max_size_cluster
-1             404.8093          119                2           151721
-  avg_size_cluster num_singletons         input
-1           6867.1              0 all_derep.tbl</code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sequence.tbl</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sequence.tbl</span>, <span class="st">"statistics"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="3%">
+<col width="94%">
+<col width="1%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Header</th>
+<th align="left">Sequence</th>
+<th align="left">otu_id</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">OTU1;size=151721</td>
+<td align="left">CGCAATGGACGAAAGTCTGACGGAGCAACGCCGCGTGAGTGATGAAGGTTTTCGGATCGTAAAGCTCTGTTGTTAGGGAAGAACAAGTACCGTTCGAATAGGGCGGTACCTTGACGGTACCTAACCAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGAATTATTGGGCGTAAAGGGCTCGCAGGCGGTTCCTTAAGTCTGATGTGAAAGCCCCCGGCTCAACCGGGGAGGGTCATTGGAAACTGGGGAACTTGAGTGCAGAAGAGGAGAGTGGAATTCCACGTGTAGCGGTGAAATGCGTAGAGATGTGGAGGAACACCAGTGGCGAAGGCGACTCTCTGGTCTGTAACTGACGCTGAGGAGCGAAAGCGTGG</td>
+<td align="left">OTU1</td>
+</tr>
+<tr class="even">
+<td align="left">OTU2;size=142184</td>
+<td align="left">CACAATGGGCGCAAGCCTGATGCAGCCATGCCGCGTGTATGAAGAAGGCCTTCGGGTTGTAAAGTACTTTCAGCGGGGAGGAAGGTGTTGTGGTTAATAACCGCAGCAATTGACGTTACCCGCAGAAGAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCACGCAGGCGGTCTGTCAAGTCGGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATTCGAAACTGGCAGGCTTGAGTCTTGTAGAGGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACAAAGACTGACGCTCAGGTGCGAAAGCGTGG</td>
+<td align="left">OTU2</td>
+</tr>
+<tr class="odd">
+<td align="left">OTU3;size=138095</td>
+<td align="left">CACAATGGGCGCAAGCCTGATGCAGCCATGCCGCGTGTATGAAGAAGGCCTTCGGGTTGTAAAGTACTTTCAGCGGGGAGGAAGGGAGTAAAGTTAATACCTTTGCTCATTGACGTTACCCGCAGAAGAAGCACCGGCTAACTCCGTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCACGCAGGCGGTTTGTTAAGTCAGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATCTGATACTGGCAAGCTTGAGTCTCGTAGAGGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACGAAGACTGACGCTCAGGTGCGAAAGCGTGG</td>
+<td align="left">OTU3</td>
+</tr>
+<tr class="even">
+<td align="left">OTU4;size=93098</td>
+<td align="left">GGCAATGGACGAAAGTCTGACCGAGCAACGCCGCGTGAGTGAAGAAGGTTTTCGGATCGTAAAACTCTGTTGTTAGAGAAGAACAAGGACGTTAGTAACTGAACGTCCCCTGACGGTATCTAACCAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTGTCCGGATTTATTGGGCGTAAAGCGAGCGCAGGCGGTTTCTTAAGTCTGATGTGAAAGCCCCCGGCTCAACCGGGGAGGGTCATTGGAAACTGGGAGACTTGAGTGCAGAAGAGGAGAGTGGAATTCCATGTGTAGCGGTGAAATGCGTAGATATATGGAGGAACACCAGTGGCGAAGGCGGCTCTCTGGTCTGTAACTGACGCTGAGGCTCGAAAGCGTGG</td>
+<td align="left">OTU4</td>
+</tr>
+<tr class="odd">
+<td align="left">OTU5;size=79738</td>
+<td align="left">GACAATGGGCGAAAGCCTGATCCAGCCATGCCGCGTGTGTGAAGAAGGTCTTCGGATTGTAAAGCACTTTAAGTTGGGAGGAAGGGCAGTAAGTTAATACCTTGCTGTTTTGACGTTACCAACAGAATAAGCACCGGCTAACTTCGTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCTGGGAACTGCATCCAAAACTACTGAGCTAGAGTACGGTAGAGGGTGGTGGAATTTCCTGTGTAGCGGTGAAATGCGTAGATATAGGAAGGAACACCAGTGGCGAAGGCGACCACCTGGACTGATACTGACACTGAGGTGCGAAAGCGTGG</td>
+<td align="left">OTU5</td>
+</tr>
+<tr class="even">
+<td align="left">OTU6;size=91320</td>
+<td align="left">CGCAATGGGCGAAAGCCTGACGGAGCAACGCCGCGTGAGTGATGAAGGTCTTCGGATCGTAAAACTCTGTTATTAGGGAAGAACATATGTGTAAGTAACTGTGCACATCTTGACGGTACCTAATCAGAAAGCCACGGCTAACTACGTGCCAGCAGCCGCGGTAATACGTAGGTGGCAAGCGTTATCCGGAATTATTGGGCGTAAAGCGCGCGTAGGCGGTTTTTTAAGTCTGATGTGAAAGCCCACGGCTCAACCGTGGAGGGTCATTGGAAACTGGAAAACTTGAGTGCAGAAGAGGAAAGTGGAATTCCATGTGTAGCGGTGAAATGCGCAGAGATATGGAGGAACACCAGTGGCGAAGGCGACTTTCTGGTCTGTAACTGACGCTGATGTGCGAAAGCGTGG</td>
+<td align="left">OTU6</td>
+</tr>
+</tbody>
+</table>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="9%">
+<col width="12%">
+<col width="12%">
+<col width="12%">
+<col width="7%">
+<col width="9%">
+<col width="9%">
+<col width="9%">
+<col width="8%">
+<col width="8%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">num_nucleotides</th>
+<th align="right">min_length_input_seq</th>
+<th align="right">max_length_input_seq</th>
+<th align="right">avg_length_input_seq</th>
+<th align="right">num_clusters</th>
+<th align="right">min_size_cluster</th>
+<th align="right">max_size_cluster</th>
+<th align="right">avg_size_cluster</th>
+<th align="right">num_singletons</th>
+<th align="left">input</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">12277056</td>
+<td align="right">238</td>
+<td align="right">408</td>
+<td align="right">404.8093</td>
+<td align="right">119</td>
+<td align="right">2</td>
+<td align="right">151721</td>
+<td align="right">6867.1</td>
+<td align="right">0</td>
+<td align="left">all_derep.tbl</td>
+</tr></tbody>
+</table>
 <p>To plot the distribution of the copy number for the different
 centroids, you can use the <code>plot_size_dist</code> function:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_size_dist.html">plot_size_dist</a></span><span class="op">(</span><span class="va">sequence.tbl</span><span class="op">)</span></span></code></pre></div>
-<p><img src="tutorial_files/figure-html/plot_size_distribution_otus-1.png" width="700"></p>
+<p><img src="figs/centroids_size_dist.png" alt=""></p>
 <div class="section level3">
 <h3 id="creating-the-otu-table">Creating the OTU table<a class="anchor" aria-label="anchor" href="#creating-the-otu-table"></a>
 </h3>
@@ -629,7 +786,7 @@ have to search with all reads against all OTU centroids using the
 <code>vs_usearch_global</code> function. To increase the speed you can
 run the function with multiple threads, but this depends on the computer
 you are using.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">readcount.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_usearch_global.html">vs_usearch_global</a></span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">all.tbl</span>,</span>
 <span>                                   database <span class="op">=</span> <span class="va">sequence.tbl</span>,</span>
 <span>                                   otutabout <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -653,10 +810,10 @@ download from the <a href="https://www.arb-silva.de/download/arb-files/" target=
 </h3>
 <p>The vs_sintax function can be used to assign taxonomy to the OTUs
 like this:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tax.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_sintax.html">vs_sintax</a></span><span class="op">(</span>fasta_input <span class="op">=</span> <span class="va">sequence.tbl</span>,</span>
 <span>                     database <span class="op">=</span> <span class="st">"SOME_DATABASE_FILE.fa.gz"</span> <span class="co"># Change me</span></span>
-<span>                     <span class="op">)</span> </span></code></pre></div>
+<span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="alternative-2-vs_usearch_global">Alternative 2: <code>vs_usearch_global</code><a class="anchor" aria-label="anchor" href="#alternative-2-vs_usearch_global"></a>
@@ -665,7 +822,7 @@ like this:</p>
 taxonomy to the OTUs. The format of the output table is a little
 different, we therefore do some data wrangling in order to make it the
 correct format for an <code>Rsearch</code> object.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tax_v2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_usearch_global.html">vs_usearch_global</a></span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">sequence.tbl</span>,</span>
 <span>                                database <span class="op">=</span> <span class="st">"SOME_DATABASE_FILE.fa.gz"</span>, <span class="co"># Change me</span></span>
 <span>                                id <span class="op">=</span> <span class="fl">0.95</span>,</span>
@@ -698,7 +855,7 @@ correct format for an <code>Rsearch</code> object.</p>
 <p>To avoid having to run this pipeline again in the future it can be a
 good idea to save the current tables as an <code>RData</code> object,
 but this is optional:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">sample.tbl</span>, </span>
 <span>     <span class="va">sequence.tbl</span>, </span>
 <span>     <span class="va">readcount.tbl</span>, </span>
@@ -710,43 +867,42 @@ but this is optional:</p>
 </h2>
 <p>If you want to run the pipeline without all the intermediate steps,
 you can use the pipe operator in R:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>all.tbl <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
-<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a></span>
-<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sample.tbl)){</span>
-<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a>  R1.tbl <span class="ot">&lt;-</span> <span class="fu">readFastq</span>(<span class="fu">file.path</span>(fastq_path, sample.tbl<span class="sc">$</span>R1_file[i]))</span>
-<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a>  R2.tbl <span class="ot">&lt;-</span> <span class="fu">readFastq</span>(<span class="fu">file.path</span>(fastq_path, sample.tbl<span class="sc">$</span>R2_file[i]))</span>
-<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a>  </span>
-<span id="cb43-7"><a href="#cb43-7" tabindex="-1"></a>  derep_wo_chimera.tbl <span class="ot">&lt;-</span> </span>
-<span id="cb43-8"><a href="#cb43-8" tabindex="-1"></a>    <span class="fu">vs_fastx_trim_filt</span>(R1.tbl, R2.tbl,</span>
-<span id="cb43-9"><a href="#cb43-9" tabindex="-1"></a>                       <span class="at">minlen =</span> <span class="dv">50</span>,</span>
-<span id="cb43-10"><a href="#cb43-10" tabindex="-1"></a>                       <span class="at">maxee_rate =</span> <span class="fl">0.01</span>,</span>
-<span id="cb43-11"><a href="#cb43-11" tabindex="-1"></a>                       <span class="at">truncee_rate =</span> <span class="fl">0.035</span>,</span>
-<span id="cb43-12"><a href="#cb43-12" tabindex="-1"></a>                       <span class="at">stripleft =</span> <span class="dv">12</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb43-13"><a href="#cb43-13" tabindex="-1"></a>    <span class="fu">vs_fastq_mergepairs</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb43-14"><a href="#cb43-14" tabindex="-1"></a>    <span class="fu">vs_fastx_uniques</span>(<span class="at">output_format =</span> <span class="st">"fasta"</span>,</span>
-<span id="cb43-15"><a href="#cb43-15" tabindex="-1"></a>                     <span class="at">sample =</span> sample.tbl<span class="sc">$</span>sample_id[i]) <span class="sc">%&gt;%</span></span>
-<span id="cb43-16"><a href="#cb43-16" tabindex="-1"></a>    <span class="fu">vs_uchime_denovo</span>()</span>
-<span id="cb43-17"><a href="#cb43-17" tabindex="-1"></a>  </span>
-<span id="cb43-18"><a href="#cb43-18" tabindex="-1"></a>  all.tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all.tbl, derep_wo_chimera.tbl)</span>
-<span id="cb43-19"><a href="#cb43-19" tabindex="-1"></a>}</span>
-<span id="cb43-20"><a href="#cb43-20" tabindex="-1"></a></span>
-<span id="cb43-21"><a href="#cb43-21" tabindex="-1"></a>all_derep.tbl <span class="ot">&lt;-</span> <span class="fu">vs_fastx_uniques</span>(all.tbl,</span>
-<span id="cb43-22"><a href="#cb43-22" tabindex="-1"></a>                                  <span class="at">minuniquesize =</span> <span class="dv">2</span>,</span>
-<span id="cb43-23"><a href="#cb43-23" tabindex="-1"></a>                                  <span class="at">relabel =</span> <span class="st">"OTU"</span>,</span>
-<span id="cb43-24"><a href="#cb43-24" tabindex="-1"></a>                                  <span class="at">output_format =</span> <span class="st">"fasta"</span>)</span>
-<span id="cb43-25"><a href="#cb43-25" tabindex="-1"></a></span>
-<span id="cb43-26"><a href="#cb43-26" tabindex="-1"></a>sequence.tbl <span class="ot">&lt;-</span> <span class="fu">vs_cluster_size</span>(all_derep.tbl)</span>
-<span id="cb43-27"><a href="#cb43-27" tabindex="-1"></a></span>
-<span id="cb43-28"><a href="#cb43-28" tabindex="-1"></a>readcount.tbl <span class="ot">&lt;-</span> <span class="fu">vs_usearch_global</span>(<span class="at">fastx_input =</span> all.tbl,</span>
-<span id="cb43-29"><a href="#cb43-29" tabindex="-1"></a>                                   <span class="at">database =</span> sequence.tbl,</span>
-<span id="cb43-30"><a href="#cb43-30" tabindex="-1"></a>                                   <span class="at">otutabout =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb43-31"><a href="#cb43-31" tabindex="-1"></a>                                   <span class="at">id =</span> <span class="fl">0.95</span>,</span>
-<span id="cb43-32"><a href="#cb43-32" tabindex="-1"></a>                                   <span class="at">threads =</span> <span class="dv">4</span></span>
-<span id="cb43-33"><a href="#cb43-33" tabindex="-1"></a>)</span>
-<span id="cb43-34"><a href="#cb43-34" tabindex="-1"></a></span>
-<span id="cb43-35"><a href="#cb43-35" tabindex="-1"></a>tax.tbl <span class="ot">&lt;-</span> <span class="fu">vs_sintax</span>(<span class="at">fasta_input =</span> sequence.tbl,</span>
-<span id="cb43-36"><a href="#cb43-36" tabindex="-1"></a>                     <span class="at">database =</span> <span class="st">"example_database.fa.gz"</span>) <span class="co"># Change me</span></span>
-<span id="cb43-37"><a href="#cb43-37" tabindex="-1"></a><span class="er">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>all.tbl <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(sample.tbl)){</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  R1.tbl <span class="ot">&lt;-</span> <span class="fu">readFastq</span>(<span class="fu">file.path</span>(fastq_path, sample.tbl<span class="sc">$</span>R1_file[i]))</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  R2.tbl <span class="ot">&lt;-</span> <span class="fu">readFastq</span>(<span class="fu">file.path</span>(fastq_path, sample.tbl<span class="sc">$</span>R2_file[i]))</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>  </span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>  derep_wo_chimera.tbl <span class="ot">&lt;-</span> </span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>    <span class="fu">vs_fastx_trim_filt</span>(R1.tbl, R2.tbl,</span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>                       <span class="at">minlen =</span> <span class="dv">50</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>                       <span class="at">truncee_rate =</span> <span class="fl">0.035</span>,</span>
+<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>                       <span class="at">stripleft =</span> <span class="dv">12</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a>    <span class="fu">vs_fastq_mergepairs</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a>    <span class="fu">vs_fastx_uniques</span>(<span class="at">output_format =</span> <span class="st">"fasta"</span>,</span>
+<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a>                     <span class="at">sample =</span> sample.tbl<span class="sc">$</span>sample_id[i]) <span class="sc">%&gt;%</span></span>
+<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a>    <span class="fu">vs_uchime_denovo</span>()</span>
+<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a>  </span>
+<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a>  all.tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all.tbl, derep_wo_chimera.tbl)</span>
+<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a>}</span>
+<span id="cb31-19"><a href="#cb31-19" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" tabindex="-1"></a>all_derep.tbl <span class="ot">&lt;-</span> <span class="fu">vs_fastx_uniques</span>(all.tbl,</span>
+<span id="cb31-21"><a href="#cb31-21" tabindex="-1"></a>                                  <span class="at">minuniquesize =</span> <span class="dv">2</span>,</span>
+<span id="cb31-22"><a href="#cb31-22" tabindex="-1"></a>                                  <span class="at">relabel =</span> <span class="st">"OTU"</span>,</span>
+<span id="cb31-23"><a href="#cb31-23" tabindex="-1"></a>                                  <span class="at">output_format =</span> <span class="st">"fasta"</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" tabindex="-1"></a></span>
+<span id="cb31-25"><a href="#cb31-25" tabindex="-1"></a>sequence.tbl <span class="ot">&lt;-</span> <span class="fu">vs_cluster_size</span>(all_derep.tbl)</span>
+<span id="cb31-26"><a href="#cb31-26" tabindex="-1"></a></span>
+<span id="cb31-27"><a href="#cb31-27" tabindex="-1"></a>readcount.tbl <span class="ot">&lt;-</span> <span class="fu">vs_usearch_global</span>(<span class="at">fastx_input =</span> all.tbl,</span>
+<span id="cb31-28"><a href="#cb31-28" tabindex="-1"></a>                                   <span class="at">database =</span> sequence.tbl,</span>
+<span id="cb31-29"><a href="#cb31-29" tabindex="-1"></a>                                   <span class="at">otutabout =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-30"><a href="#cb31-30" tabindex="-1"></a>                                   <span class="at">id =</span> <span class="fl">0.95</span>,</span>
+<span id="cb31-31"><a href="#cb31-31" tabindex="-1"></a>                                   <span class="at">threads =</span> <span class="dv">4</span></span>
+<span id="cb31-32"><a href="#cb31-32" tabindex="-1"></a>)</span>
+<span id="cb31-33"><a href="#cb31-33" tabindex="-1"></a></span>
+<span id="cb31-34"><a href="#cb31-34" tabindex="-1"></a>tax.tbl <span class="ot">&lt;-</span> <span class="fu">vs_sintax</span>(<span class="at">fasta_input =</span> sequence.tbl,</span>
+<span id="cb31-35"><a href="#cb31-35" tabindex="-1"></a>                     <span class="at">database =</span> <span class="st">"SOME_DATABASE_FILE.fa.gz"</span>) <span class="co"># Change me</span></span>
+<span id="cb31-36"><a href="#cb31-36" tabindex="-1"></a><span class="er">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="handoff-to-phyloseq">Handoff to <code>phyloseq</code><a class="anchor" aria-label="anchor" href="#handoff-to-phyloseq"></a>
@@ -760,7 +916,7 @@ function to create an <code>Rsearch</code> object. The
 <code>Rsearch</code> object can then be converted to a
 <code>phyloseq</code> object using the <code>rsearch2phyloseq</code>
 function:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create Rsearch object</span></span>
 <span><span class="va">rsearch_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsearch_obj.html">rsearch_obj</a></span><span class="op">(</span>readcount_data <span class="op">=</span> <span class="va">readcount.tbl</span>,</span>
 <span>                           sequence_data <span class="op">=</span> <span class="va">tax.tbl</span>,</span>

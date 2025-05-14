@@ -1,0 +1,2 @@
+Tot_num_pairs	Merged	Mean_Read_Length_before_merging	Mean_Read_Length_after_merging	StdDev_Read_Length	R1	R2
+60977	58323	254.92	404.97	2.33	R1_filt.tbl	R2_filt.tbl

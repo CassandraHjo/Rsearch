@@ -26,4 +26,4 @@ articles:
     desc: >
       Walkthroughs and worked examples using Rsearch.
     contents:
-      - tutorial
+      - articles/tutorial
