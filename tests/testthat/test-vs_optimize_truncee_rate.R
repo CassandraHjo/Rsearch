@@ -14,7 +14,7 @@ test_that("optimizing truncee_rate with default values and files as input", {
   attr(optimize.tbl, "plot") <- NULL
   attr(expected_df, "plot") <- NULL
 
-  # expect_equal(optimize.tbl, expected_df)
+  expect_equal(optimize.tbl, expected_df)
 
 })
 
@@ -35,7 +35,7 @@ test_that("optimizing truncee_rate with tibbles as input", {
   attr(optimize.tbl, "plot") <- NULL
   attr(expected_df, "plot") <- NULL
 
-  #expect_equal(optimize.tbl, expected_df)
+  expect_equal(optimize.tbl, expected_df)
 
 })
 
@@ -55,7 +55,7 @@ test_that("optimizing truncee_rate with pe_df tibble as input", {
   attr(optimize.tbl, "plot") <- NULL
   attr(expected_df, "plot") <- NULL
 
-  # expect_equal(optimize.tbl, expected_df)
+  expect_equal(optimize.tbl, expected_df)
 
   attr(fastq_input, "reverse") <- NULL
   expect_error(vs_optimize_truncee_rate(fastq_input = fastq_input),
