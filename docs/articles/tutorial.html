@@ -258,9 +258,9 @@ steps.</p>
 </h3>
 <p>Before trimming and filtering, we can try merging the raw reads to
 get a baseline understanding of read overlap and quality. Here we try to
-merge all the reads we have got for a given sample, without any trimming
-and filtering. The <code>vs_merging_lengths</code> function can be used
-to plot some merging statistics:</p>
+merge all the reads we have got for the first sample, without any
+trimming and filtering. The <code>vs_merging_lengths</code> function can
+be used to plot some merging statistics:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -316,7 +316,7 @@ the length of the overlap is around 130 bases.</p>
 merged read pairs with a copy number of 1. If we assume that sequencing
 errors are more likely to occur among singletons and remove them, we are
 left with approximately 49% (33 259 out of 67 857) successfully merged
-read pairs.</p>
+read pairs when merging the raw read pairs.</p>
 <p>Together this tells us:</p>
 <ul>
 <li>We should discard the very short reads, and we may set a threshold
@@ -328,16 +328,18 @@ quite a lot and still maintain a long enough overlap to merge.</li>
 <div class="section level3">
 <h3 id="optimizing-trimming-settings">Optimizing trimming settings<a class="anchor" aria-label="anchor" href="#optimizing-trimming-settings"></a>
 </h3>
-<p>In achieve optimal merging results, we need to optimize the trimming
-of the reads. For this purpose, we have created two functions that
-iterate over a range of <code>truncqual</code> and
-<code>truncee_rate</code> values used during trimming, to identify the
-settings that yield the best outcome. We still assume that sequencing
-errors are more likely to occur in singletons, and we therefore choose
-to look at merged reads with a copy number of 2 or more. We assume that
-the more of these merged sequences, the better the merging is. During
-this optimization of truncation, the reads are also filtered to remove
-the reads with average expected error greater than 0.01 (default).</p>
+<p>We now want to optimize the trimming of the reads in order to get the
+optimal merging results. We do not neccecarily just want to merge as
+many as possible, but rather merge high-quality reads. For this purpose,
+we have created two functions that iterate over a range of
+<code>truncqual</code> and <code>truncee_rate</code> values used during
+trimming, to identify the settings that yield the best outcome. We still
+assume that sequencing errors are more likely to occur in singletons,
+and we therefore choose to look at merged reads with a copy number of 2
+or more. We assume that the more of these merged sequences, the better
+the merging is. During this optimization of truncation, the reads are
+also filtered to remove the reads with average expected error greater
+than 0.01 (default).</p>
 <div class="section level4">
 <h4 id="optimize-truncqual-value">Optimize <code>truncqual</code> value<a class="anchor" aria-label="anchor" href="#optimize-truncqual-value"></a>
 </h4>

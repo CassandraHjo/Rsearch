@@ -195,7 +195,7 @@ Choosing the best trimming and filtering settings is important for obtaining goo
 
 ## Merging raw reads
 
-Before trimming and filtering, we can try merging the raw reads to get a baseline understanding of read overlap and quality. Here we try to merge all the reads we have got for a given sample, without any trimming and filtering. The `vs_merging_lengths` function can be used to plot some merging statistics:
+Before trimming and filtering, we can try merging the raw reads to get a baseline understanding of read overlap and quality. Here we try to merge all the reads we have got for the first sample, without any trimming and filtering. The `vs_merging_lengths` function can be used to plot some merging statistics:
   
 ```{r merge_raw_reads, eval=FALSE}
 for(i in 1:nrow(sample.tbl)){
@@ -221,7 +221,7 @@ From the first sample, approximately 82% (55 564 out of 67 857) of the read pair
 
 The two bottom panels show the distribution of the length of the merged reads, and the distribution of the overlap length. In this example, almost all merged reads have a length of around 430 bases, and the length of the overlap is around 130 bases. 
 
-The results from merging the raw reads above includes singletons, merged read pairs with a copy number of 1. If we assume that sequencing errors are more likely to occur among singletons and remove them, we are left with approximately 49% (33 259 out of 67 857) successfully merged read pairs.  
+The results from merging the raw reads above includes singletons, merged read pairs with a copy number of 1. If we assume that sequencing errors are more likely to occur among singletons and remove them, we are left with approximately 49% (33 259 out of 67 857) successfully merged read pairs when merging the raw read pairs.  
 
 ```{r eval=FALSE, echo=FALSE}
 library(stringr)
@@ -248,7 +248,7 @@ Together this tells us:
 
 ## Optimizing trimming settings
 
-In achieve optimal merging results, we need to optimize the trimming of the reads. For this purpose, we have created two functions that iterate over a range of `truncqual` and `truncee_rate` values used during trimming, to identify the settings that yield the best outcome. We still assume that sequencing errors are more likely to occur in singletons, and we therefore choose to look at merged reads with a copy number of 2 or more. We assume that the more of these merged sequences, the better the merging is. During this optimization of truncation, the reads are also filtered to remove the reads with average expected error greater than 0.01 (default). 
+We now want to optimize the trimming of the reads in order to get the optimal merging results. We do not neccecarily just want to merge as many as possible, but rather merge high-quality reads. For this purpose, we have created two functions that iterate over a range of `truncqual` and `truncee_rate` values used during trimming, to identify the settings that yield the best outcome. We still assume that sequencing errors are more likely to occur in singletons, and we therefore choose to look at merged reads with a copy number of 2 or more. We assume that the more of these merged sequences, the better the merging is. During this optimization of truncation, the reads are also filtered to remove the reads with average expected error greater than 0.01 (default). 
 
 ### Optimize `truncqual` value
 
