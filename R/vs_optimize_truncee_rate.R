@@ -204,7 +204,7 @@ vs_optimize_truncee_rate <- function(fastq_input,
                   color = "") +
     ggplot2::scale_color_manual(values = c("merged_read_pairs" = pal[2]),
                                 labels = c(
-                                  merged_read_pairs = "Number of read-pairs merged")) +
+                                  merged_read_pairs = "Number of merged read-pairs")) +
     ggplot2::theme_minimal() +
     # Remove x-axis because this is common with p2
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
