@@ -114,13 +114,13 @@ you do not already have it before installing <code>Rsearch</code>:</p>
 <code class="sourceCode R"><span><span class="co"># Install Rsearch from GitHub</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"CassandraHjo/Rsearch"</span><span class="op">)</span></span></code></pre></div>
 <p>After installation, it is a good idea to restart your R session (in
-Rstudio: <em>Session</em> &gt; <em>Restart R</em>) to make sure every
-thing is properly loaded.</p>
+Rstudio: <em>Session</em> &gt; <em>Restart R</em>) to make sure
+everything is properly loaded.</p>
 <p><code>Rsearch</code> requires that you have <code>VSEARCH</code>
 installed. <code>VSEARCH</code> performs the heavy computational tasks
 quickly, while <code>Rsearch</code> allows you to run these operations
 conveniently from within R. Without <code>Rsearch</code>, you would need
-to execute <code>VSEARCH</code> manually from the command line.</p>
+to run <code>VSEARCH</code> commands manually from the command line.</p>
 <p>Installation instruction for <code>VSEARCH</code> are available on
 the <a href="https://github.com/CassandraHjo/Rsearch" target="blank" class="external-link">Rsearch GitHub page</a>.</p>
 <p>You can verify the installation of both <code>Rsearch</code> and
@@ -144,7 +144,7 @@ This is a valid command to invoke VSEARCH on this computer!</code></pre>
 the publicly available project <a href="https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA1034510" target="blank" class="external-link">Sequencing marine seafloor samples</a>.</p>
 <p><a href="https://github.com/CassandraHjo/Rsearch/releases/download/v1.0-data/tutorial_data.zip" target="blank" class="external-link">Download a zipped archive with example data here</a></p>
 <p>The data set contains samples with zymbiomics mock communities.</p>
-<p>After unpacking the zipped archive you should have</p>
+<p>After unpacking the zipped archive you should have:</p>
 <ul>
 <li>A text-file <code>metadata.txt</code>
 </li>
@@ -256,11 +256,12 @@ steps.</p>
 <div class="section level3">
 <h3 id="merging-raw-reads">Merging raw reads<a class="anchor" aria-label="anchor" href="#merging-raw-reads"></a>
 </h3>
-<p>Before trimming and filtering, we can try merging the raw reads to
-get a baseline understanding of read overlap and quality. Here we try to
-merge all the reads we have got for the first sample, without any
-trimming and filtering. The <code>vs_merging_lengths</code> function can
-be used to plot some merging statistics:</p>
+<p>Before applying trimming and filtering, we can merge the raw reads to
+establish a baseline understanding of read overlap and the number of
+successfully merged reads. Here we try to merge all the reads we have
+got for the first sample, without any trimming and filtering. The
+<code>vs_merging_lengths</code> function can be used to plot some
+merging statistics:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -329,17 +330,19 @@ quite a lot and still maintain a long enough overlap to merge.</li>
 <h3 id="optimizing-trimming-settings">Optimizing trimming settings<a class="anchor" aria-label="anchor" href="#optimizing-trimming-settings"></a>
 </h3>
 <p>We now want to optimize the trimming of the reads in order to get the
-optimal merging results. We do not neccecarily just want to merge as
+optimal merging results. We do not necessarily just want to merge as
 many as possible, but rather merge high-quality reads. For this purpose,
 we have created two functions that iterate over a range of
 <code>truncqual</code> and <code>truncee_rate</code> values used during
-trimming, to identify the settings that yield the best outcome. We still
-assume that sequencing errors are more likely to occur in singletons,
-and we therefore choose to look at merged reads with a copy number of 2
-or more. We assume that the more of these merged sequences, the better
-the merging is. During this optimization of truncation, the reads are
-also filtered to remove the reads with average expected error greater
-than 0.01 (default).</p>
+trimming, to identify the settings that yield the best outcome. Remember
+that the optimization is based on reads from one sample, but our
+experience is that reads from the same sequencing run tend to get the
+same results. We still assume that sequencing errors are more likely to
+occur in singletons, and we therefore choose to look at merged reads
+with a copy number of 2 or more. We assume that the more of these merged
+sequences, the better the merging is. During this optimization of
+truncation, the reads are also filtered to remove the reads with average
+expected error greater than 0.01 (default).</p>
 <div class="section level4">
 <h4 id="optimize-truncqual-value">Optimize <code>truncqual</code> value<a class="anchor" aria-label="anchor" href="#optimize-truncqual-value"></a>
 </h4>
@@ -364,7 +367,7 @@ bellow 0.01 are considered here. Thus, trimming with
 <code>truncqual = 7</code> effectively retains higher-confidence reads
 at the cost of discarding lower-quality ones, which is exactly what we
 want.</p>
-<p>Why not merge all reads here? Because singelton reads often have
+<p>Why not merge all reads here? Because singleton reads often have
 sequencing errors, and this will affect the merging. We base the
 optimization entirely on multicopy or high-quality reads.</p>
 </div>
@@ -431,9 +434,8 @@ function to trim and filter all the reads.</p>
 <td align="left">R2.tbl</td>
 </tr></tbody>
 </table>
-<p>Here we also chose to trim off 12 bases at the 5’ end
-(<code>stripleft = 12</code>) of all reads since we saw above the
-read-quality was poorer at the first bases as well.</p>
+<p>We also trim 12 bases from the 5’ end (<code>stripleft = 12</code>)
+of each read, based on the earlier quality assessment.</p>
 <p>We can again assess the read quality after trimming and filtering
 using <code>plot_base_quality</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -783,8 +785,8 @@ centroids, you can use the <code>plot_size_dist</code> function:</p>
 <div class="section level3">
 <h3 id="creating-the-otu-table">Creating the OTU table<a class="anchor" aria-label="anchor" href="#creating-the-otu-table"></a>
 </h3>
-<p>Finally, we create the readcount table. This may take some time as we
-have to search with all reads against all OTU centroids using the
+<p>Finally, we create the read count table. This may take some time as
+we have to search with all reads against all OTU centroids using the
 <code>vs_usearch_global</code> function. To increase the speed you can
 run the function with multiple threads, but this depends on the computer
 you are using.</p>
@@ -810,8 +812,8 @@ download from the <a href="https://www.arb-silva.de/download/arb-files/" target=
 <div class="section level3">
 <h3 id="alternative-1-vs_sintax">Alternative 1: <code>vs_sintax</code><a class="anchor" aria-label="anchor" href="#alternative-1-vs_sintax"></a>
 </h3>
-<p>The vs_sintax function can be used to assign taxonomy to the OTUs
-like this:</p>
+<p>You can assign taxonomy to OTUs using the <code>vs_sintax</code>
+function as follows:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tax.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_sintax.html">vs_sintax</a></span><span class="op">(</span>fasta_input <span class="op">=</span> <span class="va">sequence.tbl</span>,</span>
 <span>                     database <span class="op">=</span> <span class="st">"SOME_DATABASE_FILE.fa.gz"</span> <span class="co"># Change me</span></span>

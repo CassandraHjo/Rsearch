@@ -73,9 +73,9 @@ Now you are ready to install `Rsearch`:
 devtools::install_github("CassandraHjo/Rsearch")
 ```
 
-After installation, it is a good idea to restart your R session (in Rstudio: *Session* > *Restart R*) to make sure every thing is properly loaded. 
+After installation, it is a good idea to restart your R session (in Rstudio: *Session* > *Restart R*) to make sure everything is properly loaded. 
 
-`Rsearch` requires that you have `VSEARCH` installed. `VSEARCH` performs the heavy computational tasks quickly, while `Rsearch` allows you to run these operations conveniently from within R. Without `Rsearch`, you would need to execute `VSEARCH` manually from the command line.
+`Rsearch` requires that you have `VSEARCH` installed. `VSEARCH` performs the heavy computational tasks quickly, while `Rsearch` allows you to run these operations conveniently from within R. Without `Rsearch`, you would need to run `VSEARCH` commands manually from the command line.
 
 Installation instruction for `VSEARCH` are available on the [Rsearch GitHub page](https://github.com/CassandraHjo/Rsearch){target="blank"}.
 
@@ -97,7 +97,7 @@ The example data set in this tutorial is a subset of the samples from the public
 
 The data set contains samples with zymbiomics mock communities. 
 
-After unpacking the zipped archive you should have
+After unpacking the zipped archive you should have:
 
 * A text-file `metadata.txt`
 * A folder named `fastq` with 16 pairs of FASTQ files.
@@ -195,7 +195,7 @@ Choosing the best trimming and filtering settings is important for obtaining goo
 
 ## Merging raw reads
 
-Before trimming and filtering, we can try merging the raw reads to get a baseline understanding of read overlap and quality. Here we try to merge all the reads we have got for the first sample, without any trimming and filtering. The `vs_merging_lengths` function can be used to plot some merging statistics:
+Before applying trimming and filtering, we can merge the raw reads to establish a baseline understanding of read overlap and the number of successfully merged reads. Here we try to merge all the reads we have got for the first sample, without any trimming and filtering. The `vs_merging_lengths` function can be used to plot some merging statistics:
   
 ```{r merge_raw_reads, eval=FALSE}
 for(i in 1:nrow(sample.tbl)){
@@ -248,7 +248,7 @@ Together this tells us:
 
 ## Optimizing trimming settings
 
-We now want to optimize the trimming of the reads in order to get the optimal merging results. We do not neccecarily just want to merge as many as possible, but rather merge high-quality reads. For this purpose, we have created two functions that iterate over a range of `truncqual` and `truncee_rate` values used during trimming, to identify the settings that yield the best outcome. We still assume that sequencing errors are more likely to occur in singletons, and we therefore choose to look at merged reads with a copy number of 2 or more. We assume that the more of these merged sequences, the better the merging is. During this optimization of truncation, the reads are also filtered to remove the reads with average expected error greater than 0.01 (default). 
+We now want to optimize the trimming of the reads in order to get the optimal merging results. We do not necessarily just want to merge as many as possible, but rather merge high-quality reads. For this purpose, we have created two functions that iterate over a range of `truncqual` and `truncee_rate` values used during trimming, to identify the settings that yield the best outcome. Remember that the optimization is based on reads from one sample, but our experience is that reads from the same sequencing run tend to get the same results. We still assume that sequencing errors are more likely to occur in singletons, and we therefore choose to look at merged reads with a copy number of 2 or more. We assume that the more of these merged sequences, the better the merging is. During this optimization of truncation, the reads are also filtered to remove the reads with average expected error greater than 0.01 (default). 
 
 ### Optimize `truncqual` value
 
@@ -278,7 +278,7 @@ For the first sample, the best `truncqual` value is 7. At this setting, approxim
 
 Although this number is just slightly higher compared to the results from the raw merging, the important difference is that only high-quality merged reads with copy number above 2 and an average expected error bellow 0.01 are considered here. Thus, trimming with `truncqual = 7` effectively retains higher-confidence reads at the cost of discarding lower-quality ones, which is exactly what we want.
 
-Why not merge all reads here? Because singelton reads often have sequencing errors, and this will affect the merging. We base the optimization entirely on multicopy or high-quality reads.
+Why not merge all reads here? Because singleton reads often have sequencing errors, and this will affect the merging. We base the optimization entirely on multicopy or high-quality reads.
 
 ### Optimize `truncee_rate` value
 
@@ -333,7 +333,7 @@ for(i in 1:nrow(sample.tbl)){
 knitr::kable(read_tsv("data/filt_stats.tsv"))
 ```
 
-Here we also chose to trim off 12 bases at the 5' end (`stripleft = 12`) of all reads since we saw above the read-quality was poorer at the first bases as well.
+We also trim 12 bases from the 5' end (`stripleft = 12`) of each read, based on the earlier quality assessment.
 
 We can again assess the read quality after trimming and filtering using `plot_base_quality`:
 
@@ -544,7 +544,7 @@ plot_size_dist(sequence.tbl)
 
 ## Creating the OTU table
 
-Finally, we create the readcount table. This may take some time as we have to search with all reads against all OTU centroids using the `vs_usearch_global` function. To increase the speed you can run the function with multiple threads, but this depends on the computer you are using. 
+Finally, we create the read count table. This may take some time as we have to search with all reads against all OTU centroids using the `vs_usearch_global` function. To increase the speed you can run the function with multiple threads, but this depends on the computer you are using. 
 
 ```{r create_readcount_table, eval=FALSE}
 readcount.tbl <- vs_usearch_global(fastx_input = all.tbl,
@@ -566,7 +566,7 @@ Both require a reference database with taxonomy, which you can download from the
 
 ## Alternative 1: `vs_sintax`
 
-The vs_sintax function can be used to assign taxonomy to the OTUs like this:
+You can assign taxonomy to OTUs using the `vs_sintax` function as follows:
   
 ```{r assign_taxonomy_sintax, eval=FALSE}
 tax.tbl <- vs_sintax(fasta_input = sequence.tbl,
