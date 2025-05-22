@@ -33,7 +33,7 @@
 #' FASTA file. Defaults to \code{0}, which eliminates wrapping.
 #' @param sample (Optional). Add the given sample identifier string to sequence
 #' headers. For instance, if the given string is "ABC", the text ";sample=ABC"
-#' will be added to the header. his option is only applicable when the output
+#' will be added to the header. This option is only applicable when the output
 #' format is FASTA (\code{centroids}). If \code{NULL} (default), no identifier
 #' is added.
 #' @param log_file (Optional). Name of the log file to capture messages from
@@ -72,7 +72,7 @@
 #'
 #' \code{id} is a value between 0 and 1 that defines the minimum pairwise
 #' identity required for a sequence to be added to a cluster. A sequence is not
-#' added to a cluster if its pairwise identity with the centroid is bellow the
+#' added to a cluster if its pairwise identity with the centroid is below the
 #' \code{id} threshold.
 #' Pairwise identity is calculated as the number of matching columns divided by
 #' the alignment length minus terminal gaps.
@@ -201,7 +201,7 @@ vs_cluster_size <- function(fasta_input,
     fasta_input_name <- basename(fasta_input)
   }
 
-  # Check is input file exists at given path
+  # Check if input file exists at given path
   if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
 
   # Normalize file paths
@@ -224,7 +224,7 @@ vs_cluster_size <- function(fasta_input,
   # Build argument string for command line
   args <- c("--cluster_size", shQuote(fasta_file),
             "--id", id,
-            "--threads", 1,
+            "--threads", threads,
             "--strand", strand,
             "--fasta_width", fasta_width)
 

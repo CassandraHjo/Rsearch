@@ -65,7 +65,7 @@ FASTA file. Defaults to \code{0}, which eliminates wrapping.}
 
 \item{sample}{(Optional). Add the given sample identifier string to sequence
 headers. For instance, if the given string is "ABC", the text ";sample=ABC"
-will be added to the header. his option is only applicable when the output
+will be added to the header. This option is only applicable when the output
 format is FASTA (\code{centroids}). If \code{NULL} (default), no identifier
 is added.}
 
@@ -147,7 +147,7 @@ tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
 
 \code{id} is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is not
-added to a cluster if its pairwise identity with the centroid is bellow the
+added to a cluster if its pairwise identity with the centroid is below the
 \code{id} threshold.
 Pairwise identity is calculated as the number of matching columns divided by
 the alignment length minus terminal gaps.
