@@ -107,20 +107,59 @@ The default command is simply `vsearch`, but this will only work if the
 file `vsearch.exe` is found in a folder that is included in the `PATH`
 environment variable.
 
-The `Rsearch` function `set_vsearch_executable()` can be used to set the
-correct command to invoke `VSEARCH` on the computer like this:
+If this is not the case, you must tell `Rsearh` explicitly where to find
+or how to invoke `vsearch`. The `Rsearch` function
+`set_vsearch_executable()` can be used to set the correct command to
+invoke `VSEARCH` on the computer like this:
 
 ``` r
-# For example, if the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
-Rsearch::set_vsearch_executable("C:/Documents/vsearch")
+# Windows example
+Rsearch::set_vsearch_executable("C:/Documents/vsearch") # If the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
+
+# Linux/macOS example
+Rsearch::set_vsearch_executable("/usr/local/bin/vsearch") # If the vsearch binary (vsearch.exe) is copied to /usr/local/bin/ on the computer
 ```
 
-Note that on a UNIX system where you use an `apptainer` container this
-would look something like this:
+This will store the path and use it in future sessions automatically.
+
+#### Using an Apptainer/Singularity Container
+
+Although `Rsearch` is primarily intended for local execution (as above),
+it is also possible to use `vsearch` packaged in an Apptainer or
+Singularity `.sif` container. However, since `Rsearch` expects a single
+executable path (not a full shell command), you must create a wrapper
+script to bridge the container invocation.
+
+**Step by step instructions:**
+
+**1.** Create a wrapper script (e.g., `vsearch`) with the following
+content:
 
 ``` r
-Rsearch::set_vsearch_executable("apptainer exec <container name> vsearch")
+#!/bin/bash
+apptainer exec /path/to/vsearch_container.sif vsearch "$@"
 ```
+
+**2.** Save it to a folder, for example:
+
+`/home/youruser/bin/vsearch`
+
+**3.** Make the script executable:
+
+``` r
+chmod +x /home/youruser/bin/vsearch
+```
+
+**4.** Point `Rsearch` to this wrapper script:
+
+``` r
+Rsearch::set_vsearch_executable("/home/youruser/bin/")
+```
+
+This will make `Rsearch` treat the containerized version of `vsearch` as
+a regular executable.
+
+#### Test that it works
 
 You may test if your executable is working properly by running the
 following command:
@@ -128,6 +167,11 @@ following command:
 ``` r
 Rsearch::vsearch()
 ```
+
+If everything is set up correctly you should see a message like this:
+
+    [1] "The VSEARCH executable is: /your/path/vsearch"
+    [1] "This is a valid command to invoke VSEARCH on this computer!"
 
 ## Documentation
 
