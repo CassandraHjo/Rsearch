@@ -173,6 +173,11 @@ If everything is set up correctly you should see a message like this:
     [1] "The VSEARCH executable is: /your/path/vsearch"
     [1] "This is a valid command to invoke VSEARCH on this computer!"
 
+<span style="color: red;">**Note:** For large-scale analyses and
+computationally intensive workflows, calling `vsearch` directly from a
+shell script may be more efficient than using `Rsearch` through R or
+RStudio. </span>
+
 ## Documentation
 
 ### Accessing help within R
