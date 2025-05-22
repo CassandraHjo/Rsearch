@@ -300,7 +300,7 @@ vs_usearch_global <- function(fastx_input,
       return(df) # Return as tibble
     }
   } else {
-    userout_df <- suppressMessages(readr::read_delim(outfile, col_names = FALSE))
+    userout_df <- suppressMessages(readr::read_delim(outfile, delim = "\t", col_names = FALSE))
     columns <- unlist(strsplit(userfields, "\\+"))
     colnames(userout_df) <- columns
     return(userout_df)
