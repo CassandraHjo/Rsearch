@@ -56,24 +56,25 @@ is returned. This is a \code{tibble} with columns \code{Header} and
 }
 \description{
 \code{vs_cluster_subseq} clusters FASTA sequences from a given
-file or object using \code{VSEARCH}´s \code{cluster_fast} method and 100% identity.
-The function automatically sorts sequences by decreasing length before
-clustering.
+file or object using \code{VSEARCH}´s \code{cluster_fast} method and 100%
+identity. The function automatically sorts sequences by decreasing length
+before clustering.
 }
 \details{
 After merging/dereplication some sequences may be sub-sequences of longer
 sequences. This function will cluster such sequences at 100% identity
-(terminal gaps ignored), and keep the longest in each cluster as the centroid.
+(terminal gaps ignored), and keep the longest in each cluster as the
+centroid.
 
 \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns \code{Header} and
 \code{Sequence}, see \code{\link{readFasta}}.
 
 If \code{sizein = TRUE} (default) the FASTA headers must contain text
-matching the regular expression \code{"size=[0-9]+"} indicating the copy number
-(=size) of each input sequence. This is then summed for each cluster and
-added to the output. This text is typically added by de-replication,
-see \code{\link{vs_fastx_uniques}}.
+matching the regular expression \code{"size=[0-9]+"} indicating the copy
+number (=size) of each input sequence. This is then summed for each cluster
+and added to the output. This text is typically added by de-replication, see
+\code{\link{vs_fastx_uniques}}.
 
 The number of distinct sequences in each cluster is output as \code{members}.
 

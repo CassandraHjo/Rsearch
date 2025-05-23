@@ -1,9 +1,9 @@
 #' Cluster FASTA sequences
 #'
 #' @description \code{vs_cluster_subseq} clusters FASTA sequences from a given
-#' file or object using \code{VSEARCH}´s \code{cluster_fast} method and 100% identity.
-#' The function automatically sorts sequences by decreasing length before
-#' clustering.
+#' file or object using \code{VSEARCH}´s \code{cluster_fast} method and 100%
+#' identity. The function automatically sorts sequences by decreasing length
+#' before clustering.
 #'
 #' @param fasta_input (Required). A FASTA file path or a FASTA object containing
 #' reads to cluster. See \emph{Details}.
@@ -27,17 +27,18 @@
 #' @details
 #' After merging/dereplication some sequences may be sub-sequences of longer
 #' sequences. This function will cluster such sequences at 100% identity
-#' (terminal gaps ignored), and keep the longest in each cluster as the centroid.
+#' (terminal gaps ignored), and keep the longest in each cluster as the
+#' centroid.
 #'
 #' \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 #' object. FASTA objects are tibbles that contain the columns \code{Header} and
 #' \code{Sequence}, see \code{\link{readFasta}}.
 #'
 #' If \code{sizein = TRUE} (default) the FASTA headers must contain text
-#' matching the regular expression \code{"size=[0-9]+"} indicating the copy number
-#' (=size) of each input sequence. This is then summed for each cluster and
-#' added to the output. This text is typically added by de-replication,
-#' see \code{\link{vs_fastx_uniques}}.
+#' matching the regular expression \code{"size=[0-9]+"} indicating the copy
+#' number (=size) of each input sequence. This is then summed for each cluster
+#' and added to the output. This text is typically added by de-replication, see
+#' \code{\link{vs_fastx_uniques}}.
 #'
 #' The number of distinct sequences in each cluster is output as \code{members}.
 #'
@@ -117,11 +118,11 @@ vs_cluster_subseq <- function(fasta_input,
     fasta_file <- fasta_input
   }
 
-  # Normalize file paths
-  fasta_file <- normalizePath(fasta_file)
-
   # Check if input file exists at given path
   if (!file.exists(fasta_file)) stop("Cannot find input file: ", fasta_file)
+
+  # Normalize file paths
+  fasta_file <- normalizePath(fasta_file)
 
   # Validate strand
   if (!strand %in% c("plus", "both")) {
@@ -162,21 +163,30 @@ vs_cluster_subseq <- function(fasta_input,
   check_vsearch_status(vsearch_output, args)
 
   # Read uc_file and wrangle
-  uc.tbl <- suppressMessages(readr::read_tsv(uc_file, col_names = c("type", "cluster", "length", "identity",
-                                                                    "strand", "star1", "star2", "star3",
-                                                                    "member", "centroid"))) |>
+  uc.tbl <- suppressMessages(readr::read_tsv(uc_file,
+                                             col_names = c("type", "cluster",
+                                                           "length", "identity",
+                                                           "strand", "star1",
+                                                           "star2", "star3",
+                                                           "member", "centroid")
+                                             )) |>
     dplyr::filter(type != "C") |>
     dplyr::select(centroid, member) |>
     dplyr::mutate(centroid = ifelse(centroid == "*", member, centroid)) |>
-    dplyr::left_join(microseq::readFasta(fasta_file), by = c("centroid" = "Header"))
+    dplyr::left_join(microseq::readFasta(fasta_file),
+                     by = c("centroid" = "Header"))
   if (sizein) {
     out.tbl <- uc.tbl |>
       dplyr::mutate(size = stringr::str_extract(member, "size=[0-9]+")) |>
       dplyr::mutate(size = as.numeric(stringr::str_remove(size, "size="))) |>
       dplyr::group_by(centroid) |>
-      dplyr::summarise(Sequence = Sequence[1], members = dplyr::n(), size = sum(size)) |>
+      dplyr::summarise(Sequence = Sequence[1],
+                       members = dplyr::n(),
+                       size = sum(size)) |>
       dplyr::ungroup() |>
-      dplyr::mutate(centroid = stringr::str_replace(centroid, "size=[0-9]+", paste0("size=", size))) |>
+      dplyr::mutate(centroid = stringr::str_replace(centroid,
+                                                    "size=[0-9]+",
+                                                    paste0("size=", size))) |>
       dplyr::mutate(centroid = paste0(centroid, ";members=", members))
   } else {
     out.tbl <- uc.tbl |>
