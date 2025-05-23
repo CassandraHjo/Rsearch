@@ -81,6 +81,8 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Name of the directory in which to store temporary
+#' files. Defaults to \code{tempdir()}.
 #'
 #' @details
 #' Reads from the input files/objects (\code{fastx_input} and \code{reverse})
@@ -236,7 +238,8 @@ vs_fastx_trim_filt <- function(fastx_input,
                                stats = TRUE,
                                log_file = NULL,
                                threads = 1,
-                               vsearch_options = NULL){
+                               vsearch_options = NULL,
+                               tmpdir = tempdir()) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -312,7 +315,9 @@ vs_fastx_trim_filt <- function(fastx_input,
         stop("FASTQ object must contain columns: Header, Sequence, Quality")
       }
 
-      temp_file_primary <- tempfile(pattern = "primary_input", fileext = ".fq")
+      temp_file_primary <- tempfile(pattern = "primary_input",
+                                    tmpdir = tmpdir,
+                                    fileext = ".fq")
       temp_files <- c(temp_files, temp_file_primary)
       microseq::writeFastq(fastx_input, temp_file_primary)
 
@@ -332,7 +337,9 @@ vs_fastx_trim_filt <- function(fastx_input,
         stop("FASTA object must contain columns: Header and Sequence")
       }
 
-      temp_file_primary <- tempfile(pattern = "primary_input", fileext = ".fa")
+      temp_file_primary <- tempfile(pattern = "primary_input",
+                                    tmpdir = tmpdir,
+                                    fileext = ".fa")
       temp_files <- c(temp_files, temp_file_primary)
       microseq::writeFasta(fastx_input, temp_file_primary)
 
@@ -395,7 +402,9 @@ vs_fastx_trim_filt <- function(fastx_input,
           stop("Reverse FASTQ object must contain columns: Header, Sequence, Quality")
         }
 
-        temp_file_reverse <- tempfile(pattern = "reverse_input", fileext = ".fq")
+        temp_file_reverse <- tempfile(pattern = "reverse_input",
+                                      tmpdir = tmpdir,
+                                      fileext = ".fq")
         temp_files <- c(temp_files, temp_file_reverse)
         microseq::writeFastq(reverse, temp_file_reverse)
 
@@ -416,7 +425,9 @@ vs_fastx_trim_filt <- function(fastx_input,
           stop("Reverse FASTA object must contain columns: Header and Sequence")
         }
 
-        temp_file_reverse <- tempfile(pattern = "reverse_input", fileext = ".fa")
+        temp_file_reverse <- tempfile(pattern = "reverse_input",
+                                      tmpdir = tmpdir,
+                                      fileext = ".fa")
         temp_files <- c(temp_files, temp_file_reverse)
         microseq::writeFasta(reverse, temp_file_reverse)
 
@@ -438,7 +449,9 @@ vs_fastx_trim_filt <- function(fastx_input,
   # Handle output for primary sequences
   if (output_format == "fasta") {
     if (is.null(fastaout)) {
-      outfile_fasta <- tempfile(pattern = "filtered_primary_", fileext = ".fa")
+      outfile_fasta <- tempfile(pattern = "filtered_primary_",
+                                tmpdir = tmpdir,
+                                fileext = ".fa")
       temp_files <- c(temp_files, outfile_fasta)
     } else {
       outfile_fasta <- fastaout
@@ -447,7 +460,9 @@ vs_fastx_trim_filt <- function(fastx_input,
 
   if (output_format == "fastq") {
     if (is.null(fastqout)) {
-      outfile_fastq <- tempfile(pattern = "filtered_primary_", fileext = ".fq")
+      outfile_fastq <- tempfile(pattern = "filtered_primary_",
+                                tmpdir = tmpdir,
+                                fileext = ".fq")
       temp_files <- c(temp_files, outfile_fastq)
     } else {
       outfile_fastq <- fastqout
@@ -458,7 +473,9 @@ vs_fastx_trim_filt <- function(fastx_input,
   if (!is.null(reverse)) {
     if (output_format == "fasta") {
       if (is.null(fastaout_rev)) {
-        outfile_fasta_rev <- tempfile(pattern = "filtered_reverse_", fileext = ".fa")
+        outfile_fasta_rev <- tempfile(pattern = "filtered_reverse_",
+                                      tmpdir = tmpdir,
+                                      fileext = ".fa")
         temp_files <- c(temp_files, outfile_fasta_rev)
       } else {
         outfile_fasta_rev <- fastaout_rev
@@ -467,7 +484,9 @@ vs_fastx_trim_filt <- function(fastx_input,
 
     if (output_format == "fastq") {
       if (is.null(fastqout_rev)) {
-        outfile_fastq_rev <- tempfile(pattern = "filtered_reverse_", fileext = ".fq")
+        outfile_fastq_rev <- tempfile(pattern = "filtered_reverse_",
+                                      tmpdir = tmpdir,
+                                      fileext = ".fq")
         temp_files <- c(temp_files, outfile_fastq_rev)
       } else {
         outfile_fastq_rev <- fastqout_rev

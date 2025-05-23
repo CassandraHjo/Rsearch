@@ -36,7 +36,8 @@ vs_fastx_trim_filt(
   stats = TRUE,
   log_file = NULL,
   threads = 1,
-  vsearch_options = NULL
+  vsearch_options = NULL,
+  tmpdir = tempdir()
 )
 }
 \arguments{
@@ -143,6 +144,9 @@ about the filtering is added as an attribute of the returned tibble. If
 
 \item{vsearch_options}{(Optional). Additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{tmpdir}{(Optional). Name of the directory in which to store temporary
+files. Defaults to \code{tempdir()}.}
 }
 \value{
 A tibble or \code{NULL}.

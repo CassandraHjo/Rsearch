@@ -55,7 +55,8 @@ overlapping regions into one sequence using <code>VSEARCH</code>.</p>
 <span>  sample <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  vsearch_options <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  vsearch_options <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -126,6 +127,11 @@ will be added to the header. If <code>NULL</code> (default), no identifier is ad
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
 <dd><p>(Optional). Additional arguments to pass to
 <code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+
+
+<dt id="arg-tmpdir">tmpdir<a class="anchor" aria-label="anchor" href="#arg-tmpdir"></a></dt>
+<dd><p>(Optional). Name of the directory in which to store temporary
+files. Defaults to <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
