@@ -56,7 +56,7 @@ overlapping regions into one sequence using <code>VSEARCH</code>.</p>
 <span>  log_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  vsearch_options <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  tmpdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -130,8 +130,10 @@ will be added to the header. If <code>NULL</code> (default), no identifier is ad
 
 
 <dt id="arg-tmpdir">tmpdir<a class="anchor" aria-label="anchor" href="#arg-tmpdir"></a></dt>
-<dd><p>(Optional). Name of the directory in which to store temporary
-files. Defaults to <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
+<dd><p>(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+<code>NULL</code>, which resolves to the session-specific temporary directory
+(<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

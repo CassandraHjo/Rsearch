@@ -58,7 +58,8 @@ optimal value that maximizes the proportion of high-quality merged read pairs.</
 <span>  min_size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  maxee_rate <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  plot_title <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  plot_title <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,6 +112,13 @@ range from <code>0.0</code> to <code>1.0</code>. Defaults to <code>0.01</code>. 
 <dt id="arg-plot-title">plot_title<a class="anchor" aria-label="anchor" href="#arg-plot-title"></a></dt>
 <dd><p>(Optional). If <code>TRUE</code> (default), a summary title will
 be displayed in the plot. Set to <code>FALSE</code> for no title.</p></dd>
+
+
+<dt id="arg-tmpdir">tmpdir<a class="anchor" aria-label="anchor" href="#arg-tmpdir"></a></dt>
+<dd><p>(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+<code>NULL</code>, which resolves to the session-specific temporary directory
+(<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

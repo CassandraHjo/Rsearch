@@ -51,7 +51,8 @@ reads.</p>
 <span>  plot_title <span class="op">=</span> <span class="st">"Per-position quality scores: median and mean"</span>,</span>
 <span>  show_median <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_mean <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  show_overlap_box <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  show_overlap_box <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,6 +101,13 @@ the mean quality scores is added to the plot.</p></dd>
 indicate the mean overlap length that would result from merging all reads in
 their current state. This visualization is only applicable when
 <code>reverse</code> is specified. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-tmpdir">tmpdir<a class="anchor" aria-label="anchor" href="#arg-tmpdir"></a></dt>
+<dd><p>(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+<code>NULL</code>, which resolves to the session-specific temporary directory
+(<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

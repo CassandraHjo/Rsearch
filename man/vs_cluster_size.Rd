@@ -22,7 +22,8 @@ vs_cluster_size(
   sample = NULL,
   log_file = NULL,
   threads = 1,
-  vsearch_options = NULL
+  vsearch_options = NULL,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -77,6 +78,11 @@ is added.}
 
 \item{vsearch_options}{(Optional). Additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble or \code{NULL}.

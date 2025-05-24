@@ -22,7 +22,7 @@ vs_fastq_mergepairs(
   log_file = NULL,
   threads = 1,
   vsearch_options = NULL,
-  tmpdir = tempdir()
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -67,8 +67,10 @@ will be added to the header. If \code{NULL} (default), no identifier is added.}
 \item{vsearch_options}{(Optional). Additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
 
-\item{tmpdir}{(Optional). Name of the directory in which to store temporary
-files. Defaults to \code{tempdir()}.}
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble or \code{NULL}.

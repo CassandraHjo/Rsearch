@@ -14,6 +14,10 @@
 #' @param file_format (Optional). Format of files to be combined and the desired
 #' output format: either \code{"fasta"} or \code{"fastq"} (default). See
 #' \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' \code{files_dir} must contain uncompressed FASTA or FASTQ files matching the
@@ -69,7 +73,12 @@
 fastx_combine_files <- function(files_dir,
                                 output_file = NULL,
                                 file_ext = ".fq",
-                                file_format = "fastq") {
+                                file_format = "fastq",
+                                tmpdir = NULL) {
+
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Check if input directory exists
   if (!dir.exists(files_dir)) {
@@ -93,8 +102,8 @@ fastx_combine_files <- function(files_dir,
 
   # Find all files in the folder
   comb_files <- sort(list.files(files_dir,
-                           pattern = paste0("\\", file_ext, "$"),
-                           full.names = TRUE))
+                                pattern = paste0("\\", file_ext, "$"),
+                                full.names = TRUE))
 
   # Check if any files are found
   if (length(comb_files) == 0) {
@@ -103,7 +112,9 @@ fastx_combine_files <- function(files_dir,
 
   # Handle output file if NULL
   if (is.null(output_file)) {
-    out_file <- tempfile(pattern = "all_fasta", fileext = file_ext)
+    out_file <- tempfile(pattern = "all_fasta",
+                         tmpdir = tmpdir,
+                         fileext = file_ext)
     temp_files <- c(temp_files, out_file)
   } else {
     out_file <- output_file

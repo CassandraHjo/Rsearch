@@ -22,6 +22,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). A character string of additional arguments
 #' to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details The sequences in the input file are classified according to the
 #' Sintax algorithm, using \code{VSEARCH}, see
@@ -82,11 +86,15 @@ vs_sintax <- function(fasta_input,
                       randseed = NULL,
                       logfile = NULL,
                       threads = 1,
-                      vsearch_options = NULL){
+                      vsearch_options = NULL,
+                      tmpdir = NULL){
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Validate strand
   if (!strand %in% c("plus", "both")) {
@@ -108,7 +116,9 @@ vs_sintax <- function(fasta_input,
 
   # Check if FASTA input is file or tibble
   if (!is.character(fasta_input)){
-    temp_file <- tempfile(pattern = "input", fileext = ".fa")
+    temp_file <- tempfile(pattern = "input",
+                          tmpdir = tmpdir,
+                          fileext = ".fa")
     temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
@@ -131,7 +141,9 @@ vs_sintax <- function(fasta_input,
       stop("FASTA data base must contain columns: Header and Sequence")
     }
 
-    temp_file_db <- tempfile(pattern = "db_input", fileext = ".fa")
+    temp_file_db <- tempfile(pattern = "db_input",
+                             tmpdir = tmpdir,
+                             fileext = ".fa")
     temp_files <- c(temp_files, temp_file_db)
     microseq::writeFasta(database, temp_file_db)
 
@@ -148,7 +160,9 @@ vs_sintax <- function(fasta_input,
   db_file <- normalizePath(db_file)
 
   # The temporary outfile
-  tmp_outfile <- tempfile(pattern = "tmp_output", fileext = ".txt")
+  tmp_outfile <- tempfile(pattern = "tmp_output",
+                          tmpdir = tmpdir,
+                          fileext = ".txt")
   temp_files <- c(temp_files, tmp_outfile)
 
   # Build argument string for command line

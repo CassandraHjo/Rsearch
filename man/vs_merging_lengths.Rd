@@ -11,7 +11,8 @@ vs_merging_lengths(
   minovlen = 10,
   minlen = 0,
   threads = 1,
-  plot_title = TRUE
+  plot_title = TRUE,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -32,6 +33,11 @@ retained. Defaults to \code{0}. See \emph{Details}.}
 
 \item{plot_title}{(Optional). If \code{TRUE} (default), a summary title will
 be displayed in the plot. Set to \code{FALSE} for no title.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble with the following columns:

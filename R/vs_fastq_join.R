@@ -31,6 +31,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
@@ -112,11 +116,15 @@ vs_fastq_join <- function(fastq_input,
                           fasta_width = 0,
                           log_file = NULL,
                           threads = 1,
-                          vsearch_options = NULL) {
+                          vsearch_options = NULL,
+                          tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Validate output_format
   if (!output_format %in% c("fasta", "fastq")) {
@@ -162,7 +170,9 @@ vs_fastq_join <- function(fastq_input,
     if (!all(required_cols %in% colnames(fastq_input))) {
       stop("FASTQ object must contain columns: Header, Sequence, Quality")
     }
-    temp_fastq_file <- tempfile("fastq_input_", fileext = ".fq")
+    temp_fastq_file <- tempfile("fastq_input_",
+                                tmpdir = tmpdir,
+                                fileext = ".fq")
     microseq::writeFastq(fastq_input, temp_fastq_file)
     temp_files <- c(temp_files, temp_fastq_file)
     fastq_file <- temp_fastq_file
@@ -180,7 +190,9 @@ vs_fastq_join <- function(fastq_input,
     if (!all(required_cols %in% colnames(reverse))) {
       stop("Reverse FASTQ object must contain columns: Header, Sequence, Quality")
     }
-    temp_reverse_file <- tempfile("reverse_input_", fileext = ".fq")
+    temp_reverse_file <- tempfile("reverse_input_",
+                                  tmpdir = tmpdir,
+                                  fileext = ".fq")
     microseq::writeFastq(reverse, temp_reverse_file)
     temp_files <- c(temp_files, temp_reverse_file)
     reverse_file <- temp_reverse_file
@@ -193,9 +205,13 @@ vs_fastq_join <- function(fastq_input,
 
   # Define output file paths
   if (output_format == "fastq") {
-    outfile <- if (is.null(fastqout)) tempfile("joined_", fileext = ".fq") else fastqout
+    outfile <- if (is.null(fastqout)) tempfile("joined_",
+                                               tmpdir = tmpdir,
+                                               fileext = ".fq") else fastqout
   } else {
-    outfile <- if (is.null(fastaout)) tempfile("joined_", fileext = ".fa") else fastaout
+    outfile <- if (is.null(fastaout)) tempfile("joined_",
+                                               tmpdir = tmpdir,
+                                               fileext = ".fa") else fastaout
   }
   if (is.null(fastqout) && is.null(fastaout)) temp_files <- c(temp_files, outfile)
 

@@ -12,7 +12,8 @@ plot_base_quality(
   plot_title = "Per-position quality scores: median and mean",
   show_median = TRUE,
   show_mean = TRUE,
-  show_overlap_box = FALSE
+  show_overlap_box = FALSE,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -42,6 +43,11 @@ the mean quality scores is added to the plot.}
 indicate the mean overlap length that would result from merging all reads in
 their current state. This visualization is only applicable when
 \code{reverse} is specified. Defaults to \code{FALSE}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A ggplot2 object.

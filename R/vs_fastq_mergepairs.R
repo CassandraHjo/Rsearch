@@ -32,8 +32,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
-#' @param tmpdir (Optional). Name of the directory in which to store temporary
-#' files. Defaults to \code{tempdir()}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Read pairs from the input FASTQ files (\code{fastq_input} and \code{reverse})
@@ -142,10 +144,14 @@ vs_fastq_mergepairs <- function(fastq_input,
                                 log_file = NULL,
                                 threads = 1,
                                 vsearch_options = NULL,
-                                tmpdir = tempdir()){
+                                tmpdir = NULL){
 
+  # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   if (!output_format %in% c("fasta", "fastq")) {
     stop("Invalid output_format. Choose from fasta or fastq.")

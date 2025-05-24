@@ -10,7 +10,8 @@ fastx_combine_files(
   files_dir,
   output_file = NULL,
   file_ext = ".fq",
-  file_format = "fastq"
+  file_format = "fastq",
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -28,6 +29,11 @@ Defaults to \code{".fq"}.}
 \item{file_format}{(Optional). Format of files to be combined and the desired
 output format: either \code{"fasta"} or \code{"fastq"} (default). See
 \emph{Details}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble or \code{NULL}.

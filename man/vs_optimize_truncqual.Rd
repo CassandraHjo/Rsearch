@@ -14,7 +14,8 @@ vs_optimize_truncqual(
   min_size = 2,
   maxee_rate = 0.01,
   threads = 1,
-  plot_title = TRUE
+  plot_title = TRUE,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -46,6 +47,11 @@ range from \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See
 
 \item{plot_title}{(Optional). If \code{TRUE} (default), a summary title will
 be displayed in the plot. Set to \code{FALSE} for no title.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A data frame with the following columns:

@@ -81,8 +81,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
-#' @param tmpdir (Optional). Name of the directory in which to store temporary
-#' files. Defaults to \code{tempdir()}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Reads from the input files/objects (\code{fastx_input} and \code{reverse})
@@ -239,11 +241,14 @@ vs_fastx_trim_filt <- function(fastx_input,
                                log_file = NULL,
                                threads = 1,
                                vsearch_options = NULL,
-                               tmpdir = tempdir()) {
+                               tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Validate output_format
   if (!output_format %in% c("fasta", "fastq")) {

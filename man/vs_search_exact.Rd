@@ -13,7 +13,8 @@ vs_search_exact(
   userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
   strand = "plus",
   threads = 1,
-  vsearch_options = NULL
+  vsearch_options = NULL,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -45,6 +46,11 @@ sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
 
 \item{vsearch_options}{(Optional). A character string of additional arguments
 to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble or \code{NULL}.

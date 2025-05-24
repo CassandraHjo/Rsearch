@@ -32,6 +32,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Chimeras in the input FASTA sequences are detected using \code{VSEARCH}´s
@@ -127,11 +131,15 @@ vs_uchime_ref <- function(fasta_input,
                           sample = NULL,
                           log_file = NULL,
                           threads = 1,
-                          vsearch_options = NULL){
+                          vsearch_options = NULL,
+                          tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Check if both output files are specified, or both unspecified
   if (is.null(nonchimeras) != is.null(chimeras)) {
@@ -153,7 +161,9 @@ vs_uchime_ref <- function(fasta_input,
 
   # Check if FASTA input is file or tibble
   if (!is.character(fasta_input)){
-    temp_file <- tempfile(pattern = "input", fileext = ".fa")
+    temp_file <- tempfile(pattern = "input",
+                          tmpdir = tmpdir,
+                          fileext = ".fa")
     temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
@@ -172,7 +182,9 @@ vs_uchime_ref <- function(fasta_input,
 
   # Check if database is file or tibble
   if (!is.character(database)){
-    temp_file_db <- tempfile(pattern = "db", fileext = ".fa")
+    temp_file_db <- tempfile(pattern = "db",
+                             tmpdir = tmpdir,
+                             fileext = ".fa")
     temp_files <- c(temp_files, temp_file_db)
     microseq::writeFasta(database, temp_file_db)
     db_file <- temp_file_db
@@ -183,7 +195,9 @@ vs_uchime_ref <- function(fasta_input,
 
   # Determine nonchimeras file
   if (is.null(nonchimeras)) {
-    nonchimeras_file <- tempfile(pattern = "nonchimeras", fileext = ".fa")
+    nonchimeras_file <- tempfile(pattern = "nonchimeras",
+                                 tmpdir = tmpdir,
+                                 fileext = ".fa")
     temp_files <- c(temp_files, nonchimeras_file)
   } else {
     nonchimeras_file <- nonchimeras
@@ -191,7 +205,9 @@ vs_uchime_ref <- function(fasta_input,
 
   # Determine chimeras file
   if (is.null(chimeras)) {
-    chimeras_file <- tempfile(pattern = "chimeras", fileext = ".fa")
+    chimeras_file <- tempfile(pattern = "chimeras",
+                              tmpdir = tmpdir,
+                              fileext = ".fa")
     temp_files <- c(temp_files, chimeras_file)
   } else {
     chimeras_file <- chimeras

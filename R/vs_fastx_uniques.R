@@ -35,6 +35,10 @@
 #' will be added to the header. If \code{NULL} (default), no identifier is added.
 #' @param vsearch_options (Optional). A character string of additional arguments
 #' to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Sequences in the input file/object (\code{fastx_input}) are dereplicated by
@@ -108,11 +112,15 @@ vs_fastx_uniques <- function(fastx_input,
                              fastq_qout_max = FALSE,
                              fasta_width = 0,
                              sample = NULL,
-                             vsearch_options = NULL){
+                             vsearch_options = NULL,
+                             tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Validate output_format
   if (!output_format %in% c("fasta", "fastq")) {
@@ -145,7 +153,9 @@ vs_fastx_uniques <- function(fastx_input,
         stop("FASTQ object must contain columns: Header, Sequence, Quality")
       }
 
-      temp_file <- tempfile(pattern = "input", fileext = ".fq")
+      temp_file <- tempfile(pattern = "input",
+                            tmpdir = tmpdir,
+                            fileext = ".fq")
       temp_files <- c(temp_files, temp_file)
       microseq::writeFastq(fastx_input, temp_file)
       input_file <- temp_file
@@ -160,7 +170,9 @@ vs_fastx_uniques <- function(fastx_input,
         stop("FASTA object must contain columns: Header and Sequence")
       }
 
-      temp_file <- tempfile(pattern = "input", fileext = ".fa")
+      temp_file <- tempfile(pattern = "input",
+                            tmpdir = tmpdir,
+                            fileext = ".fa")
       temp_files <- c(temp_files, temp_file)
       microseq::writeFasta(fastx_input, temp_file)
       input_file <- temp_file
@@ -172,7 +184,9 @@ vs_fastx_uniques <- function(fastx_input,
   # Handle output_format = "fasta"
   if (output_format == "fasta"){
     if (is.null(fastx_output)) {
-      output_file <- tempfile(pattern = "derep", fileext = ".fa")
+      output_file <- tempfile(pattern = "derep",
+                              tmpdir = tmpdir,
+                              fileext = ".fa")
       temp_files <- c(temp_files, output_file)
     } else {
       output_file <- fastx_output
@@ -182,7 +196,9 @@ vs_fastx_uniques <- function(fastx_input,
   # Handle output_format = "fastq"
   if (output_format == "fastq"){
     if (is.null(fastx_output)) {
-      output_file <- tempfile(pattern = "derep", fileext = ".fq")
+      output_file <- tempfile(pattern = "derep",
+                              tmpdir = tmpdir,
+                              fileext = ".fq")
       temp_files <- c(temp_files, output_file)
     } else {
       output_file <- fastx_output

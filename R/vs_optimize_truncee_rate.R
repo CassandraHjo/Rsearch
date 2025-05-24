@@ -28,6 +28,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param plot_title (Optional). If \code{TRUE} (default), a summary title will
 #' be displayed in the plot. Set to \code{FALSE} for no title.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}},
@@ -99,11 +103,15 @@ vs_optimize_truncee_rate <- function(fastq_input,
                                      min_size = 2,
                                      maxee_rate = 0.01,
                                      threads = 1,
-                                     plot_title = TRUE){
+                                     plot_title = TRUE,
+                                     tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Handle pe_df class
   if (is_pe_df(fastq_input) && is.null(reverse)) {
@@ -146,7 +154,8 @@ vs_optimize_truncee_rate <- function(fastq_input,
                                      maxee_rate = maxee_rate,
                                      minlen = minlen,
                                      truncee_rate = truncee_rate_range[i],
-                                     threads = threads)
+                                     threads = threads,
+                                     tmpdir = tmpdir)
     trim_R2.df <- attr(trim_R1.df, "reverse")
 
     # Merge R1 and R2 reads
@@ -155,12 +164,14 @@ vs_optimize_truncee_rate <- function(fastq_input,
                                     minovlen = minovlen,
                                     output_format = "fasta",
                                     minlen = minlen,
-                                    threads = threads)
+                                    threads = threads,
+                                    tmpdir = tmpdir)
 
     # Dereplicate merged reads
     derep.df <- vs_fastx_uniques(fastx_input = merge.df,
                                  output_format = "fasta",
-                                 relabel_sha1 = TRUE) |>
+                                 relabel_sha1 = TRUE,
+                                 tmpdir = tmpdir) |>
       dplyr::mutate(size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
       dplyr::mutate(size = as.numeric(size))
 

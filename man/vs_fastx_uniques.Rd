@@ -24,7 +24,8 @@ vs_fastx_uniques(
   fastq_qout_max = FALSE,
   fasta_width = 0,
   sample = NULL,
-  vsearch_options = NULL
+  vsearch_options = NULL,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -71,6 +72,11 @@ will be added to the header. If \code{NULL} (default), no identifier is added.}
 
 \item{vsearch_options}{(Optional). A character string of additional arguments
 to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble or \code{NULL}.

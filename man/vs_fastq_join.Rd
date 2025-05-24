@@ -19,7 +19,8 @@ vs_fastq_join(
   fasta_width = 0,
   log_file = NULL,
   threads = 1,
-  vsearch_options = NULL
+  vsearch_options = NULL,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -61,6 +62,11 @@ FASTA file. Only applies if the output file is in FASTA format. Defaults to
 
 \item{vsearch_options}{(Optional). Additional arguments to pass to
 \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 A tibble or \code{NULL}.

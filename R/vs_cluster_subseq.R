@@ -23,6 +23,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' After merging/dereplication some sequences may be sub-sequences of longer
@@ -86,11 +90,15 @@ vs_cluster_subseq <- function(fasta_input,
                               fasta_width = 0,
                               log_file = NULL,
                               threads = 1,
-                              vsearch_options = NULL){
+                              vsearch_options = NULL,
+                              tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Create empty vector for collecting temporary files
   temp_files <- character()
@@ -110,7 +118,9 @@ vs_cluster_subseq <- function(fasta_input,
 
   # Check if fasta_input is a file or a tibble
   if (!is.character(fasta_input)){
-    temp_file <- tempfile(pattern = "input", fileext = ".fa")
+    temp_file <- tempfile(pattern = "input",
+                          tmpdir = tmpdir,
+                          fileext = ".fa")
     temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
@@ -133,7 +143,9 @@ vs_cluster_subseq <- function(fasta_input,
   # Building the command line
 
   # The temporary UC-file
-  uc_file <- tempfile(pattern = "uc", fileext = ".txt")
+  uc_file <- tempfile(pattern = "uc",
+                      tmpdir = tmpdir,
+                      fileext = ".txt")
   temp_files <- c(temp_files, uc_file)
 
   # Build argument string for command line
@@ -169,7 +181,7 @@ vs_cluster_subseq <- function(fasta_input,
                                                            "strand", "star1",
                                                            "star2", "star3",
                                                            "member", "centroid")
-                                             )) |>
+  )) |>
     dplyr::filter(type != "C") |>
     dplyr::select(centroid, member) |>
     dplyr::mutate(centroid = ifelse(centroid == "*", member, centroid)) |>

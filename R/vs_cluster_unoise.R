@@ -44,6 +44,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). Additional arguments to pass to
 #' \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Sequences are denoised according to the UNOISE version 3 algorithm by Robert
@@ -173,11 +177,15 @@ vs_cluster_unoise <- function(fasta_input,
                               sample = NULL,
                               log_file = NULL,
                               threads = 1,
-                              vsearch_options = NULL){
+                              vsearch_options = NULL,
+                              tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Validate strand
   if (!strand %in% c("plus", "both")) {
@@ -204,7 +212,9 @@ vs_cluster_unoise <- function(fasta_input,
 
   # Check if FASTA input is file or tibble
   if (!is.character(fasta_input)){
-    temp_file <- tempfile(pattern = "input", fileext = ".fa")
+    temp_file <- tempfile(pattern = "input",
+                          tmpdir = tmpdir,
+                          fileext = ".fa")
     temp_files <- c(temp_files, temp_file)
     microseq::writeFasta(fasta_input, temp_file)
     fasta_file <- temp_file
@@ -226,11 +236,17 @@ vs_cluster_unoise <- function(fasta_input,
 
   # Determine output file based on user input
   if (!is.null(centroids)) {
-    outfile <- ifelse(is.character(centroids), centroids, tempfile(pattern = "centroids", fileext = ".fa"))
+    outfile <- ifelse(is.character(centroids), centroids, tempfile(pattern = "centroids",
+                                                                   tmpdir = tmpdir,
+                                                                   fileext = ".fa"))
   } else if (!is.null(otutabout)) {
-    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable", fileext = ".tsv"))
+    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable",
+                                                                   tmpdir = tmpdir,
+                                                                   fileext = ".tsv"))
   } else {
-    outfile <- tempfile(pattern = "centroids", fileext = ".fa")
+    outfile <- tempfile(pattern = "centroids",
+                        tmpdir = tmpdir,
+                        fileext = ".fa")
   }
 
   # Only add temporary files to temp_files

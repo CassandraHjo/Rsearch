@@ -16,6 +16,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param plot_title (Optional). If \code{TRUE} (default), a summary title will
 #' be displayed in the plot. Set to \code{FALSE} for no title.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details The function uses \code{\link{vs_fastq_mergepairs}} where
 #' the arguments to this function are described in detail.
@@ -79,7 +83,8 @@ vs_merging_lengths <- function(fastq_input,
                                minovlen = 10,
                                minlen = 0,
                                threads = 1,
-                               plot_title = TRUE){
+                               plot_title = TRUE,
+                               tmpdir = NULL) {
   # The forward reads
   if (!is.character(fastq_input)){
     # Ensure required columns exist
@@ -117,12 +122,16 @@ vs_merging_lengths <- function(fastq_input,
     R2.tbl <- microseq::readFastq(reverse)
   }
 
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
+
   # The merged read lengths and overlap lengths
   merged.tbl <- vs_fastq_mergepairs(R1.tbl,
                                     R2.tbl,
                                     minovlen = minovlen,
                                     minlen = minlen,
-                                    threads = threads)
+                                    threads = threads,
+                                    tmpdir = tmpdir)
 
   # The lengths
   res.tbl <- R1.tbl |>

@@ -52,7 +52,8 @@ implemented in <code>VSEARCH</code>.</p>
 <span>  randseed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  logfile <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  vsearch_options <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  vsearch_options <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,6 +105,13 @@ Sintax algorithm. Defaults to <code>NULL</code>.</p></dd>
 <dt id="arg-vsearch-options">vsearch_options<a class="anchor" aria-label="anchor" href="#arg-vsearch-options"></a></dt>
 <dd><p>(Optional). A character string of additional arguments
 to pass to <code>VSEARCH</code>. Defaults to <code>NULL</code>. See <em>Details</em>.</p></dd>
+
+
+<dt id="arg-tmpdir">tmpdir<a class="anchor" aria-label="anchor" href="#arg-tmpdir"></a></dt>
+<dd><p>(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+<code>NULL</code>, which resolves to the session-specific temporary directory
+(<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

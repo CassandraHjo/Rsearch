@@ -23,6 +23,10 @@
 #' indicate the mean overlap length that would result from merging all reads in
 #' their current state. This visualization is only applicable when
 #' \code{reverse} is specified. Defaults to \code{FALSE}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' The mean and median quality scores for each base position over all reads are
@@ -93,7 +97,8 @@ plot_base_quality <- function(fastq_input,
                               plot_title = "Per-position quality scores: median and mean",
                               show_median = TRUE,
                               show_mean = TRUE,
-                              show_overlap_box = FALSE) {
+                              show_overlap_box = FALSE,
+                              tmpdir = NULL) {
 
   # Handle input: file or tibble
   if (!is.character(fastq_input)){
@@ -140,9 +145,14 @@ plot_base_quality <- function(fastq_input,
     stop("Invalid quantile range: 'quantile_lower' must be smaller than 'quantile_upper'.")
   }
 
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
+
+  # Calculate overlap box
   if (show_overlap_box && !is.null(reverse)) {
     merging_length.tbl <- vs_merging_lengths(fastq.tbl,
-                                             reverse.tbl)
+                                             reverse.tbl,
+                                             tmpdir = tmpdir)
 
     mean_overlap_length <- round(mean(merging_length.tbl$length_overlap,
                                       na.rm = TRUE)

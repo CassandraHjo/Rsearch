@@ -47,7 +47,8 @@ within a specified directory into a single output file or a tibble object.</p>
 <span>  <span class="va">files_dir</span>,</span>
 <span>  output_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_ext <span class="op">=</span> <span class="st">".fq"</span>,</span>
-<span>  file_format <span class="op">=</span> <span class="st">"fastq"</span></span>
+<span>  file_format <span class="op">=</span> <span class="st">"fastq"</span>,</span>
+<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,6 +77,13 @@ Defaults to <code>".fq"</code>.</p></dd>
 <dd><p>(Optional). Format of files to be combined and the desired
 output format: either <code>"fasta"</code> or <code>"fastq"</code> (default). See
 <em>Details</em>.</p></dd>
+
+
+<dt id="arg-tmpdir">tmpdir<a class="anchor" aria-label="anchor" href="#arg-tmpdir"></a></dt>
+<dd><p>(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+<code>NULL</code>, which resolves to the session-specific temporary directory
+(<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

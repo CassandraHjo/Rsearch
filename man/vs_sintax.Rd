@@ -15,7 +15,8 @@ vs_sintax(
   randseed = NULL,
   logfile = NULL,
   threads = 1,
-  vsearch_options = NULL
+  vsearch_options = NULL,
+  tmpdir = NULL
 )
 }
 \arguments{
@@ -46,6 +47,11 @@ Sintax algorithm. Defaults to \code{NULL}.}
 
 \item{vsearch_options}{(Optional). A character string of additional arguments
 to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.}
+
+\item{tmpdir}{(Optional). Path to the directory where temporary files should
+be written when tables are used as input or output. Defaults to
+\code{NULL}, which resolves to the session-specific temporary directory
+(\code{tempdir()}).}
 }
 \value{
 If \code{outfile} is \code{NULL} a data.frame is returned. If it

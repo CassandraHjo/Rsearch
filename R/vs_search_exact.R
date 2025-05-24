@@ -24,6 +24,10 @@
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param vsearch_options (Optional). A character string of additional arguments
 #' to pass to \code{VSEARCH}. Defaults to \code{NULL}. See \emph{Details}.
+#' @param tmpdir (Optional). Path to the directory where temporary files should
+#' be written when tables are used as input or output. Defaults to
+#' \code{NULL}, which resolves to the session-specific temporary directory
+#' (\code{tempdir()}).
 #'
 #' @details
 #' Identifies exact full-length matches between query and target sequences
@@ -108,11 +112,15 @@ vs_search_exact <- function(fastx_input,
                             userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
                             strand = "plus",
                             threads = 1,
-                            vsearch_options = NULL){
+                            vsearch_options = NULL,
+                            tmpdir = NULL) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
   vsearch_available(vsearch_executable)
+
+  # Set temporary directory if not provided
+  if (is.null(tmpdir)) tmpdir <- tempdir()
 
   # Validate strand
   if (!strand %in% c("plus", "both")) {
@@ -147,7 +155,9 @@ vs_search_exact <- function(fastx_input,
         stop("FASTQ object must contain columns: Header, Sequence, Quality")
       }
 
-      temp_file_fastx <- tempfile(pattern = "fastx_input", fileext = ".fq")
+      temp_file_fastx <- tempfile(pattern = "fastx_input",
+                                  tmpdir = tmpdir,
+                                  fileext = ".fq")
       temp_files <- c(temp_files, temp_file_fastx)
       microseq::writeFastq(fastx_input, temp_file_fastx)
 
@@ -161,7 +171,9 @@ vs_search_exact <- function(fastx_input,
         stop("FASTA object must contain columns: Header and Sequence")
       }
 
-      temp_file_fastx <- tempfile(pattern = "fastx_input", fileext = ".fa")
+      temp_file_fastx <- tempfile(pattern = "fastx_input",
+                                  tmpdir = tmpdir,
+                                  fileext = ".fa")
       temp_files <- c(temp_files, temp_file_fastx)
       microseq::writeFasta(fastx_input, temp_file_fastx)
 
@@ -184,7 +196,9 @@ vs_search_exact <- function(fastx_input,
         stop("FASTQ object must contain columns: Header, Sequence, Quality")
       }
 
-      temp_file_db <- tempfile(pattern = "db_input", fileext = ".fq")
+      temp_file_db <- tempfile(pattern = "db_input",
+                               tmpdir = tmpdir,
+                               fileext = ".fq")
       temp_files <- c(temp_files, temp_file_db)
       microseq::writeFastq(database, temp_file_db)
 
@@ -198,7 +212,9 @@ vs_search_exact <- function(fastx_input,
         stop("FASTA object must contain columns: Header and Sequence")
       }
 
-      temp_file_db <- tempfile(pattern = "db_input", fileext = ".fa")
+      temp_file_db <- tempfile(pattern = "db_input",
+                               tmpdir = tmpdir,
+                               fileext = ".fa")
       temp_files <- c(temp_files, temp_file_db)
       microseq::writeFasta(database, temp_file_db)
 
@@ -215,9 +231,13 @@ vs_search_exact <- function(fastx_input,
   if (!is.null(userout)) {
     outfile <- userout
   } else if (!is.null(otutabout)) {
-    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable", fileext = ".tsv"))
+    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable",
+                                                                   tmpdir = tmpdir,
+                                                                   fileext = ".tsv"))
   } else {
-    outfile <- tempfile(pattern = "userout", fileext = ".txt")
+    outfile <- tempfile(pattern = "userout",
+                        tmpdir = tmpdir,
+                        fileext = ".txt")
   }
 
   if (is.null(userout) && (is.null(otutabout) || !is.character(otutabout))) {
