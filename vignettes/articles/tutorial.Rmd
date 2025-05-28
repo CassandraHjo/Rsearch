@@ -256,7 +256,7 @@ The `vs_optimize_truncqual` function finds the optimal `truncqual` value for tru
 
 The function may take some time to run, but you can view the progress through a progress bar in the console. 
 
-```{r optimize_truncqual, echo=FALSE, fig.keep='all', message=FALSE, warning=FALSE, results='hide', eval=FALSE}
+```{r optimize_truncqual, fig.keep='all', message=FALSE, warning=FALSE, results='hide', eval=FALSE}
 
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
@@ -286,7 +286,7 @@ Similarly, the `vs_optimize_truncee_rate` function optimizes the truncation with
 
 The function may take some time to run, but you can view the progress through a progress bar in the console. 
 
-```{r optimize_truncee_rate, echo=FALSE, fig.keep='all', message=FALSE, warning=FALSE, results='hide', eval=FALSE}
+```{r optimize_truncee_rate, fig.keep='all', message=FALSE, warning=FALSE, results='hide', eval=FALSE}
 
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
