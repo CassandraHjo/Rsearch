@@ -1,11 +1,9 @@
 #' Create Rsearch object
 #'
 #' @description \code{rsearch_obj} standardizes and organizes data into an
-#' Rsearch object.
-#'
-#' creates a list containing
-#' three elements with data structures that can be used as input to build a
-#' phyloseq object in the phyloseq package.
+#' Rsearch object. An Rsearch object is a list containing three elements with
+#' data structures that can be used as input to build a \code{phyloseq} object in the
+#' \code{phyloseq} package.
 #'
 #' @param readcount_data (Required). A file path or a data frame (or tibble)
 #' containing OTU count data, typically the output from
