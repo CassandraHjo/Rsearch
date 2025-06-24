@@ -8,19 +8,9 @@
 \usage{
 vs_cluster_unoise(
   fasta_input,
-  centroids = NULL,
   otutabout = NULL,
-  size_column = FALSE,
-  id = 0.97,
   minsize = 8,
   unoise_alpha = 2,
-  strand = "plus",
-  sizein = TRUE,
-  sizeout = TRUE,
-  relabel = NULL,
-  relabel_sha1 = FALSE,
-  fasta_width = 0,
-  sample = NULL,
   log_file = NULL,
   threads = 1,
   vsearch_options = NULL,
@@ -31,51 +21,16 @@ vs_cluster_unoise(
 \item{fasta_input}{(Required). A FASTA file path or a FASTA object containing
 reads to denoise. See \emph{Details}.}
 
-\item{centroids}{(Optional). A character string specifying the name of the
-FASTA output file for the cluster centroid sequences. If \code{NULL}
-(default), no output is written to a file and the centroid sequences are
-returned as a FASTA object. See \emph{Details}.}
-
 \item{otutabout}{(Optional). A character string specifying the name of the
 output file in an OTU table format. If \code{NULL} (default), no output is
 written to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
 
-\item{size_column}{(Optional). If \code{TRUE}, a column with the size of each
-centroid is added to the centroid output tibble.}
-
-\item{id}{(Optional). Pairwise identity threshold for sequence to be added to
-a cluster. Defaults to \code{0.97}. See \emph{Details}.}
-
-\item{minsize}{(Optional). Minimum abundance of sequences for denoising.
+\item{minsize}{(Optional). Minimum abundance of cluster centroids.
 Defaults to \code{8}.}
 
 \item{unoise_alpha}{(Optional). Alpha value for the UNOISE algorithm.
 Defaults to \code{2}.}
-
-\item{strand}{(Optional). Specifies which strand to consider when comparing
-sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
-
-\item{sizein}{(Optional). If \code{TRUE} (default), abundance annotations
-present in sequence headers are taken into account.}
-
-\item{sizeout}{(Optional). If \code{TRUE} (default), abundance annotations
-are added to FASTA headers.}
-
-\item{relabel}{(Optional). Relabel sequences using the given prefix and a
-ticker to construct new headers. Defaults to \code{NULL}.}
-
-\item{relabel_sha1}{(Optional). If \code{TRUE} (default), relabel sequences
-using the SHA1 message digest algorithm. Defaults to \code{FALSE}.}
-
-\item{fasta_width}{(Optional). Number of characters per line in the output
-FASTA file. Defaults to \code{0}, which eliminates wrapping.}
-
-\item{sample}{(Optional). Add the given sample identifier string to sequence
-headers. For instance, if the given string is "ABC", the text ";sample=ABC"
-will be added to the header. his option is only applicable when the output
-format is FASTA (\code{centroids}). If \code{NULL} (default), no identifier
-is added.}
 
 \item{log_file}{(Optional). Name of the log file to capture messages from
 \code{VSEARCH}. If \code{NULL} (default), no log file is created.}
@@ -92,22 +47,15 @@ be written when tables are used as input or output. Defaults to
 (\code{tempdir()}).}
 }
 \value{
-A tibble or \code{NULL}.
+A read count table with one row for each cluster and one column for
+each sample. If \code{otutabout} is a text it is assumed to be a file name,
+and the results are written to this file. If no such text is supplied (default),
+it is returned as a tibble.
 
-If \code{centroids} is specified the centroid sequences are written to the
-specified file, and no tibble is returned.
+The first column of this tibble lists the centroid sequences for each cluster.
 
-If \code{otutabout} is \code{TRUE}, an OTU table is returned as a tibble.
-If \code{otutabout} is a character string, the output is written to the file,
-and no tibble is returned.
-
-If neither \code{centroids} nor \code{otutabout} is specified, a FASTA object
-with the centroid sequences and additional column \code{otu_id} is returned.
 The clustering statistics are included as an attribute named
-\code{"statistics"}.
-
-The \code{"statistics"} attribute of the returned tibble (when
-\code{centroids} is \code{NULL}) is a tibble with the following columns:
+\code{"statistics"} with the following columns:
 \itemize{
   \item \code{num_nucleotides}: Total number of nucleotides used as input for
   clustering.
@@ -131,9 +79,9 @@ given file or object using \code{VSEARCH}´s \code{cluster_unoise} method.
 }
 \details{
 Sequences are denoised according to the UNOISE version 3 algorithm by Robert
-Edgar, but without the de novo chimera removal step. In the this algorithm,
-clustering of sequences depend on both the sequence distance and the
-abundance ratio. The abundance ratio (skew) is the abundance of a new
+Edgar, but without the de novo chimera removal step. In this algorithm,
+clustering of sequences depend on both similarity of reads and their
+abundances. The abundance ratio (skew) is the abundance of a new
 sequence divided by the abundance of the centroid sequence. This skew must
 not be larger than beta if the sequences should be clustered together. Beta
 is calculated as 2 raised to the power of minus 1 minus alpha times the
@@ -145,36 +93,20 @@ abundances will form their own new clusters.
 
 \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}, see \code{\link{readFasta}}. The \code{Header} column
-\strong{must} contain the size of each sequence in the format ";size=X",
-where X is the read count for the given sequence. This can be obtained by
-dereplicating function \code{\link{vs_fastx_uniques}} with the
-\code{sizeout = TRUE} argument.
+\code{Sequence}, see \code{\link{readFasta}}.
 
-If neither \code{centroids} nor \code{otutabout} is specified (default), the
-function returns the centroid sequences as a FASTA object with an additional
-column \code{otu_id}. This column contains the identifier extracted from each
-sequence header.
+The \code{Header} column \strong{must} contain the size (copy number) for
+each read. The size information must have the format ";size=X",
+where X is the count for the given sequence.
 
-If \code{centroids} is specified, centroid sequences are written to the
-specified file in FASTA format.
+You may use reads for a single sample or all reads from all samples as input.
+In case of the latter the \code{Header} must also contain sample information
+on the format ";sample=xxx" where "xxx" is a unique sample identifier text.
 
-\code{otutabout} gives the option to output the results in an OTU
-table format with tab-separated columns. When writing to a file, the first
-line starts with the string "#OTU ID", followed by a tab-separated list of
-all sample identifiers (formatted as "sample=X"). Each subsequent line,
-corresponding to an OTU, begins with the OTU identifier and is followed by
-tab-separated abundances for that OTU in each sample. If \code{otutabout} is
-a character string, the output is written to the specified file. If
-\code{otutabout} is \code{TRUE}, the function returns the OTU table as a
-tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
-
-\code{id} is a value between 0 and 1 that defines the minimum pairwise
-identity required for a sequence to be added to a cluster. A sequence is not
-added to a cluster if its pairwise identity with the centroid is bellow the
-\code{id} threshold.
-Pairwise identity is calculated as the number of matching columns divided by
-the alignment length minus terminal gaps.
+Both are size and sample information in the \code{Header}s are obtained by
+using \code{\link{vs_fastx_uniques}} on the reads for each sample prior to this step,
+with the \code{sizeout = TRUE} and \code{sample = "xxx"} arguments, where "xxx" is
+replaced with some unique text for each sample.
 
 If \code{log_file} is \code{NULL} and \code{centroids} is specified,
 clustering statistics from \code{VSEARCH} will not be captured.
@@ -188,18 +120,16 @@ the \code{VSEARCH} manual for more details.
 # Define arguments
 fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
                                    "small.fasta")
-centroids <- NULL
 
 # Denoise sequences and return a FASTA tibble
-denoise_seqs <- vs_cluster_unoise(fasta_input = fasta_input,
-                                  centroids = centroids)
+denoise_seqs <- vs_cluster_unoise(fasta_input = fasta_input)
 
 # Extract clustering statistics
 statistics <- attr(cluster_seqs, "statistics")
 
-# Cluster sequences and write centroids to a file
+# Cluster sequences and write results to a file
 vs_cluster_unoise(fasta_input = fasta_input,
-                  centroids = "centroids_sequences.fa")
+                  otutabout = "otutable.tsv")
 }
 
 }
