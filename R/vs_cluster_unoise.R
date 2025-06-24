@@ -210,11 +210,20 @@ vs_cluster_unoise <- function(fasta_input,
                                                fasta_input_name)
     centr.tbl <- centr.tbl |>
       dplyr::mutate(tag = stringr::word(Header, 1, sep = ";")) |>
-      dplyr::select(tag, Header, Sequence)
+      dplyr::distinct(tag, .keep_all = T) |>
+      dplyr::select(tag, Sequence)
     otu.tbl <- suppressMessages(readr::read_tsv(otutabfile)) |>
-      dplyr::rename(tag = `#OTU ID`) |>
-      dplyr::left_join(centr.tbl, by = "tag") |>
+      dplyr::rename(tag = `#OTU ID`)
+    sizes <- otu.tbl |>
       dplyr::select(-tag) |>
+      as.matrix() |>
+      rowSums()
+    otu.tbl <- otu.tbl |>
+      dplyr::left_join(centr.tbl, by = "tag") |>
+      dplyr::mutate(size = sizes) |>
+      dplyr::arrange(desc(size)) |>
+      dplyr::mutate(Header = stringr::str_c("ZOTU_", 1:dplyr::n(), ";size=", size)) |>
+      dplyr::select(-tag, -size) |>
       dplyr::relocate(Header, Sequence)
     attr(otu.tbl, "statistics") <- statistics
   } else {
