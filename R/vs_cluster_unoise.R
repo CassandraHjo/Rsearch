@@ -6,9 +6,8 @@
 #' @param fasta_input (Required). A FASTA file path or a FASTA object containing
 #' reads to denoise. See \emph{Details}.
 #' @param otutabout (Optional). A character string specifying the name of the
-#' output file in an OTU table format. If \code{NULL} (default), no output is
-#' written to a file. If \code{TRUE}, the output is returned as a tibble. See
-#' \emph{Details}.
+#' output file in an OTU table format. If \code{NULL} (default), the output is
+#' returned as a tibble in R. See \emph{Details}.
 #' @param minsize (Optional). Minimum abundance of cluster centroids.
 #' Defaults to \code{8}.
 #' @param unoise_alpha (Optional). Alpha value for the UNOISE algorithm.
@@ -27,7 +26,7 @@
 #' @details
 #' Sequences are denoised according to the UNOISE version 3 algorithm by Robert
 #' Edgar, but without the de novo chimera removal step. In this algorithm,
-#' clustering of sequences depend on both similarity of reads and their
+#' clustering of sequences depends both on their similarity and their
 #' abundances. The abundance ratio (skew) is the abundance of a new
 #' sequence divided by the abundance of the centroid sequence. This skew must
 #' not be larger than beta if the sequences should be clustered together. Beta
@@ -35,8 +34,11 @@
 #' sequence distance. The sequence distance used is the number of mismatches in
 #' the alignment, ignoring gaps. This means that the abundance must be
 #' exponentially lower as the distance increases from the centroid for a new
-#' sequence to be included in the cluster. Nearer sequences with higher
-#' abundances will form their own new clusters.
+#' sequence to be included in the cluster.
+#'
+#' The argument \code{minsize} will affect the total number of clusters,
+#' specifying the minimum copy number required for any centroid. A larger value
+#' means (in general) fewer clusters.
 #'
 #' \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 #' object. FASTA objects are tibbles that contain the columns \code{Header} and
@@ -44,16 +46,15 @@
 #'
 #' The \code{Header} column \strong{must} contain the size (copy number) for
 #' each read. The size information must have the format ";size=X",
-#' where X is the count for the given sequence.
+#' where X is the count for the given sequence. This is obtained by running all
+#' reads through \code{\link{vs_fastx_uniques}} with \code{sizeout = TRUE}.
 #'
 #' You may use reads for a single sample or all reads from all samples as input.
-#' In case of the latter the \code{Header} must also contain sample information
+#' In the latter case the \code{Header} must also contain sample information
 #' on the format ";sample=xxx" where "xxx" is a unique sample identifier text.
-#'
-#' Both are size and sample information in the \code{Header}s are obtained by
-#' using \code{\link{vs_fastx_uniques}} on the reads for each sample prior to this step,
-#' with the \code{sizeout = TRUE} and \code{sample = "xxx"} arguments, where "xxx" is
-#' replaced with some unique text for each sample.
+#' Again, this is obtained by using \code{\link{vs_fastx_uniques}} on the reads
+#' for each sample prior to this step. Use the \code{sample = "xxx"} argument,
+#' where "xxx" is replaced with some unique text for each sample.
 #'
 #' If \code{log_file} is \code{NULL} and \code{centroids} is specified,
 #' clustering statistics from \code{VSEARCH} will not be captured.
@@ -90,15 +91,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Define arguments
-#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                                    "small.fasta")
+#' # A small fasta file
+#' fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "small.fasta")
 #'
-#' # Denoise sequences and return a FASTA tibble
-#' denoise_seqs <- vs_cluster_unoise(fasta_input = fasta_input)
+#' # Denoise sequences and read counts
+#' denoise <- vs_cluster_unoise(fasta_input = fasta_input)
+#' head(denoised.tbl)
 #'
 #' # Extract clustering statistics
-#' statistics <- attr(cluster_seqs, "statistics")
+#' statistics <- attr(denoised.tbl, "statistics")
 #'
 #' # Cluster sequences and write results to a file
 #' vs_cluster_unoise(fasta_input = fasta_input,
@@ -228,3 +229,4 @@ vs_cluster_unoise <- function(fasta_input,
     return(otu.tbl)
   }
 }
+
