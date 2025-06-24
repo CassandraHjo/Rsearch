@@ -51,7 +51,8 @@ each sample. If \code{otutabout} is a text it is assumed to be a file name,
 and the results are written to this file. If no such text is supplied (default),
 it is returned as a tibble.
 
-The first column of this tibble lists the centroid sequences for each cluster.
+The first two columns of this tibble lists the \code{Header} and \code{Sequence}
+of the centroid sequences for each cluster.
 
 The clustering statistics are included as an attribute named
 \code{"statistics"} with the following columns:

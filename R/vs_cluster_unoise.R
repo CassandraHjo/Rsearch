@@ -68,7 +68,8 @@
 #' and the results are written to this file. If no such text is supplied (default),
 #' it is returned as a tibble.
 #'
-#' The first column of this tibble lists the centroid sequences for each cluster.
+#' The first two columns of this tibble lists the \code{Header} and \code{Sequence}
+#' of the centroid sequences for each cluster.
 #'
 #' The clustering statistics are included as an attribute named
 #' \code{"statistics"} with the following columns:
@@ -209,12 +210,12 @@ vs_cluster_unoise <- function(fasta_input,
                                                fasta_input_name)
     centr.tbl <- centr.tbl |>
       dplyr::mutate(tag = stringr::word(Header, 1, sep = ";")) |>
-      dplyr::select(tag, centroid = Sequence)
+      dplyr::select(tag, Header, Sequence)
     otu.tbl <- suppressMessages(readr::read_tsv(otutabfile)) |>
       dplyr::rename(tag = `#OTU ID`) |>
       dplyr::left_join(centr.tbl, by = "tag") |>
       dplyr::select(-tag) |>
-      dplyr::relocate(centroid)
+      dplyr::relocate(Header, Sequence)
     attr(otu.tbl, "statistics") <- statistics
   } else {
     warning("No clusters found, try to lower minsize")
