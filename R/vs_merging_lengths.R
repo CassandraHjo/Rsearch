@@ -141,7 +141,7 @@ vs_merging_lengths <- function(fastq_input,
     dplyr::select(tag, length_1)
   res.tbl <- R2.tbl |>
     dplyr::mutate(tag = stringr::str_extract(Header, "^\\S+")) |>
-    dplyr::mutate(tag = stringr::str_remove(tag, "/1$")) |>
+    dplyr::mutate(tag = stringr::str_remove(tag, "/2$")) |>
     dplyr::mutate(length_2 = stringr::str_length(Sequence)) |>
     dplyr::select(tag, length_2) |>
     dplyr::full_join(res.tbl, by = "tag")
