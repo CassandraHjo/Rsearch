@@ -1,10 +1,10 @@
 #OTU ID	sample1
-tax_id_1405_1734_0/1	1
-tax_id_1405_1963_0/1	1
-tax_id_2021862_44_0/1	1
-tax_id_247523_1011_0/1	4
-tax_id_2567896_1385_0/1	1
-tax_id_2567896_388_0/1	1
-tax_id_2569541_234_0/1	1
-tax_id_818_94_0/1	1
-tax_id_94_1193_0/1	3
+read_1	1
+read_10	1
+read_2	4
+read_4	1
+read_5	1
+read_6	1
+read_7	3
+read_8	1
+read_9	1
