@@ -158,13 +158,21 @@ vs_optimize_truncee_rate <- function(fastq_input,
     trim_R2.df <- attr(trim_R1.df, "reverse")
 
     # Merge R1 and R2 reads
-    merge.df <- vs_fastq_mergepairs(fastq_input = trim_R1.df,
-                                    reverse = trim_R2.df,
-                                    minovlen = minovlen,
-                                    output_format = "fasta",
-                                    minlen = minlen,
-                                    threads = threads,
-                                    tmpdir = tmpdir)
+    merge.df <- tryCatch({vs_fastq_mergepairs(fastq_input = trim_R1.df,
+                                              reverse = trim_R2.df,
+                                              minovlen = minovlen,
+                                              output_format = "fasta",
+                                              minlen = minlen,
+                                              threads = threads,
+                                              tmpdir = tmpdir)
+    }, error = function(e) {
+      res.df$merged_read_pairs[i] <<- 0
+      res.df$R1_length[i] <<- if (nrow(trim_R1.df) > 0) round(mean(nchar(trim_R1.df$Sequence)), 2) else 0
+      res.df$R2_length[i] <<- if (nrow(trim_R2.df) > 0) round(mean(nchar(trim_R2.df$Sequence)), 2) else 0
+      return(NULL)
+    })
+
+    if (is.null(merge.df)) next
 
     # Dereplicate merged reads
     derep.df <- vs_fastx_uniques(fastx_input = merge.df,
