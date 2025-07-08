@@ -30,12 +30,13 @@
 #'
 #' @details
 #' The mean and median quality scores for each base position over all reads are
-#' plotted as curves. The vertical bars at each base indicate the interquartile range.
+#' plotted as curves. The vertical bars at each base indicate the interquartile
+#' range.
 #'
 #' \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 #' or FASTQ objects. FASTQ objects are tibbles that contain the columns
 #' \code{Header}, \code{Sequence}, and \code{Quality}, see
-#' \code{\link{readFastq}}.
+#' \code{\link[microseq]{readFastq}}.
 #'
 #' If \code{reverse} is provided, it is plotted together with the first plot in
 #' its own panel. Note that the x-axis in this panel is reversed.
@@ -202,14 +203,18 @@ plot_base_quality <- function(fastq_input,
   # Plot error bars and labels
   R1.plot <- ggplot2::ggplot(df_R1, ggplot2::aes(x = Position))
   if (show_overlap_box && !is.null(reverse)) {
+    # Calculate the mean read length
+    mean_read_length <- mean(nchar(fastq.tbl$Sequence), na.rm = TRUE)
+    # Build plot
     R1.plot <- R1.plot +
       ggplot2::annotate("rect",
-                        xmin = max_length - mean_overlap_length,
-                        xmax = max_length,
+                        xmin = mean_read_length - mean_overlap_length,
+                        xmax = mean_read_length,
                         ymin = -Inf,
                         ymax = Inf,
                         alpha = 0.15,
-                        fill = "blue")
+                        fill = "blue",
+                        na.rm = TRUE)
   }
   R1.plot <- R1.plot +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),
@@ -285,14 +290,18 @@ plot_base_quality <- function(fastq_input,
     # Plot error bars and labels
     R2.plot <- ggplot2::ggplot(df_R2, ggplot2::aes(x = Position))
     if (show_overlap_box) {
+      # Calculate the mean read length
+      mean_read_length <- mean(nchar(reverse.tbl$Sequence), na.rm = TRUE)
+      # Build plot
       R2.plot <- R2.plot +
         ggplot2::annotate("rect",
-                          xmin = max_length - mean_overlap_length,
-                          xmax = max_length,
+                          xmin = mean_read_length - mean_overlap_length,
+                          xmax = mean_read_length,
                           ymin = -Inf,
                           ymax = Inf,
                           alpha = 0.15,
-                          fill = "blue")
+                          fill = "blue",
+                          na.rm = TRUE)
     }
     R2.plot <- R2.plot +
       ggplot2::geom_errorbar(ggplot2::aes(ymin = Lower, ymax = Upper),

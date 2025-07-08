@@ -119,8 +119,8 @@ test_that("plot_base_quality downsamples if more than 10 000 reads", {
 
   # Generate unique headers for both datasets
   unique_ids <- sprintf("read_%05d", seq_len(nrow(R1_large)))
-  R1_large$Header <- paste0(unique_ids, " 1")
-  R2_large$Header <- paste0(unique_ids, " 2")
+  R1_large$Header <- unique_ids
+  R2_large$Header <- unique_ids
 
   quality_plot <- plot_base_quality(fastq_input = R1_large,
                                     reverse = R2_large,
