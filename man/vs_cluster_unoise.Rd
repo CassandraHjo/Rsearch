@@ -123,7 +123,7 @@ the \code{VSEARCH} manual for more details.
 fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "small.fasta")
 
 # Denoise sequences and read counts
-denoise <- vs_cluster_unoise(fasta_input = fasta_input)
+denoised.tbl <- vs_cluster_unoise(fasta_input = fasta_input)
 head(denoised.tbl)
 
 # Extract clustering statistics
