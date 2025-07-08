@@ -229,8 +229,10 @@ test_that("fastq_input and reverse can be merged when files, and results given a
 test_that("merge read pairs from a pe_df data frame", {
 
   fastq_input <- readRDS(test_path("testdata", "pe_df.rds"))
+  output_format <- "fastq"
 
-  merged <- vs_fastq_mergepairs(fastq_input = fastq_input)
+  merged <- vs_fastq_mergepairs(fastq_input = fastq_input,
+                                output_format = output_format)
 
   expect_equal(merged,
                readRDS(test_path("testdata", "output", "merged_pe_df.rds")))

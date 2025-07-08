@@ -13,7 +13,7 @@
 \usage{
 vs_fastx_uniques(
   fastx_input,
-  output_format = "fastq",
+  output_format = "fasta",
   fastx_output = NULL,
   minuniquesize = 1,
   strand = "plus",
@@ -33,7 +33,7 @@ vs_fastx_uniques(
 See \emph{Details}.}
 
 \item{output_format}{(Optional). Desired output format of file or tibble:
-\code{"fasta"} or \code{"fastq"} (default). If \code{fastx_input} is a FASTA
+\code{"fasta"} (default) or \code{"fastq"}. If \code{fastx_input} is a FASTA
 file path or a FASTA object, \code{output_format} cannot be \code{"fastq"}.}
 
 \item{fastx_output}{(Optional). Name of the output file for dereplicated

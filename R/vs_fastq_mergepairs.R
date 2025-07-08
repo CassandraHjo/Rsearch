@@ -9,7 +9,7 @@
 #' reads). Optional if \code{fastq_input} is a \code{"pe_df"} object. See
 #' \emph{Details}.
 #' @param output_format (Optional). Desired output format of file or tibble:
-#' \code{"fasta"} or \code{"fastq"} (default).
+#' \code{"fasta"} (default) or \code{"fastq"}.
 #' @param fastaout (Optional). Name of the FASTA output file with the merged
 #' reads. If \code{NULL} (default), no output is written to file. See
 #' \emph{Details}.
@@ -134,7 +134,7 @@
 #'
 vs_fastq_mergepairs <- function(fastq_input,
                                 reverse = NULL,
-                                output_format = "fastq",
+                                output_format = "fasta",
                                 fastaout = NULL,
                                 fastqout = NULL,
                                 minovlen = 10,

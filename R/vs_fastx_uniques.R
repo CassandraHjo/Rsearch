@@ -7,7 +7,7 @@
 #' @param fastx_input (Required). A FASTA/FASTQ file path or FASTA/FASTQ object.
 #' See \emph{Details}.
 #' @param output_format (Optional). Desired output format of file or tibble:
-#' \code{"fasta"} or \code{"fastq"} (default). If \code{fastx_input} is a FASTA
+#' \code{"fasta"} (default) or \code{"fastq"}. If \code{fastx_input} is a FASTA
 #' file path or a FASTA object, \code{output_format} cannot be \code{"fastq"}.
 #' @param fastx_output (Optional). Name of the output file for dereplicated
 #' reads from \code{fastx_input}. File can be in either FASTA or FASTQ format,
@@ -101,7 +101,7 @@
 #' @export
 #'
 vs_fastx_uniques <- function(fastx_input,
-                             output_format = "fastq",
+                             output_format = "fasta",
                              fastx_output = NULL,
                              minuniquesize = 1,
                              strand = "plus",
