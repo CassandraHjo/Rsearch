@@ -162,11 +162,12 @@ and no tibble is returned.</p>
 <code>VSEARCH</code>, and reports matches based on the specified pairwise identity
 threshold (<code>id</code>). Only alignments that meet or exceed the identity
 threshold are included in the output.</p>
-<p><code>fastx_input</code> and <code>database</code> can either be file paths to a FASTA/FASTQ
-files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
-columns <code>Header</code> and <code>Sequence</code>, see <code>readFasta</code>. FASTQ
-objects are tibbles that contain the columns <code>Header</code>, <code>Sequence</code>,
-and <code>Quality</code>, see <code>readFastq</code>.</p>
+<p><code>fastx_input</code> and <code>database</code> can either be file paths to a
+FASTA/FASTQ files or FASTA/FASTQ objects. FASTA objects are tibbles that
+contain the columns <code>Header</code> and <code>Sequence</code>, see
+<code><a href="https://rdrr.io/pkg/microseq/man/readFasta.html" class="external-link">readFasta</a></code>. FASTQ objects are tibbles that contain the
+columns <code>Header</code>, <code>Sequence</code>, and <code>Quality</code>, see
+<code><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></code>.</p>
 <p><code>userfields</code> specifies the fields to include in the output file. Fields
 must be given as a character string separated by <code>"+"</code>. The default
 value of <code>userfields</code> equals
@@ -229,7 +230,7 @@ for information about defining <code>gapopen</code> and <code>gapext</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

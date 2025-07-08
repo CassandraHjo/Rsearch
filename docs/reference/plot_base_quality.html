@@ -117,11 +117,12 @@ be written when tables are used as input or output. Defaults to
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The mean and median quality scores for each base position over all reads are
-plotted as curves. The vertical bars at each base indicate the interquartile range.</p>
+plotted as curves. The vertical bars at each base indicate the interquartile
+range.</p>
 <p><code>fastq_input</code> and <code>reverse</code> can either be file paths to FASTQ files
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
 <code>Header</code>, <code>Sequence</code>, and <code>Quality</code>, see
-<code>readFastq</code>.</p>
+<code><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></code>.</p>
 <p>If <code>reverse</code> is provided, it is plotted together with the first plot in
 its own panel. Note that the x-axis in this panel is reversed.</p>
 <p>The vertical bars represent the interquartile range (25% - 75%) in the
@@ -180,7 +181,7 @@ improve performance on large datasets.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

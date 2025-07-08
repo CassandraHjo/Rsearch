@@ -282,9 +282,10 @@ are trimmed and/or filtered based on the specified criteria using
 <code>VSEARCH</code>.</p>
 <p><code>fastx_input</code> and <code>reverse</code> can either be file paths to FASTA/FASTQ
 files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
-columns <code>Header</code> and <code>Sequence</code>, see <code>readFasta</code>. FASTQ
-objects are tibbles that contain the columns <code>Header</code>, <code>Sequence</code>,
-and <code>Quality</code>, see <code>readFastq</code>.</p>
+columns <code>Header</code> and <code>Sequence</code>, see
+<code><a href="https://rdrr.io/pkg/microseq/man/readFasta.html" class="external-link">readFasta</a></code>. FASTQ objects are tibbles that contain the
+columns <code>Header</code>, <code>Sequence</code>, and <code>Quality</code>, see
+<code><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></code>.</p>
 <p>If <code>fastx_input</code> is an object of class <code>"pe_df"</code>, the reverse reads
 are automatically extracted from its <code>"reverse"</code> attribute unless
 explicitly provided via the <code>reverse</code> argument.</p>
@@ -374,7 +375,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
