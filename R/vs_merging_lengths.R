@@ -47,8 +47,8 @@
 #'
 #' The tibble includes additional attributes:
 #' \describe{
-#'   \item{\code{plot}}{A \code{\link{ggplot2}} object visualizing the returned
-#'   data frame.}
+#'   \item{\code{plot}}{A \code{\link[ggplot2]{ggplot2}} object visualizing the
+#'   returned data frame.}
 #'   \item{\code{statistics}}{Additional statistics returned from
 #'   \code{\link{vs_fastq_mergepairs}}.}
 #' }
@@ -166,12 +166,16 @@ vs_merging_lengths <- function(fastq_input,
   unique_length_2 <- unique(res.tbl$length_2)
 
   plot_r1 <- if(length(unique_length_1) == 1) {
-    ggplot2::ggplot(res.tbl, ggplot2::aes(x = as.factor(length_1))) +
+    res.tbl |>
+      dplyr::filter(!is.na(length_1)) |>
+      ggplot2::ggplot(ggplot2::aes(x = as.factor(length_1))) +
       ggplot2::geom_bar(fill = pal[3], color = pal[4], width = 0.2) +
       ggplot2::labs(title = "Length R1", x = "", y = "") +
       ggplot2::theme_minimal()
   } else {
-    ggplot2::ggplot(res.tbl, ggplot2::aes(x = length_1)) +
+    res.tbl |>
+      dplyr::filter(!is.na(length_1)) |>
+      ggplot2::ggplot(ggplot2::aes(x = length_1)) +
       ggplot2::geom_histogram(binwidth = 1, fill = pal[3], color = pal[4]) +
       ggplot2::scale_x_continuous(limits = c(min(res.tbl$length_1) - 5, max(res.tbl$length_1) + 5)) +
       ggplot2::labs(title = "Length R1", x = "", y = "") +
@@ -179,12 +183,16 @@ vs_merging_lengths <- function(fastq_input,
   }
 
   plot_r2 <- if(length(unique_length_2) == 1) {
-    ggplot2::ggplot(res.tbl, ggplot2::aes(x = as.factor(length_2))) +
+    res.tbl |>
+      dplyr::filter(!is.na(length_2)) |>
+      ggplot2::ggplot(ggplot2::aes(x = as.factor(length_2))) +
       ggplot2::geom_bar(fill = pal[3], color = pal[4], width = 0.2) +
       ggplot2::labs(title = "Length R2", x = "", y = "") +
       ggplot2::theme_minimal()
   } else {
-    ggplot2::ggplot(res.tbl, ggplot2::aes(x = length_2)) +
+    res.tbl |>
+      dplyr::filter(!is.na(length_2)) |>
+      ggplot2::ggplot(ggplot2::aes(x = length_2)) +
       ggplot2::geom_histogram(binwidth = 1, fill = pal[3], color = pal[4]) +
       ggplot2::scale_x_continuous(limits = c(min(res.tbl$length_2) - 5, max(res.tbl$length_2) + 5)) +
       ggplot2::labs(title = "Length R2", x = "", y = "") +
@@ -194,13 +202,13 @@ vs_merging_lengths <- function(fastq_input,
   # Create separate plots for merged reads and overlap
   p3 <- ggplot2::ggplot(dplyr::filter(res.tbl, !is.na(length_merged)),
                         ggplot2::aes(x = length_merged)) +
-    ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4]) +
+    ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4], na.rm = TRUE) +
     ggplot2::labs(title = "Length of merged reads", x = "", y = "") +
     ggplot2::theme_minimal()
 
   p4 <-  ggplot2::ggplot(dplyr::filter(res.tbl, !is.na(length_overlap)),
                          ggplot2::aes(x = length_overlap)) +
-    ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4]) +
+    ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4], na.rm = TRUE) +
     ggplot2::labs(title = "Length of overlap", x = "", y = "") +
     ggplot2::theme_minimal()
 
