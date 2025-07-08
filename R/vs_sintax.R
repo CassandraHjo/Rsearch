@@ -202,7 +202,8 @@ vs_sintax <- function(fasta_input,
   check_vsearch_status(vsearch_output, args)
 
   # The output table
-  out.tbl <- fasta_input
+  out.tbl <- fasta_input |>
+    dplyr::select(Header, Sequence)
   out.tbl <- utils::read.table(tmp_outfile, sep = "\t", col.names = c("Header", "taxonomy", "plus")) |>
     dplyr::select(-plus) |>
     dplyr::mutate(domain = stringr::str_extract(taxonomy, "d:.+?\\)")) |>
