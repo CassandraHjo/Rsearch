@@ -48,9 +48,9 @@
 #'
 #' \code{fastx_input} can either be a FASTA/FASTQ file or a FASTA/FASTQ object.
 #' FASTA objects are tibbles that contain the columns \code{Header} and
-#' \code{Sequence}, see \code{\link{readFasta}}. FASTQ objects are tibbles that
-#' contain the columns \code{Header}, \code{Sequence}, and \code{Quality}, see
-#' \code{\link{readFastq}}.
+#' \code{Sequence}, see \code{\link[microseq]{readFasta}}. FASTQ objects are
+#' tibbles that contain the columns \code{Header}, \code{Sequence}, and
+#' \code{Quality}, see \code{\link[microseq]{readFastq}}.
 #'
 #' By default, the quality scores in FASTQ output files will correspond to the
 #' average error probability of the nucleotides in the each position.

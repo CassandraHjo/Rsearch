@@ -43,7 +43,7 @@
 #'
 #' \code{fasta_input} can either be a FASTA file or a FASTA object. FASTA objects
 #' are tibbles that contain the columns \code{Header} and \code{Sequence}, see
-#' \code{\link{readFasta}}.
+#' \code{\link[microseq]{readFasta}}.
 #'
 #' \code{database} must be a FASTA file or a FASTA object with high-quality
 #' non-chimeric sequences.

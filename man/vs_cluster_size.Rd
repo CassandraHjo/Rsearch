@@ -131,7 +131,7 @@ The centroid of each cluster is the first sequence added to the cluster.
 
 \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}, see \code{\link{readFasta}}.
+\code{Sequence}, see \code{\link[microseq]{readFasta}}.
 
 If neither \code{centroids} nor \code{otutabout} is specified (default), the
 function returns the centroid sequences as a FASTA object with an additional

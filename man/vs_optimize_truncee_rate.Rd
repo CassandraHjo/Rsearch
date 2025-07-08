@@ -66,11 +66,10 @@ A data frame with the following columns:
 }
 
 The returned data frame has an attribute named \code{"plot"} containing a
-\code{\link{ggplot2}} object based on the returned data frame. The plot
-visualizes \code{truncee_rate} values against
-\code{merged_read_pairs}, \code{R1_length}, and
-\code{R2_length}, with the optimal \code{truncee_rate} value marked by a red
-dashed line.
+\code{\link[ggplot2]{ggplot2}} object based on the returned data frame. The
+plot visualizes \code{truncee_rate} values against \code{merged_read_pairs},
+\code{R1_length}, and \code{R2_length}, with the optimal \code{truncee_rate}
+value marked by a red dashed line.
 }
 \description{
 \code{vs_optimize_truncee_rate} optimizes the truncation

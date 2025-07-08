@@ -54,8 +54,8 @@ corresponding reads were not merged.
 
 The tibble includes additional attributes:
 \describe{
-  \item{\code{plot}}{A \code{\link{ggplot2}} object visualizing the returned
-  data frame.}
+  \item{\code{plot}}{A \code{\link[ggplot2]{ggplot2}} object visualizing the
+  returned data frame.}
   \item{\code{statistics}}{Additional statistics returned from
   \code{\link{vs_fastq_mergepairs}}.}
 }

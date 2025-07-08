@@ -53,8 +53,8 @@ A straightforward named list with three elements:
 \description{
 \code{rsearch_obj} standardizes and organizes data into an
 Rsearch object. An Rsearch object is a list containing three elements with
-data structures that can be used as input to build a \code{phyloseq} object in the
-\code{phyloseq} package.
+data structures that can be used as input to build a \code{phyloseq} object
+in the \code{phyloseq} package.
 }
 \details{
 This function standardizes and organizes data into an
@@ -68,7 +68,7 @@ suitable for constructing a phyloseq object using the
 standard \code{list} in R rather than a specialized class providing an open
 and easily accessible structure.
 
-To convert this object into a \code{\link{phyloseq}} object, use
+To convert this object into a \code{\link[phyloseq]{phyloseq}} object, use
 \code{\link{rsearch2phyloseq}}.
 }
 \examples{

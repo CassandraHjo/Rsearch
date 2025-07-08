@@ -192,9 +192,10 @@ are trimmed and/or filtered based on the specified criteria using
 
 \code{fastx_input} and \code{reverse} can either be file paths to FASTA/FASTQ
 files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
-columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
-objects are tibbles that contain the columns \code{Header}, \code{Sequence},
-and \code{Quality}, see \code{\link{readFastq}}.
+columns \code{Header} and \code{Sequence}, see
+\code{\link[microseq]{readFasta}}. FASTQ objects are tibbles that contain the
+columns \code{Header}, \code{Sequence}, and \code{Quality}, see
+\code{\link[microseq]{readFastq}}.
 
 If \code{fastx_input} is an object of class \code{"pe_df"}, the reverse reads
 are automatically extracted from its \code{"reverse"} attribute unless

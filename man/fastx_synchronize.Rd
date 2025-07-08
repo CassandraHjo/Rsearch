@@ -56,9 +56,9 @@ in both.
 \code{file1} and \code{file2} can either be paths to FASTA/FASTQ files or
 tibble objects containing the sequences.
 FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}, see \code{\link{readFasta}}. FASTQ objects are tibbles that
-contain the columns \code{Header}, \code{Sequence}, and \code{Quality}, see
-\code{\link{readFastq}}.
+\code{Sequence}, see \code{\link[microseq]{readFasta}}. FASTQ objects are
+tibbles that contain the columns \code{Header}, \code{Sequence}, and
+\code{Quality}, see \code{\link[microseq]{readFastq}}.
 
 If \code{file1} is an object of class \code{"pe_df"}, the second read tibble
 is automatically extracted from its \code{"reverse"} attribute unless

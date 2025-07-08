@@ -2,8 +2,8 @@
 #'
 #' @description \code{rsearch_obj} standardizes and organizes data into an
 #' Rsearch object. An Rsearch object is a list containing three elements with
-#' data structures that can be used as input to build a \code{phyloseq} object in the
-#' \code{phyloseq} package.
+#' data structures that can be used as input to build a \code{phyloseq} object
+#' in the \code{phyloseq} package.
 #'
 #' @param readcount_data (Required). A file path or a data frame (or tibble)
 #' containing OTU count data, typically the output from
@@ -41,7 +41,7 @@
 #' standard \code{list} in R rather than a specialized class providing an open
 #' and easily accessible structure.
 #'
-#' To convert this object into a \code{\link{phyloseq}} object, use
+#' To convert this object into a \code{\link[phyloseq]{phyloseq}} object, use
 #' \code{\link{rsearch2phyloseq}}.
 #'
 #' @return A straightforward named list with three elements:
@@ -152,10 +152,10 @@ rsearch_obj <- function(readcount_data,
 #' to \code{"sample_id"}.
 #'
 #' @details This function converts an Rsearch object, which is a simple
-#' \code{list}, to a \code{\link{phyloseq}} object from the \code{phyloseq} R
-#' package.
+#' \code{list}, to a \code{\link[phyloseq]{phyloseq}} object from the
+#' \code{phyloseq} R package.
 #'
-#' @return A \code{\link{phyloseq}} object.
+#' @return A \code{\link[phyloseq]{phyloseq}} object.
 #'
 #' @references
 #' \url{https://joey711.github.io/phyloseq/}
@@ -198,7 +198,8 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #'
 #' @description Creating an Rsearch object (list) from a phyloseq object.
 #'
-#' @param phyloseq.obj (Required). A phyloseq object, see \code{\link{phyloseq}}.
+#' @param phyloseq.obj (Required). A phyloseq object, see
+#' \code{\link[phyloseq]{phyloseq}}.
 #'
 #' @details This function converts a phyloseq object to a simple
 #' \code{\link{list}} with three elements as dataframes (or tibbles). The

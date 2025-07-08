@@ -14,7 +14,7 @@ information, see \emph{Details}.}
 confidence scores below this to \code{NA}.}
 }
 \value{
-A phylo object, see \code{\link{nj}}.
+A phylo object, see \code{\link[ape]{nj}}.
 }
 \description{
 Creates a phylo object based on taxonomy
@@ -43,7 +43,8 @@ such confidence scores i.e. columns domain_score, phylum_score,
 corresponding species name is set to \code{NA}, and similar for all ranks.
 The default is to ignore this confidence (\code{confidence = NULL}).
 
-From these distances a Neighbor Joining tree is built using \code{\link{nj}}.
+From these distances a Neighbor Joining tree is built using
+\code{\link[ape]{nj}}.
 }
 \examples{
 \dontrun{

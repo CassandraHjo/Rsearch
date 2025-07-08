@@ -15,7 +15,7 @@ the column in \code{sampledata.df} that contains sample identifiers. Defaults
 to \code{"sample_id"}.}
 }
 \value{
-A \code{\link{phyloseq}} object.
+A \code{\link[phyloseq]{phyloseq}} object.
 }
 \description{
 \code{rsearch2phyloseq} converts an Rsearch object to a phyloseq
@@ -23,8 +23,8 @@ object.
 }
 \details{
 This function converts an Rsearch object, which is a simple
-\code{list}, to a \code{\link{phyloseq}} object from the \code{phyloseq} R
-package.
+\code{list}, to a \code{\link[phyloseq]{phyloseq}} object from the
+\code{phyloseq} R package.
 }
 \examples{
 \dontrun{

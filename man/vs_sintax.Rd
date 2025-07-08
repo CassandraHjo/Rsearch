@@ -77,13 +77,13 @@ Sintax algorithm, using \code{VSEARCH}, see
 
 \code{fasta_input} can either be a file path to a FASTA file or a
 FASTA object. FASTA objects are tibbles that contain the columns
-\code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
+\code{Header} and \code{Sequence}, see \code{\link[microseq]{readFasta}}.
 
 \code{database} can either be a file path to a FASTA file or a
 FASTA object. FASTA objects are tibbles that contain the
-columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}.
-The \code{Header} texts of this file must follow the sintax-pattern, see
-\code{\link{make_sintax_db}}.
+columns \code{Header} and \code{Sequence}, see
+\code{\link[microseq]{readFasta}}. The \code{Header} texts of this file must
+follow the sintax-pattern, see \code{\link{make_sintax_db}}.
 
 \code{vsearch_options} allows users to pass additional command-line arguments
 to \code{VSEARCH} that are not directly supported by this function. Refer to

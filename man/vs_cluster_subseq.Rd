@@ -74,7 +74,7 @@ centroid.
 
 \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}, see \code{\link{readFasta}}.
+\code{Sequence}, see \code{\link[microseq]{readFasta}}.
 
 If \code{sizein = TRUE} (default) the FASTA headers must contain text
 matching the regular expression \code{"size=[0-9]+"} indicating the copy

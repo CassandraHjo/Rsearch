@@ -90,7 +90,7 @@ sequence, and the reverse complement of the reverse read.
 \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
 \code{Header}, \code{Sequence}, and \code{Quality}, see
-\code{\link{readFastq}}. Forward and reverse reads must appear in the same
+\code{\link[microseq]{readFastq}}. Forward and reverse reads must appear in the same
 order and have the same total number of reads in both files.
 
 If \code{fastq_input} is an object of class \code{"pe_df"}, the reverse reads

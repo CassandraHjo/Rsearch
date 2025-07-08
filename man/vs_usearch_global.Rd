@@ -98,11 +98,12 @@ Performs global pairwise alignment between query and target sequences using
 threshold (\code{id}). Only alignments that meet or exceed the identity
 threshold are included in the output.
 
-\code{fastx_input} and \code{database} can either be file paths to a FASTA/FASTQ
-files or FASTA/FASTQ objects. FASTA objects are tibbles that contain the
-columns \code{Header} and \code{Sequence}, see \code{\link{readFasta}}. FASTQ
-objects are tibbles that contain the columns \code{Header}, \code{Sequence},
-and \code{Quality}, see \code{\link{readFastq}}.
+\code{fastx_input} and \code{database} can either be file paths to a
+FASTA/FASTQ files or FASTA/FASTQ objects. FASTA objects are tibbles that
+contain the columns \code{Header} and \code{Sequence}, see
+\code{\link[microseq]{readFasta}}. FASTQ objects are tibbles that contain the
+columns \code{Header}, \code{Sequence}, and \code{Quality}, see
+\code{\link[microseq]{readFastq}}.
 
 \code{userfields} specifies the fields to include in the output file. Fields
 must be given as a character string separated by \code{"+"}. The default

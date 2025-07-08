@@ -48,11 +48,11 @@ be written when tables are used as input or output. Defaults to
 \value{
 A read count table with one row for each cluster and one column for
 each sample. If \code{otutabout} is a text it is assumed to be a file name,
-and the results are written to this file. If no such text is supplied (default),
-it is returned as a tibble.
+and the results are written to this file. If no such text is supplied
+(default), it is returned as a tibble.
 
-The first two columns of this tibble lists the \code{Header} and \code{Sequence}
-of the centroid sequences for each cluster.
+The first two columns of this tibble lists the \code{Header} and
+\code{Sequence} of the centroid sequences for each cluster.
 
 The clustering statistics are included as an attribute named
 \code{"statistics"} with the following columns:
@@ -74,8 +74,9 @@ The clustering statistics are included as an attribute named
 }
 }
 \description{
-\code{vs_cluster_unoise} performs denoising of FASTA sequences from a
-given file or object using \code{VSEARCH}´s \code{cluster_unoise} method.
+\code{vs_cluster_unoise} performs denoising of FASTA sequences
+from a given file or object using \code{VSEARCH}´s \code{cluster_unoise}
+method.
 }
 \details{
 Sequences are denoised according to the UNOISE version 3 algorithm by Robert
@@ -96,7 +97,7 @@ means (in general) fewer clusters.
 
 \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns \code{Header} and
-\code{Sequence}, see \code{\link{readFasta}}.
+\code{Sequence}, see \code{\link[microseq]{readFasta}}.
 
 The \code{Header} column \strong{must} contain the size (copy number) for
 each read. The size information must have the format ";size=X",
@@ -123,7 +124,7 @@ the \code{VSEARCH} manual for more details.
 fasta_input <- file.path(file.path(path.package("Rsearch"), "extdata"), "small.fasta")
 
 # Denoise sequences and read counts
-denoise <- vs_cluster_unoise(fasta_input = fasta_input)
+denoised.tbl <- vs_cluster_unoise(fasta_input = fasta_input)
 head(denoised.tbl)
 
 # Extract clustering statistics

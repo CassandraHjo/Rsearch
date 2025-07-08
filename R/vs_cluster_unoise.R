@@ -1,7 +1,8 @@
 #' Denoising FASTA sequences
 #'
-#' @description \code{vs_cluster_unoise} performs denoising of FASTA sequences from a
-#' given file or object using \code{VSEARCH}´s \code{cluster_unoise} method.
+#' @description \code{vs_cluster_unoise} performs denoising of FASTA sequences
+#' from a given file or object using \code{VSEARCH}´s \code{cluster_unoise}
+#' method.
 #'
 #' @param fasta_input (Required). A FASTA file path or a FASTA object containing
 #' reads to denoise. See \emph{Details}.
@@ -42,7 +43,7 @@
 #'
 #' \code{fasta_input} can either be a file path to a FASTA file or a FASTA
 #' object. FASTA objects are tibbles that contain the columns \code{Header} and
-#' \code{Sequence}, see \code{\link{readFasta}}.
+#' \code{Sequence}, see \code{\link[microseq]{readFasta}}.
 #'
 #' The \code{Header} column \strong{must} contain the size (copy number) for
 #' each read. The size information must have the format ";size=X",
@@ -65,11 +66,11 @@
 #'
 #' @return A read count table with one row for each cluster and one column for
 #' each sample. If \code{otutabout} is a text it is assumed to be a file name,
-#' and the results are written to this file. If no such text is supplied (default),
-#' it is returned as a tibble.
+#' and the results are written to this file. If no such text is supplied
+#' (default), it is returned as a tibble.
 #'
-#' The first two columns of this tibble lists the \code{Header} and \code{Sequence}
-#' of the centroid sequences for each cluster.
+#' The first two columns of this tibble lists the \code{Header} and
+#' \code{Sequence} of the centroid sequences for each cluster.
 #'
 #' The clustering statistics are included as an attribute named
 #' \code{"statistics"} with the following columns:
@@ -221,7 +222,7 @@ vs_cluster_unoise <- function(fasta_input,
     otu.tbl <- otu.tbl |>
       dplyr::left_join(centr.tbl, by = "tag") |>
       dplyr::mutate(size = sizes) |>
-      dplyr::arrange(desc(size)) |>
+      dplyr::arrange(dplyr::desc(size)) |>
       dplyr::mutate(Header = stringr::str_c("ZOTU_", 1:dplyr::n(), ";size=", size)) |>
       dplyr::select(-tag, -size) |>
       dplyr::relocate(Header, Sequence)

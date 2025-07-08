@@ -58,12 +58,13 @@ reads.
 }
 \details{
 The mean and median quality scores for each base position over all reads are
-plotted as curves. The vertical bars at each base indicate the interquartile range.
+plotted as curves. The vertical bars at each base indicate the interquartile
+range.
 
 \code{fastq_input} and \code{reverse} can either be file paths to FASTQ files
 or FASTQ objects. FASTQ objects are tibbles that contain the columns
 \code{Header}, \code{Sequence}, and \code{Quality}, see
-\code{\link{readFastq}}.
+\code{\link[microseq]{readFastq}}.
 
 If \code{reverse} is provided, it is plotted together with the first plot in
 its own panel. Note that the x-axis in this panel is reversed.
