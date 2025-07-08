@@ -12,6 +12,7 @@ utils::globalVariables(c(
   "genus_score", "species_score", "tax.tbl", "length_1", "length_2",
   "length_merged", "length_overlap", "merged_read_pairs", "R1_length",
   "R2_length", "truncee_rate_value", "value", "metric", "truncqual_value", "db",
-  "plus", "taxonomy", ".data", "type", "centroid", "member", "members", "#OTU ID"
+  "plus", "taxonomy", ".data", "type", "centroid", "member", "members",
+  "#OTU ID", "otu_id"
 ))
 

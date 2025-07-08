@@ -259,6 +259,18 @@ vs_uchime_denovo <- function(fasta_input,
     # Read output into FASTA object (tbl)
     nonchimeras.tbl <- microseq::readFasta(nonchimeras_file)
 
+    # Join with input table if possible
+    if (!is.character(fasta_input)){
+      if ("otu_id" %in% names(fasta_input)) {
+        fasta_input <- fasta_input |>
+          dplyr::select(otu_id, Header)
+
+        nonchimeras.tbl <- dplyr::left_join(nonchimeras.tbl,
+                                            fasta_input,
+                                            by = "Header")
+      }
+    }
+
     # Create empty table
     chimeras.tbl <- data.frame()
 
@@ -266,6 +278,18 @@ vs_uchime_denovo <- function(fasta_input,
     if (file.info(chimeras_file)$size > 0){
 
       chimeras.tbl <- microseq::readFasta(chimeras_file)
+
+      # Join with input table if possible
+      if (!is.character(fasta_input)){
+        if ("otu_id" %in% names(fasta_input)) {
+          fasta_input <- fasta_input |>
+            dplyr::select(otu_id, Header)
+
+          chimeras.tbl <- dplyr::left_join(chimeras.tbl,
+                                           fasta_input,
+                                           by = "Header")
+        }
+      }
     }
 
     # Add additional table as attribute to the primary table
@@ -278,7 +302,6 @@ vs_uchime_denovo <- function(fasta_input,
                                               attr(nonchimeras.tbl, "chimeras"))
 
     attr(nonchimeras.tbl, "statistics") <- statistics
-
   }
 
   # Return results
