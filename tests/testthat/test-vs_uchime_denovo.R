@@ -84,3 +84,34 @@ test_that("vs_uchime_denovo handles optional arguments", {
   expect_equal(out, expected_df)
   expect_true(file.exists(log_file))
 })
+
+test_that("vs_uchime_denovo joins otu_id when present in input", {
+  fasta_input <- microseq::readFasta(test_path("testdata", "output", "R1_derep.fasta"))
+  fasta_input$otu_id <- paste0("OTU", seq_len(nrow(fasta_input)))
+
+  out <- vs_uchime_denovo(fasta_input = fasta_input)
+
+  expect_true("otu_id" %in% colnames(out))
+})
+
+test_that("vs_uchime_denovo returns empty chimera table when none found", {
+  fasta_input <- microseq::readFasta(test_path("testdata", "output", "R1_derep.fasta"))
+
+  out <- vs_uchime_denovo(fasta_input = fasta_input)
+
+  chimeras_tbl <- attr(out, "chimeras")
+  expect_s3_class(chimeras_tbl, "data.frame")
+  expect_equal(nrow(chimeras_tbl), 0)
+})
+
+test_that("vs_uchime_denovo joins otu_id to chimeras when chimera is present", {
+  fasta_input <- microseq::readFasta(test_path("testdata", "chimera_test.fasta"))
+  fasta_input$otu_id <- c("Parent1", "Parent2", "Chimera")
+
+  out <- vs_uchime_denovo(fasta_input = fasta_input)
+
+  chimeras_tbl <- attr(out, "chimeras")
+
+  expect_gt(nrow(chimeras_tbl), 0)
+  expect_true("otu_id" %in% colnames(chimeras_tbl))
+})

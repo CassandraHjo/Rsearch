@@ -61,3 +61,23 @@ test_that("optimizing truncee_rate with pe_df tibble as input", {
   expect_error(vs_optimize_truncee_rate(fastq_input = fastq_input),
                "fastq_input has class 'pe_df' but no 'reverse' attribute found.")
 })
+
+test_that("vs_optimize_truncee_rate handles vs_fastq_mergepairs failure gracefully", {
+  fastq_input <- microseq::readFastq(test_path("testdata", "R1.fastq"))
+
+  tbl <- vs_optimize_truncee_rate(
+    fastq_input = fastq_input,
+    reverse = fastq_input,
+    truncee_rate_range = c(0.002, 0.04),
+    minovlen = 20,
+    min_size = 1,
+    maxee_rate = 0.01,
+    threads = 1,
+    plot_title = FALSE
+  )
+
+  expect_equal(tbl$merged_read_pairs[1], 0)
+  expect_true(is.numeric(tbl$R1_length[1]))
+  expect_true(is.numeric(tbl$R2_length[1]))
+  expect_s3_class(attr(tbl, "plot"), "gg")
+})

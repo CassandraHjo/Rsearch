@@ -52,3 +52,15 @@ test_that("cluster sequences from fasta tibble, and return file", {
   expect_equal(read.delim(otutabout),
                read.delim(test_path("testdata", "output", "cluster_unoise_otutabout.tsv")))
 })
+
+test_that("vs_cluster_unoise returns NULL and warning when no clusters found", {
+
+  fasta_input <- microseq::readFasta(test_path("testdata", "output", "R1_derep.fasta"))
+
+  expect_warning(
+    result <- vs_cluster_unoise(fasta_input = fasta_input, minsize = 20),
+    "No clusters found, try to lower minsize"
+  )
+
+  expect_null(result)
+})
