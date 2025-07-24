@@ -2,6 +2,7 @@
 % Please edit documentation in R/vs_cluster_unoise.R
 \name{vs_cluster_unoise}
 \alias{vs_cluster_unoise}
+\alias{cluster_unoise}
 \alias{unoise}
 \alias{denoise}
 \title{Denoising FASTA sequences}
