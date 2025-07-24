@@ -366,11 +366,7 @@ calculate_uchime_statistics <- function(fasta_file,
   avg_length_input_seq <- mean(nchar(input.df$Sequence))
   num_non_chimeras <- nrow(nonchimeras.tbl)
 
-  if (!is.null(chimeras.tbl)) {
-    num_chimeras <- nrow(chimeras.tbl)
-  } else {
-    num_chimeras <- 0
-  }
+  num_chimeras <- nrow(chimeras.tbl)
 
   # Create table
   result_table <- data.frame(

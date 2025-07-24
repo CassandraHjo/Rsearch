@@ -200,9 +200,6 @@ vs_fastq_join <- function(fastq_input,
     reverse_file <- normalizePath(reverse)
   }
 
-  if (!file.exists(fastq_file)) stop("Cannot find input FASTQ file: ", fastq_file)
-  if (!file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
-
   # Define output file paths
   if (output_format == "fastq") {
     outfile <- if (is.null(fastqout)) tempfile("joined_",

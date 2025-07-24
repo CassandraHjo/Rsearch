@@ -226,9 +226,6 @@ vs_fastq_mergepairs <- function(fastq_input,
     reverse_name <- basename(reverse)
   }
 
-  if (!file.exists(fastq_file)) stop("Cannot find input FASTQ file: ", fastq_file)
-  if (!file.exists(reverse_file)) stop("Cannot find reverse FASTQ file: ", reverse_file)
-
   # Output file setup
   if (output_format == "fasta") {
     outfile <- if (is.null(fastaout)) tempfile("merged_", tmpdir = tmpdir, fileext = ".fa") else fastaout
