@@ -110,7 +110,7 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_cluster_unoise unoise denoise
+#' @aliases vs_cluster_unoise cluster_unoise unoise denoise
 #'
 #' @export
 #'
@@ -204,7 +204,12 @@ vs_cluster_unoise <- function(fasta_input,
   check_vsearch_status(vsearch_output, args)
 
   # Read results and make otu table
-  centr.tbl <- microseq::readFasta(centrfile)
+  if (file.size(centrfile) == 0) {
+    centr.tbl <- tibble::tibble(Header = character(), Sequence = character())
+  } else {
+    centr.tbl <- microseq::readFasta(centrfile)
+  }
+
   if(nrow(centr.tbl) > 0){
     statistics <- calculate_cluster_statistics(centr.tbl,
                                                fasta_file,
