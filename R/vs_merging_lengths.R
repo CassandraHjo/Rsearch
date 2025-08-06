@@ -171,7 +171,8 @@ vs_merging_lengths <- function(fastq_input,
       ggplot2::ggplot(ggplot2::aes(x = as.factor(length_1))) +
       ggplot2::geom_bar(fill = pal[3], color = pal[4], width = 0.2) +
       ggplot2::labs(title = "Length R1", x = "", y = "") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
   } else {
     res.tbl |>
       dplyr::filter(!is.na(length_1)) |>
@@ -179,7 +180,8 @@ vs_merging_lengths <- function(fastq_input,
       ggplot2::geom_histogram(binwidth = 1, fill = pal[3], color = pal[4]) +
       ggplot2::scale_x_continuous(limits = c(min(res.tbl$length_1) - 5, max(res.tbl$length_1) + 5)) +
       ggplot2::labs(title = "Length R1", x = "", y = "") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
   }
 
   plot_r2 <- if(length(unique_length_2) == 1) {
@@ -188,7 +190,8 @@ vs_merging_lengths <- function(fastq_input,
       ggplot2::ggplot(ggplot2::aes(x = as.factor(length_2))) +
       ggplot2::geom_bar(fill = pal[3], color = pal[4], width = 0.2) +
       ggplot2::labs(title = "Length R2", x = "", y = "") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
   } else {
     res.tbl |>
       dplyr::filter(!is.na(length_2)) |>
@@ -196,7 +199,8 @@ vs_merging_lengths <- function(fastq_input,
       ggplot2::geom_histogram(binwidth = 1, fill = pal[3], color = pal[4]) +
       ggplot2::scale_x_continuous(limits = c(min(res.tbl$length_2) - 5, max(res.tbl$length_2) + 5)) +
       ggplot2::labs(title = "Length R2", x = "", y = "") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
   }
 
   # Create separate plots for merged reads and overlap
@@ -204,13 +208,15 @@ vs_merging_lengths <- function(fastq_input,
                         ggplot2::aes(x = length_merged)) +
     ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4], na.rm = TRUE) +
     ggplot2::labs(title = "Length of merged reads", x = "", y = "") +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
   p4 <-  ggplot2::ggplot(dplyr::filter(res.tbl, !is.na(length_overlap)),
                          ggplot2::aes(x = length_overlap)) +
     ggplot2::geom_histogram(binwidth = 5, fill = pal[3], color = pal[4], na.rm = TRUE) +
     ggplot2::labs(title = "Length of overlap", x = "", y = "") +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
   # Arrange plots in a grid
   combined_plot <- cowplot::plot_grid(plot_r1, plot_r2, p3, p4, ncol = 2)
@@ -229,15 +235,28 @@ vs_merging_lengths <- function(fastq_input,
 
   # "Draw" the plot title
   common_title <- cowplot::ggdraw() +
-    cowplot::draw_label(title, size = 14, x = 0.01, hjust = 0)
+    cowplot::draw_label(title,
+                        size = 14,
+                        x = 0.01,
+                        hjust = 0,
+                        fontface = "bold")
 
   # "Draw" common x-axis label
   common_x <- cowplot::ggdraw() +
-    cowplot::draw_label("Length (bases)", size = 14, x = 0.5, hjust = 0.5)
+    cowplot::draw_label("Length (bases)",
+                        size = 14,
+                        x = 0.5,
+                        hjust = 0.5,
+                        fontface = "bold")
 
   # "Draw" common y-axis label
   common_y <- cowplot::ggdraw() +
-    cowplot::draw_label("Number of reads", size = 14, angle = 90, y = 0.5, vjust = 0.5)
+    cowplot::draw_label("Number of reads",
+                        size = 14,
+                        angle = 90,
+                        y = 0.5,
+                        vjust = 0.5,
+                        fontface = "bold")
 
   # Combine title, main plot and common x-axis label
   final_plot_no_y <- cowplot::plot_grid(common_title, combined_plot, common_x,

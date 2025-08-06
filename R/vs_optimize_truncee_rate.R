@@ -214,7 +214,7 @@ vs_optimize_truncee_rate <- function(fastq_input,
   p1 <- ggplot2::ggplot(long.df[long.df$facet == "Merged read-pairs", ],
                         ggplot2::aes(x = truncee_rate_value, y = value, color = metric)) +
     ggplot2::geom_line() +
-    ggplot2::geom_point() +
+    ggplot2::geom_point(size = 2) +
     ggplot2::geom_vline(xintercept = optimal_truncee_rate, color = "red", linetype = "dashed") +
     ggplot2::labs(title = "Merged read-pairs",
                   x = "Truncee_rate value",
@@ -225,7 +225,8 @@ vs_optimize_truncee_rate <- function(fastq_input,
                                   merged_read_pairs = "Number of merged read-pairs")) +
     ggplot2::theme_minimal() +
     # Remove x-axis because this is common with p2
-    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"),
+                   axis.title.x = ggplot2::element_blank(),
                    axis.text.x = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank())
 
@@ -233,7 +234,7 @@ vs_optimize_truncee_rate <- function(fastq_input,
   p2 <- ggplot2::ggplot(long.df[long.df$facet == "Read Lengths", ],
                         ggplot2::aes(x = truncee_rate_value, y = value, color = metric)) +
     ggplot2::geom_line() +
-    ggplot2::geom_point() +
+    ggplot2::geom_point(size = 2) +
     ggplot2::geom_vline(xintercept = optimal_truncee_rate, color = "red", linetype = "dashed") +
     ggplot2::labs(title = "Read Lengths",
                   x = "truncee_rate",
@@ -244,7 +245,8 @@ vs_optimize_truncee_rate <- function(fastq_input,
                                 labels = c(R1_length = "Average R1 Length",
                                            R2_length = "Average R2 Length"
                                 )) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
   # Combine the two plots
   combined_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
@@ -266,7 +268,11 @@ vs_optimize_truncee_rate <- function(fastq_input,
 
   # "Draw" the main title
   common_title <- cowplot::ggdraw() +
-    cowplot::draw_label(title, size = 12, x = 0.01, hjust = 0)
+    cowplot::draw_label(title,
+                        size = 12,
+                        x = 0.01,
+                        hjust = 0,
+                        fontface = "bold")
 
   # Combine title and plot
   final_plot <- cowplot::plot_grid(common_title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))

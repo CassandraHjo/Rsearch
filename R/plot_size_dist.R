@@ -133,7 +133,8 @@ plot_size_dist <- function(fastx_input,
       ggplot2::labs(title = plot_title,
                     x = "Size",
                     y = "Number of reads") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
     # Apply log scale only if enabled
     if (log_scale_y) {
@@ -176,7 +177,8 @@ plot_size_dist <- function(fastx_input,
       ggplot2::labs(title = plot_title,
                     x = "Size",
                     y = "Number of reads") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
     # Apply log scale only if enabled
     if (log_scale_y) {

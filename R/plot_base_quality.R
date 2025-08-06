@@ -223,7 +223,8 @@ plot_base_quality <- function(fastq_input,
                   x = "Base position",
                   y = "Quality score",
                   color = "Statistic") +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
   # Create empty vector for storing color mapping
   color_mapping <- c()
@@ -311,7 +312,8 @@ plot_base_quality <- function(fastq_input,
                     x = "Base position",
                     y = "Quality score",
                     color = "Statistic") +
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
     # Create empty vector for storing color mapping
     color_mapping <- c()
@@ -352,7 +354,11 @@ plot_base_quality <- function(fastq_input,
 
     # Create common title
     common_title <- cowplot::ggdraw() +
-      cowplot::draw_label(plot_title, size = 14, x = 0.01, hjust = 0)
+      cowplot::draw_label(plot_title,
+                          size = 14,
+                          x = 0.01,
+                          hjust = 0,
+                          fontface = "bold")
 
     # Combine the two plots
     combined_plot <- cowplot::plot_grid(R1.plot, R2.plot, ncol = 2)

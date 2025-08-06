@@ -94,7 +94,8 @@ plot_ee_rate_dist <- function(fastq_input,
     ggplot2::labs(title = plot_title,
                   x = "EE-rate",
                   y = "Number of reads") +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
   return(ee_plot)
 }

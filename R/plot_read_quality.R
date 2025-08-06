@@ -125,7 +125,8 @@ plot_read_quality <- function(fastq_input,
     ggplot2::labs(title = title,
                   x = "Read length (bases)",
                   y = y_label) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(text = ggplot2::element_text(face = "bold"))
 
   # Add marginal histograms
   plot_with_marginal_plots <- ggExtra::ggMarginal(p1,
