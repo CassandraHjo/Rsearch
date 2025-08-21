@@ -401,8 +401,8 @@ this setting, approximately 50% (33 740 out of 67 857) read pairs are
 successfully merged.</p>
 <p>Although this number is just slightly higher compared to the results
 from the raw merging, the important difference is that only high-quality
-merged reads with copy number above 2 and an average expected error
-bellow 0.01 are considered here. Thus, trimming with
+merged reads with copy number 2 or more and an average expected error
+below 0.01 are considered here. Thus, trimming with
 <code>truncqual = 7</code> effectively retains higher-confidence reads
 at the cost of discarding lower-quality ones, which is exactly what we
 want.</p>
@@ -634,7 +634,7 @@ FASTA table.</li>
 <li>
 <strong>Option 2</strong>: Write the results to file.</li>
 </ul>
-<p>Both options are demonstrated in the code bellow, but we will use the
+<p>Both options are demonstrated in the code below, but we will use the
 first option in this tutorial.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create empty table to store results</span></span>

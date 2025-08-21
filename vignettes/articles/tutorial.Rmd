@@ -277,7 +277,7 @@ for(i in 1:nrow(sample.tbl)){
 
 For the first sample, the best `truncqual` value is 7. At this setting, approximately 50% (33 740 out of 67 857) read pairs are successfully merged. 
 
-Although this number is just slightly higher compared to the results from the raw merging, the important difference is that only high-quality merged reads with copy number above 2 and an average expected error bellow 0.01 are considered here. Thus, trimming with `truncqual = 7` effectively retains higher-confidence reads at the cost of discarding lower-quality ones, which is exactly what we want.
+Although this number is just slightly higher compared to the results from the raw merging, the important difference is that only high-quality merged reads with copy number 2 or more and an average expected error below 0.01 are considered here. Thus, trimming with `truncqual = 7` effectively retains higher-confidence reads at the cost of discarding lower-quality ones, which is exactly what we want.
 
 Why not merge all reads here? Because singleton reads often have sequencing errors, and this will affect the merging. We base the optimization entirely on multicopy or high-quality reads.
 
@@ -446,7 +446,7 @@ This is the last step in the preprocessing of the reads, and we will have to sto
 * **Option 1**: Store the results from each sample in a FASTA table. 
 * **Option 2**: Write the results to file. 
 
-Both options are demonstrated in the code bellow, but we will use the first option in this tutorial.
+Both options are demonstrated in the code below, but we will use the first option in this tutorial.
 
 ```{r detect_chimeras, eval=FALSE}
 # Create empty table to store results

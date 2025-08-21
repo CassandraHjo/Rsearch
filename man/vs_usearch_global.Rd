@@ -57,8 +57,7 @@ identity required for matches. Defaults to \code{0.7}.}
 sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
 
 \item{maxaccepts}{(Optional). Maximum number of matching target sequences to
-accept before stopping the search for a given query. Defaults to \code{1}.
-Only works when \code{strand} is set to \code{"plus"} (default).}
+accept before stopping the search for a given query. Defaults to \code{1}.}
 
 \item{maxrejects}{(Optional). Maximum number of non-matching target sequences
 to consider before stopping the search for a given query. Defaults to 32. If

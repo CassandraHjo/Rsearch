@@ -29,7 +29,6 @@
 #' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
 #' @param maxaccepts (Optional). Maximum number of matching target sequences to
 #' accept before stopping the search for a given query. Defaults to \code{1}.
-#' Only works when \code{strand} is set to \code{"plus"} (default).
 #' @param maxrejects (Optional). Maximum number of non-matching target sequences
 #' to consider before stopping the search for a given query. Defaults to 32. If
 #' \code{maxaccepts} and \code{maxrejects} are both set to 0, the complete
@@ -278,7 +277,9 @@ vs_usearch_global <- function(fastx_input,
             "--threads", threads,
             "--strand", strand,
             "--gapopen", gapopen,
-            "--gapext", gapext)
+            "--gapext", gapext,
+            "--maxaccepts", maxaccepts,
+            "--maxrejects", maxrejects)
 
   if (!is.null(userout)) {
     args <- c(args, "--userout", outfile, "--userfields", userfields)
@@ -286,13 +287,6 @@ vs_usearch_global <- function(fastx_input,
     args <- c(args, "--otutabout", outfile)
   } else {
     args <- c(args, "--userout", outfile, "--userfields", userfields) # Default output
-  }
-
-  # Add maxaccepts and maxrejects if strand is "plus"
-  if (strand == "plus") {
-    args <- c(args,
-              "--maxaccepts", maxaccepts,
-              "--maxrejects", maxrejects)
   }
 
   # Add additional arguments if specified
