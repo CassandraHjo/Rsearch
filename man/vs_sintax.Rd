@@ -4,7 +4,7 @@
 \alias{vs_sintax}
 \alias{sintax}
 \alias{classify}
-\title{Taxonomic classification}
+\title{Taxonomic classification using the Sintax algorithm}
 \usage{
 vs_sintax(
   fasta_input,

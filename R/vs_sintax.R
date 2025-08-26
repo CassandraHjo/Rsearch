@@ -1,4 +1,4 @@
-#' Taxonomic classification
+#' Taxonomic classification using the Sintax algorithm
 #'
 #' @description \code{vs_sintax} classifies sequences using the Sintax algorithm
 #' implemented in \code{VSEARCH}.
