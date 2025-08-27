@@ -12,6 +12,8 @@ vs_cluster_unoise(
   otutabout = NULL,
   minsize = 8,
   unoise_alpha = 2,
+  relabel = NULL,
+  relabel_sha1 = FALSE,
   log_file = NULL,
   threads = 1,
   vsearch_options = NULL,
@@ -31,6 +33,12 @@ Defaults to \code{8}.}
 
 \item{unoise_alpha}{(Optional). Alpha value for the UNOISE algorithm.
 Defaults to \code{2}.}
+
+\item{relabel}{(Optional). Relabel sequences using the given prefix and a
+ticker to construct new headers. Defaults to \code{NULL}.}
+
+\item{relabel_sha1}{(Optional). If \code{TRUE} (default), relabel sequences
+using the SHA1 message digest algorithm. Defaults to \code{FALSE}.}
 
 \item{log_file}{(Optional). Name of the log file to capture messages from
 \code{VSEARCH}. If \code{NULL} (default), no log file is created.}

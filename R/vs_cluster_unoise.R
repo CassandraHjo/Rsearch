@@ -13,6 +13,10 @@
 #' Defaults to \code{8}.
 #' @param unoise_alpha (Optional). Alpha value for the UNOISE algorithm.
 #' Defaults to \code{2}.
+#' @param relabel (Optional). Relabel sequences using the given prefix and a
+#' ticker to construct new headers. Defaults to \code{NULL}.
+#' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
+#' using the SHA1 message digest algorithm. Defaults to \code{FALSE}.
 #' @param log_file (Optional). Name of the log file to capture messages from
 #' \code{VSEARCH}. If \code{NULL} (default), no log file is created.
 #' @param threads (Optional). Number of computational threads to be used by
@@ -118,6 +122,8 @@ vs_cluster_unoise <- function(fasta_input,
                               otutabout = NULL,
                               minsize = 8,
                               unoise_alpha = 2,
+                              relabel = NULL,
+                              relabel_sha1 = FALSE,
                               log_file = NULL,
                               threads = 1,
                               vsearch_options = NULL,
@@ -183,6 +189,15 @@ vs_cluster_unoise <- function(fasta_input,
             "--unoise_alpha", unoise_alpha,
             "--centroids", centrfile,
             "--otutabout", otutabfile)
+
+  # Add relabeling arguments if specified
+  if (!is.null(relabel)){
+    args <- c(args, "--relabel", relabel)
+  }
+
+  if (relabel_sha1){
+    args <- c(args, "--relabel_sha1", "")
+  }
 
   # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
