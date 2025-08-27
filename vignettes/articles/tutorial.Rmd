@@ -392,7 +392,7 @@ In the statistics table from the merging one can see the total number of read pa
 
 # Dereplicating the merged reads
 
-The merged reads are dereplicated to remove redundancy using the `vs_fastx_uniques` function. We expand our `for`-loop to include dereplication, and because the next step, chimera detection, requires a FASTA object as input we will set the `output_format` to `"fasta"`. We also want to add the sample identifier to the header of each sequence, which is done by using the `sample` parameter.
+The merged reads are dereplicated to remove redundancy using the `vs_fastx_uniques` function. We expand our `for`-loop to include dereplication. We want to add the sample identifier to the header of each sequence, and this is done by using the `sample` parameter.
 
 ```{r dereplicate_merged_reads, eval=FALSE}
 for(i in 1:nrow(sample.tbl)){
@@ -411,7 +411,6 @@ for(i in 1:nrow(sample.tbl)){
   
   # Dereplicate
   derep.tbl <- vs_fastx_uniques(fastx_input = merged.tbl,
-                                output_format = "fasta",
                                 sample = sample.tbl$sample_id[i])
   
   break # Remove this line to loop through all samples
@@ -468,7 +467,6 @@ for(i in 1:nrow(sample.tbl)){
   
   # Dereplicate
   derep.tbl <- vs_fastx_uniques(fastx_input = merged.tbl,
-                                output_format = "fasta",
                                 sample = sample.tbl$sample_id[i])
   
   # Detect chimeras
@@ -507,12 +505,11 @@ Alternatively, if you don't want to run the entire pipeline yourself, you can us
 all.tbl <- read_tsv("path/to/all_tbl.txt.zip") # Change to the file path of your all_tbl.txt.zip file
 ```
 
-Next we dereplicate the reads again, but this time we will use the `vs_fastx_uniques` function with the `output_format` set to `"fasta"` and `minuniquesize` set to `2`. This will create a FASTA table with all the unique sequences from all samples with a copy number above `2`. We will also use the `relabel` parameter, to relabel the headers of the unique sequences. 
+Next we dereplicate the reads again, but this time we will use the `vs_fastx_uniques` function with `minuniquesize` set to `2`. This will create a FASTA table with all the unique sequences from all samples with a copy number above `2`. We will also use the `relabel` parameter, to relabel the headers of the unique sequences. 
 
 ```{r dereplicate_all_sequences, eval=FALSE}
 all_derep.tbl <- vs_fastx_uniques(all.tbl,
-                                  minuniquesize = 2,
-                                  output_format = "fasta")
+                                  minuniquesize = 2)
 ```
 
 
@@ -636,8 +633,7 @@ for(i in 1:nrow(sample.tbl)){
                        truncee_rate = 0.035,
                        stripleft = 12) %>% 
     vs_fastq_mergepairs() %>%
-    vs_fastx_uniques(output_format = "fasta",
-                     sample = sample.tbl$sample_id[i]) %>%
+    vs_fastx_uniques(sample = sample.tbl$sample_id[i]) %>%
     vs_uchime_denovo()
   
   all.tbl <- bind_rows(all.tbl, derep_wo_chimera.tbl)
@@ -645,8 +641,7 @@ for(i in 1:nrow(sample.tbl)){
 
 all_derep.tbl <- vs_fastx_uniques(all.tbl,
                                   minuniquesize = 2,
-                                  relabel = "OTU",
-                                  output_format = "fasta")
+                                  relabel = "OTU")
 
 sequence.tbl <- vs_cluster_size(all_derep.tbl)
 

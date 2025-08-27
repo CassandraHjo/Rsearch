@@ -576,11 +576,9 @@ is approximately 405 bases, with a standard deviation of 2.3 bases.</p>
 </h2>
 <p>The merged reads are dereplicated to remove redundancy using the
 <code>vs_fastx_uniques</code> function. We expand our
-<code>for</code>-loop to include dereplication, and because the next
-step, chimera detection, requires a FASTA object as input we will set
-the <code>output_format</code> to <code>"fasta"</code>. We also want to
-add the sample identifier to the header of each sequence, which is done
-by using the <code>sample</code> parameter.</p>
+<code>for</code>-loop to include dereplication. We want to add the
+sample identifier to the header of each sequence, and this is done by
+using the <code>sample</code> parameter.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sample.tbl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">R1.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R1_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
@@ -598,7 +596,6 @@ by using the <code>sample</code> parameter.</p>
 <span>  </span>
 <span>  <span class="co"># Dereplicate</span></span>
 <span>  <span class="va">derep.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_fastx_uniques.html">vs_fastx_uniques</a></span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">merged.tbl</span>,</span>
-<span>                                output_format <span class="op">=</span> <span class="st">"fasta"</span>,</span>
 <span>                                sample <span class="op">=</span> <span class="va">sample.tbl</span><span class="op">$</span><span class="va">sample_id</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="kw">break</span> <span class="co"># Remove this line to loop through all samples</span></span>
@@ -656,7 +653,6 @@ first option in this tutorial.</p>
 <span>  </span>
 <span>  <span class="co"># Dereplicate</span></span>
 <span>  <span class="va">derep.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_fastx_uniques.html">vs_fastx_uniques</a></span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">merged.tbl</span>,</span>
-<span>                                output_format <span class="op">=</span> <span class="st">"fasta"</span>,</span>
 <span>                                sample <span class="op">=</span> <span class="va">sample.tbl</span><span class="op">$</span><span class="va">sample_id</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># Detect chimeras</span></span>
@@ -695,16 +691,14 @@ the example data.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_tsv</a></span><span class="op">(</span><span class="st">"path/to/all_tbl.txt.zip"</span><span class="op">)</span> <span class="co"># Change to the file path of your all_tbl.txt.zip file</span></span></code></pre></div>
 <p>Next we dereplicate the reads again, but this time we will use the
-<code>vs_fastx_uniques</code> function with the
-<code>output_format</code> set to <code>"fasta"</code> and
-<code>minuniquesize</code> set to <code>2</code>. This will create a
-FASTA table with all the unique sequences from all samples with a copy
-number above <code>2</code>. We will also use the <code>relabel</code>
-parameter, to relabel the headers of the unique sequences.</p>
+<code>vs_fastx_uniques</code> function with <code>minuniquesize</code>
+set to <code>2</code>. This will create a FASTA table with all the
+unique sequences from all samples with a copy number above
+<code>2</code>. We will also use the <code>relabel</code> parameter, to
+relabel the headers of the unique sequences.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_derep.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_fastx_uniques.html">vs_fastx_uniques</a></span><span class="op">(</span><span class="va">all.tbl</span>,</span>
-<span>                                  minuniquesize <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>                                  output_format <span class="op">=</span> <span class="st">"fasta"</span><span class="op">)</span></span></code></pre></div>
+<span>                                  minuniquesize <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="14%">
@@ -939,31 +933,29 @@ you can use the pipe operator in R:</p>
 <span id="cb34-10"><a href="#cb34-10" tabindex="-1"></a>                       <span class="at">truncee_rate =</span> <span class="fl">0.035</span>,</span>
 <span id="cb34-11"><a href="#cb34-11" tabindex="-1"></a>                       <span class="at">stripleft =</span> <span class="dv">12</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb34-12"><a href="#cb34-12" tabindex="-1"></a>    <span class="fu">vs_fastq_mergepairs</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb34-13"><a href="#cb34-13" tabindex="-1"></a>    <span class="fu">vs_fastx_uniques</span>(<span class="at">output_format =</span> <span class="st">"fasta"</span>,</span>
-<span id="cb34-14"><a href="#cb34-14" tabindex="-1"></a>                     <span class="at">sample =</span> sample.tbl<span class="sc">$</span>sample_id[i]) <span class="sc">%&gt;%</span></span>
-<span id="cb34-15"><a href="#cb34-15" tabindex="-1"></a>    <span class="fu">vs_uchime_denovo</span>()</span>
-<span id="cb34-16"><a href="#cb34-16" tabindex="-1"></a>  </span>
-<span id="cb34-17"><a href="#cb34-17" tabindex="-1"></a>  all.tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all.tbl, derep_wo_chimera.tbl)</span>
-<span id="cb34-18"><a href="#cb34-18" tabindex="-1"></a>}</span>
-<span id="cb34-19"><a href="#cb34-19" tabindex="-1"></a></span>
-<span id="cb34-20"><a href="#cb34-20" tabindex="-1"></a>all_derep.tbl <span class="ot">&lt;-</span> <span class="fu">vs_fastx_uniques</span>(all.tbl,</span>
-<span id="cb34-21"><a href="#cb34-21" tabindex="-1"></a>                                  <span class="at">minuniquesize =</span> <span class="dv">2</span>,</span>
-<span id="cb34-22"><a href="#cb34-22" tabindex="-1"></a>                                  <span class="at">relabel =</span> <span class="st">"OTU"</span>,</span>
-<span id="cb34-23"><a href="#cb34-23" tabindex="-1"></a>                                  <span class="at">output_format =</span> <span class="st">"fasta"</span>)</span>
+<span id="cb34-13"><a href="#cb34-13" tabindex="-1"></a>    <span class="fu">vs_fastx_uniques</span>(<span class="at">sample =</span> sample.tbl<span class="sc">$</span>sample_id[i]) <span class="sc">%&gt;%</span></span>
+<span id="cb34-14"><a href="#cb34-14" tabindex="-1"></a>    <span class="fu">vs_uchime_denovo</span>()</span>
+<span id="cb34-15"><a href="#cb34-15" tabindex="-1"></a>  </span>
+<span id="cb34-16"><a href="#cb34-16" tabindex="-1"></a>  all.tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(all.tbl, derep_wo_chimera.tbl)</span>
+<span id="cb34-17"><a href="#cb34-17" tabindex="-1"></a>}</span>
+<span id="cb34-18"><a href="#cb34-18" tabindex="-1"></a></span>
+<span id="cb34-19"><a href="#cb34-19" tabindex="-1"></a>all_derep.tbl <span class="ot">&lt;-</span> <span class="fu">vs_fastx_uniques</span>(all.tbl,</span>
+<span id="cb34-20"><a href="#cb34-20" tabindex="-1"></a>                                  <span class="at">minuniquesize =</span> <span class="dv">2</span>,</span>
+<span id="cb34-21"><a href="#cb34-21" tabindex="-1"></a>                                  <span class="at">relabel =</span> <span class="st">"OTU"</span>)</span>
+<span id="cb34-22"><a href="#cb34-22" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="#cb34-23" tabindex="-1"></a>sequence.tbl <span class="ot">&lt;-</span> <span class="fu">vs_cluster_size</span>(all_derep.tbl)</span>
 <span id="cb34-24"><a href="#cb34-24" tabindex="-1"></a></span>
-<span id="cb34-25"><a href="#cb34-25" tabindex="-1"></a>sequence.tbl <span class="ot">&lt;-</span> <span class="fu">vs_cluster_size</span>(all_derep.tbl)</span>
-<span id="cb34-26"><a href="#cb34-26" tabindex="-1"></a></span>
-<span id="cb34-27"><a href="#cb34-27" tabindex="-1"></a>readcount.tbl <span class="ot">&lt;-</span> <span class="fu">vs_usearch_global</span>(<span class="at">fastx_input =</span> all.tbl,</span>
-<span id="cb34-28"><a href="#cb34-28" tabindex="-1"></a>                                   <span class="at">database =</span> sequence.tbl,</span>
-<span id="cb34-29"><a href="#cb34-29" tabindex="-1"></a>                                   <span class="at">otutabout =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb34-30"><a href="#cb34-30" tabindex="-1"></a>                                   <span class="at">id =</span> <span class="fl">0.95</span>,</span>
-<span id="cb34-31"><a href="#cb34-31" tabindex="-1"></a>                                   <span class="at">threads =</span> <span class="dv">4</span></span>
-<span id="cb34-32"><a href="#cb34-32" tabindex="-1"></a>)</span>
-<span id="cb34-33"><a href="#cb34-33" tabindex="-1"></a></span>
-<span id="cb34-34"><a href="#cb34-34" tabindex="-1"></a>tax.tbl <span class="ot">&lt;-</span> <span class="fu">vs_sintax</span>(<span class="at">fasta_input =</span> sequence.tbl,</span>
-<span id="cb34-35"><a href="#cb34-35" tabindex="-1"></a>                     <span class="at">database =</span> <span class="st">"SOME_DATABASE_FILE.fa.gz"</span> <span class="co"># Change to the file path of your SINTAX reference database </span></span>
-<span id="cb34-36"><a href="#cb34-36" tabindex="-1"></a>) </span>
-<span id="cb34-37"><a href="#cb34-37" tabindex="-1"></a><span class="er">)</span></span></code></pre></div>
+<span id="cb34-25"><a href="#cb34-25" tabindex="-1"></a>readcount.tbl <span class="ot">&lt;-</span> <span class="fu">vs_usearch_global</span>(<span class="at">fastx_input =</span> all.tbl,</span>
+<span id="cb34-26"><a href="#cb34-26" tabindex="-1"></a>                                   <span class="at">database =</span> sequence.tbl,</span>
+<span id="cb34-27"><a href="#cb34-27" tabindex="-1"></a>                                   <span class="at">otutabout =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb34-28"><a href="#cb34-28" tabindex="-1"></a>                                   <span class="at">id =</span> <span class="fl">0.95</span>,</span>
+<span id="cb34-29"><a href="#cb34-29" tabindex="-1"></a>                                   <span class="at">threads =</span> <span class="dv">4</span></span>
+<span id="cb34-30"><a href="#cb34-30" tabindex="-1"></a>)</span>
+<span id="cb34-31"><a href="#cb34-31" tabindex="-1"></a></span>
+<span id="cb34-32"><a href="#cb34-32" tabindex="-1"></a>tax.tbl <span class="ot">&lt;-</span> <span class="fu">vs_sintax</span>(<span class="at">fasta_input =</span> sequence.tbl,</span>
+<span id="cb34-33"><a href="#cb34-33" tabindex="-1"></a>                     <span class="at">database =</span> <span class="st">"SOME_DATABASE_FILE.fa.gz"</span> <span class="co"># Change to the file path of your SINTAX reference database </span></span>
+<span id="cb34-34"><a href="#cb34-34" tabindex="-1"></a>) </span>
+<span id="cb34-35"><a href="#cb34-35" tabindex="-1"></a><span class="er">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="handoff-to-phyloseq">Handoff to <code>phyloseq</code><a class="anchor" aria-label="anchor" href="#handoff-to-phyloseq"></a>
