@@ -13,6 +13,6 @@ utils::globalVariables(c(
   "length_merged", "length_overlap", "merged_read_pairs", "R1_length",
   "R2_length", "truncee_rate_value", "value", "metric", "truncqual_value", "db",
   "plus", "taxonomy", ".data", "type", "centroid", "member", "members",
-  "#OTU ID", "otu_id"
+  "#OTU ID", "otu_id", "cluster_size"
 ))
 

@@ -13,10 +13,6 @@
 #' Defaults to \code{8}.
 #' @param unoise_alpha (Optional). Alpha value for the UNOISE algorithm.
 #' Defaults to \code{2}.
-#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
-#' present in sequence headers are taken into account.
-#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
-#' are added to FASTA headers.
 #' @param relabel (Optional). Relabel sequences using the given prefix and a
 #' ticker to construct new headers. Defaults to \code{NULL}.
 #' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
@@ -126,8 +122,6 @@ vs_cluster_unoise <- function(fasta_input,
                               otutabout = NULL,
                               minsize = 8,
                               unoise_alpha = 2,
-                              sizein = TRUE,
-                              sizeout = TRUE,
                               relabel = NULL,
                               relabel_sha1 = FALSE,
                               log_file = NULL,
@@ -196,14 +190,6 @@ vs_cluster_unoise <- function(fasta_input,
             "--centroids", centrfile,
             "--otutabout", otutabfile)
 
-  if (sizein) {
-    args <- c(args, "--sizein", "")
-  }
-
-  if (sizeout) {
-    args <- c(args, "--sizeout", "")
-  }
-
   # Add relabeling arguments if specified
   if (!is.null(relabel)){
     args <- c(args, "--relabel", relabel)
@@ -240,9 +226,6 @@ vs_cluster_unoise <- function(fasta_input,
   }
 
   if(nrow(centr.tbl) > 0){
-    statistics <- calculate_cluster_statistics(centr.tbl,
-                                               fasta_file,
-                                               fasta_input_name)
     centr.tbl <- centr.tbl |>
       dplyr::mutate(tag = stringr::word(Header, 1, sep = ";")) |>
       dplyr::distinct(tag, .keep_all = T) |>
@@ -260,6 +243,10 @@ vs_cluster_unoise <- function(fasta_input,
       dplyr::mutate(Header = stringr::str_c(tag, ";size=", size)) |>
       dplyr::select(-tag, -size) |>
       dplyr::relocate(Header, Sequence)
+
+    statistics <- calculate_cluster_statistics(otu.tbl,
+                                               fasta_file,
+                                               fasta_input_name)
     attr(otu.tbl, "statistics") <- statistics
   } else {
     warning("No clusters found, try to lower minsize")
@@ -273,5 +260,82 @@ vs_cluster_unoise <- function(fasta_input,
   } else {
     return(otu.tbl)
   }
+}
+
+#' Calculate UNOISE statistics
+#'
+#' @description \code{calculate_unoise_statistics} calculates important
+#' statistics after running \code{vs_cluster_unoise}, including the number of
+#' clusters, sequences, and nucleotides, as well as the lengths and sizes of the
+#' sequences and clusters.
+#'
+#' @param otu_tbl Output tibble from clustering. Contains the columns: Header,
+#' Sequence, and one column for each cluster with read counts.
+#' @param fasta_file File path to FASTA containing the input sequences to the
+#' clustering.
+#' @param fasta_input_name Name of the file/object with the input sequences
+#' that was used in the clustering.
+#'
+#' @return A tibble with clustering statistics, including:
+#' \itemize{
+#'   \item \code{num_nucleotides}: Total number of nucleotides used as input for
+#'   clustering.
+#'   \item \code{min_length_input_seq}: Length of the shortest sequence used as
+#'   input for clustering.
+#'   \item \code{max_length_input_seq}: Length of the longest sequence used as
+#'   input for clustering.
+#'   \item \code{avg_length_input_seq}: Average length of the sequences used as
+#'   input for clustering.
+#'   \item \code{num_clusters}: Number of clusters generated.
+#'   \item \code{min_size_cluster}: Size of the smallest cluster.
+#'   \item \code{max_size_cluster}: Size of the largest cluster.
+#'   \item \code{avg_size_cluster}: Average size of the clusters.
+#'   \item \code{num_singletons}: Number of singletons after clustering.
+#'   \item \code{input}: Name of the input file/object for the clustering.
+#' }
+#'
+#' @return A tibble with clustering statistics.
+#'
+#' @noRd
+#'
+calculate_unoise_statistics <- function(otu_tbl,
+                                        fasta_file,
+                                        fasta_input_name) {
+
+  # Process clustering output
+  otu_tbl <- otu_tbl |>
+    dplyr::mutate(cluster_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
+    dplyr::mutate(cluster_size = as.numeric(cluster_size)) |>
+    dplyr::mutate(Header = stringr::str_remove(Header, ";size=\\d+"))
+
+  # Make tibble from input sequences to the clustering
+  input.df <- microseq::readFasta(fasta_file)
+
+  # Calculate statistics
+  num_nucleotides <- sum(nchar(input.df$Sequence))
+  min_length_input_seq <- min(nchar(input.df$Sequence))
+  max_length_input_seq <- max(nchar(input.df$Sequence))
+  avg_length_input_seq <- mean(nchar(input.df$Sequence))
+  num_clusters <- nrow(otu_tbl)
+  min_size_cluster <- min(otu_tbl$cluster_size)
+  max_size_cluster <- max(otu_tbl$cluster_size)
+  avg_size_cluster <- round(mean(otu_tbl$cluster_size), 1)
+  num_singletons <- sum(otu_tbl$cluster_size == 1)
+
+  # Create table
+  result_table <- tibble::tibble(
+    num_nucleotides = num_nucleotides,
+    min_length_input_seq = min_length_input_seq,
+    max_length_input_seq = max_length_input_seq,
+    avg_length_input_seq = avg_length_input_seq,
+    num_clusters = num_clusters,
+    min_size_cluster = min_size_cluster,
+    max_size_cluster = max_size_cluster,
+    avg_size_cluster = avg_size_cluster,
+    num_singletons = num_singletons,
+    input = fasta_input_name
+  )
+
+  return(result_table)
 }
 
