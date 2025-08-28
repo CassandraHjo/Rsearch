@@ -51,6 +51,8 @@ method.</p>
 <span>  otutabout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minsize <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  unoise_alpha <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  sizein <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sizeout <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  relabel <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  relabel_sha1 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -83,6 +85,16 @@ Defaults to <code>8</code>.</p></dd>
 <dt id="arg-unoise-alpha">unoise_alpha<a class="anchor" aria-label="anchor" href="#arg-unoise-alpha"></a></dt>
 <dd><p>(Optional). Alpha value for the UNOISE algorithm.
 Defaults to <code>2</code>.</p></dd>
+
+
+<dt id="arg-sizein">sizein<a class="anchor" aria-label="anchor" href="#arg-sizein"></a></dt>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+present in sequence headers are taken into account.</p></dd>
+
+
+<dt id="arg-sizeout">sizeout<a class="anchor" aria-label="anchor" href="#arg-sizeout"></a></dt>
+<dd><p>(Optional). If <code>TRUE</code> (default), abundance annotations
+are added to FASTA headers.</p></dd>
 
 
 <dt id="arg-relabel">relabel<a class="anchor" aria-label="anchor" href="#arg-relabel"></a></dt>

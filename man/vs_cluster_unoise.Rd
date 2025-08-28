@@ -12,6 +12,8 @@ vs_cluster_unoise(
   otutabout = NULL,
   minsize = 8,
   unoise_alpha = 2,
+  sizein = TRUE,
+  sizeout = TRUE,
   relabel = NULL,
   relabel_sha1 = FALSE,
   log_file = NULL,
@@ -33,6 +35,12 @@ Defaults to \code{8}.}
 
 \item{unoise_alpha}{(Optional). Alpha value for the UNOISE algorithm.
 Defaults to \code{2}.}
+
+\item{sizein}{(Optional). If \code{TRUE} (default), abundance annotations
+present in sequence headers are taken into account.}
+
+\item{sizeout}{(Optional). If \code{TRUE} (default), abundance annotations
+are added to FASTA headers.}
 
 \item{relabel}{(Optional). Relabel sequences using the given prefix and a
 ticker to construct new headers. Defaults to \code{NULL}.}

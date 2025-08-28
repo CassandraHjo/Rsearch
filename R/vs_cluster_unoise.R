@@ -13,6 +13,10 @@
 #' Defaults to \code{8}.
 #' @param unoise_alpha (Optional). Alpha value for the UNOISE algorithm.
 #' Defaults to \code{2}.
+#' @param sizein (Optional). If \code{TRUE} (default), abundance annotations
+#' present in sequence headers are taken into account.
+#' @param sizeout (Optional). If \code{TRUE} (default), abundance annotations
+#' are added to FASTA headers.
 #' @param relabel (Optional). Relabel sequences using the given prefix and a
 #' ticker to construct new headers. Defaults to \code{NULL}.
 #' @param relabel_sha1 (Optional). If \code{TRUE} (default), relabel sequences
@@ -122,6 +126,8 @@ vs_cluster_unoise <- function(fasta_input,
                               otutabout = NULL,
                               minsize = 8,
                               unoise_alpha = 2,
+                              sizein = TRUE,
+                              sizeout = TRUE,
                               relabel = NULL,
                               relabel_sha1 = FALSE,
                               log_file = NULL,
@@ -190,6 +196,14 @@ vs_cluster_unoise <- function(fasta_input,
             "--centroids", centrfile,
             "--otutabout", otutabfile)
 
+  if (sizein) {
+    args <- c(args, "--sizein", "")
+  }
+
+  if (sizeout) {
+    args <- c(args, "--sizeout", "")
+  }
+
   # Add relabeling arguments if specified
   if (!is.null(relabel)){
     args <- c(args, "--relabel", relabel)
@@ -243,7 +257,7 @@ vs_cluster_unoise <- function(fasta_input,
       dplyr::left_join(centr.tbl, by = "tag") |>
       dplyr::mutate(size = sizes) |>
       dplyr::arrange(dplyr::desc(size)) |>
-      dplyr::mutate(Header = stringr::str_c("ZOTU_", 1:dplyr::n(), ";size=", size)) |>
+      dplyr::mutate(Header = stringr::str_c(tag, ";size=", size)) |>
       dplyr::select(-tag, -size) |>
       dplyr::relocate(Header, Sequence)
     attr(otu.tbl, "statistics") <- statistics
