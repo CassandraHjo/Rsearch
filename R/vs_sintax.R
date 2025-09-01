@@ -81,7 +81,7 @@
 vs_sintax <- function(fasta_input,
                       database,
                       outfile = NULL,
-                      cutoff = NULL,
+                      cutoff = 0.0,
                       strand = "plus",
                       randseed = NULL,
                       logfile = NULL,
@@ -170,7 +170,8 @@ vs_sintax <- function(fasta_input,
             "--db", shQuote(db_file),
             "--threads", threads,
             "--strand", strand,
-            "--tabbedout", tmp_outfile)
+            "--tabbedout", tmp_outfile,
+            "--sintax_cutoff", cutoff)
 
   # Add additional arguments if specified
   if (!is.null(vsearch_options)) {
@@ -180,11 +181,6 @@ vs_sintax <- function(fasta_input,
   # Add log file if specified
   if (!is.null(logfile)){
     args <- c(args, "--log", logfile)
-  }
-
-  # Add cutoff if specified
-  if (!is.null(cutoff)){
-    args <- c(args, "--sintax_cutoff", cutoff)
   }
 
   # Add random seed for sintax if specified

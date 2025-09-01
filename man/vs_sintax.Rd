@@ -10,7 +10,7 @@ vs_sintax(
   fasta_input,
   database,
   outfile = NULL,
-  cutoff = NULL,
+  cutoff = 0,
   strand = "plus",
   randseed = NULL,
   logfile = NULL,
