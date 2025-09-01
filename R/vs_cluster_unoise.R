@@ -244,9 +244,9 @@ vs_cluster_unoise <- function(fasta_input,
       dplyr::select(-tag, -size) |>
       dplyr::relocate(Header, Sequence)
 
-    statistics <- calculate_cluster_statistics(otu.tbl,
-                                               fasta_file,
-                                               fasta_input_name)
+    statistics <- calculate_unoise_statistics(otu.tbl,
+                                              fasta_file,
+                                              fasta_input_name)
     attr(otu.tbl, "statistics") <- statistics
   } else {
     warning("No clusters found, try to lower minsize")

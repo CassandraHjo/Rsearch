@@ -10,10 +10,12 @@ test_that("cluster sequences from fasta file, and return file", {
 
   fasta_input <- test_path("testdata", "R1.fasta")
   otutabout <- withr::local_tempfile()
+  relabel <- "OTU"
 
   return_value <- vs_cluster_unoise(fasta_input = fasta_input,
                                     otutabout = otutabout,
-                                    minsize = 1)
+                                    minsize = 1,
+                                    relabel = relabel)
 
   expect_null(return_value)
 
@@ -28,7 +30,8 @@ test_that("cluster sequences from fasta file, and return tibble", {
 
   cluster_sample1_R1 <- vs_cluster_unoise(fasta_input = fasta_input,
                                           vsearch_options = vsearch_options,
-                                          minsize = 1)
+                                          minsize = 1,
+                                          relabel_sha1 = TRUE)
 
   expect_equal(cluster_sample1_R1,
                readRDS(test_path("testdata", "output", "cluster_unoise_otutabout.rds")))
@@ -39,11 +42,13 @@ test_that("cluster sequences from fasta tibble, and return file", {
   fasta_input <- microseq::readFasta(test_path("testdata", "R1.fasta"))
   otutabout <- withr::local_tempfile()
   log_file <- withr::local_tempfile()
+  relabel <- "OTU"
 
   return_value <- vs_cluster_unoise(fasta_input = fasta_input,
                                     otutabout = otutabout,
                                     log_file = log_file,
-                                    minsize = 1)
+                                    minsize = 1,
+                                    relabel = relabel)
 
   expect_null(return_value)
 
