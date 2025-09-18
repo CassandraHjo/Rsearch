@@ -23,7 +23,8 @@ vs_uchime_denovo(
 }
 \arguments{
 \item{fasta_input}{(Required). A FASTA file path or a FASTA object with reads.
-See \emph{Details}.}
+If a tibble is provided, any columns in addition to \code{Header} and
+\code{Sequence} will be preserved in the output. See \emph{Details}.}
 
 \item{nonchimeras}{(Optional). Name of the FASTA output file for the
 non-chimeric sequences. If \code{NULL} (default), no output is written to
@@ -69,10 +70,11 @@ If \code{nonchimeras} and \code{chimeras} are specified, the resulting
 sequences after chimera detection written directly to the specified files in
 FASTA format, and no tibbles are returned.
 
-If \code{nonchimeras} and \code{chimeras} are \code{NULL}, A FASTA object
-containing non-chimeric sequences with an attribute \code{"chimeras"}
-containing a tibble of chimeric sequences is returned. If no chimeras are
-found, the \code{"chimeras"} attribute is an empty data frame.
+If \code{nonchimeras} and \code{chimeras} are \code{NULL}, a FASTA object
+containing non-chimeric sequences is returned. This output tibble will
+include any additional columns that were present in the \code{fasta_input}
+tibble. An attribute named \code{"chimeras"} will contain a tibble of the
+chimeric sequences, also with the additional columns preserved.
 
 Additionally, the returned tibble (when applicable) has an attribute
 \code{"statistics"} containing a tibble with chimera detection statistics.
@@ -111,6 +113,12 @@ sequences by decreasing abundance.
 \code{fasta_input} can either be a FASTA file or a FASTA object. FASTA objects
 are tibbles that contain the columns \code{Header} and \code{Sequence}, see
 \code{\link[microseq]{readFasta}}.
+
+When providing a tibble as \code{fasta_input}, you can include additional
+columns with metadata (e.g., OTU IDs, sample origins). The function will
+preserve these columns by joining them back to the results based on the
+DNA sequence. This allows you to keep your metadata associated with your
+sequences throughout the chimera detection process.
 
 If \code{nonchimeras} and \code{chimeras} are specified, resulting
 non-chimeric and chimeric sequences are written to these files in FASTA

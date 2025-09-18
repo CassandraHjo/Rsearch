@@ -104,14 +104,27 @@ test_that("vs_uchime_denovo returns empty chimera table when none found", {
   expect_equal(nrow(chimeras_tbl), 0)
 })
 
-test_that("vs_uchime_denovo joins otu_id to chimeras when chimera is present", {
+test_that("vs_uchime_denovo preserves all extra columns from input tibble", {
   fasta_input <- microseq::readFasta(test_path("testdata", "chimera_test.fasta"))
-  fasta_input$otu_id <- c("Parent1", "Parent2", "Chimera")
+  fasta_input$otu_id <- c("ParentA_otu", "ParentB_otu", "Chimera_otu")
+  fasta_input$sample_source <- c("Sample1", "Sample1", "Sample1")
+  fasta_input$qc_passed <- c(TRUE, TRUE, TRUE)
 
   out <- vs_uchime_denovo(fasta_input = fasta_input)
 
+  # 3. Verifisering: Hent ut begge resultat-tabellene
+  nonchimeras_tbl <- out
   chimeras_tbl <- attr(out, "chimeras")
 
+  # Definer de forventede kolonnene
+  expected_cols <- c("Header", "Sequence", "otu_id", "sample_source", "qc_passed")
+
+  # Sjekk at alle ekstra kolonner finnes i nonchimeras-tabellen
+  expect_true(all(expected_cols %in% colnames(nonchimeras_tbl)))
+
+  # Sjekk at det finnes minst én kimære for å validere neste sjekk
   expect_gt(nrow(chimeras_tbl), 0)
-  expect_true("otu_id" %in% colnames(chimeras_tbl))
+
+  # Sjekk at alle ekstra kolonner finnes i chimeras-tabellen
+  expect_true(all(expected_cols %in% colnames(chimeras_tbl)))
 })

@@ -71,7 +71,8 @@ detection accuracy.</p>
 
 <dl><dt id="arg-fasta-input">fasta_input<a class="anchor" aria-label="anchor" href="#arg-fasta-input"></a></dt>
 <dd><p>(Required). A FASTA file path or a FASTA object with reads.
-See <em>Details</em>.</p></dd>
+If a tibble is provided, any columns in addition to <code>Header</code> and
+<code>Sequence</code> will be preserved in the output. See <em>Details</em>.</p></dd>
 
 
 <dt id="arg-nonchimeras">nonchimeras<a class="anchor" aria-label="anchor" href="#arg-nonchimeras"></a></dt>
@@ -139,10 +140,11 @@ be written when tables are used as input or output. Defaults to
 <p>If <code>nonchimeras</code> and <code>chimeras</code> are specified, the resulting
 sequences after chimera detection written directly to the specified files in
 FASTA format, and no tibbles are returned.</p>
-<p>If <code>nonchimeras</code> and <code>chimeras</code> are <code>NULL</code>, A FASTA object
-containing non-chimeric sequences with an attribute <code>"chimeras"</code>
-containing a tibble of chimeric sequences is returned. If no chimeras are
-found, the <code>"chimeras"</code> attribute is an empty data frame.</p>
+<p>If <code>nonchimeras</code> and <code>chimeras</code> are <code>NULL</code>, a FASTA object
+containing non-chimeric sequences is returned. This output tibble will
+include any additional columns that were present in the <code>fasta_input</code>
+tibble. An attribute named <code>"chimeras"</code> will contain a tibble of the
+chimeric sequences, also with the additional columns preserved.</p>
 <p>Additionally, the returned tibble (when applicable) has an attribute
 <code>"statistics"</code> containing a tibble with chimera detection statistics.</p>
 <p>The statistics tibble has the following columns:</p><ul><li><p><code>num_nucleotides</code>: Total number of nucleotides used as input
@@ -170,6 +172,11 @@ sequences by decreasing abundance.</p>
 <p><code>fasta_input</code> can either be a FASTA file or a FASTA object. FASTA objects
 are tibbles that contain the columns <code>Header</code> and <code>Sequence</code>, see
 <code><a href="https://rdrr.io/pkg/microseq/man/readFasta.html" class="external-link">readFasta</a></code>.</p>
+<p>When providing a tibble as <code>fasta_input</code>, you can include additional
+columns with metadata (e.g., OTU IDs, sample origins). The function will
+preserve these columns by joining them back to the results based on the
+DNA sequence. This allows you to keep your metadata associated with your
+sequences throughout the chimera detection process.</p>
 <p>If <code>nonchimeras</code> and <code>chimeras</code> are specified, resulting
 non-chimeric and chimeric sequences are written to these files in FASTA
 format.</p>

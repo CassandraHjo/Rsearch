@@ -6,7 +6,8 @@
 #' detection accuracy.
 #'
 #' @param fasta_input (Required). A FASTA file path or a FASTA object with reads.
-#' See \emph{Details}.
+#' If a tibble is provided, any columns in addition to \code{Header} and
+#' \code{Sequence} will be preserved in the output. See \emph{Details}.
 #' @param nonchimeras (Optional). Name of the FASTA output file for the
 #' non-chimeric sequences. If \code{NULL} (default), no output is written to
 #' file.
@@ -45,6 +46,12 @@
 #' are tibbles that contain the columns \code{Header} and \code{Sequence}, see
 #' \code{\link[microseq]{readFasta}}.
 #'
+#' When providing a tibble as \code{fasta_input}, you can include additional
+#' columns with metadata (e.g., OTU IDs, sample origins). The function will
+#' preserve these columns by joining them back to the results based on the
+#' DNA sequence. This allows you to keep your metadata associated with your
+#' sequences throughout the chimera detection process.
+#'
 #' If \code{nonchimeras} and \code{chimeras} are specified, resulting
 #' non-chimeric and chimeric sequences are written to these files in FASTA
 #' format.
@@ -65,10 +72,11 @@
 #' sequences after chimera detection written directly to the specified files in
 #' FASTA format, and no tibbles are returned.
 #'
-#' If \code{nonchimeras} and \code{chimeras} are \code{NULL}, A FASTA object
-#' containing non-chimeric sequences with an attribute \code{"chimeras"}
-#' containing a tibble of chimeric sequences is returned. If no chimeras are
-#' found, the \code{"chimeras"} attribute is an empty data frame.
+#' If \code{nonchimeras} and \code{chimeras} are \code{NULL}, a FASTA object
+#' containing non-chimeric sequences is returned. This output tibble will
+#' include any additional columns that were present in the \code{fasta_input}
+#' tibble. An attribute named \code{"chimeras"} will contain a tibble of the
+#' chimeric sequences, also with the additional columns preserved.
 #'
 #' Additionally, the returned tibble (when applicable) has an attribute
 #' \code{"statistics"} containing a tibble with chimera detection statistics.
@@ -168,7 +176,8 @@ vs_uchime_denovo <- function(fasta_input,
                           tmpdir = tmpdir,
                           fileext = ".fa")
     temp_files <- c(temp_files, temp_file)
-    microseq::writeFasta(fasta_input, temp_file)
+    fasta_input_vsearch <- dplyr::select(fasta_input, Header, Sequence)
+    microseq::writeFasta(fasta_input_vsearch, temp_file)
     fasta_file <- temp_file
 
     # Capture original name for statistics table later
@@ -257,18 +266,17 @@ vs_uchime_denovo <- function(fasta_input,
   if (is.null(nonchimeras) && is.null(chimeras)) {
 
     # Read output into FASTA object (tbl)
-    nonchimeras.tbl <- microseq::readFasta(nonchimeras_file)
+    nonchimeras.tbl <- microseq::readFasta(nonchimeras_file)|>
+      dplyr::mutate(Sequence = toupper(Sequence))
 
     # Join with input table if possible
     if (!is.character(fasta_input)){
-      if ("otu_id" %in% names(fasta_input)) {
-        fasta_input <- fasta_input |>
-          dplyr::select(otu_id, Header)
+        fasta_input_join <- fasta_input |>
+          dplyr::select(-Header)
 
         nonchimeras.tbl <- dplyr::left_join(nonchimeras.tbl,
-                                            fasta_input,
-                                            by = "Header")
-      }
+                                            fasta_input_join,
+                                            by = "Sequence")
     }
 
     # Create empty table
@@ -277,20 +285,16 @@ vs_uchime_denovo <- function(fasta_input,
     # Check if chimeras file contains something
     if (file.info(chimeras_file)$size > 0){
 
-      chimeras.tbl <- microseq::readFasta(chimeras_file)
+      chimeras.tbl <- microseq::readFasta(chimeras_file) |>
+        dplyr::mutate(Sequence = toupper(Sequence))
 
       # Join with input table if possible
       if (!is.character(fasta_input)){
-        if ("otu_id" %in% names(fasta_input)) {
-          fasta_input <- fasta_input |>
-            dplyr::select(otu_id, Header)
-
           chimeras.tbl <- dplyr::left_join(chimeras.tbl,
-                                           fasta_input,
-                                           by = "Header")
+                                           fasta_input_join,
+                                           by = "Sequence")
         }
       }
-    }
 
     # Add additional table as attribute to the primary table
     attr(nonchimeras.tbl, "chimeras") <- chimeras.tbl
