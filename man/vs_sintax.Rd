@@ -12,6 +12,7 @@ vs_sintax(
   outfile = NULL,
   cutoff = 0,
   strand = "plus",
+  sintax_random = TRUE,
   randseed = NULL,
   logfile = NULL,
   threads = 1,
@@ -35,6 +36,10 @@ the classifications. Defaults to \code{0.0}.}
 
 \item{strand}{(Optional). Specifies which strand to consider when comparing
 sequences. Can be either \code{"plus"} (default) or \code{"both"}.}
+
+\item{sintax_random}{(Optional). If \code{TRUE} (default), the Sintax
+algorithm breaks ties between sequences with equally many kmer matches by a
+random draw.}
 
 \item{randseed}{(Optional). Seed for the random number generator used in the
 Sintax algorithm. Defaults to \code{NULL}.}

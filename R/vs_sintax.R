@@ -14,6 +14,9 @@
 #' the classifications. Defaults to \code{0.0}.
 #' @param strand (Optional). Specifies which strand to consider when comparing
 #' sequences. Can be either \code{"plus"} (default) or \code{"both"}.
+#' @param sintax_random (Optional). If \code{TRUE} (default), the Sintax
+#' algorithm breaks ties between sequences with equally many kmer matches by a
+#' random draw.
 #' @param randseed (Optional). Seed for the random number generator used in the
 #' Sintax algorithm. Defaults to \code{NULL}.
 #' @param logfile (Optional). Name of the log file to capture messages from
@@ -83,6 +86,7 @@ vs_sintax <- function(fasta_input,
                       outfile = NULL,
                       cutoff = 0.0,
                       strand = "plus",
+                      sintax_random = TRUE,
                       randseed = NULL,
                       logfile = NULL,
                       threads = 1,
@@ -174,6 +178,10 @@ vs_sintax <- function(fasta_input,
             "--sintax_cutoff", cutoff)
 
   # Add additional arguments if specified
+  if (sintax_random){
+    args <- c(args, "--sintax_random")
+  }
+
   if (!is.null(vsearch_options)) {
     args <- c(args, vsearch_options)
   }
