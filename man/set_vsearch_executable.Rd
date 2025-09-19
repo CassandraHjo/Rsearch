@@ -8,7 +8,8 @@ set_vsearch_executable(vsearch_executable)
 }
 \arguments{
 \item{vsearch_executable}{(Required). Full path to the VSEARCH executable on
-your computer.}
+your computer. See \emph{Details} for more information on how to install
+\code{VSEARCH}.}
 }
 \value{
 Nothing is returned, but the option \code{Rsearch.vsearch_executable}
@@ -30,6 +31,9 @@ information by  \code{set_vsearch_executable("C:/Documents/vsearch")}.
 
 You may use the function \code{\link{vsearch}} to test if the command is
 valid.
+
+Visit \url{https://github.com/CassandraHjo/Rsearch} for more information on
+how to install \code{VSEARCH}.
 }
 \seealso{
 \code{\link{vsearch}}.

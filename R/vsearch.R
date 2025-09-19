@@ -4,7 +4,8 @@
 #' invoke \code{VSEARCH}.
 #'
 #' @param vsearch_executable (Required). Full path to the VSEARCH executable on
-#' your computer.
+#' your computer. See \emph{Details} for more information on how to install
+#' \code{VSEARCH}.
 #'
 #' @details Use this function to change the command used to invoke the external
 #' software VSEARCH on this computer. When the \code{Rsearch} package is
@@ -16,6 +17,9 @@
 #'
 #' You may use the function \code{\link{vsearch}} to test if the command is
 #' valid.
+#'
+#' Visit \url{https://github.com/CassandraHjo/Rsearch} for more information on
+#' how to install \code{VSEARCH}.
 #'
 #' @return Nothing is returned, but the option \code{Rsearch.vsearch_executable}
 #' is updated. The string is also saved to a file for later R sessions, i.e. you
