@@ -13,6 +13,8 @@ test_that("optimizing truncee_rate with default values and files as input", {
   # Remove 'plot' attribute before comparison due to errors with ggplot
   attr(optimize.tbl, "plot") <- NULL
   attr(expected_df, "plot") <- NULL
+  attr(optimize.tbl, "optimal_truncee_rate") <- NULL
+  attr(expected_df, "optimal_truncee_rate") <- NULL
 
   expect_equal(optimize.tbl, expected_df)
 
@@ -34,6 +36,8 @@ test_that("optimizing truncee_rate with tibbles as input", {
   # Remove 'plot' attribute before comparison due to errors with ggplot
   attr(optimize.tbl, "plot") <- NULL
   attr(expected_df, "plot") <- NULL
+  attr(optimize.tbl, "optimal_truncee_rate") <- NULL
+  attr(expected_df, "optimal_truncee_rate") <- NULL
 
   expect_equal(optimize.tbl, expected_df)
 
@@ -54,6 +58,8 @@ test_that("optimizing truncee_rate with pe_df tibble as input", {
   # Remove 'plot' attribute before comparison due to errors with ggplot
   attr(optimize.tbl, "plot") <- NULL
   attr(expected_df, "plot") <- NULL
+  attr(optimize.tbl, "optimal_truncee_rate") <- NULL
+  attr(expected_df, "optimal_truncee_rate") <- NULL
 
   expect_equal(optimize.tbl, expected_df)
 

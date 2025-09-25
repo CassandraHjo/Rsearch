@@ -68,6 +68,9 @@ The returned data frame has an attribute named \code{"plot"} containing a
 plot visualizes \code{truncqual} values against \code{merged_read_pairs},
 \code{R1_length}, and \code{R2_length}, with the optimal \code{truncqual}
 value marked by a red dashed line.
+
+Additionally, the returned data frame has an attribute named
+\code{"optimal_truncqual"} containing the optimal \code{truncqual} value.
 }
 \description{
 \code{vs_optimize_truncqual} optimizes the truncation parameter

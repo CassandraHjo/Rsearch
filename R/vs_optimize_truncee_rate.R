@@ -66,6 +66,10 @@
 #' \code{R1_length}, and \code{R2_length}, with the optimal \code{truncee_rate}
 #' value marked by a red dashed line.
 #'
+#' Additionally, the returned data frame has an attribute named
+#' \code{"optimal_truncee_rate"} containing the optimal \code{truncee_rate}
+#' value.
+#'
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
 #'
@@ -279,6 +283,8 @@ vs_optimize_truncee_rate <- function(fastq_input,
 
   # Add plot as attribute
   attr(res.df, "plot") <- final_plot
+  # Add optimal truncee_rate as attribute
+  attr(res.df, "optimal_truncee_rate") <- optimal_truncee_rate
 
   return(res.df)
 }

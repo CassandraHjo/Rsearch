@@ -1,6 +1,6 @@
 Package: Rsearch
 Type: Package
-Title: Processing and analyzing amplicon sequence data
+Title: Processing and Analyzing Amplicon Sequence Data
 Version: 1.0.0
 Authors@R: c(
     person("Cassandra", "Hjortdahl", email = "cassandra.hjortdahl@nmbu.no", role = c("cre", "aut")),
@@ -8,10 +8,11 @@ Authors@R: c(
     person("Torbjørn", "Rognes", email = "torognes@ifi.uio.no", role = "aut"),
     person("Hilde", "Vinje", email = "hilde.vinje@nmbu.no", role = "aut"))
 Maintainer: Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no>
-Description: An R package designed for handling and analyzing targeted sequencing data. 
-  The package provides a user-friendly interface for core VSEARCH functions in 
-  addition to tools for visualization and parameter optimization. 
-License: GPL (>= 3) + file LICENSE
+Description: Functions for handling and analyzing targeted sequencing data. 
+  The package provides a user-friendly interface for core VSEARCH 
+  (Rognes et al. (2016), <doi:10.7717/peerj.2584>) functions in 
+  addition to tools for visualization and parameter tuning. 
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports: 
@@ -34,8 +35,8 @@ Suggests:
     withr (>= 3.0.2)
 Config/testthat/edition: 3
 RoxygenNote: 7.3.3
-URL: https://cassandrahjo.github.io/Rsearch, https://github.com/CassandraHjo/Rsearch
-BugReports: https://github.com/CassandraHjo/Rsearch/issues
+URL: https://cassandrahjo.github.io/Rsearch/, https://github.com/CassandraHjo/Rsearch/
+BugReports: https://github.com/CassandraHjo/Rsearch/issues/
 Depends: 
     R (>= 4.1)
 Config/Needs/website: rmarkdown

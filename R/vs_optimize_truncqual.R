@@ -63,6 +63,9 @@
 #' \code{R1_length}, and \code{R2_length}, with the optimal \code{truncqual}
 #' value marked by a red dashed line.
 #'
+#' Additionally, the returned data frame has an attribute named
+#' \code{"optimal_truncqual"} containing the optimal \code{truncqual} value.
+#'
 #' @seealso \code{\link{vs_fastq_mergepairs}}, \code{\link{vs_fastx_trim_filt}},
 #' \code{\link{vs_fastx_uniques}}
 #'
@@ -274,6 +277,8 @@ vs_optimize_truncqual <- function(fastq_input,
 
   # Add plot as attribute
   attr(res.df, "plot") <- final_plot
+  # Add optimal truncqual as attribute
+  attr(res.df, "optimal_truncqual") <- optimal_truncqual
 
   return(res.df)
 }

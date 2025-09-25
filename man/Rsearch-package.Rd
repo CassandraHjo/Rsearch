@@ -18,9 +18,9 @@ of some of the results from the functions.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://cassandrahjo.github.io/Rsearch}
-  \item \url{https://github.com/CassandraHjo/Rsearch}
-  \item Report bugs at \url{https://github.com/CassandraHjo/Rsearch/issues}
+  \item \url{https://cassandrahjo.github.io/Rsearch/}
+  \item \url{https://github.com/CassandraHjo/Rsearch/}
+  \item Report bugs at \url{https://github.com/CassandraHjo/Rsearch/issues/}
 }
 
 }

@@ -70,6 +70,10 @@ The returned data frame has an attribute named \code{"plot"} containing a
 plot visualizes \code{truncee_rate} values against \code{merged_read_pairs},
 \code{R1_length}, and \code{R2_length}, with the optimal \code{truncee_rate}
 value marked by a red dashed line.
+
+Additionally, the returned data frame has an attribute named
+\code{"optimal_truncee_rate"} containing the optimal \code{truncee_rate}
+value.
 }
 \description{
 \code{vs_optimize_truncee_rate} optimizes the truncation
