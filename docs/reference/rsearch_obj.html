@@ -126,14 +126,10 @@ and easily accessible structure.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># Define inputs</span></span></span>
-<span class="r-in"><span><span class="va">readcount.dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html" class="external-link">path.package</a></span><span class="op">(</span><span class="st">"Rsearch"</span><span class="op">)</span>, <span class="st">"extdata"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                           <span class="st">"readcount_data.tsv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sequence.dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html" class="external-link">path.package</a></span><span class="op">(</span><span class="st">"Rsearch"</span><span class="op">)</span>, <span class="st">"extdata"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                          <span class="st">"sequence_data.tsv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sample.dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html" class="external-link">path.package</a></span><span class="op">(</span><span class="st">"Rsearch"</span><span class="op">)</span>, <span class="st">"extdata"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                        <span class="st">"sample_data.tsv"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Define inputs</span></span></span>
+<span class="r-in"><span><span class="va">readcount.dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/readcount_data.tsv"</span>, package <span class="op">=</span> <span class="st">"Rsearch"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sequence.dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sequence_data.tsv"</span>, package <span class="op">=</span> <span class="st">"Rsearch"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sample.dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sample_data.tsv"</span>, package <span class="op">=</span> <span class="st">"Rsearch"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Create Rsearch object</span></span></span>
 <span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">rsearch_obj</span><span class="op">(</span>readcount_data <span class="op">=</span> <span class="va">readcount.dta</span>,</span></span>
@@ -146,8 +142,6 @@ and easily accessible structure.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert phyloseq object to Rsearch object</span></span></span>
 <span class="r-in"><span><span class="va">rsearch_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="phyloseq2rsearch.html">phyloseq2rsearch</a></span><span class="op">(</span><span class="va">phy_obj</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
