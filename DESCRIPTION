@@ -3,11 +3,11 @@ Type: Package
 Title: Processing and Analyzing Amplicon Sequence Data
 Version: 1.0.0
 Authors@R: c(
-    person("Cassandra", "Hjortdahl", email = "cassandra.hjortdahl@nmbu.no", role = c("cre", "aut")),
+    person("Cassandra", "Stamsaas", email = "cassandra.hjortdahl@nmbu.no", role = c("cre", "aut")),
     person("Lars", "Snipen", email = "lars.snipen@nmbu.no", role = "aut"),
     person("Torbjørn", "Rognes", email = "torognes@ifi.uio.no", role = "aut"),
     person("Hilde", "Vinje", email = "hilde.vinje@nmbu.no", role = "aut"))
-Maintainer: Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no>
+Maintainer: Cassandra Stamsaas <cassandra.hjortdahl@nmbu.no>
 Description: Processing and analysis of targeted sequencing data. The package provides a user-friendly interface for core 'VSEARCH' (Rognes et al. (2016), <doi:10.7717/peerj.2584>) functions, in addition to tools for visualization and parameter tuning. 
 License: GPL (>= 3)
 Encoding: UTF-8
