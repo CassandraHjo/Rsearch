@@ -68,9 +68,8 @@ a tibble in the format specified by \code{file_format}, and no file is
 written.
 }
 \examples{
-\dontrun{
 # Define arguments
-files_dir <- file.path(path.package("Rsearch"), "extdata")
+files_dir <- system.file("extdata", package = "Rsearch")
 output_file <- NULL
 file_ext <- ".fq"
 file_format <- "fastq"
@@ -81,11 +80,15 @@ combined_files <- fastx_combine_files(files_dir = files_dir,
                                       file_ext = file_ext,
                                       file_format = file_format)
 
-# Combine files and write to an output file
+# Combine files and write to output file
+
+# Define output file name
+out <- tempfile(fileext = ".fastq")
+
 fastx_combine_files(files_dir = files_dir,
-                    output_file = "combined.fastq",
+                    output_file = out,
                     file_ext = file_ext,
                     file_format = file_format)
-}
+\dontshow{unlink(out)}
 
 }

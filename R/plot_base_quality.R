@@ -56,12 +56,9 @@
 #' @return A ggplot2 object.
 #'
 #' @examples
-#' \dontrun{
 #' # Define inputs
-#' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "small_R1.fq")
-#' reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                      "small_R2.fq")
+#' fastq_input <- system.file("extdata/small_R1.fq", package = "Rsearch")
+#' reverse <- system.file("extdata/small_R2.fq", package = "Rsearch")
 #'
 #' # Generate and display quality plot with both median and mean lines
 #' qual_plots <- plot_base_quality(fastq_input = fastq_input,
@@ -85,7 +82,6 @@
 #'                                           reverse = reverse,
 #'                                           show_median = FALSE)
 #' print(qual_plots_mean_only)
-#' }
 #'
 #' @export
 #'

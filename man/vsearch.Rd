@@ -6,6 +6,9 @@
 \usage{
 vsearch()
 }
+\value{
+No return value, called for side effects (prints validation message to console).
+}
 \description{
 \code{vsearch} tests if the VSEARCH executable is a valid
 command.

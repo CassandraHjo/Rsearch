@@ -86,12 +86,9 @@ Both \code{file1_out} and \code{file2_out} must either be \code{NULL} or both
 must be character strings specifying the file paths.
 }
 \examples{
-\dontrun{
 # Define arguments
-file1 <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                   "small_R1.fq")
-file2 <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                   "small_R2.fq")
+file1 <- system.file("extdata/small_R1.fq", package = "Rsearch")
+file2 <- system.file("extdata/small_R1.fq", package = "Rsearch")
 file_format <- "fastq"
 file1_out <- NULL
 file2_out <- NULL
@@ -108,11 +105,17 @@ R1_sync <- sync_seqs
 R2_sync <- attr(sync_seqs, "reverse")
 
 # Synchronize files and write to output files
+
+# Define output file names
+out1 <- tempfile(fileext = ".fastq")
+out2 <- tempfile(fileext = ".fastq")
+
 fastx_synchronize(file1 = file1,
                   file2 = file2,
                   file_format = file_format,
-                  file1_out = "synchronized_R1.fastq",
-                  file2_out = "synchronized_R2.fastq")
-}
+                  file1_out = out1,
+                  file2_out = out2)
+
+\dontshow{unlink(c(out1, out2))}
 
 }

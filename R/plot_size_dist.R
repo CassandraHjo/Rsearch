@@ -46,10 +46,8 @@
 #' @return A ggplot2 object displaying a plot of size distribution.
 #'
 #' @examples
-#' \dontrun{
 #' # Define input file
-#' fastx_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "small_derep_R1.fa")
+#' fastx_input <- system.file("extdata/small_derep_R1.fa", package = "Rsearch")
 #'
 #' # Generate and display plot without cutoff
 #' size_plot <- plot_size_dist(fastx_input = fastx_input,
@@ -73,7 +71,6 @@
 #'                             input_format = "fasta",
 #'                             log_scale_y = FALSE)
 #' print(size_plot)
-#' }
 #'
 #' @export
 #'

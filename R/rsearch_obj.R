@@ -54,14 +54,10 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' # Define inputs
-#' readcount.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                            "readcount_data.tsv")
-#' sequence.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                           "sequence_data.tsv")
-#' sample.dta <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                         "sample_data.tsv")
+#' readcount.dta <- system.file("extdata/readcount_data.tsv", package = "Rsearch")
+#' sequence.dta <- system.file("extdata/sequence_data.tsv", package = "Rsearch")
+#' sample.dta <- system.file("extdata/sample_data.tsv", package = "Rsearch")
 #'
 #' # Create Rsearch object
 #' obj <- rsearch_obj(readcount_data = readcount.dta,
@@ -74,8 +70,6 @@
 #'
 #' # Convert phyloseq object to Rsearch object
 #' rsearch_obj <- phyloseq2rsearch(phy_obj)
-#'
-#' }
 #'
 #' @seealso \link{rsearch2phyloseq} \link{phyloseq2rsearch}
 #' @export

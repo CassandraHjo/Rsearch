@@ -8,10 +8,7 @@ Authors@R: c(
     person("Torbjørn", "Rognes", email = "torognes@ifi.uio.no", role = "aut"),
     person("Hilde", "Vinje", email = "hilde.vinje@nmbu.no", role = "aut"))
 Maintainer: Cassandra Hjortdahl <cassandra.hjortdahl@nmbu.no>
-Description: Functions for handling and analyzing targeted sequencing data. 
-  The package provides a user-friendly interface for core VSEARCH 
-  (Rognes et al. (2016), <doi:10.7717/peerj.2584>) functions in 
-  addition to tools for visualization and parameter tuning. 
+Description: Processing and analysis of targeted sequencing data. The package provides a user-friendly interface for core 'VSEARCH' (Rognes et al. (2016), <doi:10.7717/peerj.2584>) functions, in addition to tools for visualization and parameter tuning. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

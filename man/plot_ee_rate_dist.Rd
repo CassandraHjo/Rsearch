@@ -49,14 +49,11 @@ performed to reduce computation time and improve performance on large
 datasets.
 }
 \examples{
-\dontrun{
 # Define input file path
-fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-                         "small_R1.fq")
+fastq_input <- system.file("extdata/small_R1.fq", package = "Rsearch")
 
 # Generate and display histogram
 ee_plot <- plot_ee_rate_dist(fastq_input = fastq_input)
 print(ee_plot)
-}
 
 }

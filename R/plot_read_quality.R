@@ -43,10 +43,8 @@
 #' @return A ggplot2 object displaying the scatter plot with marginal histograms.
 #'
 #' @examples
-#' \dontrun{
 #' # Define arguments
-#' fastq_input <- file.path(file.path(path.package("Rsearch"), "extdata"),
-#'                          "small_R1.fq")
+#' fastq_input <- system.file("extdata/small_R1.fq", package = "Rsearch")
 #'
 #' # Generate and display scatter plot with mean quality score on y-axis
 #' p1 <- plot_read_quality(fastq_input = fastq_input)
@@ -56,7 +54,6 @@
 #' p2 <- plot_read_quality(fastq_input = fastq_input,
 #'                         use_ee_rate = TRUE)
 #' print(p2)
-#' }
 #'
 #' @export
 #'
