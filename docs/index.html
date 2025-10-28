@@ -62,10 +62,19 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p><code>Rsearch</code> is available from <a href="https://CRAN.R-project.org/package=Rsearch" class="external-link">The Comprehensive R Archive Network (CRAN)</a>, with the development version hosted here on GitHub.</p>
+<p>To install the stable CRAN version of <code>Rsearch</code>, simply run the following command in your R console:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Rsearch"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="installing-the-development-version-of-rsearch">Installing the development version of <code>Rsearch</code>
+<a class="anchor" aria-label="anchor" href="#installing-the-development-version-of-rsearch"></a>
+</h3>
 <ul>
 <li><a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps" target="blank" class="external-link">A short video on how to install on a Windows laptop</a></li>
 <li><a href="https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG" target="blank" class="external-link">A short video on how to install on a Mac laptop</a></li>
 </ul>
+</div>
 <div class="section level3">
 <h3 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
 </h3>
@@ -76,7 +85,7 @@
 <h3 id="installing-vsearch">Installing <code>VSEARCH</code>
 <a class="anchor" aria-label="anchor" href="#installing-vsearch"></a>
 </h3>
-<p>You typically install <code>VSEARCH</code> by simply downloading a pre-compiled binary file to your computer (Windows or Mac). The latest release of <code>VSEARCH</code>, with corresponding binaries, for installation can be found under <a href="https://github.com/torognes/vsearch/releases" class="external-link">Releases</a>. On a High Performance Computing (HPC) cluster we prefer to use an <code>apptainer</code> container for <code>VSEARCH</code>. These are freely available from many sites, e.g.  <a href="https://depot.galaxyproject.org/singularity/" class="external-link uri">https://depot.galaxyproject.org/singularity/</a></p>
+<p>You typically install <code>VSEARCH</code> by simply downloading a pre-compiled binary file to your computer (Windows or Mac). The latest release of <code>VSEARCH</code>, with corresponding binaries, for installation can be found under <a href="https://github.com/torognes/vsearch/releases" class="external-link">Releases</a>. On a High Performance Computing (HPC) cluster we prefer to use an <code>apptainer</code> container for <code>VSEARCH</code>. These are freely available from many sites, e.g. <a href="https://depot.galaxyproject.org/singularity/" class="external-link uri">https://depot.galaxyproject.org/singularity/</a></p>
 <p>After downloading the binary you may edit your <code>PATH</code> environment variable to tell your operating system where to find the <code>VSEARCH</code> binary. However, this is not required since the <code>Rsearch</code> package has a function <code><a href="reference/set_vsearch_executable.html">set_vsearch_executable()</a></code> where you specify where your <code>VSEARCH</code> binary file is found (see <a href="#set-correct-vsearch-executable">Set correct vsearch executable</a>) below.</p>
 </div>
 <div class="section level3">
@@ -88,13 +97,13 @@
 <code>Bioconductor</code> dependency<a class="anchor" aria-label="anchor" href="#bioconductor-dependency"></a>
 </h4>
 <p><code>Rsearch</code> also relies on the Bioconductor package <code>phyloseq</code>. Please install it <strong>before</strong> installing <code>Rsearch</code> if you do not already have it installed:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"phyloseq"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version of <code>Rsearch</code> from <a href="https://github.com/CassandraHjo/Rsearch" class="external-link">GitHub</a> by using the <code>devtools</code> package from CRAN:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -107,7 +116,7 @@
 </h3>
 <p>In order for most of the functions (those starting with <code>vs_</code>) in <code>Rsearch</code> to work, the command to invoke VSEARCH must be set correctly. The default command is simply <code>vsearch</code>, but this will only work if the file <code>vsearch.exe</code> is found in a folder that is included in the <code>PATH</code> environment variable.</p>
 <p>If this is not the case, you must tell <code>Rsearh</code> explicitly where to find or how to invoke <code>vsearch</code>. The <code>Rsearch</code> function <code><a href="reference/set_vsearch_executable.html">set_vsearch_executable()</a></code> can be used to set the correct command to invoke <code>VSEARCH</code> on the computer like this:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Windows example</span></span>
 <span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/set_vsearch_executable.html">set_vsearch_executable</a></span><span class="op">(</span><span class="st">"C:/Documents/vsearch"</span><span class="op">)</span> <span class="co"># If the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer</span></span>
 <span></span>
@@ -120,15 +129,15 @@
 <p>Although <code>Rsearch</code> is primarily intended for local execution (as above), it is also possible to use <code>vsearch</code> packaged in an Apptainer or Singularity <code>.sif</code> container. However, since <code>Rsearch</code> expects a single executable path (not a full shell command), you must create a wrapper script to bridge the container invocation.</p>
 <p><strong>Step by step instructions:</strong></p>
 <p><strong>1.</strong> Create a wrapper script (e.g., <code>vsearch</code>) with the following content:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>apptainer exec <span class="sc">/</span>path<span class="sc">/</span>to<span class="sc">/</span>vsearch_container.sif vsearch <span class="st">"$@"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>apptainer exec <span class="sc">/</span>path<span class="sc">/</span>to<span class="sc">/</span>vsearch_container.sif vsearch <span class="st">"$@"</span></span></code></pre></div>
 <p><strong>2.</strong> Save it to a folder, for example:</p>
 <p><code>/home/youruser/bin/vsearch</code></p>
 <p><strong>3.</strong> Make the script executable:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chmod</span> <span class="op">+</span><span class="va">x</span> <span class="op">/</span><span class="va">home</span><span class="op">/</span><span class="va">youruser</span><span class="op">/</span><span class="va">bin</span><span class="op">/</span><span class="va">vsearch</span></span></code></pre></div>
 <p><strong>4.</strong> Point <code>Rsearch</code> to this wrapper script:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/set_vsearch_executable.html">set_vsearch_executable</a></span><span class="op">(</span><span class="st">"/home/youruser/bin/"</span><span class="op">)</span></span></code></pre></div>
 <p>This will make <code>Rsearch</code> treat the containerized version of <code>vsearch</code> as a regular executable.</p>
 </div>
@@ -136,12 +145,12 @@
 <h4 id="test-that-it-works">Test that it works<a class="anchor" aria-label="anchor" href="#test-that-it-works"></a>
 </h4>
 <p>You may test if your executable is working properly by running the following command:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/vsearch.html">vsearch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>If everything is set up correctly you should see a message like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"The VSEARCH executable is: /your/path/vsearch"</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"This is a valid command to invoke VSEARCH on this computer!"</span></span></code></pre></div>
-<p><span style="color: red;"><strong>Note:</strong> For large-scale analyses and computationally intensive workflows, calling <code>vsearch</code> directly from a shell script may be more efficient than using <code>Rsearch</code> through R or RStudio. </span></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"The VSEARCH executable is: /your/path/vsearch"</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"This is a valid command to invoke VSEARCH on this computer!"</span></span></code></pre></div>
+<p><span style="color: red;"><strong>Note:</strong> For large-scale analyses and computationally intensive workflows, calling <code>vsearch</code> directly from a shell script may be more efficient than using <code>Rsearch</code> through R or RStudio.</span></p>
 </div>
 </div>
 </div>
@@ -156,16 +165,16 @@
 <li>
 <strong>Function-specific help:</strong> To get detailed information about a specific function, use the <code>?</code> operator followed by the function name. For example, to access help for the <code>vs_fastx_trim_filt</code> function:</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="va">vs_fastx_trim_filt</span></span></code></pre></div>
 <p>Alternatively, you can use the <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code> function:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">vs_fastx_trim_filt</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li><strong>Package-wide help</strong></li>
 </ul>
 <p>To get an overview of the <code>Rsearch</code> package an its available functions, use:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># library(Rsearch)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"Rsearch"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -177,7 +186,7 @@
 <div class="section level3">
 <h3 id="example-filter-paired-end-reads-based-on-quality">Example: Filter paired-end reads based on quality<a class="anchor" aria-label="anchor" href="#example-filter-paired-end-reads-based-on-quality"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cassandrahjo.github.io/Rsearch/">Rsearch</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define input</span></span>
@@ -201,7 +210,7 @@
 </h2>
 <p>The main contributors to <code>Rsearch</code>:</p>
 <ul>
-<li>Cassandra Stamsaas <a href="mailto:cassandra.hjortdahl@nmbu.no" class="email">cassandra.hjortdahl@nmbu.no</a> (Coding, testing, documentation, maintaining)</li>
+<li>Cassandra Stamsaas <a href="mailto:cassandra.stamsaas@nmbu.no" class="email">cassandra.stamsaas@nmbu.no</a> (Coding, testing, documentation, maintaining)</li>
 <li>Lars Snipen <a href="mailto:lars.snipen@nmbu.no" class="email">lars.snipen@nmbu.no</a> (Coding, documentation)</li>
 <li>Torbjørn Rognes <a href="mailto:torognes@ifi.uio.no" class="email">torognes@ifi.uio.no</a> (Coding, documentation)</li>
 <li>Hilde Vinje <a href="mailto:hilde.vinje@nmbu.no" class="email">hilde.vinje@nmbu.no</a> (Coding, documentation)</li>
@@ -212,7 +221,7 @@
 </h2>
 <p>Please cite the following publication if you use <code>Rsearch</code>:</p>
 <p>xxx</p>
-<p>Please note that citing any of the underlying algorithms, e.g. <code>VSEARCH</code>, may also be appropriate.</p>
+<p>Please note that citing any of the underlying algorithms, e.g. <code>VSEARCH</code>, may also be appropriate.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -228,6 +237,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=Rsearch" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/CassandraHjo/Rsearch/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/CassandraHjo/Rsearch/issues/" class="external-link">Report a bug</a></li>
 </ul>

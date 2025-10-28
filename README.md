@@ -1,5 +1,5 @@
 
-# Rsearch <img src='man/figures/rsearch_logo.png' alt='Rsearch logo' align="right" height="150" />
+# Rsearch <img src="man/figures/rsearch_logo.png" alt="Rsearch logo" align="right" height="150"/>
 
 ## Introduction
 
@@ -37,6 +37,19 @@ the [Rsearch website](https://cassandrahjo.github.io/Rsearch/)**
 
 ## Installation
 
+`Rsearch` is available from [The Comprehensive R Archive Network
+(CRAN)](https://CRAN.R-project.org/package=Rsearch), with the
+development version hosted here on GitHub.
+
+To install the stable CRAN version of `Rsearch`, simply run the
+following command in your R console:
+
+``` r
+install.packages("Rsearch")
+```
+
+### Installing the development version of `Rsearch`
+
 - <a href="https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps"
   target="blank">A short video on how to install on a Windows laptop</a>
 - <a href="https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG"
@@ -60,7 +73,7 @@ binary file to your computer (Windows or Mac). The latest release of
 under [Releases](https://github.com/torognes/vsearch/releases). On a
 High Performance Computing (HPC) cluster we prefer to use an `apptainer`
 container for `VSEARCH`. These are freely available from many sites,
-e.g.  <https://depot.galaxyproject.org/singularity/>
+e.g. <https://depot.galaxyproject.org/singularity/>
 
 After downloading the binary you may edit your `PATH` environment
 variable to tell your operating system where to find the `VSEARCH`
@@ -176,7 +189,7 @@ If everything is set up correctly you should see a message like this:
 <span style="color: red;">**Note:** For large-scale analyses and
 computationally intensive workflows, calling `vsearch` directly from a
 shell script may be more efficient than using `Rsearch` through R or
-RStudio. </span>
+RStudio.</span>
 
 ## Documentation
 
@@ -240,7 +253,7 @@ statistics <- attr(filt_seqs, "statistics")
 
 The main contributors to `Rsearch`:
 
-- Cassandra Stamsaas <cassandra.hjortdahl@nmbu.no> (Coding, testing,
+- Cassandra Stamsaas <cassandra.stamsaas@nmbu.no> (Coding, testing,
   documentation, maintaining)
 - Lars Snipen <lars.snipen@nmbu.no> (Coding, documentation)
 - Torbjørn Rognes <torognes@ifi.uio.no> (Coding, documentation)
@@ -252,8 +265,8 @@ Please cite the following publication if you use `Rsearch`:
 
 xxx
 
-Please note that citing any of the underlying algorithms,
-e.g. `VSEARCH`, may also be appropriate.
+Please note that citing any of the underlying algorithms, e.g.
+`VSEARCH`, may also be appropriate.
 
 ## References
 
