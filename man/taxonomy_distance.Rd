@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxonomy_tree.R
 \name{taxonomy_distance}
 \alias{taxonomy_distance}
-\title{Calculate taxonomic distances}
+\title{Creates a distance object based on taxonomy information.}
 \usage{
 taxonomy_distance(taxonomy_table, confidence = NULL)
 }
@@ -14,8 +14,7 @@ information, see \emph{Details}.}
 confidence scores below this to \code{NA}.}
 }
 \value{
-A symmetric matrix containing taxonomic distances between OTUs. Rows
-and columns are named by the 'Header' column of the input.
+A \code{dist} object containing taxonomic distances between OTUs.
 }
 \description{
 Creates a distance matrix based on taxonomy information
@@ -51,8 +50,8 @@ tax.tbl <- vs_sintax(fasta_input = fasta.file, database = db.file)
 # Calculate distance matrix
 tax.dist <- taxonomy_distance(tax.tbl)
 
-# If you need a dist object for other packages:
-dist_obj <- as.diat(tax.dist)
+# You can now directly use 'tax.dist' with functions like hclust or ape::nj
+tax.tree <- ape::nj(tax.dist)
 }
 
 }

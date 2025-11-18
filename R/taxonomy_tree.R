@@ -58,11 +58,11 @@ taxonomy_tree <- function(taxonomy_table,
                           confidence = NULL){
 
   D.mat <- taxonomy_distance(taxonomy_table, confidence)
-  tree <- ape::nj(stats::as.dist(D.mat))
+  tree <- ape::nj(D.mat)
   return(tree)
 }
 
-#' Calculate taxonomic distances
+#' Creates a distance object based on taxonomy information.
 #'
 #' @description Creates a distance matrix based on taxonomy information
 #'
@@ -89,8 +89,7 @@ taxonomy_tree <- function(taxonomy_table,
 #' corresponding species name is set to \code{NA}, and similar for all ranks.
 #' The default is to ignore this confidence (\code{confidence = NULL}).
 #'
-#' @returns A symmetric matrix containing taxonomic distances between OTUs. Rows
-#' and columns are named by the 'Header' column of the input.
+#' @returns A \code{dist} object containing taxonomic distances between OTUs.
 #'
 #' @references \url{https://www.biorxiv.org/content/10.1101/074161v1}
 #'
@@ -106,8 +105,8 @@ taxonomy_tree <- function(taxonomy_table,
 #' # Calculate distance matrix
 #' tax.dist <- taxonomy_distance(tax.tbl)
 #'
-#' # If you need a dist object for other packages:
-#' dist_obj <- as.diat(tax.dist)
+#' # You can now directly use 'tax.dist' with functions like hclust or ape::nj
+#' tax.tree <- ape::nj(tax.dist)
 #' }
 #'
 #' @aliases taxonomy_distance
@@ -209,6 +208,6 @@ taxonomy_distance <- function(taxonomy_table,
 
   rownames(D.mat) <- colnames(D.mat) <- tax.mat[,1]
 
-  return(D.mat)
+  return(stats::as.dist(D.mat))
 }
 
