@@ -49,6 +49,7 @@ method.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vs_cluster_unoise</span><span class="op">(</span></span>
 <span>  <span class="va">fasta_input</span>,</span>
 <span>  otutabout <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clusters <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minsize <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  unoise_alpha <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  relabel <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -73,6 +74,13 @@ reads to denoise. See <em>Details</em>.</p></dd>
 <dd><p>(Optional). A character string specifying the name of the
 output file in an OTU table format. If <code>NULL</code> (default), the output is
 returned as a tibble in R. See <em>Details</em>.</p></dd>
+
+
+<dt id="arg-clusters">clusters<a class="anchor" aria-label="anchor" href="#arg-clusters"></a></dt>
+<dd><p>(Optional). Output each cluster to a separate FASTA file
+using the prefix string provided and a ticker (0, 1, 2, etc.) to construct
+the path and the filenames. Defaults to <code>NULL</code>, meaning no such files
+are created.</p></dd>
 
 
 <dt id="arg-minsize">minsize<a class="anchor" aria-label="anchor" href="#arg-minsize"></a></dt>

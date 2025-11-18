@@ -10,6 +10,7 @@
 vs_cluster_unoise(
   fasta_input,
   otutabout = NULL,
+  clusters = NULL,
   minsize = 8,
   unoise_alpha = 2,
   relabel = NULL,
@@ -27,6 +28,11 @@ reads to denoise. See \emph{Details}.}
 \item{otutabout}{(Optional). A character string specifying the name of the
 output file in an OTU table format. If \code{NULL} (default), the output is
 returned as a tibble in R. See \emph{Details}.}
+
+\item{clusters}{(Optional). Output each cluster to a separate FASTA file
+using the prefix string provided and a ticker (0, 1, 2, etc.) to construct
+the path and the filenames. Defaults to \code{NULL}, meaning no such files
+are created.}
 
 \item{minsize}{(Optional). Minimum abundance of cluster centroids.
 Defaults to \code{8}.}

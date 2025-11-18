@@ -11,6 +11,7 @@ vs_cluster_size(
   fasta_input,
   centroids = NULL,
   otutabout = NULL,
+  clusters = NULL,
   size_column = FALSE,
   id = 0.97,
   strand = "plus",
@@ -39,6 +40,11 @@ returned as a FASTA object. See \emph{Details}.}
 output file in an OTU table format. If \code{NULL} (default), no output is
 written to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
+
+\item{clusters}{(Optional). Output each cluster to a separate FASTA file
+using the prefix string provided and a ticker (0, 1, 2, etc.) to construct
+the path and the filenames. Defaults to \code{NULL}, meaning no such files
+are created.}
 
 \item{size_column}{(Optional). If \code{TRUE}, a column with the size of each
 centroid is added to the centroid output tibble.}
