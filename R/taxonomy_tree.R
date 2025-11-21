@@ -2,7 +2,7 @@
 #'
 #' @description Creates a phylo object based on taxonomy
 #'
-#' @param taxonomy_table (Required). A data.frame with sequences and taxonomy
+#' @param taxonomy_table (Required). A data.frame with taxonomy
 #' information, see \emph{Details}.
 #' @param confidence (Optional). A threshold value used to replace taxa with
 #' confidence scores below this to \code{NA}.
@@ -66,7 +66,7 @@ taxonomy_tree <- function(taxonomy_table,
 #'
 #' @description Creates a distance matrix based on taxonomy information
 #'
-#' @param taxonomy_table (Required). A data.frame with sequences and taxonomy
+#' @param taxonomy_table (Required). A data.frame with taxonomy
 #' information, see \emph{Details}.
 #' @param confidence (Optional). A threshold value used to replace taxa with
 #' confidence scores below this to \code{NA}.
@@ -74,22 +74,27 @@ taxonomy_tree <- function(taxonomy_table,
 #' @details In some data analyses involving OTU data, it is often useful to
 #' quantify the relatedness of OTUs based on their taxonomy. This function
 #' creates a distance matrix from a taxonomy table of the same format as output
-#' by \code{\link{vs_sintax}}.
+#' by \code{\link{vs_sintax}}. This means \code{taxonomy_table} must have columns
+#' domain, phylum, class, order, family, genus and species. It must also have a column
+#' Header with a text that unique to each row. These are used as row/column names
+#' in the returned \code{\link{dist}} object.
 #'
 #' Distances between two OTUs reflect how high up in the taxonomy they have a
 #' common taxon, i.e if they are of the same species the distance is 0, if
-#' different species but same genus the distance is 1 etc. Note that \code{NA}s
+#' different species but the same genus the distance is 1, if different species and
+#' different genera but same family the distance is 2  etc. Note that \code{NA}s
 #' in the taxonomy are not matched, increasing the distances, i.e if two OTUs
 #' have \code{NA} as species and genus, but share family, the distance is 2.
 #'
-#' The \code{confidence} sets a threshold for replacing low-confidence taxa to
+#' The \code{confidence} is a numerical threshold for replacing low-confidence taxa with
 #' \code{NA}. For this to work the \code{taxonomy_table} must have columns with
 #' such confidence scores i.e. columns domain_score, phylum_score,
 #' ...species_score. If the species_score is below \code{confidence} the
 #' corresponding species name is set to \code{NA}, and similar for all ranks.
-#' The default is to ignore this confidence (\code{confidence = NULL}).
+#' The default is to ignore this confidence (\code{confidence = NULL}) and use the
+#' \code{taxonomy_table} as it is.
 #'
-#' @returns A \code{dist} object containing taxonomic distances between OTUs.
+#' @returns A \code{\link{dist}} object containing taxonomic distances between OTUs.
 #'
 #' @references \url{https://www.biorxiv.org/content/10.1101/074161v1}
 #'

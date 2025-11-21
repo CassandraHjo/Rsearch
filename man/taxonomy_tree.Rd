@@ -7,7 +7,7 @@
 taxonomy_tree(taxonomy_table, confidence = NULL)
 }
 \arguments{
-\item{taxonomy_table}{(Required). A data.frame with sequences and taxonomy
+\item{taxonomy_table}{(Required). A data.frame with taxonomy
 information, see \emph{Details}.}
 
 \item{confidence}{(Optional). A threshold value used to replace taxa with
