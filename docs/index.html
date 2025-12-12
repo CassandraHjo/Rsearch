@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Processing and Analyzing Amplicon Sequence Data • Rsearch</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -13,6 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Processing and Analyzing Amplicon Sequence Data">
 <meta name="description" content="Processing and analysis of targeted sequencing data. The package provides a user-friendly interface for core VSEARCH (Rognes et al. (2016), &lt;doi:10.7717/peerj.2584&gt;) functions, in addition to tools for visualization and parameter tuning.">
 <meta property="og:description" content="Processing and analysis of targeted sequencing data. The package provides a user-friendly interface for core VSEARCH (Rognes et al. (2016), &lt;doi:10.7717/peerj.2584&gt;) functions, in addition to tools for visualization and parameter tuning.">
+<meta property="og:image" content="https://cassandrahjo.github.io/Rsearch/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -48,12 +54,15 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="rsearch-">Rsearch <img src="reference/figures/rsearch_logo.png" alt="Rsearch logo" align="right" height="150"><a class="anchor" aria-label="anchor" href="#rsearch-"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="rsearch-">Rsearch 
+<a class="anchor" aria-label="anchor" href="#rsearch-"></a>
+</h1>
+</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><code>Rsearch</code> is an R package designed for handling and analyzing targeted sequencing data. The package provides a user-friendly interface for core VSEARCH functions in addition to tools for visualization and parameter optimization.</p>
+<p><code>Rsearch</code> is an R package designed for handling and analyzing targeted sequencing data. The package provides a user-friendly interface for core <code>VSEARCH</code> functions in addition to tools for visualization and parameter optimization.</p>
 <p>The core idea behind <code>Rsearch</code> is to retain the output from <code>VSEARCH</code> within R’s generic data structures, rather than writing results to files as the original <code>VSEARCH</code> functions. By offering this option users can choose between working entirely within R and Rstudio or to export results to files as <code>VSEARCH</code> typically does. Keeping all results in R data structures allows users to leverage the power of standard data wrangling and visualization tools familiar to R users.</p>
 <p>Another feature that enhances usability for R users is the consistent return format of the functions. All functions return a single table/data frame unless the user specifies that results should be written to a file. For functions that can return multiple results - such as those handling read pairs with forward and reverse reads - the secondary table is included as an attribute of the primary table. The same approach applies to tables containing statistics from function executions. By ensuring that all functions return only one table, navigating and managing results become more straightforward. Additionally, since all core functions return data frames or tibbles, they are compatible with piping using the <code>%&gt;%</code> or <code>|&gt;</code> operators.</p>
 <p>More information about attributes in R can be found <a href="https://www.r-bloggers.com/2020/10/attributes-in-r/" class="external-link">here</a> and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes" class="external-link">here</a>.</p>
