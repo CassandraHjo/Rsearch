@@ -55,11 +55,19 @@
 #' @export
 #'
 taxonomy_tree <- function(taxonomy_table,
-                          confidence = NULL){
-
-  if(confidence > 1 || confidence <0) {
-  error("Parameter confidence must be range between 0 and 1")  
+                          confidence = NULL) {
+  if(!is.null(confidence)) {
+    if(confidence > 1 || confidence < 0) {
+      stop("Parameter confidence must be range between 0 and 1")
+    }
   }
+
+  if(!is.null(confidence)) {
+    if(!is.numeric(confidence)) {
+      stop("Parameter confidence must be numeric in the range between 0 and 1")
+    }
+  }
+
   D.mat <- taxonomy_distance(taxonomy_table, confidence)
   tree <- ape::nj(D.mat)
   return(tree)
