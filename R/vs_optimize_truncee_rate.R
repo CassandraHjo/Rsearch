@@ -32,6 +32,8 @@
 #' be written when tables are used as input or output. Defaults to
 #' \code{NULL}, which resolves to the session-specific temporary directory
 #' (\code{tempdir()}).
+#' @param verbose (Optional). Logical. Controls verbosity of the function. If
+#' \code{TRUE}, a progress bar is displayed. Defaults to \code{TRUE}.
 #'
 #' @details
 #' The function uses \code{\link{vs_fastq_mergepairs}},
@@ -107,7 +109,8 @@ vs_optimize_truncee_rate <- function(fastq_input,
                                      maxee_rate = 0.01,
                                      threads = 1,
                                      plot_title = TRUE,
-                                     tmpdir = NULL) {
+                                     tmpdir = NULL,
+                                     verbose = TRUE) {
 
   # Check if vsearch is available
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
@@ -140,16 +143,22 @@ vs_optimize_truncee_rate <- function(fastq_input,
   }
 
   # Setting up progress bar
-  pb = utils::txtProgressBar(min = 0,
-                             max = length(truncee_rate_range),
-                             initial = 0,
-                             style = 3)
+  pb <- NULL
+  if (verbose) {
+    pb = utils::txtProgressBar(min = 0,
+                               max = length(truncee_rate_range),
+                               initial = 0,
+                               style = 3)
+    on.exit(try(close(pb), silent = TRUE), add = TRUE)
+  }
 
   # Looping through truncee_rate values
   for (i in 1:length(truncee_rate_range)) {
 
     # Update progress bar
-    utils::setTxtProgressBar(pb, i)
+    if (!is.null(pb)){
+      utils::setTxtProgressBar(pb, i)
+    }
 
     # Trim R1 and R2 reads together
     trim_R1.df <- vs_fastx_trim_filt(fastx_input = fastq_input,
@@ -196,8 +205,6 @@ vs_optimize_truncee_rate <- function(fastq_input,
     res.df$R2_length[i] = round(mean(nchar(trim_R2.df$Sequence)), 2)
 
   }
-  # Close progress bar
-  close(pb)
 
   # Find optimal truncee_rate value from res.df
   optimal_truncee_rate <- res.df$truncee_rate_value[which.max(res.df$merged_read_pairs)]

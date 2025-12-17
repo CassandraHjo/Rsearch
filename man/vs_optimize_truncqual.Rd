@@ -15,7 +15,8 @@ vs_optimize_truncqual(
   maxee_rate = 0.01,
   threads = 1,
   plot_title = TRUE,
-  tmpdir = NULL
+  tmpdir = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -52,6 +53,9 @@ be displayed in the plot. Set to \code{FALSE} for no title.}
 be written when tables are used as input or output. Defaults to
 \code{NULL}, which resolves to the session-specific temporary directory
 (\code{tempdir()}).}
+
+\item{verbose}{(Optional). Logical. Controls verbosity of the function. If
+\code{TRUE}, a progress bar is displayed. Defaults to \code{TRUE}.}
 }
 \value{
 A data frame with the following columns:

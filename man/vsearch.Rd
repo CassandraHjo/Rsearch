@@ -4,10 +4,16 @@
 \alias{vsearch}
 \title{Test if \code{VSEARCH} can be executed}
 \usage{
-vsearch()
+vsearch(verbose = TRUE)
+}
+\arguments{
+\item{verbose}{(Optional). Logical. Controls verbosity of the function.
+If \code{TRUE}, validation messages are printed to the console. Defaults to
+\code{TRUE}.}
 }
 \value{
-No return value, called for side effects (prints validation message to console).
+No return value, called for side effects (prints validation message
+to console).
 }
 \description{
 \code{vsearch} tests if the VSEARCH executable is a valid

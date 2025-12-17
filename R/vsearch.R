@@ -45,20 +45,27 @@ set_vsearch_executable <- function(vsearch_executable){
 #' @description \code{vsearch} tests if the VSEARCH executable is a valid
 #' command.
 #'
+#' @param verbose (Optional). Logical. Controls verbosity of the function.
+#' If \code{TRUE}, validation messages are printed to the console. Defaults to
+#' \code{TRUE}.
+#'
 #' @details Use this function to test the command used to invoke the external
 #' software VSEARCH on this computer.
 #'
-#' @return No return value, called for side effects (prints validation message to console).
+#' @return No return value, called for side effects (prints validation message
+#' to console).
 #'
 #' @seealso \code{\link{set_vsearch_executable}}.
 #'
 #' @export vsearch
 #'
-vsearch <- function(){
+vsearch <- function(verbose = TRUE){
   vsearch_executable <- options("Rsearch.vsearch_executable")[[1]]
-  message("The VSEARCH executable is:", vsearch_executable, "\n")
+  if(verbose){
+    message("The VSEARCH executable is:", vsearch_executable, "\n")
+  }
   ok <- vsearch_available(vsearch_executable)
-  if(ok){
+  if(ok && verbose){
     message("This is a valid command to invoke VSEARCH on this computer!\n")
   }
 }

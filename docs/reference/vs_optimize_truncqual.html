@@ -58,7 +58,8 @@ optimal value that maximizes the proportion of high-quality merged read pairs.</
 <span>  maxee_rate <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  threads <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  plot_title <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  tmpdir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -118,6 +119,11 @@ be displayed in the plot. Set to <code>FALSE</code> for no title.</p></dd>
 be written when tables are used as input or output. Defaults to
 <code>NULL</code>, which resolves to the session-specific temporary directory
 (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>(Optional). Logical. Controls verbosity of the function. If
+<code>TRUE</code>, a progress bar is displayed. Defaults to <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

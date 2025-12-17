@@ -4,7 +4,8 @@ test_that("optimizing truncqual with default values and files as input", {
   reverse <- test_path("testdata", "R2.fastq")
 
   optimize.tbl <- vs_optimize_truncqual(fastq_input = fastq_input,
-                                        reverse = reverse)
+                                        reverse = reverse,
+                                        verbose = FALSE)
 
   expected_df <- readRDS(test_path("testdata", "output", "optimize_truncqual.rds"))
 
@@ -27,7 +28,8 @@ test_that("optimizing truncqual with tibbles as input", {
 
   optimize.tbl <- vs_optimize_truncqual(fastq_input = fastq_input,
                                         reverse = reverse,
-                                        plot_title = FALSE)
+                                        plot_title = FALSE,
+                                        verbose = FALSE)
 
   expected_df <- readRDS(test_path("testdata", "output", "optimize_truncqual.rds"))
 
@@ -48,7 +50,8 @@ test_that("optimizing truncqual with pe_df tibble as input", {
 
   optimize.tbl <- vs_optimize_truncqual(fastq_input = fastq_input,
                                         min_size = 1,
-                                        maxee_rate = 1.0)
+                                        maxee_rate = 1.0,
+                                        verbose = FALSE)
 
   expected_df <- readRDS(test_path("testdata", "output", "optimize_truncqual_tibble.rds"))
 
@@ -78,7 +81,8 @@ test_that("vs_optimize_truncqual handles vs_fastq_mergepairs failure gracefully"
     min_size = 1,
     maxee_rate = 0.01,
     threads = 1,
-    plot_title = FALSE
+    plot_title = FALSE,
+    verbose = FALSE
   )
 
   expect_equal(tbl$merged_read_pairs[1], 0)
@@ -86,4 +90,3 @@ test_that("vs_optimize_truncqual handles vs_fastq_mergepairs failure gracefully"
   expect_true(is.numeric(tbl$R2_length[1]))
   expect_s3_class(attr(tbl, "plot"), "gg")
 })
-
