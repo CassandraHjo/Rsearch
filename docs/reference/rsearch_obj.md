@@ -1,0 +1,112 @@
+# Create Rsearch object
+
+`rsearch_obj` standardizes and organizes data into an Rsearch object. An
+Rsearch object is a list containing three elements with data structures
+that can be used as input to build a `phyloseq` object in the `phyloseq`
+package.
+
+## Usage
+
+``` r
+rsearch_obj(
+  readcount_data,
+  sequence_data,
+  sample_data,
+  sample_id_col = "sample_id"
+)
+```
+
+## Arguments
+
+- readcount_data:
+
+  (Required). A file path or a data frame (or tibble) containing OTU
+  count data, typically the output from
+  [`vs_cluster_size`](https://cassandrahjo.github.io/Rsearch/reference/vs_cluster_size.md)
+  or similar. This must have one row per OTU and one column per sample.
+  The first column must contain OTU identifiers corresponding to those
+  in the first column of `sequence_data`, and the remaining columns must
+  have names matching the sample identifiers in `sample_data`. OTUs and
+  samples not found across all data structures are discarded.
+
+- sequence_data:
+
+  (Required). A file path or a data frame (or tibble) containing
+  centroid sequences representing each OTU, typically obtained from
+  clustering
+  ([`vs_cluster_size`](https://cassandrahjo.github.io/Rsearch/reference/vs_cluster_size.md))
+  or denoising
+  ([`vs_cluster_unoise`](https://cassandrahjo.github.io/Rsearch/reference/vs_cluster_unoise.md)).
+  The first column must be called `Header` and contain OTU identifiers.
+  One of the remaining columns must be named `Sequence`, containing the
+  actual DNA sequences. Additional columns may include taxonomic
+  classification data, e.g. from
+  [`vs_sintax`](https://cassandrahjo.github.io/Rsearch/reference/vs_sintax.md).
+
+- sample_data:
+
+  (Required). A file path or a data frame (or tibble) containing
+  metadata about each sample. Samples are assumed to be in rows, and one
+  of the columns **must** contain a unique identifier for each sample
+  that matches the column names in `readcount_data`.
+
+- sample_id_col:
+
+  (Optional). A character string specifying the name of the column in
+  `sample_data` that contains the unique sample identifiers. This column
+  will be used to match sample metadata to read count data. Defaults to
+  `"sample_id"`.
+
+## Value
+
+A straightforward named list with three elements:
+
+- `readcount.mat`: A numeric matrix of OTU abundances with OTUs as rows
+  and samples as columns.
+
+- `sequence.df`: A data.frame with one row for each OTU sequence and
+
+- `sampledata.df`: A data frame containing data about the samples.
+
+## Details
+
+This function standardizes and organizes data into an Rsearch object: a
+structured three key data components used or generated during the
+Rsearch workflow: read count data, sequence data, and sample data.
+
+The function accepts three datasets—read count data, sequence data, and
+sample metadata, and returns a streamlined input suitable for
+constructing a phyloseq object using the
+[`rsearch2phyloseq`](https://cassandrahjo.github.io/Rsearch/reference/rsearch2phyloseq.md)
+function. The implementation uses a standard `list` in R rather than a
+specialized class providing an open and easily accessible structure.
+
+To convert this object into a
+[`phyloseq`](https://rdrr.io/pkg/phyloseq/man/phyloseq.html) object, use
+[`rsearch2phyloseq`](https://cassandrahjo.github.io/Rsearch/reference/rsearch2phyloseq.md).
+
+## See also
+
+[rsearch2phyloseq](https://cassandrahjo.github.io/Rsearch/reference/rsearch2phyloseq.md)
+[phyloseq2rsearch](https://cassandrahjo.github.io/Rsearch/reference/phyloseq2rsearch.md)
+
+## Examples
+
+``` r
+# Define inputs
+readcount.dta <- system.file("extdata/readcount_data.tsv", package = "Rsearch")
+sequence.dta <- system.file("extdata/sequence_data.tsv", package = "Rsearch")
+sample.dta <- system.file("extdata/sample_data.tsv", package = "Rsearch")
+
+# Create Rsearch object
+obj <- rsearch_obj(readcount_data = readcount.dta,
+                   sequence_data = sequence.dta,
+                   sample_data = sample.dta,
+                   sample_id_col = "sample_id")
+
+# Convert Rsearch object to phyloseq object
+phy_obj <- rsearch2phyloseq(obj, sample_id_col = "sample_id")
+
+# Convert phyloseq object to Rsearch object
+rsearch_obj <- phyloseq2rsearch(phy_obj)
+```

@@ -1,0 +1,279 @@
+# Rsearch
+
+## Introduction
+
+`Rsearch` is an R package designed for handling and analyzing targeted
+sequencing data. The package provides a user-friendly interface for core
+`VSEARCH` functions in addition to tools for visualization and parameter
+optimization.
+
+The core idea behind `Rsearch` is to retain the output from `VSEARCH`
+within R’s generic data structures, rather than writing results to files
+as the original `VSEARCH` functions. By offering this option users can
+choose between working entirely within R and Rstudio or to export
+results to files as `VSEARCH` typically does. Keeping all results in R
+data structures allows users to leverage the power of standard data
+wrangling and visualization tools familiar to R users.
+
+Another feature that enhances usability for R users is the consistent
+return format of the functions. All functions return a single table/data
+frame unless the user specifies that results should be written to a
+file. For functions that can return multiple results - such as those
+handling read pairs with forward and reverse reads - the secondary table
+is included as an attribute of the primary table. The same approach
+applies to tables containing statistics from function executions. By
+ensuring that all functions return only one table, navigating and
+managing results become more straightforward. Additionally, since all
+core functions return data frames or tibbles, they are compatible with
+piping using the `%>%` or `|>` operators.
+
+More information about attributes in R can be found
+[here](https://www.r-bloggers.com/2020/10/attributes-in-r/) and
+[here](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/attributes).
+
+**Full documentation and tutorials with usage examples are available on
+the [Rsearch website](https://cassandrahjo.github.io/Rsearch/)**
+
+## Installation
+
+`Rsearch` is available from [The Comprehensive R Archive Network
+(CRAN)](https://CRAN.R-project.org/package=Rsearch), with the
+development version hosted here on GitHub.
+
+To install the stable CRAN version of `Rsearch`, simply run the
+following command in your R console:
+
+``` r
+install.packages("Rsearch")
+```
+
+### Installing the development version of `Rsearch`
+
+- [A short video on how to install on a Windows
+  laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps)
+- [A short video on how to install on a Mac
+  laptop](https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG)
+
+### Prerequisites
+
+For the `Rsearch` package to function properly on your computer,
+`VSEARCH` must be installed as well (see below). Please ensure that you
+are using `VSEARCH` version 2.30.0 or newer.
+
+Visit the [`VSEARCH`](https://github.com/torognes/vsearch) GitHub site
+for learning more about `VSEARCH`.
+
+### Installing `VSEARCH`
+
+You typically install `VSEARCH` by simply downloading a pre-compiled
+binary file to your computer (Windows or Mac). The latest release of
+`VSEARCH`, with corresponding binaries, for installation can be found
+under [Releases](https://github.com/torognes/vsearch/releases). On a
+High Performance Computing (HPC) cluster we prefer to use an `apptainer`
+container for `VSEARCH`. These are freely available from many sites,
+e.g. <https://depot.galaxyproject.org/singularity/>
+
+After downloading the binary you may edit your `PATH` environment
+variable to tell your operating system where to find the `VSEARCH`
+binary. However, this is not required since the `Rsearch` package has a
+function
+[`set_vsearch_executable()`](https://cassandrahjo.github.io/Rsearch/reference/set_vsearch_executable.md)
+where you specify where your `VSEARCH` binary file is found (see [Set
+correct vsearch executable](#set-correct-vsearch-executable)) below.
+
+### Installing `Rsearch`
+
+#### `Bioconductor` dependency
+
+`Rsearch` also relies on the Bioconductor package `phyloseq`. Please
+install it **before** installing `Rsearch` if you do not already have it
+installed:
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("phyloseq")
+```
+
+You can install the development version of `Rsearch` from
+[GitHub](https://github.com/CassandraHjo/Rsearch) by using the
+`devtools` package from CRAN:
+
+``` r
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+devtools::install_github("CassandraHjo/Rsearch")
+```
+
+After installation, it is a good idea to restart your R session (in
+Rstudio: *Session* \> *Restart R*) to make sure every thing is properly
+loaded.
+
+### Set correct `VSEARCH` executable
+
+In order for most of the functions (those starting with `vs_`) in
+`Rsearch` to work, the command to invoke VSEARCH must be set correctly.
+The default command is simply `vsearch`, but this will only work if the
+file `vsearch.exe` is found in a folder that is included in the `PATH`
+environment variable.
+
+If this is not the case, you must tell `Rsearh` explicitly where to find
+or how to invoke `vsearch`. The `Rsearch` function
+[`set_vsearch_executable()`](https://cassandrahjo.github.io/Rsearch/reference/set_vsearch_executable.md)
+can be used to set the correct command to invoke `VSEARCH` on the
+computer like this:
+
+``` r
+# Windows example
+Rsearch::set_vsearch_executable("C:/Documents/vsearch") # If the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
+
+# Linux/macOS example
+Rsearch::set_vsearch_executable("/usr/local/bin/vsearch") # If the vsearch binary (vsearch.exe) is copied to /usr/local/bin/ on the computer
+```
+
+This will store the path and use it in future sessions automatically.
+
+#### Using an Apptainer/Singularity Container
+
+Although `Rsearch` is primarily intended for local execution (as above),
+it is also possible to use `vsearch` packaged in an Apptainer or
+Singularity `.sif` container. However, since `Rsearch` expects a single
+executable path (not a full shell command), you must create a wrapper
+script to bridge the container invocation.
+
+**Step by step instructions:**
+
+**1.** Create a wrapper script (e.g., `vsearch`) with the following
+content:
+
+``` r
+#!/bin/bash
+apptainer exec /path/to/vsearch_container.sif vsearch "$@"
+```
+
+**2.** Save it to a folder, for example:
+
+`/home/youruser/bin/vsearch`
+
+**3.** Make the script executable:
+
+``` r
+chmod +x /home/youruser/bin/vsearch
+```
+
+**4.** Point `Rsearch` to this wrapper script:
+
+``` r
+Rsearch::set_vsearch_executable("/home/youruser/bin/")
+```
+
+This will make `Rsearch` treat the containerized version of `vsearch` as
+a regular executable.
+
+#### Test that it works
+
+You may test if your executable is working properly by running the
+following command:
+
+``` r
+Rsearch::vsearch()
+```
+
+If everything is set up correctly you should see a message like this:
+
+``` R
+[1] "The VSEARCH executable is: /your/path/vsearch"
+[1] "This is a valid command to invoke VSEARCH on this computer!"
+```
+
+**Note:** For large-scale analyses and computationally intensive
+workflows, calling `vsearch` directly from a shell script may be more
+efficient than using `Rsearch` through R or RStudio.
+
+## Documentation
+
+### Accessing help within R
+
+Documentation can be accessed directly in the R console. Here are some
+methods to access help:
+
+- **Function-specific help:** To get detailed information about a
+  specific function, use the `?` operator followed by the function name.
+  For example, to access help for the `vs_fastx_trim_filt` function:
+
+``` r
+?vs_fastx_trim_filt
+```
+
+Alternatively, you can use the
+[`help()`](https://rdrr.io/r/utils/help.html) function:
+
+``` r
+help(vs_fastx_trim_filt)
+```
+
+- **Package-wide help**
+
+To get an overview of the `Rsearch` package an its available functions,
+use:
+
+``` r
+# library(Rsearch)
+help(package = "Rsearch")
+```
+
+## Usage
+
+Additional usage examples can be found in the
+[documentation](#documentation) for each individual function and on the
+[package website](https://cassandrahjo.github.io/Rsearch/).
+
+### Example: Filter paired-end reads based on quality
+
+``` r
+library(Rsearch)
+
+# Define input
+fastx_input <- "R1_sample1.fq"
+reverse <- "R2_sample1.fq"
+
+# Execute filtering, with tibble as output
+filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,
+                                reverse = reverse)
+
+# Extract tibbles with filtered sequences
+R1_filt <- filt_seqs
+R2_filt <- attr(filt_seqs, "reverse")
+
+# Extract filtering statistics
+statistics <- attr(filt_seqs, "statistics")
+```
+
+## Contributors
+
+The main contributors to `Rsearch`:
+
+- Cassandra Stamsaas <cassandra.stamsaas@nmbu.no> (Coding, testing,
+  documentation, maintaining)
+- Lars Snipen <lars.snipen@nmbu.no> (Coding, documentation)
+- Torbjørn Rognes <torognes@ifi.uio.no> (Coding, documentation)
+- Hilde Vinje <hilde.vinje@nmbu.no> (Coding, documentation)
+
+## Citing Rsearch
+
+Please cite the following publication if you use `Rsearch`:
+
+xxx
+
+Please note that citing any of the underlying algorithms, e.g.
+`VSEARCH`, may also be appropriate.
+
+## References
+
+- Rognes T, Flouri T, Nichols B, Quince C, Mahé F (2016) **VSEARCH: a
+  versatile open source tool for metagenomics.** *PeerJ* 4:e2584. doi:
+  [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
+- The subplot of the `Rsearch` logo is created with
+  <https://BioRender.com>

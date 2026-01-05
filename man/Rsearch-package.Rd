@@ -25,7 +25,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Cassandra Stamsaas \email{cassandra.hjortdahl@nmbu.no}
+\strong{Maintainer}: Cassandra Stamsaas \email{cassandra.stamsaas@nmbu.no}
 
 Authors:
 \itemize{
