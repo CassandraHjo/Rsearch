@@ -30,18 +30,7 @@ An alternative is then to simply use the taxonomy, and create a
 tree from a taxonomy table of the same format as output by
 \code{\link{vs_sintax}}.
 
-Distances between two OTUs reflect how high up in the taxonomy they have a
-common taxon, i.e if they are of the same species the distance is 0, if
-different species but same genus the distance is 1 etc. Note that \code{NA}s
-in the taxonomy are not matched, increasing the distances, i.e if two OTUs
-have \code{NA} as species and genus, but share family, the distance is 2.
-
-The \code{confidence} sets a threshold for replacing low-confidence taxa to
-\code{NA}. For this to work the \code{taxonomy_table} must have columns with
-such confidence scores i.e. columns domain_score, phylum_score,
-...species_score. If the species_score is below \code{confidence} the
-corresponding species name is set to \code{NA}, and similar for all ranks.
-The default is to ignore this confidence (\code{confidence = NULL}).
+The distances between OTUs are computed by \code{\link[Rsearch]{taxonomy_dstance}}.
 
 From these distances a Neighbor Joining tree is built using
 \code{\link[ape]{nj}}.
