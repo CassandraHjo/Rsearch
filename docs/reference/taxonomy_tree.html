@@ -70,17 +70,8 @@ OTU, which is a huge job.</p>
 'taxonomy-tree' instead of a phylogenetic tree. This function creates such a
 tree from a taxonomy table of the same format as output by
 <code><a href="vs_sintax.html">vs_sintax</a></code>.</p>
-<p>Distances between two OTUs reflect how high up in the taxonomy they have a
-common taxon, i.e if they are of the same species the distance is 0, if
-different species but same genus the distance is 1 etc. Note that <code>NA</code>s
-in the taxonomy are not matched, increasing the distances, i.e if two OTUs
-have <code>NA</code> as species and genus, but share family, the distance is 2.</p>
-<p>The <code>confidence</code> sets a threshold for replacing low-confidence taxa to
-<code>NA</code>. For this to work the <code>taxonomy_table</code> must have columns with
-such confidence scores i.e. columns domain_score, phylum_score,
-...species_score. If the species_score is below <code>confidence</code> the
-corresponding species name is set to <code>NA</code>, and similar for all ranks.
-The default is to ignore this confidence (<code>confidence = NULL</code>).</p>
+<p>The distances between OTUs are computed by
+<code><a href="taxonomy_distance.html">taxonomy_distance</a></code>.</p>
 <p>From these distances a Neighbor Joining tree is built using
 <code><a href="https://rdrr.io/pkg/ape/man/nj.html" class="external-link">nj</a></code>.</p>
     </div>

@@ -36,20 +36,19 @@ a text that unique to each row. These are used as row/column names in
 the returned [`dist`](https://rdrr.io/r/stats/dist.html) object.
 
 Distances between two OTUs reflect how high up in the taxonomy they have
-a common taxon, i.e if they are of the same species the distance is 0,
-if different species but the same genus the distance is 1, if different
-species and different genera but same family the distance is 2 etc. Note
-that `NA`s in the taxonomy are not matched, increasing the distances,
-i.e if two OTUs have `NA` as species and genus, but share family, the
-distance is 2.
+a common taxon, i.e if they are distinct OTUs but of the same species
+the distance is 1, if they are different species but same genus the
+distance is 2 etc. Note that `NA`s in the taxonomy are not matched,
+increasing the distances, i.e if two OTUs have `NA` as species and
+genus, but share family, the distance is 3 (implicitly assuming they are
+different genera but same family).
 
-The `confidence` is a numerical threshold for replacing low-confidence
-taxa with `NA`. For this to work the `taxonomy_table` must have columns
-with such confidence scores i.e. columns domain_score, phylum_score,
+The `confidence` sets a threshold for replacing low-confidence taxa to
+`NA`. For this to work the `taxonomy_table` must have columns with such
+confidence scores i.e. columns domain_score, phylum_score,
 ...species_score. If the species_score is below `confidence` the
 corresponding species name is set to `NA`, and similar for all ranks.
-The default is to ignore this confidence (`confidence = NULL`) and use
-the `taxonomy_table` as it is.
+The default is to ignore this confidence (`confidence = NULL`).
 
 ## References
 
