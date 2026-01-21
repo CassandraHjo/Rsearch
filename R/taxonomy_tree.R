@@ -213,11 +213,11 @@ taxonomy_distance <- function(taxonomy_table,
                            species) |>
     as.matrix()
 
-  D.mat <- matrix(7, nrow = nrow(tax.mat), ncol = nrow(tax.mat))
+  D.mat <- matrix(8, nrow = nrow(tax.mat), ncol = nrow(tax.mat))
 
   for(i in 2:8){
     idx <- which(outer(tax.mat[,i], tax.mat[,i], FUN = "=="))
-    D.mat[idx] <- 8 - i
+    D.mat[idx] <- 9 - i
   }
 
   diag(D.mat) <- 0
