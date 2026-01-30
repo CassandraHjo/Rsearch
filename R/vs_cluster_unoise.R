@@ -244,6 +244,7 @@ vs_cluster_unoise <- function(fasta_input,
       dplyr::rename(tag = `#OTU ID`)
     sizes <- otu.tbl |>
       dplyr::select(-tag) |>
+      dplyr::select(tidyselect::where(is.numeric)) |>
       as.matrix() |>
       rowSums()
     otu.tbl <- otu.tbl |>
