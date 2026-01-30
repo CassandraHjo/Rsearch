@@ -117,7 +117,7 @@ If you see the expected files listed and no errors, you are ready to proceed.
 
 Load the libraries needed for this tutorial:
 
-```{r load_libraries, message=FALSE, eval=TRUE}
+```{r load_libraries, message=FALSE, warning=FALSE, eval=TRUE}
 library(Rsearch)
 library(microseq)
 library(readr)
