@@ -156,7 +156,7 @@ plot_base_quality <- function(fastq_input,
     )
   }
 
-  # Make fastq.tbl plot
+  # Quality scores
 
   # Convert quality symbols to numeric scores
   fastq.tbl$Q_scores <- lapply(fastq.tbl$Quality,
@@ -164,6 +164,27 @@ plot_base_quality <- function(fastq_input,
                                    charToRaw() |>
                                    strtoi(16L) - 33
                                })
+  max.quality <- max(sapply(fastq.tbl$Q_scores, max))
+  min.quality <- min(sapply(fastq.tbl$Q_scores, min))
+
+  if (!is.null(reverse)){
+
+    # Convert quality symbols to numeric scores
+    reverse.tbl$Q_scores <- lapply(reverse.tbl$Quality,
+                                   function(Q.seq) {Q.seq |>
+                                       charToRaw() |>
+                                       strtoi(16L) - 33
+                                   })
+    max.quality <- max(max.quality, max(sapply(reverse.tbl$Q_scores, max)))
+    min.quality <- min(min.quality, min(sapply(fastq.tbl$Q_scores, min)))
+  }
+
+  # y-axis limits
+  y_limits <- c(min.quality, max.quality)
+  y_limits <- c(floor(y_limits[1]) - 1, ceiling(y_limits[2]) + 1)
+
+
+  # Make fastq.tbl plot
 
   # Find max length among all reads
   max_length <- max(sapply(fastq.tbl$Q_scores, length))
@@ -242,15 +263,11 @@ plot_base_quality <- function(fastq_input,
     R1.plot <- R1.plot + ggplot2::scale_color_manual(values = color_mapping)
   }
 
+  # Add limits to y-axis
+  R1.plot <- R1.plot + ggplot2::ylim(y_limits)
+
   # Make reverse.tbl plot
   if (!is.null(reverse)){
-
-    # Convert quality symbols to numeric scores
-    reverse.tbl$Q_scores <- lapply(reverse.tbl$Quality,
-                                   function(Q.seq) {Q.seq |>
-                                       charToRaw() |>
-                                       strtoi(16L) - 33
-                                   })
 
     # Find max length among all reads
     max_length <- max(sapply(reverse.tbl$Q_scores, length))
@@ -280,9 +297,6 @@ plot_base_quality <- function(fastq_input,
       MeanQuality = mean_quality_R2,
       Lower = quantiles_quality_R2[1, ],
       Upper = quantiles_quality_R2[2, ])
-
-    y_limits <- range(df_R1$Lower, df_R1$Upper, df_R2$Lower, df_R2$Upper, na.rm = TRUE)
-    y_limits <- c(floor(y_limits[1]) - 1, ceiling(y_limits[2]) + 1)
 
     # Plot error bars and labels
     R2.plot <- ggplot2::ggplot(df_R2, ggplot2::aes(x = Position))
@@ -332,7 +346,6 @@ plot_base_quality <- function(fastq_input,
     }
 
     # Add limits to y-axis
-    R1.plot <- R1.plot + ggplot2::ylim(y_limits)
     R2.plot <- R2.plot + ggplot2::ylim(y_limits)
 
     # Add new title to R1 plot
