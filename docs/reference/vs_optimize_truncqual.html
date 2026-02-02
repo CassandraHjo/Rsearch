@@ -51,6 +51,7 @@ optimal value that maximizes the proportion of high-quality merged read pairs.</
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vs_optimize_truncqual</span><span class="op">(</span></span>
 <span>  <span class="va">fastq_input</span>,</span>
 <span>  reverse <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sample_size <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  minovlen <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  truncqual_range <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span>,</span>
 <span>  minlen <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -75,6 +76,12 @@ reads), or a paired-end tibble of class <code>"pe_df"</code>. See <em>Details</e
 <dt id="arg-reverse">reverse<a class="anchor" aria-label="anchor" href="#arg-reverse"></a></dt>
 <dd><p>(Optional). A FASTQ file path or FASTQ tibble (reverse reads).
 Optional if <code>fastq_input</code> is a <code>"pe_df"</code> object.</p></dd>
+
+
+<dt id="arg-sample-size">sample_size<a class="anchor" aria-label="anchor" href="#arg-sample-size"></a></dt>
+<dd><p>(Optional). Number of read-pairs to randomly sample for
+the optimization process. Set to <code>NULL</code> to use all reads.
+Defaults to <code>10000</code>.</p></dd>
 
 
 <dt id="arg-minovlen">minovlen<a class="anchor" aria-label="anchor" href="#arg-minovlen"></a></dt>

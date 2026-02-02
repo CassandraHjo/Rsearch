@@ -8,6 +8,7 @@
 vs_optimize_truncqual(
   fastq_input,
   reverse = NULL,
+  sample_size = 10000,
   minovlen = 10,
   truncqual_range = 1:20,
   minlen = 1,
@@ -25,6 +26,10 @@ reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.}
 
 \item{reverse}{(Optional). A FASTQ file path or FASTQ tibble (reverse reads).
 Optional if \code{fastq_input} is a \code{"pe_df"} object.}
+
+\item{sample_size}{(Optional). Number of read-pairs to randomly sample for
+the optimization process. Set to \code{NULL} to use all reads.
+Defaults to \code{10000}.}
 
 \item{minovlen}{(Optional). Minimum overlap between the merged reads. Must be
 at least 5. Defaults to \code{10}.}

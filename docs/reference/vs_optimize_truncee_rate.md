@@ -12,6 +12,7 @@ merged read pairs.
 vs_optimize_truncee_rate(
   fastq_input,
   reverse = NULL,
+  sample_size = 10000,
   minovlen = 10,
   truncee_rate_range = c(seq(0.002, 0.04, by = 0.002)),
   minlen = 1,
@@ -35,6 +36,12 @@ vs_optimize_truncee_rate(
 
   (Optional). A FASTQ file path or FASTQ tibble (reverse reads).
   Optional if `fastq_input` is a `"pe_df"` object.
+
+- sample_size:
+
+  (Optional). Number of read pairs to randomly sample for the
+  optimization process. Sampling speeds up the process on large
+  datasets. Set to `NULL` to use all reads. Defaults to `10000`.
 
 - minovlen:
 

@@ -10,6 +10,9 @@
 #' reads), or a paired-end tibble of class \code{"pe_df"}. See \emph{Details}.
 #' @param reverse (Optional). A FASTQ file path or FASTQ tibble (reverse reads).
 #' Optional if \code{fastq_input} is a \code{"pe_df"} object.
+#' @param sample_size (Optional). Number of read pairs to randomly sample for
+#' the optimization process. Sampling speeds up the process on large datasets.
+#' Set to \code{NULL} to use all reads. Defaults to \code{10000}.
 #' @param minovlen (Optional). Minimum overlap between the merged reads. Must be
 #' at least 5. Defaults to \code{10}.
 #' @param truncee_rate_range (Optional). A numeric vector of \code{truncee_rate}
@@ -100,6 +103,7 @@
 #'
 vs_optimize_truncee_rate <- function(fastq_input,
                                      reverse = NULL,
+                                     sample_size = 10000,
                                      minovlen = 10,
                                      truncee_rate_range = c(
                                        seq(0.002, 0.04,
@@ -127,6 +131,35 @@ vs_optimize_truncee_rate <- function(fastq_input,
     }
   }
 
+  # Sampling reads for faster optimization (if input is large)
+  if (is.character(fastq_input)) {
+    fastq_input <- microseq::readFastq(fastq_input)
+  }
+  if (is.character(reverse)) {
+    reverse <- microseq::readFastq(reverse)
+  }
+
+  num_total_reads <- nrow(fastq_input)
+  is_sampled <- FALSE
+
+  if (!is.null(sample_size) && num_total_reads > sample_size) {
+    if (verbose) {
+      message(paste0("Input has ", num_total_reads, " reads. Sampling ",
+                     sample_size, " pairs for optimization..."))
+    }
+
+    sample_indices <- sample(seq_len(num_total_reads), sample_size)
+
+    fastq_input <- fastq_input[sample_indices, ]
+    if (!is.null(reverse)) {
+      reverse <- reverse[sample_indices, ]
+    }
+    num_readpairs <- sample_size
+    is_sampled <- TRUE
+  } else {
+    num_readpairs <- num_total_reads
+  }
+
   # Create data frame for storing results
   res.df <- data.frame(
     truncee_rate_value = truncee_rate_range,
@@ -134,13 +167,6 @@ vs_optimize_truncee_rate <- function(fastq_input,
     R1_length = 0,
     R2_length = 0
   )
-
-  # Get the number of read pairs
-  if (!is.character(fastq_input)) {
-    num_readpairs <- nrow(fastq_input)
-  } else {
-    num_readpairs <- nrow(microseq::readFastq(fastq_input))
-  }
 
   # Setting up progress bar
   pb <- NULL
@@ -264,15 +290,9 @@ vs_optimize_truncee_rate <- function(fastq_input,
 
   # Create the main title
   if (plot_title) {
-    title <- paste(max(res.df$merged_read_pairs),
-                   "read-pairs merged with truncee rate:",
-                   optimal_truncee_rate,
-                   "(total:",
-                   num_readpairs,
-                   ", size >",
-                   min_size,
-                   ")"
-    )
+    sample_info <- if(is_sampled) paste0("sampled ", num_readpairs) else paste0("total ", num_readpairs)
+    title <- paste0(max(res.df$merged_read_pairs), " merged pairs at rate ",
+                    optimal_truncee_rate, " (", sample_info, ", size > ", min_size, ")")
   } else {
     title <- ""
   }

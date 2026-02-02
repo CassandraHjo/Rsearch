@@ -11,6 +11,7 @@ value that maximizes the proportion of high-quality merged read pairs.
 vs_optimize_truncqual(
   fastq_input,
   reverse = NULL,
+  sample_size = 10000,
   minovlen = 10,
   truncqual_range = 1:20,
   minlen = 1,
@@ -34,6 +35,12 @@ vs_optimize_truncqual(
 
   (Optional). A FASTQ file path or FASTQ tibble (reverse reads).
   Optional if `fastq_input` is a `"pe_df"` object.
+
+- sample_size:
+
+  (Optional). Number of read-pairs to randomly sample for the
+  optimization process. Set to `NULL` to use all reads. Defaults to
+  `10000`.
 
 - minovlen:
 
