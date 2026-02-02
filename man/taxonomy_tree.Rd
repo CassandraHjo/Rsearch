@@ -30,7 +30,8 @@ An alternative is then to simply use the taxonomy, and create a
 tree from a taxonomy table of the same format as output by
 \code{\link{vs_sintax}}.
 
-The distances between OTUs are computed by \code{\link[Rsearch]{taxonomy_dstance}}.
+The distances between OTUs are computed by
+\code{\link[Rsearch]{taxonomy_distance}}.
 
 From these distances a Neighbor Joining tree is built using
 \code{\link[ape]{nj}}.

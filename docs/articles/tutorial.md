@@ -132,8 +132,6 @@ library(microseq)
 library(readr)
 ```
 
-    Warning: package 'readr' was built under R version 4.5.2
-
 ## Inspect the raw data
 
 First, we read the metadata file:

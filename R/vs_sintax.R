@@ -241,7 +241,8 @@ vs_sintax <- function(fasta_input,
     # Read output into R tibble
     utils::write.table(out.tbl,
                        file = outfile,
-                       sep = "\t")
+                       sep = "\t",
+                       row.names = FALSE)
   }
 
   # Return results
