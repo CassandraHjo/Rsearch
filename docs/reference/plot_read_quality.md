@@ -80,6 +80,10 @@ fastq_input <- system.file("extdata/small_R1.fq", package = "Rsearch")
 p1 <- plot_read_quality(fastq_input = fastq_input)
 print(p1)
 
+
+# (To separate figures in documentation file)
+grid::grid.newpage()
+
 # Generate and display scatter plot with mean quality score on y-axis
 p2 <- plot_read_quality(fastq_input = fastq_input,
                         use_ee_rate = TRUE)
