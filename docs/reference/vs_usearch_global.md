@@ -51,8 +51,9 @@ vs_usearch_global(
 
 - userfields:
 
-  (Optional). Fields to include in the output file. Defaults to
-  `"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"`. See
+  (Optional). Fields to include in the `otutabout` output file. Defaults
+  to
+  `"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"`.See
   *Details*.
 
 - gapopen:

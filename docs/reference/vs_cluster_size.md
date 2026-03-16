@@ -11,6 +11,7 @@ vs_cluster_size(
   fasta_input,
   centroids = NULL,
   otutabout = NULL,
+  uc = NULL,
   clusters = NULL,
   size_column = FALSE,
   id = 0.97,
@@ -47,6 +48,12 @@ vs_cluster_size(
   (Optional). A character string specifying the name of the output file
   in an OTU table format. If `NULL` (default), no output is written to a
   file. If `TRUE`, the output is returned as a tibble. See *Details*.
+
+- uc:
+
+  (Optional). A character string specifying the name of the output file
+  in a uclust-like format. If `NULL` (default), no output is written to
+  a file. If `TRUE`, the output is returned as a tibble. See *Details*.
 
 - clusters:
 
@@ -179,8 +186,8 @@ object. FASTA objects are tibbles that contain the columns `Header` and
 `Sequence`, see
 [`readFasta`](https://rdrr.io/pkg/microseq/man/readFasta.html).
 
-If neither `centroids` nor `otutabout` is specified (default), the
-function returns the centroid sequences as a FASTA object with an
+If neither `centroids`, `otutabout`, nor `uc` is specified (default),
+the function returns the centroid sequences as a FASTA object with an
 additional column `otu_id`. This column contains the identifier
 extracted from each sequence header.
 
@@ -197,6 +204,14 @@ followed by tab-separated abundances for that OTU in each sample. If
 specified file. If `otutabout` is `TRUE`, the function returns the OTU
 table as a tibble, where the first column is named `otu_id` instead of
 "#OTU ID".
+
+`uc` gives the option to output the results in a uclust-like format.
+This is a tab-separated uclust-like format with 10 columns and 3
+different types of entries (S, H or C). Each FASTA sequence i the input
+can either be a cluster centroid (S) or a hit (H) assigned to a cluster.
+Cluster records (C) summarize information (size, centroid label) for
+each cluster. See the '–uc' section in the `VSEARCH` manual for more
+information.
 
 `id` is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is

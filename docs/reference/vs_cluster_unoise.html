@@ -48,6 +48,7 @@ method.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vs_cluster_unoise</span><span class="op">(</span></span>
 <span>  <span class="va">fasta_input</span>,</span>
 <span>  otutabout <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  uc <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  clusters <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minsize <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  unoise_alpha <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -73,6 +74,13 @@ reads to denoise. See <em>Details</em>.</p></dd>
 <dd><p>(Optional). A character string specifying the name of the
 output file in an OTU table format. If <code>NULL</code> (default), the output is
 returned as a tibble in R. See <em>Details</em>.</p></dd>
+
+
+<dt id="arg-uc">uc<a class="anchor" aria-label="anchor" href="#arg-uc"></a></dt>
+<dd><p>(Optional). A character string specifying the name of the output
+file in a uclust-like format. If <code>NULL</code> (default), no output is written
+to a file. If <code>TRUE</code>, the output is returned as a tibble. See
+<em>Details</em>.</p></dd>
 
 
 <dt id="arg-clusters">clusters<a class="anchor" aria-label="anchor" href="#arg-clusters"></a></dt>
@@ -177,6 +185,21 @@ on the format ";sample=xxx" where "xxx" is a unique sample identifier text.
 Again, this is obtained by using <code><a href="vs_fastx_uniques.html">vs_fastx_uniques</a></code> on the reads
 for each sample prior to this step. Use the <code>sample = "xxx"</code> argument,
 where "xxx" is replaced with some unique text for each sample.</p>
+<p><code>otutabout</code> gives the option to output the results in an OTU
+table format with tab-separated columns. When writing to a file, the first
+line starts with the string "#OTU ID", followed by a tab-separated list of
+all sample identifiers (formatted as "sample=X"). Each subsequent line,
+corresponding to an OTU, begins with the OTU identifier and is followed by
+tab-separated abundances for that OTU in each sample. If <code>otutabout</code> is
+a character string, the output is written to the specified file. If
+<code>otutabout</code> is <code>TRUE</code>, the function returns the OTU table as a
+tibble, where the first column is named <code>otu_id</code> instead of "#OTU ID".</p>
+<p><code>uc</code> gives the option to output the results in a uclust-like format.
+This is a tab-separated uclust-like format with 10 columns and 3 different
+types of entries (S, H or C). Each FASTA sequence i the input can either be a
+cluster centroid (S) or a hit (H) assigned to a cluster. Cluster records (C)
+summarize information (size, centroid label) for each cluster. See the '–uc'
+section in the <code>VSEARCH</code> manual for more information.</p>
 <p>If <code>log_file</code> is <code>NULL</code> and <code>centroids</code> is specified,
 clustering statistics from <code>VSEARCH</code> will not be captured.</p>
 <p><code>vsearch_options</code> allows users to pass additional command-line arguments

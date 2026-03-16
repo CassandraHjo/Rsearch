@@ -52,6 +52,7 @@ clustering.</p>
 <span>  <span class="va">fasta_input</span>,</span>
 <span>  centroids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  otutabout <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  uc <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  clusters <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  size_column <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  id <span class="op">=</span> <span class="fl">0.97</span>,</span>
@@ -89,6 +90,13 @@ returned as a FASTA object. See <em>Details</em>.</p></dd>
 <dd><p>(Optional). A character string specifying the name of the
 output file in an OTU table format. If <code>NULL</code> (default), no output is
 written to a file. If <code>TRUE</code>, the output is returned as a tibble. See
+<em>Details</em>.</p></dd>
+
+
+<dt id="arg-uc">uc<a class="anchor" aria-label="anchor" href="#arg-uc"></a></dt>
+<dd><p>(Optional). A character string specifying the name of the output
+file in a uclust-like format. If <code>NULL</code> (default), no output is written
+to a file. If <code>TRUE</code>, the output is returned as a tibble. See
 <em>Details</em>.</p></dd>
 
 
@@ -205,10 +213,10 @@ The centroid of each cluster is the first sequence added to the cluster.</p>
 <p><code>fasta_input</code> can either be a file path to a FASTA file or a FASTA
 object. FASTA objects are tibbles that contain the columns <code>Header</code> and
 <code>Sequence</code>, see <code><a href="https://rdrr.io/pkg/microseq/man/readFasta.html" class="external-link">readFasta</a></code>.</p>
-<p>If neither <code>centroids</code> nor <code>otutabout</code> is specified (default), the
-function returns the centroid sequences as a FASTA object with an additional
-column <code>otu_id</code>. This column contains the identifier extracted from each
-sequence header.</p>
+<p>If neither <code>centroids</code>, <code>otutabout</code>, nor <code>uc</code> is specified
+(default), the function returns the centroid sequences as a FASTA object with
+an additional column <code>otu_id</code>. This column contains the identifier
+extracted from each sequence header.</p>
 <p>If <code>centroids</code> is specified, centroid sequences are written to the
 specified file in FASTA format.</p>
 <p><code>otutabout</code> gives the option to output the results in an OTU
@@ -220,6 +228,12 @@ tab-separated abundances for that OTU in each sample. If <code>otutabout</code> 
 a character string, the output is written to the specified file. If
 <code>otutabout</code> is <code>TRUE</code>, the function returns the OTU table as a
 tibble, where the first column is named <code>otu_id</code> instead of "#OTU ID".</p>
+<p><code>uc</code> gives the option to output the results in a uclust-like format.
+This is a tab-separated uclust-like format with 10 columns and 3 different
+types of entries (S, H or C). Each FASTA sequence i the input can either be a
+cluster centroid (S) or a hit (H) assigned to a cluster. Cluster records (C)
+summarize information (size, centroid label) for each cluster. See the '–uc'
+section in the <code>VSEARCH</code> manual for more information.</p>
 <p><code>id</code> is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is not
 added to a cluster if its pairwise identity with the centroid is below the

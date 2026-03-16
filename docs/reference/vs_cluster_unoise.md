@@ -9,6 +9,7 @@ file or object using `VSEARCH`´s `cluster_unoise` method.
 vs_cluster_unoise(
   fasta_input,
   otutabout = NULL,
+  uc = NULL,
   clusters = NULL,
   minsize = 8,
   unoise_alpha = 2,
@@ -33,6 +34,12 @@ vs_cluster_unoise(
   (Optional). A character string specifying the name of the output file
   in an OTU table format. If `NULL` (default), the output is returned as
   a tibble in R. See *Details*.
+
+- uc:
+
+  (Optional). A character string specifying the name of the output file
+  in a uclust-like format. If `NULL` (default), no output is written to
+  a file. If `TRUE`, the output is returned as a tibble. See *Details*.
 
 - clusters:
 
@@ -156,6 +163,25 @@ identifier text. Again, this is obtained by using
 on the reads for each sample prior to this step. Use the
 `sample = "xxx"` argument, where "xxx" is replaced with some unique text
 for each sample.
+
+`otutabout` gives the option to output the results in an OTU table
+format with tab-separated columns. When writing to a file, the first
+line starts with the string "#OTU ID", followed by a tab-separated list
+of all sample identifiers (formatted as "sample=X"). Each subsequent
+line, corresponding to an OTU, begins with the OTU identifier and is
+followed by tab-separated abundances for that OTU in each sample. If
+`otutabout` is a character string, the output is written to the
+specified file. If `otutabout` is `TRUE`, the function returns the OTU
+table as a tibble, where the first column is named `otu_id` instead of
+"#OTU ID".
+
+`uc` gives the option to output the results in a uclust-like format.
+This is a tab-separated uclust-like format with 10 columns and 3
+different types of entries (S, H or C). Each FASTA sequence i the input
+can either be a cluster centroid (S) or a hit (H) assigned to a cluster.
+Cluster records (C) summarize information (size, centroid label) for
+each cluster. See the '–uc' section in the `VSEARCH` manual for more
+information.
 
 If `log_file` is `NULL` and `centroids` is specified, clustering
 statistics from `VSEARCH` will not be captured.
