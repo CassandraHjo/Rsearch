@@ -18,18 +18,6 @@ test_that("error when input fasta_input does not exist", {
                paste("Cannot find input file:", fasta_input))
 })
 
-test_that("error when both outputs are specified", {
-
-  fasta_input <- test_path("testdata", "R1.fasta")
-  centroids <- withr::local_tempfile()
-  otutabout <- withr::local_tempfile()
-
-  expect_error(vs_cluster_size(fasta_input = fasta_input,
-                               centroids = centroids,
-                               otutabout = otutabout),
-               "Only one of 'centroids' or 'otutabout' can be specified.")
-})
-
 test_that("cluster sequences from fasta file, and return fasta file", {
 
   fasta_input <- test_path("testdata", "R1.fasta")
@@ -45,7 +33,7 @@ test_that("cluster sequences from fasta file, and return fasta file", {
                microseq::readFasta(test_path("testdata", "output", "cluster.fasta")))
 })
 
-test_that("cluster sequences from fasta file, and return fasta file", {
+test_that("cluster sequences from fasta file, and return fasta file with relabeling", {
 
   fasta_input <- test_path("testdata", "R1.fasta")
   centroids <- withr::local_tempfile()

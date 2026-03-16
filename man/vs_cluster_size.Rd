@@ -11,6 +11,7 @@ vs_cluster_size(
   fasta_input,
   centroids = NULL,
   otutabout = NULL,
+  uc = NULL,
   clusters = NULL,
   size_column = FALSE,
   id = 0.97,
@@ -39,6 +40,11 @@ returned as a FASTA object. See \emph{Details}.}
 \item{otutabout}{(Optional). A character string specifying the name of the
 output file in an OTU table format. If \code{NULL} (default), no output is
 written to a file. If \code{TRUE}, the output is returned as a tibble. See
+\emph{Details}.}
+
+\item{uc}{(Optional). A character string specifying the name of the output
+file in a uclust-like format. If \code{NULL} (default), no output is written
+to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
 
 \item{clusters}{(Optional). Output each cluster to a separate FASTA file
@@ -156,6 +162,13 @@ tab-separated abundances for that OTU in each sample. If \code{otutabout} is
 a character string, the output is written to the specified file. If
 \code{otutabout} is \code{TRUE}, the function returns the OTU table as a
 tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
+
+\code{uc} gives the option to output the results in a uclust-like format.
+This is a tab-separated uclust-like format with 10 columns and 3 different
+types of entries (S, H or C). Each FASTA sequence i the input can either be a
+cluster centroid (S) or a hit (H) assigned to a cluster. Cluster records (C)
+summarize information (size, centroid label) for each cluster. See the '--uc'
+section in the \code{VSEARCH} manual for more information.
 
 \code{id} is a value between 0 and 1 that defines the minimum pairwise
 identity required for a sequence to be added to a cluster. A sequence is not

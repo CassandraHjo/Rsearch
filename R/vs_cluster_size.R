@@ -19,6 +19,10 @@
 #' using the prefix string provided and a ticker (0, 1, 2, etc.) to construct
 #' the path and the filenames. Defaults to \code{NULL}, meaning no such files
 #' are created.
+#' @param uc (Optional). A character string specifying the name of the output
+#' file in a uclust-like format. If \code{NULL} (default), no output is written
+#' to a file. If \code{TRUE}, the output is returned as a tibble. See
+#' \emph{Details}.
 #' @param size_column (Optional). If \code{TRUE}, a column with the size of each
 #' centroid is added to the centroid output tibble.
 #' @param id (Optional). Pairwise identity threshold for sequence to be added to
@@ -77,6 +81,13 @@
 #' a character string, the output is written to the specified file. If
 #' \code{otutabout} is \code{TRUE}, the function returns the OTU table as a
 #' tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
+#'
+#' \code{uc} gives the option to output the results in a uclust-like format.
+#' This is a tab-separated uclust-like format with 10 columns and 3 different
+#' types of entries (S, H or C). Each FASTA sequence i the input can either be a
+#' cluster centroid (S) or a hit (H) assigned to a cluster. Cluster records (C)
+#' summarize information (size, centroid label) for each cluster. See the '--uc'
+#' section in the \code{VSEARCH} manual for more information.
 #'
 #' \code{id} is a value between 0 and 1 that defines the minimum pairwise
 #' identity required for a sequence to be added to a cluster. A sequence is not
@@ -153,6 +164,7 @@
 vs_cluster_size <- function(fasta_input,
                             centroids = NULL,
                             otutabout = NULL,
+                            uc = NULL,
                             clusters = NULL,
                             size_column = FALSE,
                             id = 0.97,
@@ -180,9 +192,9 @@ vs_cluster_size <- function(fasta_input,
     stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")
   }
 
-  # Ensure only one output format is specified
-  if (!is.null(centroids) && !is.null(otutabout)) {
-    stop("Only one of 'centroids' or 'otutabout' can be specified.")
+  # Validation: only one output table is allowed
+  if (isTRUE(otutabout) && isTRUE(uc)) {
+    stop("Only one table can be returned at a time ('otutabout' and 'uc' can not both be TRUE")
   }
 
   # Create empty vector for collecting temporary files
@@ -223,23 +235,34 @@ vs_cluster_size <- function(fasta_input,
   fasta_file <- normalizePath(fasta_file)
 
   # Determine output file based on user input
-  if (!is.null(centroids)) {
-    outfile <- ifelse(is.character(centroids), centroids, tempfile(pattern = "centroids",
-                                                                   tmpdir = tmpdir,
-                                                                   fileext = ".fa"))
-  } else if (!is.null(otutabout)) {
-    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable",
-                                                                   tmpdir = tmpdir,
-                                                                   fileext = ".tsv"))
-  } else {
-    outfile <- tempfile(pattern = "centroids",
-                        tmpdir = tmpdir,
-                        fileext = ".fa")
+
+  # CENTROIDS: If centroids is specified, use that as output file. If centroids is NULL, use a temporary file.
+  path_centroids <- NULL
+  if (is.character(centroids) ) {
+    path_centroids <- centroids
+  } else if (is.null(centroids) && !isTRUE(otutabout) && !isTRUE(uc)) {
+    path_centroids <- tempfile(pattern = "centroids",
+                               tmpdir = tmpdir,
+                               fileext = ".fa")
+    temp_files <- c(temp_files, path_centroids)
   }
 
-  # Only add temporary files to temp_files
-  if (is.null(centroids) && (is.null(otutabout) || !is.character(otutabout))) {
-    temp_files <- c(temp_files, outfile)
+  # OTU table: If otutabout is specified, use that as output file. If otutabout is TRUE, use temp file.
+  path_otutab <- NULL
+  if (!is.null(otutabout)) {
+    path_otutab <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutab",
+                                                                   tmpdir = tmpdir,
+                                                                   fileext = ".tsv"))
+    if (isTRUE(otutabout)) temp_files <- c(temp_files, path_otutab)
+  }
+
+  # UC: If uc is specified, use that as output file. If uc is TRUE, use temp file.
+  path_uc <- NULL
+  if (!is.null(uc)) {
+    path_uc <- ifelse(is.character(uc), uc, tempfile(pattern = "uc",
+                                                     tmpdir = tmpdir,
+                                                     fileext = ".txt"))
+    if (isTRUE(uc)) temp_files <- c(temp_files, path_uc)
   }
 
   # Build argument string for command line
@@ -249,49 +272,18 @@ vs_cluster_size <- function(fasta_input,
             "--strand", strand,
             "--fasta_width", fasta_width)
 
-  if (!is.null(centroids)) {
-    args <- c(args, "--centroids", outfile)
-  } else if (!is.null(otutabout)) {
-    args <- c(args, "--otutabout", outfile)
-  } else {
-    args <- c(args, "--centroids", outfile) # Default output
-  }
+  if (!is.null(path_centroids))  args <- c(args, "--centroids", path_centroids)
+  if (!is.null(path_otutab))     args <- c(args, "--otutabout", path_otutab)
+  if (!is.null(path_uc))         args <- c(args, "--uc", path_uc)
 
-  if (!is.null(clusters)) {
-    args <- c(args, "--clusters", clusters)
-  }
-
-  if (sizein) {
-    args <- c(args, "--sizein", "")
-  }
-
-  if (sizeout) {
-    args <- c(args, "--sizeout", "")
-  }
-
-  # Add relabeling arguments if specified
-  if (!is.null(relabel)){
-    args <- c(args, "--relabel", relabel)
-  }
-
-  if (relabel_sha1){
-    args <- c(args, "--relabel_sha1", "")
-  }
-
-  # Add additional arguments if specified
-  if (!is.null(vsearch_options)) {
-    args <- c(args, vsearch_options)
-  }
-
-  # Add sample identifier if specified
-  if (!is.null(sample)) {
-    args <- c(args, "--sample", sample)
-  }
-
-  # Add log file if specified
-  if (!is.null(log_file)){
-    args <- c(args, "--log", log_file)
-  }
+  if (!is.null(clusters))        args <- c(args, "--clusters", clusters)
+  if (sizein)                    args <- c(args, "--sizein", "")
+  if (sizeout)                   args <- c(args, "--sizeout", "")
+  if (!is.null(relabel))         args <- c(args, "--relabel", relabel)
+  if (relabel_sha1)              args <- c(args, "--relabel_sha1", "")
+  if (!is.null(vsearch_options)) args <- c(args, vsearch_options)
+  if (!is.null(sample))          args <- c(args, "--sample", sample)
+  if (!is.null(log_file))        args <- c(args, "--log", log_file)
 
   # Run VSEARCH
   vsearch_output <- system2(command = vsearch_executable,
@@ -303,52 +295,57 @@ vs_cluster_size <- function(fasta_input,
   check_vsearch_status(vsearch_output, args)
 
   # Determine return output
-  if (!is.null(centroids)) {
-    return(invisible(NULL)) # No return if centroids is specified
-  } else if (!is.null(otutabout)) {
-    if (is.character(otutabout)) {
-      return(invisible(NULL)) # File output only
-    } else {
-      df <- suppressMessages(readr::read_delim(outfile))
-      colnames(df)[1] <- "otu_id"
-      return(df) # Return as tibble
-    }
-  } else {
-    if (file.exists(outfile) && file.info(outfile)$size > 0) {
-      centroids_fasta <- microseq::readFasta(outfile) |>
-        dplyr::mutate(otu_id = stringr::str_extract(Header, "^[^;]+"))
-    } else {
-      centroids_fasta <- tibble::tibble(Header = character(), Sequence = character())
-      warning("No centroid sequences were returned by VSEARCH. Check input quality or parameters.")
-    }
-
-    if (size_column && nrow(centroids_fasta) > 0) {
-      centroids_fasta <- centroids_fasta |>
-        dplyr::mutate(centroid_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
-        dplyr::mutate(centroid_size = as.numeric(centroid_size))
-    }
-
-    if (nrow(centroids_fasta) > 0) {
-      statistics <- calculate_cluster_statistics(centroids_fasta,
-                                                 fasta_file,
-                                                 fasta_input_name)
-    } else {
-      statistics <- tibble::tibble(num_nucleotides = 0,
-                                   min_length_input_seq = 0,
-                                   max_length_input_seq = 0,
-                                   avg_length_input_seq = 0,
-                                   num_clusters = 0,
-                                   min_size_cluster = 0,
-                                   max_size_cluster = 0,
-                                   avg_size_cluster = 0,
-                                   num_singletons = 0,
-                                   input = fasta_input_name)
-    }
-    attr(centroids_fasta, "statistics") <- statistics
-    return(centroids_fasta)
+  if (isTRUE(otutabout)) {
+    df <- suppressMessages(readr::read_delim(path_otutab, delim = "\t"))
+    colnames(df)[1] <- "otu_id"
+    return(df)
   }
-}
 
+  if (isTRUE(uc)) {
+    df <- suppressMessages(readr::read_delim(path_uc, delim = "\t", col_names = FALSE))
+    return(df)
+  }
+
+  if (!is.null(centroids) || is.character(otutabout) || is.character(uc)) {
+    return(invisible(NULL))
+  }
+
+  if (file.exists(path_centroids) && file.info(path_centroids)$size > 0) {
+    centroids_fasta <- microseq::readFasta(path_centroids) |>
+      dplyr::mutate(otu_id = stringr::str_extract(Header, "^[^;]+"))
+  } else {
+    centroids_fasta <- tibble::tibble(Header = character(), Sequence = character())
+    warning("No centroid sequences were returned by VSEARCH. Check input quality or parameters.")
+  }
+
+  # Håndtering av size_column
+  if (size_column && nrow(centroids_fasta) > 0) {
+    centroids_fasta <- centroids_fasta |>
+      dplyr::mutate(centroid_size = stringr::str_extract(Header, "(?<=;size=)\\d+")) |>
+      dplyr::mutate(centroid_size = as.numeric(centroid_size))
+  }
+
+  # Beregning av statistikk (med 0-tabell fallback)
+  if (nrow(centroids_fasta) > 0) {
+    statistics <- calculate_cluster_statistics(centroids_fasta,
+                                               fasta_file,
+                                               fasta_input_name)
+  } else {
+    statistics <- tibble::tibble(num_nucleotides = 0,
+                                 min_length_input_seq = 0,
+                                 max_length_input_seq = 0,
+                                 avg_length_input_seq = 0,
+                                 num_clusters = 0,
+                                 min_size_cluster = 0,
+                                 max_size_cluster = 0,
+                                 avg_size_cluster = 0,
+                                 num_singletons = 0,
+                                 input = fasta_input_name)
+  }
+
+  attr(centroids_fasta, "statistics") <- statistics
+  return(centroids_fasta)
+}
 
 #' Calculate clustering statistics
 #'
