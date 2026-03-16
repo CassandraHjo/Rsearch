@@ -64,10 +64,10 @@
 #' object. FASTA objects are tibbles that contain the columns \code{Header} and
 #' \code{Sequence}, see \code{\link[microseq]{readFasta}}.
 #'
-#' If neither \code{centroids} nor \code{otutabout} is specified (default), the
-#' function returns the centroid sequences as a FASTA object with an additional
-#' column \code{otu_id}. This column contains the identifier extracted from each
-#' sequence header.
+#' If neither \code{centroids}, \code{otutabout}, nor \code{uc} is specified
+#' (default), the function returns the centroid sequences as a FASTA object with
+#' an additional column \code{otu_id}. This column contains the identifier
+#' extracted from each sequence header.
 #'
 #' If \code{centroids} is specified, centroid sequences are written to the
 #' specified file in FASTA format.
@@ -251,8 +251,8 @@ vs_cluster_size <- function(fasta_input,
   path_otutab <- NULL
   if (!is.null(otutabout)) {
     path_otutab <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutab",
-                                                                   tmpdir = tmpdir,
-                                                                   fileext = ".tsv"))
+                                                                       tmpdir = tmpdir,
+                                                                       fileext = ".tsv"))
     if (isTRUE(otutabout)) temp_files <- c(temp_files, path_otutab)
   }
 
