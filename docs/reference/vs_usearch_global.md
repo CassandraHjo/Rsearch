@@ -12,6 +12,7 @@ vs_usearch_global(
   userout = NULL,
   otutabout = NULL,
   userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
+  uc = NULL,
   gapopen = "20I/2E",
   gapext = "2I/1E",
   id = 0.7,
@@ -55,6 +56,12 @@ vs_usearch_global(
   to
   `"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"`.See
   *Details*.
+
+- uc:
+
+  (Optional). A character string specifying the name of the output file
+  in a uclust-like format. If `NULL` (default), no output is written to
+  a file. If `TRUE`, the output is returned as a tibble. See *Details*.
 
 - gapopen:
 
@@ -150,6 +157,13 @@ followed by tab-separated abundances for that OTU in each sample. If
 specified file. If `otutabout` is `TRUE`, the function returns the OTU
 table as a tibble, where the first column is named `otu_id` instead of
 "#OTU ID".
+
+`uc` gives the option to output the results in a uclust-like format. The
+table present two different type of entries: hit (H) or no hit (N). Each
+query sequence is compared to all other sequences, and the best hit or
+several hits are reported (H). Output order may vary when using multiple
+threads. Column content varies with the type of entry (H or N). See the
+'–uc' section in the `VSEARCH` manual for more information.
 
 Pairwise identity (`id`) is calculated as the number of matching columns
 divided by the alignment length minus terminal gaps.

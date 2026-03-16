@@ -48,6 +48,7 @@ sequences against target sequences using <code>VSEARCH</code>.</p>
 <span>  userout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  otutabout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  userfields <span class="op">=</span> <span class="st">"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"</span>,</span>
+<span>  uc <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gapopen <span class="op">=</span> <span class="st">"20I/2E"</span>,</span>
 <span>  gapext <span class="op">=</span> <span class="st">"2I/1E"</span>,</span>
 <span>  id <span class="op">=</span> <span class="fl">0.7</span>,</span>
@@ -92,6 +93,13 @@ written to a file. If <code>TRUE</code>, the output is returned as a tibble. See
 <dd><p>(Optional). Fields to include in the <code>otutabout</code>
 output file. Defaults to
 <code>"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"</code>.See
+<em>Details</em>.</p></dd>
+
+
+<dt id="arg-uc">uc<a class="anchor" aria-label="anchor" href="#arg-uc"></a></dt>
+<dd><p>(Optional). A character string specifying the name of the output
+file in a uclust-like format. If <code>NULL</code> (default), no output is written
+to a file. If <code>TRUE</code>, the output is returned as a tibble. See
 <em>Details</em>.</p></dd>
 
 
@@ -182,6 +190,12 @@ tab-separated abundances for that OTU in each sample. If <code>otutabout</code> 
 a character string, the output is written to the specified file. If
 <code>otutabout</code> is <code>TRUE</code>, the function returns the OTU table as a
 tibble, where the first column is named <code>otu_id</code> instead of "#OTU ID".</p>
+<p><code>uc</code> gives the option to output the results in a uclust-like format. The
+table present two different type of entries: hit (H) or no hit (N). Each
+query sequence is compared to all other sequences, and the best hit
+or several hits are reported (H). Output order may vary when using multiple
+threads. Column content varies with the type of entry (H or N). See the
+'–uc' section in the <code>VSEARCH</code> manual for more information.</p>
 <p>Pairwise identity (<code>id</code>) is calculated as the number of matching columns
 divided by the alignment length minus terminal gaps.</p>
 <p><code>vsearch_options</code> allows users to pass additional command-line arguments
