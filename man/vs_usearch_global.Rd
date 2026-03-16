@@ -40,9 +40,10 @@ output file in an OTU table format. If \code{NULL} (default), no output is
 written to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
 
-\item{userfields}{(Optional). Fields to include in the output file. Defaults
-to \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.
-See \emph{Details}.}
+\item{userfields}{(Optional). Fields to include in the \code{otutabout}
+output file. Defaults to
+\code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.See
+\emph{Details}.}
 
 \item{gapopen}{(Optional). Penalties for gap opening. Defaults to
 \code{"20I/2E"}. See \emph{Details}.}
