@@ -13,6 +13,10 @@
 #' using the prefix string provided and a ticker (0, 1, 2, etc.) to construct
 #' the path and the filenames. Defaults to \code{NULL}, meaning no such files
 #' are created.
+#' @param uc (Optional). A character string specifying the name of the output
+#' file in a uclust-like format. If \code{NULL} (default), no output is written
+#' to a file. If \code{TRUE}, the output is returned as a tibble. See
+#' \emph{Details}.
 #' @param minsize (Optional). Minimum abundance of cluster centroids.
 #' Defaults to \code{8}.
 #' @param unoise_alpha (Optional). Alpha value for the UNOISE algorithm.
@@ -64,6 +68,23 @@
 #' Again, this is obtained by using \code{\link{vs_fastx_uniques}} on the reads
 #' for each sample prior to this step. Use the \code{sample = "xxx"} argument,
 #' where "xxx" is replaced with some unique text for each sample.
+#'
+#' \code{otutabout} gives the option to output the results in an OTU
+#' table format with tab-separated columns. When writing to a file, the first
+#' line starts with the string "#OTU ID", followed by a tab-separated list of
+#' all sample identifiers (formatted as "sample=X"). Each subsequent line,
+#' corresponding to an OTU, begins with the OTU identifier and is followed by
+#' tab-separated abundances for that OTU in each sample. If \code{otutabout} is
+#' a character string, the output is written to the specified file. If
+#' \code{otutabout} is \code{TRUE}, the function returns the OTU table as a
+#' tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
+#'
+#' \code{uc} gives the option to output the results in a uclust-like format.
+#' This is a tab-separated uclust-like format with 10 columns and 3 different
+#' types of entries (S, H or C). Each FASTA sequence i the input can either be a
+#' cluster centroid (S) or a hit (H) assigned to a cluster. Cluster records (C)
+#' summarize information (size, centroid label) for each cluster. See the '--uc'
+#' section in the \code{VSEARCH} manual for more information.
 #'
 #' If \code{log_file} is \code{NULL} and \code{centroids} is specified,
 #' clustering statistics from \code{VSEARCH} will not be captured.
@@ -124,6 +145,7 @@
 #'
 vs_cluster_unoise <- function(fasta_input,
                               otutabout = NULL,
+                              uc = NULL,
                               clusters = NULL,
                               minsize = 8,
                               unoise_alpha = 2,
@@ -140,6 +162,11 @@ vs_cluster_unoise <- function(fasta_input,
 
   # Set temporary directory if not provided
   if (is.null(tmpdir)) tmpdir <- tempdir()
+
+  # Only one table output allowed
+  if (isTRUE(otutabout) && isTRUE(uc)) {
+    stop("Only one of 'otutabout' and 'uc' can be TRUE. Please specify only one of these options.")
+  }
 
   # Create empty vector for collecting temporary files
   temp_files <- character()
@@ -187,6 +214,12 @@ vs_cluster_unoise <- function(fasta_input,
                          fileext = ".tsv")
   temp_files <- c(temp_files, centrfile, otutabfile)
 
+  path_uc <- NULL
+  if (!is.null(uc)) {
+    path_uc <- if(is.character(uc)) uc else tempfile(pattern = "uc", tmpdir = tmpdir, fileext = ".uc")
+    if (isTRUE(uc)) temp_files <- c(temp_files, path_uc)
+  }
+
   # Build argument string for command line
   args <- c("--cluster_unoise", shQuote(fasta_file),
             "--threads", threads,
@@ -195,29 +228,12 @@ vs_cluster_unoise <- function(fasta_input,
             "--centroids", centrfile,
             "--otutabout", otutabfile)
 
-  # Add relabeling arguments if specified
-  if (!is.null(relabel)){
-    args <- c(args, "--relabel", relabel)
-  }
-
-  if (relabel_sha1){
-    args <- c(args, "--relabel_sha1", "")
-  }
-
-  # Add additional arguments if specified
-  if (!is.null(vsearch_options)) {
-    args <- c(args, vsearch_options)
-  }
-
-  # Add log file if specified
-  if (!is.null(log_file)){
-    args <- c(args, "--log", log_file)
-  }
-
-  # Add clusters output if specified
-  if (!is.null(clusters)) {
-    args <- c(args, "--clusters", clusters)
-  }
+  if (!is.null(relabel))         args <- c(args, "--relabel", relabel)
+  if (relabel_sha1)              args <- c(args, "--relabel_sha1", "")
+  if (!is.null(vsearch_options)) args <- c(args, vsearch_options)
+  if (!is.null(log_file))        args <- c(args, "--log", log_file)
+  if (!is.null(clusters))        args <- c(args, "--clusters", clusters)
+  if (!is.null(path_uc))         args <- c(args, "--uc", path_uc)
 
   # Run VSEARCH
   vsearch_output <- system2(command = vsearch_executable,
@@ -240,13 +256,16 @@ vs_cluster_unoise <- function(fasta_input,
       dplyr::mutate(tag = stringr::word(Header, 1, sep = ";")) |>
       dplyr::distinct(tag, .keep_all = T) |>
       dplyr::select(tag, Sequence)
+
     otu.tbl <- suppressMessages(readr::read_tsv(otutabfile)) |>
       dplyr::rename(tag = `#OTU ID`)
+
     sizes <- otu.tbl |>
       dplyr::select(-tag) |>
       dplyr::select(tidyselect::where(is.numeric)) |>
       as.matrix() |>
       rowSums()
+
     otu.tbl <- otu.tbl |>
       dplyr::left_join(centr.tbl, by = "tag") |>
       dplyr::mutate(size = sizes) |>
@@ -264,13 +283,20 @@ vs_cluster_unoise <- function(fasta_input,
     otu.tbl <- NULL
   }
 
-  # The return
-  if(is.character(otutabout)){
-    readr::write_delim(otu.tbl, delim = "\t", file = otutabout)
-    return(invisible(NULL))
-  } else {
-    return(otu.tbl)
+  if (isTRUE(uc)) {
+    res <- suppressMessages(readr::read_delim(path_uc, delim = "\t", col_names = FALSE))
+    attr(res, "statistics") <- statistics
+    return(res)
   }
+
+  if (is.character(otutabout) || is.character(uc)) {
+    if (is.character(otutabout) && !is.null(otu.tbl)) {
+      readr::write_delim(otu.tbl, delim = "\t", file = otutabout)
+    }
+    return(invisible(NULL))
+  }
+
+  return(otu.tbl)
 }
 
 #' Calculate UNOISE statistics

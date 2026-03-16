@@ -10,6 +10,7 @@
 vs_cluster_unoise(
   fasta_input,
   otutabout = NULL,
+  uc = NULL,
   clusters = NULL,
   minsize = 8,
   unoise_alpha = 2,
@@ -28,6 +29,11 @@ reads to denoise. See \emph{Details}.}
 \item{otutabout}{(Optional). A character string specifying the name of the
 output file in an OTU table format. If \code{NULL} (default), the output is
 returned as a tibble in R. See \emph{Details}.}
+
+\item{uc}{(Optional). A character string specifying the name of the output
+file in a uclust-like format. If \code{NULL} (default), no output is written
+to a file. If \code{TRUE}, the output is returned as a tibble. See
+\emph{Details}.}
 
 \item{clusters}{(Optional). Output each cluster to a separate FASTA file
 using the prefix string provided and a ticker (0, 1, 2, etc.) to construct
@@ -125,6 +131,23 @@ on the format ";sample=xxx" where "xxx" is a unique sample identifier text.
 Again, this is obtained by using \code{\link{vs_fastx_uniques}} on the reads
 for each sample prior to this step. Use the \code{sample = "xxx"} argument,
 where "xxx" is replaced with some unique text for each sample.
+
+\code{otutabout} gives the option to output the results in an OTU
+table format with tab-separated columns. When writing to a file, the first
+line starts with the string "#OTU ID", followed by a tab-separated list of
+all sample identifiers (formatted as "sample=X"). Each subsequent line,
+corresponding to an OTU, begins with the OTU identifier and is followed by
+tab-separated abundances for that OTU in each sample. If \code{otutabout} is
+a character string, the output is written to the specified file. If
+\code{otutabout} is \code{TRUE}, the function returns the OTU table as a
+tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
+
+\code{uc} gives the option to output the results in a uclust-like format.
+This is a tab-separated uclust-like format with 10 columns and 3 different
+types of entries (S, H or C). Each FASTA sequence i the input can either be a
+cluster centroid (S) or a hit (H) assigned to a cluster. Cluster records (C)
+summarize information (size, centroid label) for each cluster. See the '--uc'
+section in the \code{VSEARCH} manual for more information.
 
 If \code{log_file} is \code{NULL} and \code{centroids} is specified,
 clustering statistics from \code{VSEARCH} will not be captured.
