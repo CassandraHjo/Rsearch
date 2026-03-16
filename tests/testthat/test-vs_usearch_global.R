@@ -12,20 +12,6 @@ test_that("error when wrong strand", {
                "Invalid value for 'strand'. Choose from 'plus' or 'both'.")
 })
 
-test_that("error when both outputs are specified", {
-
-  fastx_input <- readRDS(test_path("testdata", "R1_fastq_df.rds"))
-  db <- readRDS(test_path("testdata", "output", "merged_fq_files_fq_tibble.rds"))
-  userout <- withr::local_tempfile()
-  otutabout <- withr::local_tempfile()
-
-  expect_error(vs_usearch_global(fastx_input = fastx_input,
-                                 database = db,
-                                 userout = userout,
-                                 otutabout = otutabout),
-               "Only one of 'userout' or 'otutabout' can be specified.")
-})
-
 test_that("error when wrong columns in fastx_input fastq", {
 
   fastx_input <- readRDS(test_path("testdata", "R1_fastq_df.rds")) |>

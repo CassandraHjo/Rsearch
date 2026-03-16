@@ -12,6 +12,7 @@ vs_usearch_global(
   userout = NULL,
   otutabout = NULL,
   userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
+  uc = NULL,
   gapopen = "20I/2E",
   gapext = "2I/1E",
   id = 0.7,
@@ -43,6 +44,11 @@ written to a file. If \code{TRUE}, the output is returned as a tibble. See
 \item{userfields}{(Optional). Fields to include in the \code{otutabout}
 output file. Defaults to
 \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.See
+\emph{Details}.}
+
+\item{uc}{(Optional). A character string specifying the name of the output
+file in a uclust-like format. If \code{NULL} (default), no output is written
+to a file. If \code{TRUE}, the output is returned as a tibble. See
 \emph{Details}.}
 
 \item{gapopen}{(Optional). Penalties for gap opening. Defaults to
@@ -121,6 +127,13 @@ tab-separated abundances for that OTU in each sample. If \code{otutabout} is
 a character string, the output is written to the specified file. If
 \code{otutabout} is \code{TRUE}, the function returns the OTU table as a
 tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
+
+\code{uc} gives the option to output the results in a uclust-like format. The
+table present two different type of entries: hit (H) or no hit (N). Each
+query sequence is compared to all other sequences, and the best hit
+or several hits are reported (H). Output order may vary when using multiple
+threads. Column content varies with the type of entry (H or N). See the
+'--uc' section in the \code{VSEARCH} manual for more information.
 
 Pairwise identity (\code{id}) is calculated as the number of matching columns
 divided by the alignment length minus terminal gaps.

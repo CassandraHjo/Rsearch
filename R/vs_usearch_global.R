@@ -20,6 +20,10 @@
 #' output file. Defaults to
 #' \code{"query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits"}.See
 #' \emph{Details}.
+#' @param uc (Optional). A character string specifying the name of the output
+#' file in a uclust-like format. If \code{NULL} (default), no output is written
+#' to a file. If \code{TRUE}, the output is returned as a tibble. See
+#' \emph{Details}.
 #' @param gapopen (Optional). Penalties for gap opening. Defaults to
 #' \code{"20I/2E"}. See \emph{Details}.
 #' @param gapext (Optional). Penalties for gap extension. Defaults to
@@ -72,6 +76,13 @@
 #' a character string, the output is written to the specified file. If
 #' \code{otutabout} is \code{TRUE}, the function returns the OTU table as a
 #' tibble, where the first column is named \code{otu_id} instead of "#OTU ID".
+#'
+#' \code{uc} gives the option to output the results in a uclust-like format. The
+#' table present two different type of entries: hit (H) or no hit (N). Each
+#' query sequence is compared to all other sequences, and the best hit
+#' or several hits are reported (H). Output order may vary when using multiple
+#' threads. Column content varies with the type of entry (H or N). See the
+#' '--uc' section in the \code{VSEARCH} manual for more information.
 #'
 #' Pairwise identity (\code{id}) is calculated as the number of matching columns
 #' divided by the alignment length minus terminal gaps.
@@ -128,6 +139,7 @@ vs_usearch_global <- function(fastx_input,
                               userout = NULL,
                               otutabout = NULL,
                               userfields = "query+target+id+alnlen+mism+opens+qlo+qhi+tlo+thi+evalue+bits",
+                              uc = NULL,
                               gapopen = "20I/2E",
                               gapext = "2I/1E",
                               id = 0.7,
@@ -150,9 +162,9 @@ vs_usearch_global <- function(fastx_input,
     stop("Invalid value for 'strand'. Choose from 'plus' or 'both'.")
   }
 
-  # Ensure only one output format is specified
-  if (!is.null(userout) && !is.null(otutabout)) {
-    stop("Only one of 'userout' or 'otutabout' can be specified.")
+  # Ensure only one output table is specified
+  if (isTRUE(otutabout) && isTRUE(uc)) {
+    stop("Only one table can be returned at a time (otutabout or uc).")
   }
 
   # Create empty vector for collecting temporary files
@@ -251,20 +263,28 @@ vs_usearch_global <- function(fastx_input,
   }
 
   # Determine output file based on user input
-  if (!is.null(userout)) {
-    outfile <- userout
-  } else if (!is.null(otutabout)) {
-    outfile <- ifelse(is.character(otutabout), otutabout, tempfile(pattern = "otutable",
-                                                                   tmpdir = tmpdir,
-                                                                   fileext = ".tsv"))
-  } else {
-    outfile <- tempfile(pattern = "userout",
-                        tmpdir = tmpdir,
-                        fileext = ".txt")
+
+  # userout path
+  path_userout <- NULL
+  if (is.character(userout)) {
+    path_userout <- userout
+  } else if (is.null(userout) && !isTRUE(otutabout) && !isTRUE(uc)) {
+    path_userout <- tempfile(pattern = "userout", tmpdir = tmpdir, fileext = ".txt")
+    temp_files <- c(temp_files, path_userout)
   }
 
-  if (is.null(userout) && (is.null(otutabout) || !is.character(otutabout))) {
-    temp_files <- c(temp_files, outfile)
+  # otutabout path
+  path_otutab <- NULL
+  if (!is.null(otutabout)) {
+    path_otutab <- if(is.character(otutabout)) otutabout else tempfile(pattern = "otutab", tmpdir = tmpdir, fileext = ".tsv")
+    if (isTRUE(otutabout)) temp_files <- c(temp_files, path_otutab)
+  }
+
+  # uc path
+  path_uc <- NULL
+  if (!is.null(uc)) {
+    path_uc <- if(is.character(uc)) uc else tempfile(pattern = "uc", tmpdir = tmpdir, fileext = ".uc")
+    if (isTRUE(uc)) temp_files <- c(temp_files, path_uc)
   }
 
   # Normalize file paths
@@ -282,18 +302,11 @@ vs_usearch_global <- function(fastx_input,
             "--maxaccepts", maxaccepts,
             "--maxrejects", maxrejects)
 
-  if (!is.null(userout)) {
-    args <- c(args, "--userout", outfile, "--userfields", userfields)
-  } else if (!is.null(otutabout)) {
-    args <- c(args, "--otutabout", outfile)
-  } else {
-    args <- c(args, "--userout", outfile, "--userfields", userfields) # Default output
-  }
+  if (!is.null(path_userout))    args <- c(args, "--userout", path_userout, "--userfields", userfields)
+  if (!is.null(path_otutab))     args <- c(args, "--otutabout", path_otutab)
+  if (!is.null(path_uc))         args <- c(args, "--uc", path_uc)
 
-  # Add additional arguments if specified
-  if (!is.null(vsearch_options)) {
-    args <- c(args, vsearch_options)
-  }
+  if (!is.null(vsearch_options)) args <- c(args, vsearch_options)
 
   # Run VSEARCH
   vsearch_output <- system2(command = vsearch_executable,
@@ -305,20 +318,23 @@ vs_usearch_global <- function(fastx_input,
   check_vsearch_status(vsearch_output, args)
 
   # Determine return output
-  if (!is.null(userout)) {
-    return(invisible(NULL)) # No return if userout is specified
-  } else if (!is.null(otutabout)) {
-    if (is.character(otutabout)) {
-      return(invisible(NULL)) # File output only
-    } else {
-      df <- suppressMessages(readr::read_delim(outfile))
-      colnames(df)[1] <- "otu_id"
-      return(df) # Return as tibble
-    }
-  } else {
-    userout_df <- suppressMessages(readr::read_delim(outfile, delim = "\t", col_names = FALSE))
+
+  if (isTRUE(otutabout)) {
+    df <- suppressMessages(readr::read_delim(path_otutab, delim = "\t"))
+    colnames(df)[1] <- "otu_id"
+    return(df)
+  }
+
+  if (isTRUE(uc)) {
+    return(suppressMessages(readr::read_delim(path_uc, delim = "\t", col_names = FALSE)))
+  }
+
+  if (is.null(userout) && !is.character(otutabout) && !is.character(uc)) {
+    userout_df <- suppressMessages(readr::read_delim(path_userout, delim = "\t", col_names = FALSE))
     columns <- unlist(strsplit(userfields, "\\+"))
-    colnames(userout_df) <- columns
+    if (nrow(userout_df) > 0) colnames(userout_df) <- columns else userout_df <- tibble::as_tibble(matrix(nrow = 0, ncol = length(columns), dimnames = list(NULL, columns)))
     return(userout_df)
   }
+
+  return(invisible(NULL))
 }
