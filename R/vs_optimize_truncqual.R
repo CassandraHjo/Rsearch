@@ -58,8 +58,8 @@
 #'   \item \code{truncqual_value}: Tested \code{truncqual} value.
 #'   \item \code{merged_read_pairs}: Count of merged read-pairs with a copy
 #'   number above \code{min_size} after dereplication.
-#'   \item \code{R1_length}: Average length of R1-reads after trimming.
-#'   \item \code{R2_length}: Average length of R2-reads after trimming.
+#'   \item \code{R1_length}: Mean length of R1-reads after trimming.
+#'   \item \code{R2_length}: Mean length of R2-reads after trimming.
 #' }
 #'
 #' The returned data frame has an attribute named \code{"plot"} containing a
@@ -254,7 +254,7 @@ vs_optimize_truncqual <- function(fastq_input,
                   color = "") +
     ggplot2::scale_color_manual(values = c("merged_read_pairs" = pal[2]),
                                 labels = c(
-                                  merged_read_pairs = "Number of merged read-pairs ")) +
+                                  merged_read_pairs = paste0("Number of", "\n", "merged read-pairs"))) +
     ggplot2::theme_minimal() +
     # Remove x-axis because this is common with p2
     ggplot2::theme(text = ggplot2::element_text(face = "bold"),
@@ -274,8 +274,8 @@ vs_optimize_truncqual <- function(fastq_input,
                   color = "") +
     ggplot2::scale_color_manual(values = c("R1_length" = pal[3],
                                            "R2_length" = pal[4]),
-                                labels = c(R1_length = "Average R1 Length",
-                                           R2_length = "Average R2 Length"
+                                labels = c(R1_length = "Mean R1 Length",
+                                           R2_length = "Mean R2 Length"
                                 )) +
     ggplot2::theme_minimal()+
     ggplot2::theme(text = ggplot2::element_text(face = "bold"))

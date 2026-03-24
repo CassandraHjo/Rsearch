@@ -68,8 +68,8 @@ A data frame with the following columns:
   \item \code{truncqual_value}: Tested \code{truncqual} value.
   \item \code{merged_read_pairs}: Count of merged read-pairs with a copy
   number above \code{min_size} after dereplication.
-  \item \code{R1_length}: Average length of R1-reads after trimming.
-  \item \code{R2_length}: Average length of R2-reads after trimming.
+  \item \code{R1_length}: Mean length of R1-reads after trimming.
+  \item \code{R2_length}: Mean length of R2-reads after trimming.
 }
 
 The returned data frame has an attribute named \code{"plot"} containing a
