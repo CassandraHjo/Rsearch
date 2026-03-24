@@ -392,7 +392,8 @@ through a progress bar in the console.</p>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">optimize_truncqual.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_optimize_truncqual.html">vs_optimize_truncqual</a></span><span class="op">(</span>fastq_input <span class="op">=</span> <span class="va">R1.tbl</span>, </span>
-<span>                                                  reverse <span class="op">=</span> <span class="va">R2.tbl</span></span>
+<span>                                                  reverse <span class="op">=</span> <span class="va">R2.tbl</span>,</span>
+<span>                                                  sample_size <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">optimize_truncqual.tbl</span>, <span class="st">"plot"</span><span class="op">)</span><span class="op">)</span></span>
@@ -434,7 +435,8 @@ through a progress bar in the console.</p>
 <span>  <span class="va">R2.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/microseq/man/readFastq.html" class="external-link">readFastq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">fastq_path</span>, <span class="va">sample.tbl</span><span class="op">$</span><span class="va">R2_file</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">optimize_truncee_rate.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_optimize_truncee_rate.html">vs_optimize_truncee_rate</a></span><span class="op">(</span>fastq_input <span class="op">=</span> <span class="va">R1.tbl</span>, </span>
-<span>                                                        reverse <span class="op">=</span> <span class="va">R2.tbl</span></span>
+<span>                                                        reverse <span class="op">=</span> <span class="va">R2.tbl</span>,</span>
+<span>                                                        sample_size <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">optimize_truncee_rate.tbl</span>, <span class="st">"plot"</span><span class="op">)</span><span class="op">)</span></span>

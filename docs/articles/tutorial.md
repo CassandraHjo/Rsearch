@@ -333,7 +333,8 @@ for(i in 1:nrow(sample.tbl)){
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
   
   optimize_truncqual.tbl <- vs_optimize_truncqual(fastq_input = R1.tbl, 
-                                                  reverse = R2.tbl
+                                                  reverse = R2.tbl,
+                                                  sample_size = NULL
   )
   
   print(attr(optimize_truncqual.tbl, "plot"))
@@ -379,7 +380,8 @@ for(i in 1:nrow(sample.tbl)){
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
   
   optimize_truncee_rate.tbl <- vs_optimize_truncee_rate(fastq_input = R1.tbl, 
-                                                        reverse = R2.tbl
+                                                        reverse = R2.tbl,
+                                                        sample_size = NULL
   )
   
   print(attr(optimize_truncee_rate.tbl, "plot"))

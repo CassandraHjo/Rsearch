@@ -143,8 +143,8 @@ be written when tables are used as input or output. Defaults to
     <p>A data frame with the following columns:</p><ul><li><p><code>truncee_rate_value</code>: Tested <code>truncee_rate</code> value.</p></li>
 <li><p><code>merged_read_pairs</code>: Count of merged read-pairs with a copy
   number above <code>min_size</code> after dereplication.</p></li>
-<li><p><code>R1_length</code>: Average length of R1-reads after trimming.</p></li>
-<li><p><code>R2_length</code>: Average length of R2-reads after trimming.</p></li>
+<li><p><code>R1_length</code>: Mean length of R1-reads after trimming.</p></li>
+<li><p><code>R2_length</code>: Mean length of R2-reads after trimming.</p></li>
 </ul><p>The returned data frame has an attribute named <code>"plot"</code> containing a
 <code><a href="https://ggplot2.tidyverse.org/reference/ggplot2-package.html" class="external-link">ggplot2</a></code> object based on the returned data frame. The
 plot visualizes <code>truncee_rate</code> values against <code>merged_read_pairs</code>,

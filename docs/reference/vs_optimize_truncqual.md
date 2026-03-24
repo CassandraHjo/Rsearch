@@ -99,9 +99,9 @@ A data frame with the following columns:
 - `merged_read_pairs`: Count of merged read-pairs with a copy number
   above `min_size` after dereplication.
 
-- `R1_length`: Average length of R1-reads after trimming.
+- `R1_length`: Mean length of R1-reads after trimming.
 
-- `R2_length`: Average length of R2-reads after trimming.
+- `R2_length`: Mean length of R2-reads after trimming.
 
 The returned data frame has an attribute named `"plot"` containing a
 [`ggplot2`](https://ggplot2.tidyverse.org/reference/ggplot2-package.html)
