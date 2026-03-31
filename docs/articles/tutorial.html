@@ -341,11 +341,11 @@ be performed using the <code>vs_fastq_mergepairs</code> and
 <span>                                 threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d_raw.tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vs_fastx_uniques.html">vs_fastx_uniques</a></span><span class="op">(</span><span class="va">m_raw.tbl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>centroid_size <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html" class="external-link">str_extract</a></span><span class="op">(</span><span class="va">Header</span>, <span class="st">"(?&lt;=;size=)\\d+"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>centroid_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">centroid_size</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">centroid_size</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html" class="external-link">str_extract</a></span><span class="op">(</span><span class="va">Header</span>, <span class="st">"(?&lt;=;size=)\\d+"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">size</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">size</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">d_raw.tbl</span><span class="op">$</span><span class="va">centroid_size</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">d_raw.tbl</span><span class="op">$</span><span class="va">size</span><span class="op">)</span></span></code></pre></div>
 <p>Together this tells us:</p>
 <ul>
 <li>We should discard the very short reads, and we may set a threshold
@@ -976,39 +976,23 @@ organize your data into an an <code>Rsearch</code> object. An
 data structures that can be used as input to build a
 <code>phyloseq</code> object:</p>
 <ul>
-<li>
-<p><strong>Read count table</strong></p>
-<p>A data frame with one row per OTU and one column per sample:</p>
-<ul>
-<li>The first column must list OTU identifiers (matching those in the
-sequence table).</li>
-<li>Remaining columns correspond to sample names, with each cell
-containing the read count for that OTU in that sample.</li>
+<li><strong>Read count table</strong></li>
 </ul>
-</li>
-<li>
-<p><strong>Sequence table</strong></p>
-<p>A data frame of centroid sequences representing each OTU:</p>
-<ul>
-<li>The first column must be named <code>Header</code> and contain the
-OTU identifiers.</li>
-<li>One column must be named <code>Sequence</code>(containing the DNA
-sequences).</li>
-<li>Additional columns (e.g., taxonomic classifications) are
-optional.</li>
-</ul>
-</li>
-<li>
-<p><strong>Sample metadata table</strong></p>
-<p>A data frame with one row per sample:</p>
-<ul>
-<li>One column must contain unique sample identifiers that match the
-column names in the read count table.</li>
-<li>Other columns can include any metadata (e.g., treatment group,
-collection date, etc.).</li>
-</ul>
-</li>
-</ul>
+<p>A data frame with one row per OTU and one column per sample: * The
+first column must list OTU identifiers (matching those in the sequence
+table). * Remaining columns correspond to sample names, with each cell
+containing the read count for that OTU in that sample. *
+<strong>Sequence table</strong></p>
+<p>A data frame of centroid sequences representing each OTU: * The first
+column must be named <code>Header</code> and contain the OTU
+identifiers. * One column must be named <code>Sequence</code>(containing
+the DNA sequences). * Additional columns (e.g., taxonomic
+classifications) are optional. * <strong>Sample metadata
+table</strong></p>
+<p>A data frame with one row per sample: * One column must contain
+unique sample identifiers that match the column names in the read count
+table. * Other columns can include any metadata (e.g., treatment group,
+collection date, etc.).</p>
 <p>The <code>sample_id_col</code> parameter specifies the name of the
 column containing the unique sample identifiers in the sample metadata
 table.</p>

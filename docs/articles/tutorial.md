@@ -281,11 +281,11 @@ m_raw.tbl <- vs_fastq_mergepairs(R1.tbl,
                                  threads = 1)
 
 d_raw.tbl <- vs_fastx_uniques(m_raw.tbl) %>% 
-  mutate(centroid_size = str_extract(Header, "(?<=;size=)\\d+")) %>% 
-  mutate(centroid_size = as.numeric(centroid_size)) %>% 
-  filter(centroid_size > 1)
+  mutate(size = str_extract(Header, "(?<=;size=)\\d+")) %>% 
+  mutate(size = as.numeric(size)) %>% 
+  filter(size > 1)
 
-sum(d_raw.tbl$centroid_size)
+sum(d_raw.tbl$size)
 ```
 
 Together this tells us:
@@ -820,30 +820,22 @@ to build a `phyloseq` object:
 
 - **Read count table**
 
-  A data frame with one row per OTU and one column per sample:
+A data frame with one row per OTU and one column per sample: \* The
+first column must list OTU identifiers (matching those in the sequence
+table). \* Remaining columns correspond to sample names, with each cell
+containing the read count for that OTU in that sample. \* **Sequence
+table**
 
-  - The first column must list OTU identifiers (matching those in the
-    sequence table).
-  - Remaining columns correspond to sample names, with each cell
-    containing the read count for that OTU in that sample.
+A data frame of centroid sequences representing each OTU: \* The first
+column must be named `Header` and contain the OTU identifiers. \* One
+column must be named `Sequence`(containing the DNA sequences). \*
+Additional columns (e.g., taxonomic classifications) are optional. \*
+**Sample metadata table**
 
-- **Sequence table**
-
-  A data frame of centroid sequences representing each OTU:
-
-  - The first column must be named `Header` and contain the OTU
-    identifiers.
-  - One column must be named `Sequence`(containing the DNA sequences).
-  - Additional columns (e.g., taxonomic classifications) are optional.
-
-- **Sample metadata table**
-
-  A data frame with one row per sample:
-
-  - One column must contain unique sample identifiers that match the
-    column names in the read count table.
-  - Other columns can include any metadata (e.g., treatment group,
-    collection date, etc.).
+A data frame with one row per sample: \* One column must contain unique
+sample identifiers that match the column names in the read count table.
+\* Other columns can include any metadata (e.g., treatment group,
+collection date, etc.).
 
 The `sample_id_col` parameter specifies the name of the column
 containing the unique sample identifiers in the sample metadata table.
