@@ -121,6 +121,7 @@ Load the libraries needed for this tutorial:
 library(Rsearch)
 library(microseq)
 library(readr)
+library(scales)
 ```
 
 # Inspect the raw data
@@ -431,7 +432,11 @@ cat("Number of unique reads after dereplication: ", nrow(derep.tbl), "\n")
 An optional step is to plot the size (copy number) distribution of the dereplicated reads, using the `plot_size_dist` function:
 
 ```{r plot_size_distribution_derep, warning=F, eval=FALSE}
-plot_size_dist(fastx_input = derep.tbl)
+p <- plot_size_dist(fastx_input = derep.tbl)
+
+# Adding pseudo log transformation to avoid infinite negative values
+p + scale_y_continuous(trans = pseudo_log_trans(base = 10), 
+                       breaks = NULL)
 ```
 
 ![](figs/derep_size_dist.png){alt=""}
