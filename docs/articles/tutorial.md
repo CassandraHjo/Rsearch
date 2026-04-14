@@ -540,9 +540,8 @@ dereplicated reads, using the `plot_size_dist` function:
 ``` r
 p <- plot_size_dist(fastx_input = derep.tbl)
 
-# Adding pseudo log transformation to avoid infinite negative values
-p + scale_y_continuous(trans = pseudo_log_trans(base = 10), 
-                       breaks = NULL)
+# Adding pseudo log transformation to avoid infinite negative values in the plot
+p + scale_y_continuous(trans = pseudo_log_trans(base = 10))
 ```
 
 ![](figs/derep_size_dist.png)
@@ -677,7 +676,10 @@ To plot the distribution of the copy number for the different centroids,
 you can use the `plot_size_dist` function:
 
 ``` r
-plot_size_dist(sequence.tbl)
+p <- plot_size_dist(sequence.tbl)
+
+# Adding pseudo log transformation to avoid infinite negative values in the plot
+p + scale_y_continuous(trans = pseudo_log_trans(base = 10))
 ```
 
 ![](figs/centroids_size_dist.png)

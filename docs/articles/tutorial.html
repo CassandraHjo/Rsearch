@@ -619,9 +619,8 @@ function:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_size_dist.html">plot_size_dist</a></span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">derep.tbl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Adding pseudo log transformation to avoid infinite negative values</span></span>
-<span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/transform_log.html" class="external-link">pseudo_log_trans</a></span><span class="op">(</span>base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, </span>
-<span>                       breaks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Adding pseudo log transformation to avoid infinite negative values in the plot</span></span>
+<span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/transform_log.html" class="external-link">pseudo_log_trans</a></span><span class="op">(</span>base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figs/derep_size_dist.png" alt=""></p>
 <p>In this example, we can see that most of the dereplicated reads have
 a low copy number, and only a few reads have high copy numbers.</p>
@@ -840,7 +839,10 @@ relabel the headers of the unique sequences.</p>
 <p>To plot the distribution of the copy number for the different
 centroids, you can use the <code>plot_size_dist</code> function:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_size_dist.html">plot_size_dist</a></span><span class="op">(</span><span class="va">sequence.tbl</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_size_dist.html">plot_size_dist</a></span><span class="op">(</span><span class="va">sequence.tbl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Adding pseudo log transformation to avoid infinite negative values in the plot</span></span>
+<span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>trans <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/transform_log.html" class="external-link">pseudo_log_trans</a></span><span class="op">(</span>base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figs/centroids_size_dist.png" alt=""></p>
 <div class="section level3">
 <h3 id="creating-the-otu-table">Creating the OTU table<a class="anchor" aria-label="anchor" href="#creating-the-otu-table"></a>

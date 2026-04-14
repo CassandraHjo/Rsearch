@@ -434,9 +434,8 @@ An optional step is to plot the size (copy number) distribution of the dereplica
 ```{r plot_size_distribution_derep, warning=F, eval=FALSE}
 p <- plot_size_dist(fastx_input = derep.tbl)
 
-# Adding pseudo log transformation to avoid infinite negative values
-p + scale_y_continuous(trans = pseudo_log_trans(base = 10), 
-                       breaks = NULL)
+# Adding pseudo log transformation to avoid infinite negative values in the plot
+p + scale_y_continuous(trans = pseudo_log_trans(base = 10))
 ```
 
 ![](figs/derep_size_dist.png){alt=""}
@@ -544,7 +543,10 @@ knitr::kable(read_tsv("data/sequence_tbl_stats.tsv"))
 To plot the distribution of the copy number for the different centroids, you can use the `plot_size_dist` function:
 
 ```{r plot_size_distribution_otus, message=FALSE, warning=FALSE, eval=FALSE}
-plot_size_dist(sequence.tbl)
+p <- plot_size_dist(sequence.tbl)
+
+# Adding pseudo log transformation to avoid infinite negative values in the plot
+p + scale_y_continuous(trans = pseudo_log_trans(base = 10))
 ```
 
 ![](figs/centroids_size_dist.png){alt=""}
