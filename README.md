@@ -1,6 +1,9 @@
 
 # Rsearch <a href="https://cassandrahjo.github.io/Rsearch"><img src="man/figures/logo.png" align="right" height="139" alt="Rsearch website" /></a>
 
+![commit activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
+![CRAN](https://img.shields.io/cran/v/Rsearch)
+
 ## Introduction
 
 `Rsearch` is an R package designed for handling and analyzing targeted
