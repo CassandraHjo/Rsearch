@@ -135,6 +135,18 @@ Rsearch::set_vsearch_executable("/usr/local/bin/vsearch") # If the vsearch binar
 
 This will store the path and use it in future sessions automatically.
 
+#### macOS security settings
+
+After downloading `VSEARCH`, some macOS users may experience problems
+running the `VSEARCH` executable because of macOS security settings. If
+macOS blocks `VSEARCH` from running, open *System Settings*, go to
+*Privacy & Security*, scroll down to the *Security* section, and look for 
+a message about `VSEARCH` being blocked. Click *Allow anyway* or 
+*Open anyway*. 
+
+After allowing `VSEARCH` to run, try running the relevant `Rsearch`
+function again.
+
 #### Using an Apptainer/Singularity Container
 
 Although `Rsearch` is primarily intended for local execution (as above),
