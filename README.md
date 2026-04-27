@@ -1,7 +1,8 @@
 
 # Rsearch <a href="https://cassandrahjo.github.io/Rsearch"><img src="man/figures/logo.png" align="right" height="139" alt="Rsearch website" /></a>
 
-![commit activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
+![commit
+activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
 ![CRAN](https://img.shields.io/cran/v/Rsearch)
 
 ## Introduction
@@ -143,9 +144,9 @@ This will store the path and use it in future sessions automatically.
 After downloading `VSEARCH`, some macOS users may experience problems
 running the `VSEARCH` executable because of macOS security settings. If
 macOS blocks `VSEARCH` from running, open *System Settings*, go to
-*Privacy & Security*, scroll down to the *Security* section, and look for 
-a message about `VSEARCH` being blocked. Click *Allow anyway* or 
-*Open anyway*. 
+*Privacy & Security*, scroll down to the *Security* section, and look
+for a message about `VSEARCH` being blocked. Click *Allow anyway* or
+*Open anyway*.
 
 After allowing `VSEARCH` to run, try running the relevant `Rsearch`
 function again.
