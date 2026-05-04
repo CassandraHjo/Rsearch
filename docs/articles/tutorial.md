@@ -40,6 +40,7 @@ To install `Rsearch` from GitHub, you will first need the `devtools`
 package. If it’s not installed yet, you can install it by running:
 
 ``` r
+
 # Install devtools if not already installed
 if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
@@ -50,6 +51,7 @@ If you don’t already have it, you will need to install the `phyloseq`
 package before installing `Rsearch`:
 
 ``` r
+
 # Install phyloseq if not already installed
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
   install.packages("BiocManager")
@@ -60,6 +62,7 @@ BiocManager::install("phyloseq")
 Now you are ready to install `Rsearch`:
 
 ``` r
+
 # Install Rsearch from GitHub
 devtools::install_github("CassandraHjo/Rsearch")
 ```
@@ -80,6 +83,7 @@ You can verify the installation of both `Rsearch` and `VSEARCH` by
 running:
 
 ``` r
+
 library(Rsearch)
 packageVersion("Rsearch")
 ```
@@ -87,6 +91,7 @@ packageVersion("Rsearch")
     [1] '1.0.0'
 
 ``` r
+
 vsearch()
 ```
 
@@ -115,6 +120,7 @@ After unpacking the zipped archive you should have:
 First, define the paths to your FASTQ files and metadata file:
 
 ``` r
+
 fastq_path <- "../tutorial_data/fastq"           # Change to the directory containing the FASTQ files
 metadata_file <- "../tutorial_data/metadata.txt" # Change to the file path of your metadata file
 ```
@@ -127,6 +133,7 @@ proceed.
 Load the libraries needed for this tutorial:
 
 ``` r
+
 library(Rsearch)
 library(microseq)
 library(readr)
@@ -138,6 +145,7 @@ library(scales)
 First, we read the metadata file:
 
 ``` r
+
 sample.tbl <- read_tsv(metadata_file)
 cat("Number of samples in the metadata file: ", nrow(sample.tbl), "\n")
 ```
@@ -159,6 +167,7 @@ that the x-axis for the R2 panel has been flipped to remind us that R1
 and R2 reads are sequenced in opposite directions.
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -187,6 +196,7 @@ reads, which provides a measure of read quality (lower EE rates indicate
 higher quality).
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -234,6 +244,7 @@ without any trimming and filtering. The `vs_merging_lengths` function
 can be used to plot some merging statistics:
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -272,6 +283,7 @@ performed using the `vs_fastq_mergepairs` and `vs_fastx_uniques`
 functions, as shown below.
 
 ``` r
+
 library(stringr)
 library(tidyverse)
 
@@ -329,6 +341,7 @@ The function may take some time to run, but you can view the progress
 through a progress bar in the console.
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -376,6 +389,7 @@ The function may take some time to run, but you can view the progress
 through a progress bar in the console.
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -412,6 +426,7 @@ time we will add the `vs_fastx_trim_filt` function to trim and filter
 all the reads.
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -439,6 +454,7 @@ We can again assess the read quality after trimming and filtering using
 `plot_base_quality`:
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -469,6 +485,7 @@ After trimming and filtering, we merge the read pairs using the
 to include merging like this:
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -506,6 +523,7 @@ dereplication. We want to add the sample identifier to the header of
 each sequence, and this is done by using the `sample` parameter.
 
 ``` r
+
 for(i in 1:nrow(sample.tbl)){
   R1.tbl <- readFastq(file.path(fastq_path, sample.tbl$R1_file[i]))
   R2.tbl <- readFastq(file.path(fastq_path, sample.tbl$R2_file[i]))
@@ -538,6 +556,7 @@ An optional step is to plot the size (copy number) distribution of the
 dereplicated reads, using the `plot_size_dist` function:
 
 ``` r
+
 p <- plot_size_dist(fastx_input = derep.tbl)
 
 # Adding pseudo log transformation to avoid infinite negative values in the plot
@@ -565,6 +584,7 @@ Both options are demonstrated in the code below, but we will use the
 first option in this tutorial.
 
 ``` r
+
 # Create empty table to store results
 all.tbl <- tibble()
 
@@ -613,6 +633,7 @@ If you wrote the results to file you need to read the files into R
 again:
 
 ``` r
+
 files <- list.files("../tutorial_data/fasta", # Change to the directory where you saved your FASTA files
                     full.names = TRUE)
 all.tbl <- lapply(files, readFasta) %>% 
@@ -624,6 +645,7 @@ you can use the `all_tbl.txt.zip` object that is included in the example
 data.
 
 ``` r
+
 all.tbl <- read_tsv("path/to/all_tbl.txt.zip") # Change to the file path of your all_tbl.txt.zip file
 ```
 
@@ -634,6 +656,7 @@ a copy number above `2`. We will also use the `relabel` parameter, to
 relabel the headers of the unique sequences.
 
 ``` r
+
 all_derep.tbl <- vs_fastx_uniques(all.tbl,
                                   minuniquesize = 2)
 ```
@@ -651,6 +674,7 @@ Next we cluster the unique sequences at 95% identity using the
 `vs_cluster_size` function:
 
 ``` r
+
 sequence.tbl <- vs_cluster_size(all_derep.tbl, 
                                 id = 0.95, 
                                 relabel = "OTU")
@@ -676,6 +700,7 @@ To plot the distribution of the copy number for the different centroids,
 you can use the `plot_size_dist` function:
 
 ``` r
+
 p <- plot_size_dist(sequence.tbl)
 
 # Adding pseudo log transformation to avoid infinite negative values in the plot
@@ -693,6 +718,7 @@ function with multiple threads, but this depends on the computer you are
 using.
 
 ``` r
+
 readcount.tbl <- vs_usearch_global(fastx_input = all.tbl,
                                    database = sequence.tbl,
                                    otutabout = TRUE,
@@ -719,6 +745,7 @@ You can assign taxonomy to OTUs using the `vs_sintax` function as
 follows:
 
 ``` r
+
 tax.tbl <- vs_sintax(fasta_input = sequence.tbl,
                      database = "SOME_DATABASE_FILE.fa.gz" # Change to the file path of your SINTAX reference database 
 ) 
@@ -732,6 +759,7 @@ some data wrangling in order to make it the correct format for an
 `Rsearch` object.
 
 ``` r
+
 tax_v2.tbl <- vs_usearch_global(fastx_input = sequence.tbl,
                                 database = "SOME_DATABASE_FILE.fa.gz" # Change to the file path of your reference database 
 )
@@ -763,6 +791,7 @@ good idea to save the current tables as an `RData` object, but this is
 optional:
 
 ``` r
+
 save(sample.tbl, 
      sequence.tbl, 
      readcount.tbl, 
@@ -851,6 +880,7 @@ The `Rsearch` object can then be converted to a `phyloseq` object using
 the `rsearch2phyloseq` function:
 
 ``` r
+
 # Create Rsearch object
 rsearch_obj <- rsearch_obj(readcount_data = readcount.tbl,
                            sequence_data = tax.tbl,

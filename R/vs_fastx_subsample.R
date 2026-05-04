@@ -100,8 +100,7 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_fastx_subsample vs_fastq_subsample vs_fasta_subsample
-#' vs_subsample fastx_subsample subsample
+#' @aliases vs_fastx_subsample vs_fastq_subsample vs_fasta_subsample vs_subsample fastx_subsample subsample
 #' @export
 #'
 vs_fastx_subsample <- function(fastx_input,

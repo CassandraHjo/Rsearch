@@ -59,6 +59,7 @@
 <a class="anchor" aria-label="anchor" href="#rsearch-"></a>
 </h1>
 </div>
+<p><img src="https://img.shields.io/github/last-commit/CassandraHjo/Rsearch" alt="commit activity"><img src="https://img.shields.io/cran/v/Rsearch" alt="CRAN"></p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -132,6 +133,12 @@
 <span><span class="co"># Linux/macOS example</span></span>
 <span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/set_vsearch_executable.html">set_vsearch_executable</a></span><span class="op">(</span><span class="st">"/usr/local/bin/vsearch"</span><span class="op">)</span> <span class="co"># If the vsearch binary (vsearch.exe) is copied to /usr/local/bin/ on the computer</span></span></code></pre></div>
 <p>This will store the path and use it in future sessions automatically.</p>
+<div class="section level4">
+<h4 id="macos-security-settings">macOS security settings<a class="anchor" aria-label="anchor" href="#macos-security-settings"></a>
+</h4>
+<p>After downloading <code>VSEARCH</code>, some macOS users may experience problems running the <code>VSEARCH</code> executable because of macOS security settings. If macOS blocks <code>VSEARCH</code> from running, open <em>System Settings</em>, go to <em>Privacy &amp; Security</em>, scroll down to the <em>Security</em> section, and look for a message about <code>VSEARCH</code> being blocked. Click <em>Allow anyway</em> or <em>Open anyway</em>.</p>
+<p>After allowing <code>VSEARCH</code> to run, try running the relevant <code>Rsearch</code> function again.</p>
+</div>
 <div class="section level4">
 <h4 id="using-an-apptainersingularity-container">Using an Apptainer/Singularity Container<a class="anchor" aria-label="anchor" href="#using-an-apptainersingularity-container"></a>
 </h4>

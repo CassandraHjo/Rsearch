@@ -1,5 +1,8 @@
 # Rsearch
 
+![commit
+activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)![CRAN](https://img.shields.io/cran/v/Rsearch)
+
 ## Introduction
 
 `Rsearch` is an R package designed for handling and analyzing targeted
@@ -44,6 +47,7 @@ To install the stable CRAN version of `Rsearch`, simply run the
 following command in your R console:
 
 ``` r
+
 install.packages("Rsearch")
 ```
 
@@ -90,6 +94,7 @@ install it **before** installing `Rsearch` if you do not already have it
 installed:
 
 ``` r
+
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
@@ -101,6 +106,7 @@ You can install the development version of `Rsearch` from
 `devtools` package from CRAN:
 
 ``` r
+
 if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
 }
@@ -126,6 +132,7 @@ can be used to set the correct command to invoke `VSEARCH` on the
 computer like this:
 
 ``` r
+
 # Windows example
 Rsearch::set_vsearch_executable("C:/Documents/vsearch") # If the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer
 
@@ -134,6 +141,18 @@ Rsearch::set_vsearch_executable("/usr/local/bin/vsearch") # If the vsearch binar
 ```
 
 This will store the path and use it in future sessions automatically.
+
+#### macOS security settings
+
+After downloading `VSEARCH`, some macOS users may experience problems
+running the `VSEARCH` executable because of macOS security settings. If
+macOS blocks `VSEARCH` from running, open *System Settings*, go to
+*Privacy & Security*, scroll down to the *Security* section, and look
+for a message about `VSEARCH` being blocked. Click *Allow anyway* or
+*Open anyway*.
+
+After allowing `VSEARCH` to run, try running the relevant `Rsearch`
+function again.
 
 #### Using an Apptainer/Singularity Container
 
@@ -160,12 +179,14 @@ apptainer exec /path/to/vsearch_container.sif vsearch "$@"
 **3.** Make the script executable:
 
 ``` r
+
 chmod +x /home/youruser/bin/vsearch
 ```
 
 **4.** Point `Rsearch` to this wrapper script:
 
 ``` r
+
 Rsearch::set_vsearch_executable("/home/youruser/bin/")
 ```
 
@@ -178,6 +199,7 @@ You may test if your executable is working properly by running the
 following command:
 
 ``` r
+
 Rsearch::vsearch()
 ```
 
@@ -204,6 +226,7 @@ methods to access help:
   For example, to access help for the `vs_fastx_trim_filt` function:
 
 ``` r
+
 ?vs_fastx_trim_filt
 ```
 
@@ -211,6 +234,7 @@ Alternatively, you can use the
 [`help()`](https://rdrr.io/r/utils/help.html) function:
 
 ``` r
+
 help(vs_fastx_trim_filt)
 ```
 
@@ -220,6 +244,7 @@ To get an overview of the `Rsearch` package an its available functions,
 use:
 
 ``` r
+
 # library(Rsearch)
 help(package = "Rsearch")
 ```
@@ -233,6 +258,7 @@ Additional usage examples can be found in the
 ### Example: Filter paired-end reads based on quality
 
 ``` r
+
 library(Rsearch)
 
 # Define input

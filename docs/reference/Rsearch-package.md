@@ -25,6 +25,8 @@ Useful links:
 
 Authors:
 
+- Cassandra Stamsaas <cassandra.stamsaas@nmbu.no>
+
 - Lars Snipen <lars.snipen@nmbu.no>
 
 - Torbjørn Rognes <torognes@ifi.uio.no>

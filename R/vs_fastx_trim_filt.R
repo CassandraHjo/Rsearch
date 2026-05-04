@@ -209,8 +209,7 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_fastx_trim_filt vs_fastq_trim_filt vs_fasta_trim_filt
-#' fastx_trim_filt trim_filt
+#' @aliases vs_fastx_trim_filt vs_fastq_trim_filt vs_fasta_trim_filt fastx_trim_filt trim_filt
 #'
 #' @export
 #'

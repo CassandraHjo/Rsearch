@@ -29,6 +29,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Cassandra Stamsaas \email{cassandra.stamsaas@nmbu.no}
   \item Lars Snipen \email{lars.snipen@nmbu.no}
   \item Torbjørn Rognes \email{torognes@ifi.uio.no}
   \item Hilde Vinje \email{hilde.vinje@nmbu.no}

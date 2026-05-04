@@ -95,8 +95,7 @@
 #'
 #' @references \url{https://github.com/torognes/vsearch}
 #'
-#' @aliases vs_alignment_classification alignment_classification lca
-#' lca_classification
+#' @aliases vs_alignment_classification alignment_classification lca lca_classification
 #'
 #' @export
 #'

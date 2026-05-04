@@ -32,9 +32,9 @@ Suggests:
     testthat (>= 3.0.0),
     withr (>= 3.0.2)
 Config/testthat/edition: 3
-RoxygenNote: 7.3.3
 URL: https://cassandrahjo.github.io/Rsearch/, https://github.com/CassandraHjo/Rsearch/
 BugReports: https://github.com/CassandraHjo/Rsearch/issues/
 Depends: 
     R (>= 4.1)
 Config/Needs/website: rmarkdown
+Config/roxygen2/version: 8.0.0
