@@ -12,3 +12,4 @@
 ^vignettes/articles$
 ^\.positai$
 ^\.claude$
+^cran-comments\.md$
