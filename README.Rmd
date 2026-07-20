@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Rsearch <a href="https://cassandrahjo.github.io/Rsearch"><img src="man/figures/logo.png" align="right" height="139" alt="Rsearch website" /></a>
+# Rsearch <a href="https://cassandrahjo.github.io/Rsearch/"><img src="man/figures/logo.png" align="right" height="139" alt="Rsearch website" /></a>
 
 ![commit activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
 ![CRAN](https://img.shields.io/cran/v/Rsearch)
@@ -313,5 +313,4 @@ Please note that citing any of the underlying algorithms, e.g.
 -   Rognes T, Flouri T, Nichols B, Quince C, Mahé F (2016) **VSEARCH: a
     versatile open source tool for metagenomics.** *PeerJ* 4:e2584. doi:
     [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
--   The subplot of the `Rsearch` logo is created with
-    <https://BioRender.com>
+-   The subplot of the `Rsearch` logo was created with [BioRender](https://www.biorender.com/)

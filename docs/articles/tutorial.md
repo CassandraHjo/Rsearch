@@ -88,7 +88,7 @@ library(Rsearch)
 packageVersion("Rsearch")
 ```
 
-    [1] '1.0.0'
+    [1] '1.1.0'
 
 ``` r
 
