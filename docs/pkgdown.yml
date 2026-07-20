@@ -1,9 +1,9 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/tutorial: tutorial.html
-last_built: 2026-06-03T07:37Z
+last_built: 2026-07-20T08:08Z
 urls:
   reference: https://cassandrahjo.github.io/Rsearch/reference
   article: https://cassandrahjo.github.io/Rsearch/articles
