@@ -279,7 +279,9 @@ The main contributors to `Rsearch`:
 
 Please cite the following publication if you use `Rsearch`:
 
-xxx
+C. Stamsaas, T. Rognes, K. Rudi, L. Snipen, and H. Vinje, “Rsearch: An R
+interface to VSEARCH supporting visualization and parameter tuning,”
+Sep. 16, 2026, bioRxiv. doi: 10.64898/2026.09.10.750626.
 
 Please note that citing any of the underlying algorithms, e.g.
 `VSEARCH`, may also be appropriate.

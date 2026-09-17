@@ -1,11 +1,11 @@
 bibentry(
   bibtype = "Article",
-  title = "Rsearch",
+  title = "Rsearch: An R interface to VSEARCH supporting visualization and parameter tuning",
   author = "Cassandra Stamsaas, Torbjørn Rognes, Knut Rudi, Lars Snipen, Hilde Vinje",
-  journal = "NA",
-  year = "NA",
-  volume = "NA",
-  number = "NA",
-  pages = "NA",
-  doi = "NA"
+  journal = "bioRxiv",
+  year = "2026",
+  volume = "",
+  number = "",
+  pages = "",
+  doi = "10.64898/2026.09.10.750626"
 )
