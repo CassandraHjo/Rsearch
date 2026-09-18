@@ -41,7 +41,7 @@ per base is lower than the specified value. Defaults to \code{(0.002, 0.004,
 0.028, 0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.}
 
 \item{minlen}{(Optional). Minimum number of bases a sequence must have to be
-retained. Defaults to \code{0}. See \emph{Details}.}
+retained. Defaults to \code{1}.}
 
 \item{min_size}{(Optional). Minimum copy number (size) for a merged read to
 be included in the results. Defaults to \code{2}.}

@@ -106,11 +106,6 @@ If both \code{fastaout} or \code{fastqout} are \code{NULL}, the results are
 returned as a FASTA or FASTQ object, and no file is written.
 \code{output_format} must match the desired output files/objects.
 
-Any input sequence with fewer bases than the value set in \code{minlen} is
-discarded. By default, \code{minlen} is set to 0, which means that no
-sequences are removed. However, using the default value may allow empty
-sequences to remain in the results.
-
 \code{vsearch_options} allows users to pass additional command-line arguments
 to \code{VSEARCH} that are not directly supported by this function. Refer to
 the \code{VSEARCH} manual for more details.

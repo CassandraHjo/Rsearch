@@ -23,7 +23,7 @@ vs_fastx_trim_filt(
   stripright = 0,
   stripleft = 0,
   maxee_rate = 0.01,
-  minlen = 0,
+  minlen = 1,
   maxlen = NULL,
   maxns = 0,
   minsize = NULL,
@@ -98,7 +98,7 @@ value ranging form \code{0.0} to \code{1.0}. Defaults to \code{0.01}. See
 \emph{Details}.}
 
 \item{minlen}{(Optional). Minimum number of bases a sequence must have to be
-retained. Defaults to \code{0}. See \emph{Details}.}
+retained. Defaults to \code{1}.}
 
 \item{maxlen}{(Optional). Maximum number of bases a sequences can have to be
 retained. If \code{NULL} (default), the filter is not applied.}
@@ -234,11 +234,6 @@ Sequences with an average expected error greater than the specified
 error is the sum of error probabilities for all the positions in the sequence,
 divided by the length of the sequence.
 
-Any input sequence with fewer bases than the value set in \code{minlen} will
-be discarded. By default, \code{minlen} is set to 0, which means that no
-sequences are removed. However, using the default value may allow empty
-sequences to remain in the results.
-
 \code{vsearch_options} allows users to pass additional command-line arguments
 to \code{VSEARCH} that are not directly supported by this function. Refer to
 the \code{VSEARCH} manual for more details.
@@ -252,7 +247,7 @@ reverse <- file.path(file.path(path.package("Rsearch"), "extdata"),
                      "small_R1.fq")
 output_format <- "fastq"
 maxee_rate <- 0.01
-minlen <- 0
+minlen <- 1
 
 # Trim/filter sequences and return a FASTQ tibble
 filt_seqs <- vs_fastx_trim_filt(fastx_input = fastx_input,

@@ -49,7 +49,7 @@ overlapping regions into one sequence using <code>VSEARCH</code>.</p>
 <span>  fastaout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fastqout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minovlen <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  minlen <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  minlen <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  fasta_width <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  sample <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  log_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -98,7 +98,7 @@ at least 5. Defaults to <code>10</code>.</p></dd>
 
 <dt id="arg-minlen">minlen<a class="anchor" aria-label="anchor" href="#arg-minlen"></a></dt>
 <dd><p>(Optional). Minimum number of bases a sequence must have to be
-retained. Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
+retained. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-fasta-width">fasta_width<a class="anchor" aria-label="anchor" href="#arg-fasta-width"></a></dt>
@@ -178,10 +178,6 @@ written to the respective file in either FASTA or FASTQ format.</p>
 <p>If both <code>fastaout</code> or <code>fastqout</code> are <code>NULL</code>, the results are
 returned as a FASTA or FASTQ object, and no file is written.</p>
 <p><code>output_format</code> has to match the desired output files/objects.</p>
-<p>Any input sequence with fewer bases than the value set in <code>minlen</code> will
-be discarded. Default <code>minlen</code> is 0, meaning no sequences are removed.
-However, using the default value may allow empty sequences to remain in
-the results.</p>
 <p>If <code>log_file</code> is <code>NULL</code> and <code>fastqout</code> or <code>fastaout</code> is
 specified, merging statistics from <code>VSEARCH</code> will not be captured.</p>
 <p><code>vsearch_options</code> allows users to pass additional command-line arguments

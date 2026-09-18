@@ -56,7 +56,7 @@ vs_optimize_truncqual(
 - minlen:
 
   (Optional). Minimum number of bases a sequence must have to be
-  retained. Defaults to `0`. See *Details*.
+  retained. Defaults to `1`.
 
 - min_size:
 

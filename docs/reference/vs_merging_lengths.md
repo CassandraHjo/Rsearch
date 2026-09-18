@@ -11,7 +11,7 @@ vs_merging_lengths(
   fastq_input,
   reverse = NULL,
   minovlen = 10,
-  minlen = 0,
+  minlen = 1,
   threads = 1,
   plot_title = TRUE,
   tmpdir = NULL
@@ -38,7 +38,7 @@ vs_merging_lengths(
 - minlen:
 
   (Optional). Minimum number of bases a sequence must have to be
-  retained. Defaults to `0`. See *Details*.
+  retained. Defaults to `1`.
 
 - threads:
 

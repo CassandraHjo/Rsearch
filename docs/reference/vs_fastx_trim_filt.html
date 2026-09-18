@@ -63,7 +63,7 @@ on sequence quality, length, abundance, and more.</p>
 <span>  stripright <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  stripleft <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  maxee_rate <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  minlen <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  minlen <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  maxlen <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maxns <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  minsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -171,7 +171,7 @@ value ranging form <code>0.0</code> to <code>1.0</code>. Defaults to <code>0.01<
 
 <dt id="arg-minlen">minlen<a class="anchor" aria-label="anchor" href="#arg-minlen"></a></dt>
 <dd><p>(Optional). Minimum number of bases a sequence must have to be
-retained. Defaults to <code>0</code>. See <em>Details</em>.</p></dd>
+retained. Defaults to <code>1</code>.</p></dd>
 
 
 <dt id="arg-maxlen">maxlen<a class="anchor" aria-label="anchor" href="#arg-maxlen"></a></dt>
@@ -314,10 +314,6 @@ for more details.</p>
 <code>maxee_rate</code> are discarded. For a given sequence, the average expected
 error is the sum of error probabilities for all the positions in the sequence,
 divided by the length of the sequence.</p>
-<p>Any input sequence with fewer bases than the value set in <code>minlen</code> will
-be discarded. By default, <code>minlen</code> is set to 0, which means that no
-sequences are removed. However, using the default value may allow empty
-sequences to remain in the results.</p>
 <p><code>vsearch_options</code> allows users to pass additional command-line arguments
 to <code>VSEARCH</code> that are not directly supported by this function. Refer to
 the <code>VSEARCH</code> manual for more details.</p>
@@ -337,7 +333,7 @@ the <code>VSEARCH</code> manual for more details.</p>
 <span class="r-in"><span>                     <span class="st">"small_R1.fq"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">output_format</span> <span class="op">&lt;-</span> <span class="st">"fastq"</span></span></span>
 <span class="r-in"><span><span class="va">maxee_rate</span> <span class="op">&lt;-</span> <span class="fl">0.01</span></span></span>
-<span class="r-in"><span><span class="va">minlen</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">minlen</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Trim/filter sequences and return a FASTQ tibble</span></span></span>
 <span class="r-in"><span><span class="va">filt_seqs</span> <span class="op">&lt;-</span> <span class="fu">vs_fastx_trim_filt</span><span class="op">(</span>fastx_input <span class="op">=</span> <span class="va">fastx_input</span>,</span></span>

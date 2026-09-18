@@ -128,11 +128,6 @@ If both `fastaout` or `fastqout` are `NULL`, the results are returned as
 a FASTA or FASTQ object, and no file is written. `output_format` must
 match the desired output files/objects.
 
-Any input sequence with fewer bases than the value set in `minlen` is
-discarded. By default, `minlen` is set to 0, which means that no
-sequences are removed. However, using the default value may allow empty
-sequences to remain in the results.
-
 `vsearch_options` allows users to pass additional command-line arguments
 to `VSEARCH` that are not directly supported by this function. Refer to
 the `VSEARCH` manual for more details.

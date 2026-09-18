@@ -9,7 +9,7 @@ vs_merging_lengths(
   fastq_input,
   reverse = NULL,
   minovlen = 10,
-  minlen = 0,
+  minlen = 1,
   threads = 1,
   plot_title = TRUE,
   tmpdir = NULL
@@ -26,7 +26,7 @@ reverse reads. Optional if \code{fastq_input} is a \code{"pe_df"} object.}
 at least 5. Defaults to \code{10}.}
 
 \item{minlen}{(Optional). Minimum number of bases a sequence must have to be
-retained. Defaults to \code{0}. See \emph{Details}.}
+retained. Defaults to \code{1}.}
 
 \item{threads}{(Optional). Number of computational threads to be used by
 \code{VSEARCH}. Defaults to \code{1}.}

@@ -13,7 +13,7 @@ vs_fastq_mergepairs(
   fastaout = NULL,
   fastqout = NULL,
   minovlen = 10,
-  minlen = 0,
+  minlen = 1,
   fasta_width = 0,
   sample = NULL,
   log_file = NULL,
@@ -58,7 +58,7 @@ vs_fastq_mergepairs(
 - minlen:
 
   (Optional). Minimum number of bases a sequence must have to be
-  retained. Defaults to `0`. See *Details*.
+  retained. Defaults to `1`.
 
 - fasta_width:
 
@@ -154,11 +154,6 @@ If both `fastaout` or `fastqout` are `NULL`, the results are returned as
 a FASTA or FASTQ object, and no file is written.
 
 `output_format` has to match the desired output files/objects.
-
-Any input sequence with fewer bases than the value set in `minlen` will
-be discarded. Default `minlen` is 0, meaning no sequences are removed.
-However, using the default value may allow empty sequences to remain in
-the results.
 
 If `log_file` is `NULL` and `fastqout` or `fastaout` is specified,
 merging statistics from `VSEARCH` will not be captured.

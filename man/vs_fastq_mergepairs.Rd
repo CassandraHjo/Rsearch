@@ -16,7 +16,7 @@ vs_fastq_mergepairs(
   fastaout = NULL,
   fastqout = NULL,
   minovlen = 10,
-  minlen = 0,
+  minlen = 1,
   fasta_width = 0,
   sample = NULL,
   log_file = NULL,
@@ -48,7 +48,7 @@ reads. If \code{NULL} (default) no output is written to file. See
 at least 5. Defaults to \code{10}.}
 
 \item{minlen}{(Optional). Minimum number of bases a sequence must have to be
-retained. Defaults to \code{0}. See \emph{Details}.}
+retained. Defaults to \code{1}.}
 
 \item{fasta_width}{(Optional). Number of characters per line in the output
 FASTA file. Only applies if the output file is in FASTA format. Defaults to
@@ -128,11 +128,6 @@ If both \code{fastaout} or \code{fastqout} are \code{NULL}, the results are
 returned as a FASTA or FASTQ object, and no file is written.
 
 \code{output_format} has to match the desired output files/objects.
-
-Any input sequence with fewer bases than the value set in \code{minlen} will
-be discarded. Default \code{minlen} is 0, meaning no sequences are removed.
-However, using the default value may allow empty sequences to remain in
-the results.
 
 If \code{log_file} is \code{NULL} and \code{fastqout} or \code{fastaout} is
 specified, merging statistics from \code{VSEARCH} will not be captured.
