@@ -211,6 +211,7 @@ test_that("trim/filter fastq sequences from two files, and return two fastq file
   log_file <- withr::local_tempfile()
   vsearch_options <- c("")
   relabel <- "OTU"
+  minlen <- 1
 
   return_value <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                      reverse = reverse,
@@ -220,7 +221,8 @@ test_that("trim/filter fastq sequences from two files, and return two fastq file
                                      truncee = truncee,
                                      log_file = log_file,
                                      vsearch_options = vsearch_options,
-                                     relabel= relabel)
+                                     relabel= relabel,
+                                     minlen = minlen)
 
   expect_null(return_value)
 
@@ -240,13 +242,15 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble",
   output_format <- "fastq"
   truncee <- 0.01
   sample <- "sample1"
+  minlen <- 1
 
   trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                   reverse = reverse,
                                   output_format = output_format,
                                   truncee = truncee,
                                   sample = sample,
-                                  relabel_sha1 = TRUE)
+                                  relabel_sha1 = TRUE,
+                                  minlen = minlen)
 
   expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_files.rds")))
@@ -258,10 +262,12 @@ test_that("trim/filter fastq sequences from one file, and return fastq tibble", 
   fastx_input <- test_path("testdata", "R1.fastq")
   output_format <- "fastq"
   truncee <- 0.01
+  minlen <- 1
 
   trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                   output_format = output_format,
-                                  truncee = truncee)
+                                  truncee = truncee,
+                                  minlen = minlen)
 
   expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_R1_fq_file.rds")))
@@ -274,11 +280,13 @@ test_that("trim/filter fastq sequences from two tibbles, and return fastq tibble
   reverse <- microseq::readFastq(test_path("testdata", "R2.fastq"))
   output_format <- "fastq"
   truncee <- 0.01
+  minlen <- 1
 
   trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                   reverse = reverse,
                                   output_format = output_format,
-                                  truncee = truncee)
+                                  truncee = truncee,
+                                  minlen = minlen)
 
   expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_tibbles.rds")))
@@ -350,13 +358,15 @@ test_that("trim/filter fastq sequences from two files, and return fastq tibble w
   truncee <- 0.01
   stripright <- 10
   stripleft <- 10
+  minlen <- 1
 
   trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                   reverse = reverse,
                                   output_format = output_format,
                                   truncee = truncee,
                                   stripright = stripright,
-                                  stripleft = stripleft)
+                                  stripleft = stripleft,
+                                  minlen = minlen)
 
   expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_files_strip.rds")))
@@ -371,13 +381,15 @@ test_that("trim/filter fastq sequences from one file with size values, and retur
   minsize <- 1
   maxsize <- 10
   minqual <- 1
+  minlen <- 1
 
   trim_filt <- vs_fastx_trim_filt(fastx_input = fastx_input,
                                   output_format = output_format,
                                   truncee = truncee,
                                   minsize = minsize,
                                   maxsize = maxsize,
-                                  minqual = minqual)
+                                  minqual = minqual,
+                                  minlen = minlen)
 
   expect_equal(trim_filt,
                readRDS(test_path("testdata", "output", "trim_filt_fq_file_size.rds")))
