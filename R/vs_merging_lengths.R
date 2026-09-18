@@ -11,7 +11,7 @@
 #' @param minovlen (Optional). Minimum overlap between the merged reads. Must be
 #' at least 5. Defaults to \code{10}.
 #' @param minlen (Optional). Minimum number of bases a sequence must have to be
-#' retained. Defaults to \code{0}. See \emph{Details}.
+#' retained. Defaults to \code{1}.
 #' @param threads (Optional). Number of computational threads to be used by
 #' \code{VSEARCH}. Defaults to \code{1}.
 #' @param plot_title (Optional). If \code{TRUE} (default), a summary title will
@@ -81,7 +81,7 @@
 vs_merging_lengths <- function(fastq_input,
                                reverse = NULL,
                                minovlen = 10,
-                               minlen = 0,
+                               minlen = 1,
                                threads = 1,
                                plot_title = TRUE,
                                tmpdir = NULL) {

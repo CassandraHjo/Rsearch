@@ -21,7 +21,7 @@
 #' 0.006, 0.008, 0.010, 0.012, 0.014, 0.016, 0.018, 0.020, 0.022, 0.024, 0.026,
 #' 0.028, 0.030, 0.032, 0.034, 0.036, 0.038, 0.040)}.
 #' @param minlen (Optional). Minimum number of bases a sequence must have to be
-#' retained. Defaults to \code{0}. See \emph{Details}.
+#' retained. Defaults to \code{1}.
 #' @param min_size (Optional). Minimum copy number (size) for a merged read to
 #' be included in the results. Defaults to \code{2}.
 #' @param maxee_rate (Optional). Threshold for average expected error. Must

@@ -18,7 +18,7 @@
 #' values to test. Sequences are truncated starting from the first base with the
 #' specified base quality score or lower. Defaults to \code{1:20}.
 #' @param minlen (Optional). Minimum number of bases a sequence must have to be
-#' retained. Defaults to \code{0}. See \emph{Details}.
+#' retained. Defaults to \code{1}.
 #' @param min_size (Optional). Minimum copy number (size) for a merged read to
 #' be included in the results. Defaults to \code{2}.
 #' @param maxee_rate (Optional). Threshold for average expected error. Must
