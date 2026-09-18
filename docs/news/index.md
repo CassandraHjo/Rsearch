@@ -1,5 +1,17 @@
 # Changelog
 
+## Rsearch 1.2.0
+
+### Changes
+
+- Changed the default value of the `minlen` parameter to ensure
+  compatibility with newer versions of VSEARCH.
+
+### Documentation
+
+- Updated the package citation to reference the correct associated
+  paper.
+
 ## Rsearch 1.1.0
 
 CRAN release: 2026-07-20
