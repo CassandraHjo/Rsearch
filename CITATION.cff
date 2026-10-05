@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use Rsearch, please cite the following publication."
+type: software
+title: "Rsearch: Processing and Analyzing Amplicon Sequence Data"
+version: "1.2.0"
+
+authors:
+  - family-names: Stamsaas
+    given-names: Cassandra
+  - family-names: Snipen
+    given-names: Lars
+  - family-names: Rognes
+    given-names: Torbjørn
+  - family-names: Vinje
+    given-names: Hilde
+
+repository-code: "https://github.com/CassandraHjo/Rsearch"
+url: "https://cassandrahjo.github.io/Rsearch/"
+license: GPL-3.0-or-later
+
+preferred-citation:
+  type: article
+  title: "Rsearch: An R interface to VSEARCH supporting visualization and parameter tuning"
+  authors:
+    - family-names: Stamsaas
+      given-names: Cassandra
+    - family-names: Rognes
+      given-names: Torbjørn
+    - family-names: Rudi
+      given-names: Knut
+    - family-names: Snipen
+      given-names: Lars
+    - family-names: Vinje
+      given-names: Hilde
+  journal: bioRxiv
+  year: 2026
+  date-published: "2026-09-16"
+  doi: "10.64898/2026.09.10.750626"

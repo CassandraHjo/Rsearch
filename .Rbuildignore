@@ -13,3 +13,4 @@
 ^\.positai$
 ^\.claude$
 ^cran-comments\.md$
+^CITATION\.cff$
