@@ -2,6 +2,8 @@
 
 ## Rsearch 1.2.0
 
+CRAN release: 2026-09-18
+
 ### Changes
 
 - Changed the default value of the `minlen` parameter to ensure
