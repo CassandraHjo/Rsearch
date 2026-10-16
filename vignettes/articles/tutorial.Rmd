@@ -1,5 +1,5 @@
 ---
-title: "Rsearch tutorial (v1.0.0)"
+title: "Rsearch tutorial (v1.2.0)"
 output:
   html_document:
     toc: true

@@ -5,4 +5,4 @@
 Walkthroughs and worked examples using Rsearch.
 
 - [Rsearch tutorial
-  (v1.0.0)](https://cassandrahjo.github.io/Rsearch/articles/tutorial.md):
+  (v1.2.0)](https://cassandrahjo.github.io/Rsearch/articles/tutorial.md):
