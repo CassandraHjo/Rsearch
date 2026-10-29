@@ -25,6 +25,9 @@ object.
 This function converts an Rsearch object, which is a simple
 \code{list}, to a \code{\link[phyloseq]{phyloseq}} object from the
 \code{phyloseq} R package.
+
+The \code{phyloseq} package is an optional dependency and must be
+installed separately to use this function.
 }
 \examples{
 \dontrun{

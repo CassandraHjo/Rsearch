@@ -102,31 +102,20 @@
 <h3 id="installing-rsearch">Installing <code>Rsearch</code>
 <a class="anchor" aria-label="anchor" href="#installing-rsearch"></a>
 </h3>
-<div class="section level4">
-<h4 id="bioconductor-dependency">
-<code>Bioconductor</code> dependency<a class="anchor" aria-label="anchor" href="#bioconductor-dependency"></a>
-</h4>
-<p><code>Rsearch</code> also relies on the Bioconductor package <code>phyloseq</code>. Please install it <strong>before</strong> installing <code>Rsearch</code> if you do not already have it installed:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"phyloseq"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version of <code>Rsearch</code> from <a href="https://github.com/CassandraHjo/Rsearch" class="external-link">GitHub</a> by using the <code>devtools</code> package from CRAN:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"CassandraHjo/Rsearch"</span><span class="op">)</span></span></code></pre></div>
 <p>After installation, it is a good idea to restart your R session (in Rstudio: <em>Session</em> &gt; <em>Restart R</em>) to make sure every thing is properly loaded.</p>
 </div>
-</div>
 <div class="section level3">
 <h3 id="set-correct-vsearch-executable">Set correct <code>VSEARCH</code> executable<a class="anchor" aria-label="anchor" href="#set-correct-vsearch-executable"></a>
 </h3>
 <p>In order for most of the functions (those starting with <code>vs_</code>) in <code>Rsearch</code> to work, the command to invoke VSEARCH must be set correctly. The default command is simply <code>vsearch</code>, but this will only work if the file <code>vsearch.exe</code> is found in a folder that is included in the <code>PATH</code> environment variable.</p>
 <p>If this is not the case, you must tell <code>Rsearh</code> explicitly where to find or how to invoke <code>vsearch</code>. The <code>Rsearch</code> function <code><a href="reference/set_vsearch_executable.html">set_vsearch_executable()</a></code> can be used to set the correct command to invoke <code>VSEARCH</code> on the computer like this:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Windows example</span></span>
 <span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/set_vsearch_executable.html">set_vsearch_executable</a></span><span class="op">(</span><span class="st">"C:/Documents/vsearch"</span><span class="op">)</span> <span class="co"># If the vsearch binary (vsearch.exe) is copied to C:/Documents/ on the computer</span></span>
 <span></span>
@@ -145,15 +134,15 @@
 <p>Although <code>Rsearch</code> is primarily intended for local execution (as above), it is also possible to use <code>vsearch</code> packaged in an Apptainer or Singularity <code>.sif</code> container. However, since <code>Rsearch</code> expects a single executable path (not a full shell command), you must create a wrapper script to bridge the container invocation.</p>
 <p><strong>Step by step instructions:</strong></p>
 <p><strong>1.</strong> Create a wrapper script (e.g., <code>vsearch</code>) with the following content:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>apptainer exec <span class="sc">/</span>path<span class="sc">/</span>to<span class="sc">/</span>vsearch_container.sif vsearch <span class="st">"$@"</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>apptainer exec <span class="sc">/</span>path<span class="sc">/</span>to<span class="sc">/</span>vsearch_container.sif vsearch <span class="st">"$@"</span></span></code></pre></div>
 <p><strong>2.</strong> Save it to a folder, for example:</p>
 <p><code>/home/youruser/bin/vsearch</code></p>
 <p><strong>3.</strong> Make the script executable:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chmod</span> <span class="op">+</span><span class="va">x</span> <span class="op">/</span><span class="va">home</span><span class="op">/</span><span class="va">youruser</span><span class="op">/</span><span class="va">bin</span><span class="op">/</span><span class="va">vsearch</span></span></code></pre></div>
 <p><strong>4.</strong> Point <code>Rsearch</code> to this wrapper script:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/set_vsearch_executable.html">set_vsearch_executable</a></span><span class="op">(</span><span class="st">"/home/youruser/bin/"</span><span class="op">)</span></span></code></pre></div>
 <p>This will make <code>Rsearch</code> treat the containerized version of <code>vsearch</code> as a regular executable.</p>
 </div>
@@ -161,12 +150,24 @@
 <h4 id="test-that-it-works">Test that it works<a class="anchor" aria-label="anchor" href="#test-that-it-works"></a>
 </h4>
 <p>You may test if your executable is working properly by running the following command:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">Rsearch</span><span class="fu">::</span><span class="fu"><a href="reference/vsearch.html">vsearch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>If everything is set up correctly you should see a message like this:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"The VSEARCH executable is: /your/path/vsearch"</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"This is a valid command to invoke VSEARCH on this computer!"</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"The VSEARCH executable is: /your/path/vsearch"</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"This is a valid command to invoke VSEARCH on this computer!"</span></span></code></pre></div>
 <p><span style="color: red;"><strong>Note:</strong> For large-scale analyses and computationally intensive workflows, calling <code>vsearch</code> directly from a shell script may be more efficient than using <code>Rsearch</code> through R or RStudio.</span></p>
+</div>
+<div class="section level4">
+<h4 id="optional-bioconductor-dependency">Optional <code>Bioconductor</code> dependency<a class="anchor" aria-label="anchor" href="#optional-bioconductor-dependency"></a>
+</h4>
+<p>The Bioconductor package <code>phyloseq</code> is an optional dependency of <code>Rsearch</code> and is only required for the functions <code><a href="reference/rsearch2phyloseq.html">rsearch2phyloseq()</a></code>and <code><a href="reference/phyloseq2rsearch.html">phyloseq2rsearch()</a></code>, which allow conversion between <code>Rsearch</code> and <code>phyloseq</code> data formats.</p>
+<p>All other functions in <code>Rsearch</code> can be used without installing <code>phyloseq</code>.</p>
+<p>If you intend to use either of these functions, install <code>phyloseq</code> from Bioconductor:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"phyloseq"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>

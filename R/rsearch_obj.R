@@ -149,6 +149,9 @@ rsearch_obj <- function(readcount_data,
 #' \code{list}, to a \code{\link[phyloseq]{phyloseq}} object from the
 #' \code{phyloseq} R package.
 #'
+#' The \code{phyloseq} package is an optional dependency and must be
+#' installed separately to use this function.
+#'
 #' @return A \code{\link[phyloseq]{phyloseq}} object.
 #'
 #' @references
@@ -167,6 +170,14 @@ rsearch_obj <- function(readcount_data,
 #'
 rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 
+  if (!requireNamespace("phyloseq", quietly = TRUE)) {
+    stop(
+      "The 'phyloseq' package is required to use 'rsearch2phyloseq()'. ",
+      "Please install it using BiocManager::install('phyloseq').",
+      call. = FALSE
+    )
+  }
+
   otu.table <- rsearch.obj$readcount.mat
   sample.dta <- as.data.frame(rsearch.obj$sampledata.df)
   rownames(sample.dta) <- sample.dta[[sample_id_col]]
@@ -177,12 +188,12 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
     tax.mat <- as.matrix(taxonomy.tbl)
     rownames(tax.mat) <- rsearch.obj$sequence.df$Header
     ps.obj <- phyloseq::phyloseq(phyloseq::otu_table(otu.table,
-                                                     taxa_are_rows = T),
+                                                     taxa_are_rows = TRUE),
                                  phyloseq::sample_data(sample.dta),
                                  phyloseq::tax_table(tax.mat))
   } else {
     ps.obj <- phyloseq::phyloseq(phyloseq::otu_table(otu.table,
-                                                     taxa_are_rows = T),
+                                                     taxa_are_rows = TRUE),
                                  phyloseq::sample_data(sample.dta))
   }
   return(ps.obj)
@@ -198,7 +209,10 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #' @details This function converts a phyloseq object to a simple
 #' \code{\link{list}} with three elements as dataframes (or tibbles). The
 #' entries are named according to the structure used in
-#' \code{\link{rsearch_obj}}
+#' \code{\link{rsearch_obj}}.
+#'
+#' The \code{phyloseq} package is an optional dependency and must be
+#' installed separately to use this function.
 #'
 #' @return A \code{list} with entries as in a Rsearch object, except that the
 #' \code{sequence.tbl} do not contain sequences, only taxonomy.
@@ -227,6 +241,15 @@ rsearch2phyloseq <- function(rsearch.obj, sample_id_col = "sample_id"){
 #' @export
 #'
 phyloseq2rsearch <- function(phyloseq.obj){
+
+  if (!requireNamespace("phyloseq", quietly = TRUE)) {
+    stop(
+      "The 'phyloseq' package is required to use 'rsearch2phyloseq()'. ",
+      "Please install it using BiocManager::install('phyloseq').",
+      call. = FALSE
+    )
+  }
+
   lst <- list(
     sampledata.df = as.data.frame(as.matrix(phyloseq::sample_data(phyloseq.obj))),
     readcount.mat = as.matrix(as.data.frame(phyloseq::otu_table(phyloseq.obj))),

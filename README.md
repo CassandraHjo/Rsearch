@@ -1,5 +1,5 @@
 
-# Rsearch <a href="https://cassandrahjo.github.io/Rsearch/"><img src="man/figures/logo.png" align="right" height="139" alt="Rsearch website" /></a>
+# Rsearch <a href="https://cassandrahjo.github.io/Rsearch/"><img src="man/figures/logo.png" alt="Rsearch website" align="right" height="139"/></a>
 
 ![commit
 activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
@@ -87,19 +87,6 @@ function `set_vsearch_executable()` where you specify where your
 executable](#set-correct-vsearch-executable)) below.
 
 ### Installing `Rsearch`
-
-#### `Bioconductor` dependency
-
-`Rsearch` also relies on the Bioconductor package `phyloseq`. Please
-install it **before** installing `Rsearch` if you do not already have it
-installed:
-
-``` r
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-    install.packages("BiocManager")
-}
-BiocManager::install("phyloseq")
-```
 
 You can install the development version of `Rsearch` from
 [GitHub](https://github.com/CassandraHjo/Rsearch) by using the
@@ -206,6 +193,26 @@ If everything is set up correctly you should see a message like this:
 computationally intensive workflows, calling `vsearch` directly from a
 shell script may be more efficient than using `Rsearch` through R or
 RStudio.</span>
+
+#### Optional `Bioconductor` dependency
+
+The Bioconductor package `phyloseq` is an optional dependency of
+`Rsearch` and is only required for the functions `rsearch2phyloseq()`and
+`phyloseq2rsearch()`, which allow conversion between `Rsearch` and
+`phyloseq` data formats.
+
+All other functions in `Rsearch` can be used without installing
+`phyloseq`.
+
+If you intend to use either of these functions, install `phyloseq` from
+Bioconductor:
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("phyloseq")
+```
 
 ## Documentation
 

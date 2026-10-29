@@ -14,9 +14,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Rsearch <a href="https://cassandrahjo.github.io/Rsearch/"><img src="man/figures/logo.png" align="right" height="139" alt="Rsearch website" /></a>
+# Rsearch <a href="https://cassandrahjo.github.io/Rsearch/"><img src="man/figures/logo.png" alt="Rsearch website" align="right" height="139"/></a>
 
-![commit activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
+![commit
+activity](https://img.shields.io/github/last-commit/CassandraHjo/Rsearch)
 ![CRAN](https://img.shields.io/cran/v/Rsearch)
 
 ## Introduction
@@ -68,10 +69,10 @@ install.packages("Rsearch")
 
 ### Installing the development version of `Rsearch`
 
--   [A short video on how to install on a Windows
-    laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps){target="blank"}
--   [A short video on how to install on a Mac
-    laptop](https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG){target="blank"}
+- [A short video on how to install on a Windows
+  laptop](https://youtu.be/vxcQHTbcDss?si=QYPSliQum6ZjV6Ps){target="blank"}
+- [A short video on how to install on a Mac
+  laptop](https://youtu.be/ZgNjiwx7wVY?si=4FqsG54K9amO3oPG){target="blank"}
 
 ### Prerequisites
 
@@ -101,19 +102,6 @@ function `set_vsearch_executable()` where you specify where your
 executable](#set-correct-vsearch-executable)) below.
 
 ### Installing `Rsearch`
-
-#### `Bioconductor` dependency
-
-`Rsearch` also relies on the Bioconductor package `phyloseq`. Please
-install it **before** installing `Rsearch` if you do not already have it
-installed:
-
-```{r, eval=FALSE}
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-    install.packages("BiocManager")
-}
-BiocManager::install("phyloseq")
-```
 
 You can install the development version of `Rsearch` from
 [GitHub](https://github.com/CassandraHjo/Rsearch) by using the
@@ -158,9 +146,9 @@ This will store the path and use it in future sessions automatically.
 After downloading `VSEARCH`, some macOS users may experience problems
 running the `VSEARCH` executable because of macOS security settings. If
 macOS blocks `VSEARCH` from running, open *System Settings*, go to
-*Privacy & Security*, scroll down to the *Security* section, and look for 
-a message about `VSEARCH` being blocked. Click *Allow anyway* or 
-*Open anyway*. 
+*Privacy & Security*, scroll down to the *Security* section, and look
+for a message about `VSEARCH` being blocked. Click *Allow anyway* or
+*Open anyway*.
 
 After allowing `VSEARCH` to run, try running the relevant `Rsearch`
 function again.
@@ -220,8 +208,28 @@ print("This is a valid command to invoke VSEARCH on this computer!")
 
 [**Note:** For large-scale analyses and computationally intensive
 workflows, calling `vsearch` directly from a shell script may be more
-efficient than using `Rsearch` through R or RStudio.
-]{style="color: red;"}
+efficient than using `Rsearch` through R or
+RStudio.]{style="color: red;"}
+
+#### Optional `Bioconductor` dependency
+
+The Bioconductor package `phyloseq` is an optional dependency of
+`Rsearch` and is only required for the functions `rsearch2phyloseq()`and
+`phyloseq2rsearch()`, which allow conversion between `Rsearch` and
+`phyloseq` data formats.
+
+All other functions in `Rsearch` can be used without installing
+`phyloseq`.
+
+If you intend to use either of these functions, install `phyloseq` from
+Bioconductor:
+
+```{r, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("phyloseq")
+```
 
 ## Documentation {#documentation}
 
@@ -230,10 +238,9 @@ efficient than using `Rsearch` through R or RStudio.
 Documentation can be accessed directly in the R console. Here are some
 methods to access help:
 
--   **Function-specific help:** To get detailed information about a
-    specific function, use the `?` operator followed by the function
-    name. For example, to access help for the `vs_fastx_trim_filt`
-    function:
+- **Function-specific help:** To get detailed information about a
+  specific function, use the `?` operator followed by the function name.
+  For example, to access help for the `vs_fastx_trim_filt` function:
 
 ```{r, eval = FALSE}
 ?vs_fastx_trim_filt
@@ -245,7 +252,7 @@ Alternatively, you can use the `help()` function:
 help(vs_fastx_trim_filt)
 ```
 
--   **Package-wide help**
+- **Package-wide help**
 
 To get an overview of the `Rsearch` package an its available functions,
 use:
@@ -286,31 +293,32 @@ statistics <- attr(filt_seqs, "statistics")
 
 The main contributors to `Rsearch`:
 
--   Cassandra Stamsaas
-    [cassandra.stamsaas\@nmbu.no](mailto:cassandra.stamsaas@nmbu.no){.email}
-    (Coding, testing, documentation, maintaining)
--   Lars Snipen
-    [lars.snipen\@nmbu.no](mailto:lars.snipen@nmbu.no){.email} (Coding,
-    documentation)
--   Torbjørn Rognes
-    [torognes\@ifi.uio.no](mailto:torognes@ifi.uio.no){.email} (Coding,
-    documentation)
--   Hilde Vinje
-    [hilde.vinje\@nmbu.no](mailto:hilde.vinje@nmbu.no){.email} (Coding,
-    documentation)
+- Cassandra Stamsaas
+  [cassandra.stamsaas\@nmbu.no](mailto:cassandra.stamsaas@nmbu.no){.email}
+  (Coding, testing, documentation, maintaining)
+- Lars Snipen [lars.snipen\@nmbu.no](mailto:lars.snipen@nmbu.no){.email}
+  (Coding, documentation)
+- Torbjørn Rognes
+  [torognes\@ifi.uio.no](mailto:torognes@ifi.uio.no){.email} (Coding,
+  documentation)
+- Hilde Vinje [hilde.vinje\@nmbu.no](mailto:hilde.vinje@nmbu.no){.email}
+  (Coding, documentation)
 
 ## Citing Rsearch
 
 Please cite the following publication if you use `Rsearch`:
 
-C. Stamsaas, T. Rognes, K. Rudi, L. Snipen, and H. Vinje, “Rsearch: An R interface to VSEARCH supporting visualization and parameter tuning,” Sep. 16, 2026, bioRxiv. doi: 10.64898/2026.09.10.750626.
+C. Stamsaas, T. Rognes, K. Rudi, L. Snipen, and H. Vinje, “Rsearch: An R
+interface to VSEARCH supporting visualization and parameter tuning,”
+Sep. 16, 2026, bioRxiv. doi: 10.64898/2026.09.10.750626.
 
 Please note that citing any of the underlying algorithms, e.g.
 `VSEARCH`, may also be appropriate.
 
 ## References
 
--   Rognes T, Flouri T, Nichols B, Quince C, Mahé F (2016) **VSEARCH: a
-    versatile open source tool for metagenomics.** *PeerJ* 4:e2584. doi:
-    [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
--   The subplot of the `Rsearch` logo was created with [BioRender](https://www.biorender.com/)
+- Rognes T, Flouri T, Nichols B, Quince C, Mahé F (2016) **VSEARCH: a
+  versatile open source tool for metagenomics.** *PeerJ* 4:e2584. doi:
+  [10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584)
+- The subplot of the `Rsearch` logo was created with
+  [BioRender](https://www.biorender.com/)

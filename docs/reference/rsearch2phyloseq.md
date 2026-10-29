@@ -31,6 +31,9 @@ This function converts an Rsearch object, which is a simple `list`, to a
 [`phyloseq`](https://rdrr.io/pkg/phyloseq/man/phyloseq.html) object from
 the `phyloseq` R package.
 
+The `phyloseq` package is an optional dependency and must be installed
+separately to use this function.
+
 ## References
 
 <https://joey711.github.io/phyloseq/>

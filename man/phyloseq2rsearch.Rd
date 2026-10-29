@@ -21,7 +21,10 @@ Creating an Rsearch object (list) from a phyloseq object.
 This function converts a phyloseq object to a simple
 \code{\link{list}} with three elements as dataframes (or tibbles). The
 entries are named according to the structure used in
-\code{\link{rsearch_obj}}
+\code{\link{rsearch_obj}}.
+
+The \code{phyloseq} package is an optional dependency and must be
+installed separately to use this function.
 }
 \examples{
 \dontrun{

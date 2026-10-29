@@ -26,7 +26,10 @@ This function converts a phyloseq object to a simple
 [`list`](https://rdrr.io/r/base/list.html) with three elements as
 dataframes (or tibbles). The entries are named according to the
 structure used in
-[`rsearch_obj`](https://cassandrahjo.github.io/Rsearch/reference/rsearch_obj.md)
+[`rsearch_obj`](https://cassandrahjo.github.io/Rsearch/reference/rsearch_obj.md).
+
+The `phyloseq` package is an optional dependency and must be installed
+separately to use this function.
 
 ## References
 

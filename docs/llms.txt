@@ -87,20 +87,6 @@ correct vsearch executable](#set-correct-vsearch-executable)) below.
 
 ### Installing `Rsearch`
 
-#### `Bioconductor` dependency
-
-`Rsearch` also relies on the Bioconductor package `phyloseq`. Please
-install it **before** installing `Rsearch` if you do not already have it
-installed:
-
-``` r
-
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-    install.packages("BiocManager")
-}
-BiocManager::install("phyloseq")
-```
-
 You can install the development version of `Rsearch` from
 [GitHub](https://github.com/CassandraHjo/Rsearch) by using the
 `devtools` package from CRAN:
@@ -213,6 +199,28 @@ If everything is set up correctly you should see a message like this:
 **Note:** For large-scale analyses and computationally intensive
 workflows, calling `vsearch` directly from a shell script may be more
 efficient than using `Rsearch` through R or RStudio.
+
+#### Optional `Bioconductor` dependency
+
+The Bioconductor package `phyloseq` is an optional dependency of
+`Rsearch` and is only required for the functions
+[`rsearch2phyloseq()`](https://cassandrahjo.github.io/Rsearch/reference/rsearch2phyloseq.md)and
+[`phyloseq2rsearch()`](https://cassandrahjo.github.io/Rsearch/reference/phyloseq2rsearch.md),
+which allow conversion between `Rsearch` and `phyloseq` data formats.
+
+All other functions in `Rsearch` can be used without installing
+`phyloseq`.
+
+If you intend to use either of these functions, install `phyloseq` from
+Bioconductor:
+
+``` r
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("phyloseq")
+```
 
 ## Documentation
 
