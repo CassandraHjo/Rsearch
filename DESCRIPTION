@@ -9,10 +9,12 @@ Authors@R: c(
     person("Hilde", "Vinje", , "hilde.vinje@nmbu.no", role = "aut")
   )
 Maintainer: Cassandra Stamsaas <cassandra.stamsaas@nmbu.no>
-Description: Processing and analysis of targeted sequencing data. The
-    package provides a user-friendly interface for core 'VSEARCH' (Rognes
-    et al. (2016), <doi:10.7717/peerj.2584>) functions, in addition to
-    tools for visualization and parameter tuning.
+Description: Processing and analysis of amplicon sequencing data, with a
+    primary focus on eDNA metabarcoding while remaining applicable to
+    general targeted sequencing workflows. The package provides a
+    user-friendly interface for core 'VSEARCH' (Rognes et al. (2016),
+    <doi:10.7717/peerj.2584>) functions, extended with dedicated tools for
+    visualization and parameter tuning.
 License: GPL (>= 3)
 URL: https://cassandrahjo.github.io/Rsearch/,
     https://github.com/CassandraHjo/Rsearch/
