@@ -1,5 +1,18 @@
 # Changelog
 
+## Rsearch 1.2.1
+
+### Changes
+
+- Moved `phyloseq` from `Imports` to `Suggests`, making it an optional
+  dependency.
+
+### Documentation
+
+- Updated the documentation to reflect the changes surrounding
+  `phyloseq`.
+- Expanded the package description.
+
 ## Rsearch 1.2.0
 
 CRAN release: 2026-09-18
