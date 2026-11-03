@@ -1,7 +1,7 @@
 Type: Package
 Package: Rsearch
 Title: Processing and Analyzing Amplicon Sequence Data
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: c(
     person("Cassandra", "Stamsaas", , "cassandra.stamsaas@nmbu.no", role = c("cre", "aut")),
     person("Lars", "Snipen", , "lars.snipen@nmbu.no", role = "aut"),
