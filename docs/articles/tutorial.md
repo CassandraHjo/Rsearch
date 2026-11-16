@@ -1,4 +1,4 @@
-# Rsearch tutorial (v1.2.0)
+# Rsearch tutorial (v1.2.1)
 
 ## Introduction
 

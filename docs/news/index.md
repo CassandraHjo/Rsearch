@@ -2,6 +2,8 @@
 
 ## Rsearch 1.2.1
 
+CRAN release: 2026-11-04
+
 ### Changes
 
 - Moved `phyloseq` from `Imports` to `Suggests`, making it an optional
